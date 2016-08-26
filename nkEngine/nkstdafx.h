@@ -55,5 +55,5 @@ using namespace std;
 #include"_Graphics\nkEffectManager.h"
 #include"_Graphics\modelRender\nkAnimation.h"
 
-#include"Component\nkTransform.h"
+#include"_Component\nkTransform.h"
 #include"_GameObject\nkGameObject.h"

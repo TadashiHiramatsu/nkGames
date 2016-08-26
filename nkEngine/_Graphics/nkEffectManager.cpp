@@ -20,10 +20,14 @@ namespace nkEngine
 		if (it == m_effectDictinary.end())
 		{
 			//êVãK
+			char* baseDir = "Shader/";
+			char fileP[64];
+			strcpy(fileP, baseDir);
+			strcat(fileP, filePath);
 			LPD3DXBUFFER  compileErrorBuffer = nullptr;
 			HRESULT hr = D3DXCreateEffectFromFile(
 				Engine().GetDevice(),
-				filePath,
+				fileP,
 				NULL,
 				NULL,
 #ifdef _DEBUG

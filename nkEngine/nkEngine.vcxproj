@@ -136,12 +136,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Component\nkTransform.h" />
     <ClInclude Include="debug\nkAssert.h" />
     <ClInclude Include="debug\nkLog.h" />
     <ClInclude Include="nkEngine.h" />
     <ClInclude Include="nkOriginalDefine.h" />
     <ClInclude Include="nkstdafx.h" />
+    <ClInclude Include="_Component\nkTransform.h" />
     <ClInclude Include="_GameObject\nkGameObject.h" />
     <ClInclude Include="_Graphics\modelRender\nkAnimation.h" />
     <ClInclude Include="_Graphics\modelRender\nkLight.h" />
@@ -160,11 +160,11 @@
     <ClInclude Include="_Scene\nkSceneManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Component\nkTransform.cpp" />
     <ClCompile Include="nkEngine.cpp" />
     <ClCompile Include="nkstdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="_Component\nkTransform.cpp" />
     <ClCompile Include="_GameObject\nkGameObject.cpp" />
     <ClCompile Include="_Graphics\modelRender\nkAnimation.cpp" />
     <ClCompile Include="_Graphics\modelRender\nkLight.cpp" />

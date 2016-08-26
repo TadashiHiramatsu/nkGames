@@ -75,9 +75,6 @@
     <ClCompile Include="_Graphics\Shadow\nkShadow.cpp">
       <Filter>Graphics\Shadow</Filter>
     </ClCompile>
-    <ClCompile Include="Component\nkTransform.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
     <ClCompile Include="_Graphics\nkVertexBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -86,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="_Graphics\nkEffectManager.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Component\nkTransform.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,9 +140,6 @@
     <ClInclude Include="_Graphics\Shadow\nkShadow.h">
       <Filter>Graphics\Shadow</Filter>
     </ClInclude>
-    <ClInclude Include="Component\nkTransform.h">
-      <Filter>Component</Filter>
-    </ClInclude>
     <ClInclude Include="_Graphics\nkVertexBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -154,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="_Math\nkHash.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="_Component\nkTransform.h">
+      <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

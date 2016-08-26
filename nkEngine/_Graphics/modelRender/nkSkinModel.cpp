@@ -24,7 +24,7 @@ namespace nkEngine
 
 	void CModelRender::Init(LPCSTR FileName)
 	{
-		m_Effect = EffectManager().LoadEffect("shader/skinModel.fx");
+		m_Effect = EffectManager().LoadEffect("skinModel.fx");
 		m_Skinmodel = new CSkinModelData;
 		m_Skinmodel->LoadModelData(FileName, &m_Animation);
 	}
