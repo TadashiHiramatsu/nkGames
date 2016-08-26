@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{51552a67-f04b-431a-b56c-3c175ccd1ca0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{dad0e502-0bab-434f-b68d-176c9dd57b36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="debug">
+      <UniqueIdentifier>{bb1c3770-8a38-47b0-81fa-c9f7408ebccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{bafd3229-5fdd-4794-8782-dd6842ad98e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{62f38837-f2b8-4852-8b46-adbeef9b05c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\ModelRender">
+      <UniqueIdentifier>{eb31b30e-ab18-4ecc-bec0-c99f34f8f78e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\2DRender">
+      <UniqueIdentifier>{87509d2d-b699-44ae-a9e9-fbbe5270094b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Shadow">
+      <UniqueIdentifier>{2af43d90-50b3-44e0-8d21-eaecdc06871a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{8f348ce0-094a-4018-ab04-8e3c34ebe489}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{1bf93946-df91-45a3-b071-b6adc0930f28}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="nkEngine.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="nkstdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="_Scene\nkScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="_Scene\nkSceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\nkRenderTarget.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\nkOffScreenRender.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\nkTexture.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="_GameObject\nkGameObject.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\modelRender\nkAnimation.cpp">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\modelRender\nkSkinModelData.cpp">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\modelRender\nkSkinModel.cpp">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\modelRender\nkLight.cpp">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\nkSprite.cpp">
+      <Filter>Graphics\2DRender</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\Shadow\nkShadow.cpp">
+      <Filter>Graphics\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\nkTransform.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\nkVertexBuffer.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\nkCamera.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\nkEffectManager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="nkEngine.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="nkstdafx.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="debug\nkAssert.h">
+      <Filter>debug</Filter>
+    </ClInclude>
+    <ClInclude Include="debug\nkLog.h">
+      <Filter>debug</Filter>
+    </ClInclude>
+    <ClInclude Include="_Scene\nkScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="_Scene\nkSceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\nkRenderTarget.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\nkOffScreenRender.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\nkTexture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="_GameObject\nkGameObject.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="nkOriginalDefine.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\modelRender\nkAnimation.h">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\modelRender\nkSkinModelData.h">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\modelRender\nkSkinModel.h">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\modelRender\nkLight.h">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\nkSprite.h">
+      <Filter>Graphics\2DRender</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\Shadow\nkShadow.h">
+      <Filter>Graphics\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\nkTransform.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\nkVertexBuffer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\nkCamera.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\nkEffectManager.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Math\nkHash.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

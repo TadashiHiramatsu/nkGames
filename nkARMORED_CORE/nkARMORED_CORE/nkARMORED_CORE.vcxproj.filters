@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{71e87fcc-ece2-425a-b2c9-66f097e4ee8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TitleScene">
+      <UniqueIdentifier>{827b3ba6-2d0e-4249-b45f-a8055cd1ab33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameScene">
+      <UniqueIdentifier>{7ce095e1-d612-4dc3-bcce-e3c0595b5fbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{25185476-6365-4ac9-ad52-b9493a6d729a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TitleScene\CTitleScene.cpp">
+      <Filter>TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameScene\CGameScene.cpp">
+      <Filter>GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameScene\CPlayer.cpp">
+      <Filter>GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameScene\CGameCamera.cpp">
+      <Filter>GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameScene\CGround.cpp">
+      <Filter>GameScene</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TitleScene\CTitleScene.h">
+      <Filter>TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameScene\CGameScene.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameScene\CPlayer.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameScene\CGameCamera.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameScene\CGround.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
