@@ -147,6 +147,7 @@
     <ClInclude Include="_Graphics\modelRender\nkLight.h" />
     <ClInclude Include="_Graphics\modelRender\nkSkinModel.h" />
     <ClInclude Include="_Graphics\modelRender\nkSkinModelData.h" />
+    <ClInclude Include="_Graphics\nkBlur.h" />
     <ClInclude Include="_Graphics\nkCamera.h" />
     <ClInclude Include="_Graphics\nkEffectManager.h" />
     <ClInclude Include="_Graphics\nkOffScreenRender.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="_Graphics\modelRender\nkLight.cpp" />
     <ClCompile Include="_Graphics\modelRender\nkSkinModel.cpp" />
     <ClCompile Include="_Graphics\modelRender\nkSkinModelData.cpp" />
+    <ClCompile Include="_Graphics\nkBlur.cpp" />
     <ClCompile Include="_Graphics\nkCamera.cpp" />
     <ClCompile Include="_Graphics\nkEffectManager.cpp" />
     <ClCompile Include="_Graphics\nkOffScreenRender.cpp" />

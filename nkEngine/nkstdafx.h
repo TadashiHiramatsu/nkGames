@@ -54,6 +54,7 @@ using namespace std;
 #include"_Graphics\nkVertexBuffer.h"
 #include"_Graphics\nkEffectManager.h"
 #include"_Graphics\modelRender\nkAnimation.h"
+#include"_Graphics\nkBlur.h"
 
 #include"_Component\nkTransform.h"
 #include"_GameObject\nkGameObject.h"

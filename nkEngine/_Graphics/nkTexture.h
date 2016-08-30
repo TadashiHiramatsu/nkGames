@@ -16,7 +16,7 @@ namespace nkEngine
 		{
 			m_tex = tex;
 		}
-		IDirect3DTexture9* GetTextureDX()
+		IDirect3DTexture9* GetTextureDX() const
 		{
 			return m_tex;
 		}

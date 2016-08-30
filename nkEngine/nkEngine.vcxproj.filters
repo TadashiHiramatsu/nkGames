@@ -87,6 +87,9 @@
     <ClCompile Include="_Component\nkTransform.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="_Graphics\nkBlur.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nkEngine.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="_Component\nkTransform.h">
       <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\nkBlur.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

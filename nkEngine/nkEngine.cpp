@@ -16,8 +16,10 @@ namespace nkEngine
 		UpdateWindow(m_hWnd);
 
 		OffScreenRender().Init(initParam);
-		Shadow().Create(256, 256, initParam.ShadowActive);
-
+		if (initParam.ShadowActive)
+		{
+			Shadow().Create(1024, 1024);
+		}
 		return true;
 	}
 	

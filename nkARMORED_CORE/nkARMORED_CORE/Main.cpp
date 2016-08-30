@@ -11,6 +11,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 	initparam.frameBufferW = 900*3;
 	initparam.frameBufferH = 540*3;
 	initparam.GameName = "ARMORED_CORE";
+	initparam.ShadowActive = true;
 
 	Engine().Init(initparam);
 

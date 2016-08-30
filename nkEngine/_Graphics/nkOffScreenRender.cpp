@@ -15,6 +15,7 @@ namespace nkEngine
 	{
 		full.Update(D3DXVECTOR3(Engine().GetFrameW() / 2, Engine().GetFrameH() / 2, 0), D3DXVECTOR3(Engine().GetFrameW(), Engine().GetFrameH(), 0));
 		SceneManager().UpdateScene();
+		Shadow().Update();
 	}
 	void COffScreenRender::Render()
 	{
@@ -37,6 +38,7 @@ namespace nkEngine
 		Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
 		
 		//Œ»Ý‚ÌƒV[ƒ“‚Ì•`‰æ
+		Shadow().Render();
 		SceneManager().RenderScene();
 
 		Device->SetRenderTarget(0, BackBuffer);
@@ -47,7 +49,7 @@ namespace nkEngine
 		Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
 
 		//‚±‚±‚Å2DŽg‚Á‚Ä•`‰æ‚·‚ê‚Î‚¨‚‹
-		full.SetTexture(m_RenderTarget.GetTexture());
+		full.SetTexture(m_RenderTarget.GetTexture()->GetTextureDX());
 		full.Render();
 
 

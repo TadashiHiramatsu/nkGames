@@ -4,111 +4,117 @@
 
 namespace nkEngine
 {
-
-	void CShadowMap::Create(int w, int h,bool Active)
+	CShadowMap::CShadowMap():
+		m_isActive(false),
+		m_near(1.0f),
+		m_far(100.0f),
+		m_Aspect(1.0f),
+		m_shadowAreaW(10.0f),
+		m_shadowAreaH(10.0f),
+		m_camera(nullptr),
+		m_calcLightViewFunc(enCalcLightViewFunc_PositionTarget),
+		m_vLTarget(D3DXVECTOR3(0.0f, 0.0f, 0.0f))
 	{
-		this->h = h;
-		this->w = w;
-		m_isActive = Active;
-		m_shadowMapRT.Create(this->w, this->h, 1, D3DFMT_A8R8G8B8, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);
+		D3DXMatrixIdentity(&m_mLView);
+		m_vLPosition = D3DXVECTOR3(0.0f, 3.0f, 0.0f);
+		m_vLDirection = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
+	}
+
+	CShadowMap::~CShadowMap()
+	{
+		Release();
+	}
+
+	void CShadowMap::Create(int w, int h)
+	{
+		Release();
 
 		m_near = 1.0f;
 		m_far = 100.0f;
 
-		m_shadowModels.clear();
+		m_shadowMapRT.Create(w, h, 1, D3DFMT_G16R16F, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);
 
-		LPD3DXBUFFER  compileErrorBuffer = NULL;
-		HRESULT hr = D3DXCreateEffectFromFile(
-			Engine().GetDevice(),
-			"shader\\shadow.fx",
-			NULL,
-			NULL,
-			D3DXSHADER_DEBUG,
-			NULL,
-			&m_pEffect,
-			&compileErrorBuffer
-		);
-		if (FAILED(hr)) {
-			MessageBox(NULL, (char*)(compileErrorBuffer->GetBufferPointer()), "error", MB_OK);
-			abort();
-		}
+		m_isActive = true;
+
+		m_Aspect = (float)w / (float)h;
+
+		D3DXMatrixOrthoLH(&m_mProj, m_shadowAreaW * m_Aspect, m_shadowAreaH, m_near, m_far);
+	
+		m_blur.Init(w, h, *m_shadowMapRT.GetTexture());
 	}
 
-
-	void CShadowMap::Draw(D3DXMATRIX proj)
+	void CShadowMap::Update()
 	{
 		if (m_isActive)
 		{
-
-			Engine().GetDevice()->GetViewport(&m_viewport);
-			Engine().GetDevice()->GetRenderTarget(0, &m_Backbuffer);
-			Engine().GetDevice()->GetDepthStencilSurface(&m_BackZ);
-
-			Engine().GetDevice()->SetRenderTarget(0, m_shadowMapRT.GetSurface());
-			Engine().GetDevice()->SetDepthStencilSurface(m_shadowMapRT.GetDepthSurface());
-
-			Engine().GetDevice()->Clear(
-				0,
-				NULL,
-				D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,
-				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-				1.0f,
-				0);
-
-			D3DVIEWPORT9 viewport = { 0, 0, (DWORD)w, (DWORD)h, 0.0f, 1.0f };
-			Engine().GetDevice()->SetViewport(&viewport);
-			Engine().GetDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-			float aspect;
-			aspect = (float)viewport.Width / (float)viewport.Height;
-			D3DXMatrixPerspectiveFovLH(&m_projMatrix, D3DXToRadian(120.0f), aspect, m_near, m_far);
-
-			CreateLight();
-
-			int size = m_shadowModels.size();
-			
-			D3DXMatrixMultiply(&m_VPMatrix, &m_lvMatrix, &m_projMatrix);
-
-			for (int idx = 0; idx < size; idx++)
+			if (m_calcLightViewFunc == enCalcLightViewFunc_PositionTarget)
 			{
-				
+				//ライトの視点と注視点で計算
+				m_vLDirection = m_vLTarget - m_vLPosition;
+				D3DXVec3Normalize(&m_vLDirection, &m_vLDirection);
 			}
-			Engine().GetDevice()->SetRenderTarget(0, m_Backbuffer);
-			Engine().GetDevice()->SetDepthStencilSurface(m_BackZ);
-			Engine().GetDevice()->SetViewport(&m_viewport);
-			Engine().GetDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+
+			//ライトビュープロジェクション行列を作成
+			D3DXVECTOR3 vLUp;
+			float t = fabsf(D3DXVec3Dot(&m_vLDirection, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)));
+			if (fabsf((t - 1.0f)) < 0.00001f)
+			{
+				vLUp = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+			}
+			else
+			{
+				vLUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+			}
+
+			//ライトから見たビュー行列を作成
+			D3DXVECTOR3 target;
+
+			target = m_vLPosition + m_vLDirection;
+
+			D3DXMatrixLookAtLH(&m_mLView, &m_vLPosition, &target, &vLUp);
+		
+			D3DXMatrixOrthoLH(&m_mProj, m_shadowAreaW * m_Aspect, m_shadowAreaH, m_near, m_far);
+		
+			m_mLViewProj = m_mLView * m_mProj;
 		}
 	}
 
-	void CShadowMap::CreateLight()
+	void CShadowMap::Render()
 	{
-		D3DXVECTOR3 lightUp;
-		float t = fabsf(D3DXVec3Dot(&m_lightDirection, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)));
-		if (fabsf((t - 1.0f)) < 0.00001f)
+		if (m_isActive)
 		{
-			lightUp = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+			IDirect3DDevice9* Device = Engine().GetDevice();
+
+			LPDIRECT3DSURFACE9 BackBuffer;
+			LPDIRECT3DSURFACE9 BackDepthBuffer;
+			Device->GetRenderTarget(0, &BackBuffer);
+			Device->GetDepthStencilSurface(&BackDepthBuffer);
+
+			Device->SetRenderTarget(0, m_shadowMapRT.GetSurface());
+			Device->SetDepthStencilSurface(m_shadowMapRT.GetDepthSurface());
+
+			Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
+
+			for (auto model : m_shadowModels) {
+				model->DrawToShadowMap();
+			}
+
+			Device->SetRenderTarget(0, BackBuffer);
+			Device->SetDepthStencilSurface(BackDepthBuffer);
+
+			m_shadowModels.clear();
+
+			m_blur.Render();
 		}
-		else
-		{
-			lightUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		}
-		D3DXVECTOR3 target;
-		D3DXVec3Add(&target, &m_lightPosition, &m_lightDirection);
-		D3DXMatrixLookAtLH(&m_lvMatrix, &m_lightPosition, &target, &lightUp);
-		D3DXMatrixMultiply(&m_LVPMatrix, &m_lvMatrix, &m_projMatrix);
 	}
 
 	void CShadowMap::Release()
 	{
-		m_shadowMapRT.Delete();
-		if (m_pEffect != nullptr) {
-			//m_pEffect->Release();
-			m_pEffect = nullptr;
-		}
+		m_shadowMapRT.Release();
 	}
 
 	void CShadowMap::Entry(CModelRender* model)
 	{
 		m_shadowModels.push_back(model);
 	}
-
 }

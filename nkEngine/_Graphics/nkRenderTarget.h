@@ -24,11 +24,11 @@ namespace nkEngine
 			int multiSampleQuality
 		);
 		//レンダリングターゲットの破棄
-		void Delete();
+		void Release();
 		//テクスチャの取得
-		IDirect3DTexture9* GetTexture()
+		const CTexture* GetTexture() const
 		{
-			return m_texture.GetTextureDX();
+			return &m_texture;
 		}
 		//レンダリングターゲットの幅を取得
 		int GetSizeW()

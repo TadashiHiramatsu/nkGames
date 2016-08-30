@@ -39,6 +39,14 @@ void CGameCamera::Update()
 	{
 		m_camera.SpinVertically(-0.05f);
 	}
+	if (GetAsyncKeyState(0x5A) & 0x8000)
+	{
+		m_camera.SetDistance(m_camera.GetDistance()+ 0.1f);
+	}
+	if (GetAsyncKeyState(0x58) & 0x8000)
+	{
+		m_camera.SetDistance(m_camera.GetDistance() -0.1f);
+	}
 
 
 	m_camera.Update();

@@ -13,11 +13,11 @@ namespace nkEngine
 
 	CRenderTarget::~CRenderTarget()
 	{
-		Delete();
+		Release();
 	}
 	void CRenderTarget::Create(int sizeW, int sizeH, int mipLevel, D3DFORMAT colorFormat, D3DFORMAT depthStencilFormat, D3DMULTISAMPLE_TYPE multiSampleType, int multiSampleQuality)
 	{
-		Delete();
+		Release();
 		m_sizeW = sizeW;
 		m_sizeH = sizeH;
 		
@@ -57,7 +57,7 @@ namespace nkEngine
 
 		m_texture.SetTextureDX(m_TextureDX);
 	}
-	void CRenderTarget::Delete()
+	void CRenderTarget::Release()
 	{
 		SAFE_RELEASE(m_TextureDX);
 		SAFE_RELEASE(m_DepthSurface);

@@ -25,6 +25,7 @@ namespace nkEngine
 		//初期化
 		//param[in] Xファイルのファイルパス
 		void Init(LPCSTR Filepass);
+		void Init(LPCSTR Filepass, CAnimation* anim);
 		//初期化
 		//param[in] スキンモデルデータ
 		void Init(CSkinModelData* ModelData);

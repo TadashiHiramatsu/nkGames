@@ -40,8 +40,8 @@ sampler_state
 {
 	Texture = <g_ShadowTexture>;
 	MipFilter = NONE;
-	MinFilter = NONE;
-	MagFilter = NONE;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
 	AddressU = Clamp;
 	AddressV = Clamp;
 };
@@ -246,8 +246,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 	}
 
 	float4 lig = DiffuseLight(normal);
-	color.xyz *= lig.xyz;
-	return color * lig;
+
 	if (g_flags.y)
 	{
 		//影落とす
@@ -260,13 +259,20 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 
 		if (shadowMapUV.x <= 1.0f && shadowMapUV.y <= 1.0f && shadowMapUV.x >= 0.0f && shadowMapUV.y >= 0.0f) {
 			shadow_val = tex2D(g_ShadowTextureSampler, shadowMapUV).rg;
-		}
-		float depth = min(posInLVP.z, 1.0f);
-		if (depth > shadow_val.r + 0.006f){
-			lig = 0.0f;
+
+			float depth = min(posInLVP.z, 1.0f);
+
+			if (depth > shadow_val.r) {
+				//チェビシェフ
+				float depth_sq = shadow_val.r * shadow_val.r;
+				float variance = max(shadow_val.g - depth_sq, 0.0006f);
+				float md = depth - shadow_val.r;
+				float P = variance / (variance + md * md);
+				lig *= pow(P, 5.0f);
+			}
 		}
 	}
-	
+
 	//アンビエントライト
 	lig.xyz += g_light.ambient.xyz;
 	color.xyz *= lig;

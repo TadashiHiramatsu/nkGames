@@ -26,16 +26,34 @@ namespace nkEngine
 	{
 		m_Effect = EffectManager().LoadEffect("skinModel.fx");
 		m_Skinmodel = new CSkinModelData;
+
 		m_Skinmodel->LoadModelData(FileName, &m_Animation);
+
+	}
+
+	void CModelRender::Init(LPCSTR FileName, CAnimation* anim)
+	{
+		m_Effect = EffectManager().LoadEffect("skinModel.fx");
+		m_Skinmodel = new CSkinModelData;
+
+		m_Skinmodel->LoadModelData(FileName, anim);
+
 	}
 
 	void CModelRender::Init(CSkinModelData * ModelData)
 	{
+		m_Effect = EffectManager().LoadEffect("skinModel.fx");
+
 		m_Skinmodel = ModelData;
 	}
 
 	void CModelRender::Update()
 	{
+		if (m_isShadowCaster && Shadow().IsActive()) {
+			//シャドウキャスター。
+			Shadow().Entry(this);
+		}
+
 		D3DXMATRIX mPosition, mScale;
 		
 		D3DXMatrixTranslation(&mPosition, m_Transform->GetPosition().x, m_Transform->GetPosition().y, m_Transform->GetPosition().z);
@@ -180,7 +198,7 @@ namespace nkEngine
 			//ビュープロジェクション行列
 			if (isDrawToShadowMap)
 			{
-				m_Effect->SetMatrix("g_mViewProj", Shadow().GetVPMatrix());
+				m_Effect->SetMatrix("g_mViewProj", Shadow().GetLVPMatrix());
 			}
 			else
 			{
@@ -206,7 +224,7 @@ namespace nkEngine
 			if (!isDrawToShadowMap && m_isShadowReceiver)
 			{
 				flag[1] = true;
-				m_Effect->SetTexture("g_ShadowTexture", Shadow().GetTexture());
+				m_Effect->SetTexture("g_ShadowTexture", Shadow().GetTexture()->GetTextureDX());
 				m_Effect->SetMatrix("g_mLVP", Shadow().GetLVPMatrix());
 			}
 
@@ -249,7 +267,7 @@ namespace nkEngine
 				m_Effect->SetInt("g_numBone", pMeshContainer->NumInfl);
 				
 				//ディフューズテクスチャ
-				m_Effect->SetTexture("g_diffuseTexture", pMeshContainer->ppTextures[pBoneComb[iAttrib].AttribId]);
+				//m_Effect->SetTexture("g_diffuseTexture", pMeshContainer->ppTextures[pBoneComb[iAttrib].AttribId]);
 
 				//カメラの回転行列の逆行列
 				m_Effect->SetMatrix("g_mViewMatrixRotInv",&m_camera->GetRotationInvMatrix());

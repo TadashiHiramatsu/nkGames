@@ -7,9 +7,14 @@ namespace nkEngine
 	void CTexture::Load(const char * fileName)
 	{
 		IDirect3DDevice9* Device = Engine().GetDevice();
+		char* baseDir = "Texture/";
+		char filePath[64];
+		strcpy(filePath, baseDir);
+		strcat(filePath, fileName);
+
 		if(FAILED(D3DXCreateTextureFromFile(
 		Device,
-			fileName,
+			filePath,
 			&m_tex)))
 		{
 			NK_ASSERT(false, "failed lloadtexture");
