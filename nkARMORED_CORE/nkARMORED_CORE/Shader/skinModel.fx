@@ -20,6 +20,9 @@ int4 g_flags;				//xに法線マップの保持フラグ、yはシャドウレシーバー、zはフレネル
 //被写界深度
 bool g_isDepthField;
 
+//フォグパラメータ x:フォグがかかり始める距離 ,y:フォグがかかりきる距離 ,z:フォグの種類
+float4 g_fogParam;
+
 //ディフューズテクスチャ。
 texture g_diffuseTexture;		
 sampler g_diffuseTextureSampler = 
@@ -87,7 +90,8 @@ struct VS_OUTPUT
 	float3 Normal   : NORMAL;
     float2 Tex0     : TEXCOORD0;
 	float3 Tangent	: TEXCOORD1;//接ベクトル
-	float4 worldPos : TEXCOORD2;
+	float4 lightViewPos : TEXCOORD2;
+	float3 worldPos : TEXCOORD3;
 };
 
 //シャドウマップ出力頂点
@@ -174,14 +178,14 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
 		//スキンなし。
 		CalcWorldPosAndNormal(In, Pos, Normal, Tangent, true);
 	}
-
+	Out.worldPos = Pos.xyz;
 	Out.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
 	Out.Normal = normalize(Normal);
 	Out.Tangent = normalize(Tangent);
 	Out.Tex0 = In.Tex0;
 	if (g_flags.y) {
 		//シャドウレシーバー。
-		Out.worldPos = mul(float4(Pos.xyz, 1.0f), g_mLVP);
+		Out.lightViewPos = mul(float4(Pos.xyz, 1.0f), g_mLVP);
 	}
 	return Out;
 }
@@ -208,12 +212,13 @@ VS_OUTPUT VSMainInstancing(VS_INPUT_INSTANCING In, uniform bool hasSkin)
 	worldMat[2] = In.mWorld3;
 	worldMat[3] = In.mWorld4;
 	Pos = mul(float4(Pos.xyz, 1.0f), worldMat);	//ワールド行列をかける。
+	Out.worldPos = Pos.xyz;
 	Out.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
 	Out.Normal = mul(normalize(Normal), worldMat);
 	Out.Tex0 = In.base.Tex0;
 	if (g_flags.y) {
 		//シャドウレシーバー。
-		Out.worldPos = mul(float4(Pos.xyz, 1.0f), g_mLVP);
+		Out.lightViewPos = mul(float4(Pos.xyz, 1.0f), g_mLVP);
 	}
 	return Out;
 }
@@ -250,7 +255,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 	if (g_flags.y)
 	{
 		//影落とす
-		float4 posInLVP = In.worldPos;
+		float4 posInLVP = In.lightViewPos;
 		posInLVP.xyz /= posInLVP.w;
 
 		//uv座標に変換
@@ -259,7 +264,6 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 
 		if (shadowMapUV.x <= 1.0f && shadowMapUV.y <= 1.0f && shadowMapUV.x >= 0.0f && shadowMapUV.y >= 0.0f) {
 			shadow_val = tex2D(g_ShadowTextureSampler, shadowMapUV).rg;
-
 			float depth = min(posInLVP.z, 1.0f);
 
 			if (depth > shadow_val.r) {
@@ -270,7 +274,16 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 				float P = variance / (variance + md * md);
 				lig *= pow(P, 5.0f);
 			}
+			/*if (depth > shadow_val.r + 0.0006f) {
+				lig = 0;
+			}*/
 		}
+	}
+
+	if (g_isSpec)
+	{
+		//スペキュラライト。
+		lig.xyz += CalcSpecular(In.worldPos, normal, In.Tex0);
 	}
 
 	//アンビエントライト
@@ -290,9 +303,22 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 	if (g_flags.w){
 		color.a *= CalcLuminance(color.xyz);
 	}
+
+	if (g_fogParam.z > 1.9f) {
+		//高さフォグ
+		float h = max(In.worldPos.y - g_fogParam.y, 0.0f);
+		float t = min(h / g_fogParam.x, 1.0f);
+		color.xyz = lerp(float3(1.0f, 1.0f, 1.0f), color.xyz, t);
+	}
+	else if (g_fogParam.z > 0.0f) {
+		//距離フォグ
+		float z = length(In.worldPos - g_cameraPos);
+		z = max(z - g_fogParam.x, 0.0f);
+		float t = z / g_fogParam.y;
+		color.xyz = lerp(color.xyz, float3(1.0f, 1.0f, 1.0f), t);
+	}
 	
 	return color;
-
 }
 
 //シャドウマップ書き込み用頂点シェーダー

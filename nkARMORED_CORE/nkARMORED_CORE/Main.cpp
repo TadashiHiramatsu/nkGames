@@ -14,6 +14,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 	initparam.ShadowActive = true;
 
 	Engine().Init(initparam);
+	ShowCursor(FALSE);
 
 	CGameScene* game = new CGameScene();
 	SceneManager().ChangeScene(game);

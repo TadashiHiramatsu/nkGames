@@ -12,6 +12,13 @@ namespace nkEngine
 	class CTransform;
 	class CCamera;
 
+	enum EFogFunc
+	{
+		enFogFuncNone, //フォグなし
+		enFogFuncDist, //距離フォグ
+		enFogFuncHeight, //高さフォグ
+	};
+
 	//モデルレンダー
 	class CModelRender
 	{
@@ -24,7 +31,6 @@ namespace nkEngine
 
 		//初期化
 		//param[in] Xファイルのファイルパス
-		void Init(LPCSTR Filepass);
 		void Init(LPCSTR Filepass, CAnimation* anim);
 		//初期化
 		//param[in] スキンモデルデータ
@@ -59,6 +65,13 @@ namespace nkEngine
 		void SetNormalMap(CTexture* normalmap)
 		{
 			m_NormalMap = normalmap;
+		}
+
+		//スペキュラマップを設定
+		//param[in] テクスチャ
+		void SetSpecMap(CTexture* spec)
+		{
+			m_SpecMap = spec;
 		}
 
 		//シャドウキャスターのフラグを設定
@@ -112,6 +125,17 @@ namespace nkEngine
 			m_Transform = nullptr;
 		}
 
+		//フォグパラメータを設定
+		//param[in] フォグの種類
+		//param[in] フォグがかかり始める距離
+		//param[in] フォグがかかりきる距離
+		void SetFogParam(EFogFunc fogfunc, float idx0, float idx1)
+		{
+			m_fogFunc = fogfunc;
+			m_fogParam[0] = idx0;
+			m_fogParam[1] = idx1;
+		}
+
 	private:
 
 		void DrawFrame(
@@ -128,7 +152,6 @@ namespace nkEngine
 
 	private:
 		CSkinModelData* m_Skinmodel; //スキンモデルのデータ
-		CAnimation m_Animation; //アニメーション 
 		CLight* m_Light; //ライトクラス
 		ID3DXEffect* m_Effect; //エフェクト
 
@@ -146,7 +169,9 @@ namespace nkEngine
 		bool m_isRimLight; //リムライトをするかどうか
 		bool m_isLuminance; //輝度を埋め込むか
 		CTexture* m_NormalMap; //法線マップのTexture
+		CTexture* m_SpecMap; //鏡面反射マップのTexture
 
-		//シャドウキャスター必要
+		EFogFunc m_fogFunc;	//フォグの種類
+		float m_fogParam[2]; //フォグのパラメータ
 	};
 }

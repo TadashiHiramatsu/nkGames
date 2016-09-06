@@ -53,6 +53,9 @@ namespace nkEngine
 		//リリース
 		void Release();
 
+		//スケルトン削除
+		void DeleteSkeleton(LPD3DXFRAME frame);
+
 		//フレームレートの取得
 		//return フレームレート
 		D3DXFRAME* GetFrameRoot()
@@ -110,7 +113,7 @@ namespace nkEngine
 		}
 
 		//メッシュコンテナの削除
-		HRESULT DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase);
+		//HRESULT DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase);
 
 	private:
 

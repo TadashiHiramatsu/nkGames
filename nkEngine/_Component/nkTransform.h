@@ -31,6 +31,10 @@ namespace nkEngine
 		{
 			m_rotation = rot;
 		}
+		void AddPosition(D3DXVECTOR3& pos)
+		{
+			m_position += pos;
+		}
 	private:
 		D3DXVECTOR3 m_position;
 		D3DXVECTOR3 m_scale;

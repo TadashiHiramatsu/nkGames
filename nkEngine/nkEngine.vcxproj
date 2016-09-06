@@ -88,7 +88,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>d3dx9.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3dx9.lib;d3d9.lib;dinput8.lib;dxguid.lib;Xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -156,6 +156,8 @@
     <ClInclude Include="_Graphics\nkTexture.h" />
     <ClInclude Include="_Graphics\nkVertexBuffer.h" />
     <ClInclude Include="_Graphics\Shadow\nkShadow.h" />
+    <ClInclude Include="_Input\nkInput.h" />
+    <ClInclude Include="_Input\nkXinput.h" />
     <ClInclude Include="_Math\nkHash.h" />
     <ClInclude Include="_Scene\nkScene.h" />
     <ClInclude Include="_Scene\nkSceneManager.h" />
@@ -180,6 +182,8 @@
     <ClCompile Include="_Graphics\nkTexture.cpp" />
     <ClCompile Include="_Graphics\nkVertexBuffer.cpp" />
     <ClCompile Include="_Graphics\Shadow\nkShadow.cpp" />
+    <ClCompile Include="_Input\nkInput.cpp" />
+    <ClCompile Include="_Input\nkXinput.cpp" />
     <ClCompile Include="_Scene\nkScene.cpp" />
     <ClCompile Include="_Scene\nkSceneManager.cpp" />
   </ItemGroup>

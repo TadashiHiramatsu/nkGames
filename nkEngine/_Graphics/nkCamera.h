@@ -3,6 +3,12 @@
 
 namespace nkEngine
 {
+	enum EPerson
+	{
+		fast,
+		third
+	};
+
 	class CCamera
 	{
 	public:
@@ -30,6 +36,14 @@ namespace nkEngine
 			return m_mView;
 		}
 
+
+		//ビュー行列の逆行列の取得
+		//return ビュー行列の逆行列
+		const D3DXMATRIX& GetViewInvMatrix()
+		{
+			return m_mViewInv;
+		}
+
 		//プロジェクション行列の取得
 		//return プロジェクション行列
 		const D3DXMATRIX& GetProjectionMatrix()
@@ -51,19 +65,34 @@ namespace nkEngine
 			return m_mRotationInv;
 		}
 
+		//カメラの正規化された視点の取得
+		//return カメラの視点
+		const D3DXVECTOR3& GetNormalizePosition()
+		{
+			return m_vNormalizePosition;
+		}
+
+		//カメラの正規化された視点の設定
+		//param[in] 視点ベクトル
+		void SetNormalizePosition(const D3DXVECTOR3& pos)
+		{
+			D3DXVec3Normalize(&m_vNormalizePosition, &pos);
+		}
+
 		//カメラの視点の取得
 		//return カメラの視点
 		const D3DXVECTOR3& GetPosition()
 		{
-			return m_vNormalizeTarget;
+			return m_vPosition;
 		}
 
 		//カメラの視点の設定
 		//param[in] 視点ベクトル
 		void SetPosition(const D3DXVECTOR3& pos)
 		{
-			D3DXVec3Normalize(&m_vNormalizeTarget, &pos);
+			m_vPosition = pos;
 		}
+	
 
 		//カメラの注視点の取得
 		//return カメラの注視点
@@ -163,15 +192,28 @@ namespace nkEngine
 			m_Far = ffar;
 		}
 
+		//視点の設定
+		void SetPetson(const EPerson& person)
+		{
+			m_ePerson = person;
+		}
+
+		//視点の設定
+		EPerson GetPerson()
+		{
+			return m_ePerson;
+		}
+
 	private:
 		D3DXMATRIX m_mView; //ビュー行列
+		D3DXMATRIX m_mViewInv; //ビュー行列の逆行列
 		D3DXMATRIX m_mProj; //プロジェクション行列
 		D3DXMATRIX m_mRotation; //回転行列
 		D3DXMATRIX m_mRotationInv; //回転行列の逆行列
 
 		D3DXVECTOR3 m_vPosition; //カメラの視点
+		D3DXVECTOR3 m_vNormalizePosition; //カメラの正規化された視点
 		D3DXVECTOR3 m_vTarget; //カメラの注視点
-		D3DXVECTOR3 m_vNormalizeTarget; //カメラの注視点
 		D3DXVECTOR3 m_vUp; //カメラの上方向
 		float m_Distance; //カメラの視点と注視点の距離
 
@@ -180,5 +222,6 @@ namespace nkEngine
 		float m_Near;		//ニア
 		float m_Far;		//ファー
 
+		EPerson m_ePerson;
 	};
 }

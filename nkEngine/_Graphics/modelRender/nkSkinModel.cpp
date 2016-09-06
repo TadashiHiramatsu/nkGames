@@ -10,25 +10,18 @@ namespace nkEngine
 		m_Skinmodel(nullptr),
 		m_Light(nullptr),
 		m_NormalMap(nullptr),
+		m_SpecMap(nullptr),
 		m_isShadowCaster(false),
 		m_isShadowReceiver(false),
-		m_isRimLight(false)
+		m_isRimLight(false),
+		m_fogFunc(enFogFuncNone)
 	{
-
+		m_fogParam[0] = 0.0f;
+		m_fogParam[1] = 0.0f;
 	}
 
 	CModelRender::~CModelRender()
 	{
-		SAFE_RELEASE(m_Effect);
-	}
-
-	void CModelRender::Init(LPCSTR FileName)
-	{
-		m_Effect = EffectManager().LoadEffect("skinModel.fx");
-		m_Skinmodel = new CSkinModelData;
-
-		m_Skinmodel->LoadModelData(FileName, &m_Animation);
-
 	}
 
 	void CModelRender::Init(LPCSTR FileName, CAnimation* anim)
@@ -241,6 +234,43 @@ namespace nkEngine
 			}
 			m_Effect->SetValue("g_flags", flag, sizeof(flag));
 
+			//スペキュラとフォグで使用
+			D3DXVECTOR3 cameraPos;
+			cameraPos.x = m_camera->GetViewInvMatrix().m[3][0];
+			cameraPos.y = m_camera->GetViewInvMatrix().m[3][1];
+			cameraPos.z = m_camera->GetViewInvMatrix().m[3][2];
+			m_Effect->SetVector("g_cameraPos", (D3DXVECTOR4*)&cameraPos);
+
+			//スペキュラマップ
+			if (m_SpecMap != nullptr)
+			{
+				m_Effect->SetTexture("g_speculerMap", m_SpecMap->GetTextureDX());
+				m_Effect->SetBool("g_isSpec", true);
+			}
+			else
+			{
+				m_Effect->SetBool("g_isSpec", false);
+			}
+
+			D3DXVECTOR4 fogParam;
+			if (m_fogFunc == enFogFuncDist) {
+				//距離フォグ
+				fogParam.x = m_fogParam[0];
+				fogParam.y = m_fogParam[1];
+				fogParam.z = 1.0f;
+			}
+			else if (m_fogFunc == enFogFuncHeight) {
+				//高さフォグ
+				fogParam.x = m_fogParam[0];
+				fogParam.y = m_fogParam[1];
+				fogParam.z = 2.0f;
+			}
+			else {
+				fogParam.z = 0.0f;
+			}
+			
+			m_Effect->SetVector("g_fogParam",&fogParam);
+
 		}
 
 		//アニメーション
@@ -267,7 +297,7 @@ namespace nkEngine
 				m_Effect->SetInt("g_numBone", pMeshContainer->NumInfl);
 				
 				//ディフューズテクスチャ
-				//m_Effect->SetTexture("g_diffuseTexture", pMeshContainer->ppTextures[pBoneComb[iAttrib].AttribId]);
+				m_Effect->SetTexture("g_diffuseTexture", pMeshContainer->ppTextures[pBoneComb[iAttrib].AttribId]);
 
 				//カメラの回転行列の逆行列
 				m_Effect->SetMatrix("g_mViewMatrixRotInv",&m_camera->GetRotationInvMatrix());

@@ -18,6 +18,8 @@ using namespace std;
 
 #include<d3d9.h>
 #include<d3dx9.h>
+#include<dinput.h>
+#include<XInput.h>
 
 #ifdef _DEBUG
 #include <DxErr.h>
@@ -58,3 +60,6 @@ using namespace std;
 
 #include"_Component\nkTransform.h"
 #include"_GameObject\nkGameObject.h"
+
+#include"_Input\nkInput.h"
+#include"_Input\nkXinput.h"

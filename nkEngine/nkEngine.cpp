@@ -18,13 +18,17 @@ namespace nkEngine
 		OffScreenRender().Init(initParam);
 		if (initParam.ShadowActive)
 		{
-			Shadow().Create(1024, 1024);
+			Shadow().Create(2048, 2048);
 		}
+
+		Input().Init(m_hWnd);
+
 		return true;
 	}
 	
 	void CEngine::Final()
 	{
+		Input().Release();
 		SAFE_RELEASE(m_pD3DDevice);
 		SAFE_RELEASE(m_pD3D);
 	}
@@ -42,6 +46,9 @@ namespace nkEngine
 			}
 			else
 			{
+				Input().Update();
+				XInput().Update();
+				Shadow().Render();
 				OffScreenRender().Update();
 				OffScreenRender().Render();
 			}

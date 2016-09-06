@@ -38,7 +38,6 @@ namespace nkEngine
 		Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
 		
 		//Œ»Ý‚ÌƒV[ƒ“‚Ì•`‰æ
-		Shadow().Render();
 		SceneManager().RenderScene();
 
 		Device->SetRenderTarget(0, BackBuffer);

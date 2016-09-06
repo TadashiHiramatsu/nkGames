@@ -27,6 +27,34 @@ namespace {
 		}
 	}
 
+	void InnerDestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase)
+	{
+		UINT iMaterial;
+		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
+
+		SAFE_DELETE_ARRAY(pMeshContainer->pAttributeTable);
+		SAFE_DELETE_ARRAY(pMeshContainer->Name);
+		SAFE_DELETE_ARRAY(pMeshContainer->pAdjacency);
+		SAFE_DELETE_ARRAY(pMeshContainer->pMaterials);
+		SAFE_DELETE_ARRAY(pMeshContainer->pBoneOffsetMatrices);
+
+		// release all the allocated textures
+		if (pMeshContainer->ppTextures != NULL)
+		{
+			for (iMaterial = 0; iMaterial < pMeshContainer->NumMaterials; iMaterial++)
+			{
+				SAFE_RELEASE(pMeshContainer->ppTextures[iMaterial]);
+			}
+		}
+
+		SAFE_DELETE_ARRAY(pMeshContainer->ppTextures);
+		SAFE_DELETE_ARRAY(pMeshContainer->ppBoneMatrixPtrs);
+		SAFE_RELEASE(pMeshContainer->pBoneCombinationBuf);
+		SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
+		SAFE_RELEASE(pMeshContainer->pSkinInfo);
+		SAFE_RELEASE(pMeshContainer->pOrigMesh);
+		SAFE_DELETE(pMeshContainer);
+	}
 
 	HRESULT GenerateSkinnedMesh(
 		IDirect3DDevice9* pd3dDevice,
@@ -385,7 +413,7 @@ namespace {
 			if (FAILED(hr))
 				goto e_Exit;
 
-			LPD3DXMESH pOutMesh;
+			LPD3DXMESH pOutMesh, pTmpMesh;
 			hr = pMeshContainer->MeshData.pMesh->CloneMesh(
 				pMeshContainer->MeshData.pMesh->GetOptions(),
 				decl,
@@ -394,13 +422,15 @@ namespace {
 			if (FAILED(hr))
 				goto e_Exit;
 
+			//一時メッシュに退避。
+			pTmpMesh = pOutMesh;
 			//D3DXComputeTangentFrameExを実行すると属性テーブルの情報が失われる・・・。
 			DWORD numAttributeTable;
 			pMeshContainer->MeshData.pMesh->GetAttributeTable(NULL, &numAttributeTable);
 			pMeshContainer->pAttributeTable = new D3DXATTRIBUTERANGE[numAttributeTable];
 			pMeshContainer->MeshData.pMesh->GetAttributeTable(pMeshContainer->pAttributeTable, NULL);
 			hr = D3DXComputeTangentFrameEx(
-				pOutMesh,
+				pTmpMesh,
 				D3DDECLUSAGE_TEXCOORD,
 				0,
 				D3DDECLUSAGE_TANGENT,
@@ -417,22 +447,16 @@ namespace {
 				&pOutMesh,
 				NULL
 			);
-			pMeshContainer->MeshData.pMesh->Release();
+			//一時メッシュを破棄。
+			SAFE_RELEASE(pTmpMesh);
+			SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
 			pMeshContainer->MeshData.pMesh = pOutMesh;
-
-			std::vector<DWORD> adjList;
-			adjList.resize(3 * pOutMesh->GetNumFaces());
-			pOutMesh->GenerateAdjacency(1.0f / 512.0f, &adjList[0]); // EPSIONは適当な値(1.0f/512とか)
-
-			DWORD numVert = pOutMesh->GetNumVertices();  // Optimizeの一種
-			pOutMesh->OptimizeInplace(D3DXMESHOPT_COMPACT, &adjList[0], NULL, NULL, NULL);
-			numVert = pOutMesh->GetNumVertices();
 
 			if (FAILED(hr))
 				goto e_Exit;
 		}
 		else {
-			LPD3DXMESH pOutMesh;
+			LPD3DXMESH pOutMesh, pTmpMesh;
 			DWORD numVert = pMeshContainer->MeshData.pMesh->GetNumVertices();
 			hr = pMeshContainer->MeshData.pMesh->CloneMesh(
 				pMeshContainer->MeshData.pMesh->GetOptions(),
@@ -443,8 +467,12 @@ namespace {
 			pMeshContainer->pAttributeTable = new D3DXATTRIBUTERANGE[numAttributeTable];
 			pMeshContainer->MeshData.pMesh->GetAttributeTable(pMeshContainer->pAttributeTable, NULL);
 			numVert = pMeshContainer->MeshData.pMesh->GetNumVertices();
+			
+			//一時メッシュに退避。
+			pTmpMesh = pOutMesh; 
+			
 			hr = D3DXComputeTangentFrameEx(
-				pOutMesh,
+				pTmpMesh,
 				D3DDECLUSAGE_TEXCOORD,
 				0,
 				D3DDECLUSAGE_TANGENT,
@@ -461,18 +489,14 @@ namespace {
 				&pOutMesh,
 				NULL
 			);
+
+			//一時メッシュを破棄。
+			SAFE_RELEASE(pTmpMesh);
 			numVert = pOutMesh->GetNumVertices();
-			pMeshContainer->MeshData.pMesh->Release();
+			SAFE_RELEASE(pMesh);
 			pMeshContainer->MeshData.pMesh = pOutMesh;
 			if (FAILED(hr))
 				goto e_Exit;
-			LPD3DXMESH optMesh;
-			std::vector<DWORD> adjList;
-			adjList.resize(3 * pOutMesh->GetNumFaces());
-			pOutMesh->GenerateAdjacency(1.0f, &adjList[0]); // EPSIONは適当な値(1.0f/512とか)
-			numVert = pOutMesh->GetNumVertices();  // Optimizeの一種
-			pOutMesh->Optimize(D3DXMESHOPT_COMPACT, &adjList[0], NULL, NULL, NULL, &optMesh);
-			numVert = optMesh->GetNumVertices();
 
 		}
 
@@ -482,7 +506,7 @@ namespace {
 
 	e_Exit:
 
-		pd3dDevice->Release();
+		SAFE_RELEASE(pd3dDevice);
 
 		// call Destroy function to properly clean up the memory allocated 
 		if (pMeshContainer != NULL)
@@ -512,31 +536,7 @@ namespace {
 	//--------------------------------------------------------------------------------------
 	HRESULT CAllocateHierarchy::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase)
 	{
-		UINT iMaterial;
-		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
-
-		SAFE_DELETE_ARRAY(pMeshContainer->pAttributeTable);
-		SAFE_DELETE_ARRAY(pMeshContainer->Name);
-		SAFE_DELETE_ARRAY(pMeshContainer->pAdjacency);
-		SAFE_DELETE_ARRAY(pMeshContainer->pMaterials);
-		SAFE_DELETE_ARRAY(pMeshContainer->pBoneOffsetMatrices);
-
-		// release all the allocated textures
-		if (pMeshContainer->ppTextures != NULL)
-		{
-			for (iMaterial = 0; iMaterial < pMeshContainer->NumMaterials; iMaterial++)
-			{
-				SAFE_RELEASE(pMeshContainer->ppTextures[iMaterial]);
-			}
-		}
-
-		SAFE_DELETE_ARRAY(pMeshContainer->ppTextures);
-		SAFE_DELETE_ARRAY(pMeshContainer->ppBoneMatrixPtrs);
-		SAFE_RELEASE(pMeshContainer->pBoneCombinationBuf);
-		SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
-		SAFE_RELEASE(pMeshContainer->pSkinInfo);
-		SAFE_RELEASE(pMeshContainer->pOrigMesh);
-		SAFE_DELETE(pMeshContainer);
+		InnerDestroyMeshContainer(pMeshContainerBase);
 		return S_OK;
 	}
 
@@ -605,14 +605,41 @@ namespace nkEngine
 			DeleteCloneSkeleton(m_FrameRoot);
 			m_FrameRoot = nullptr;
 		}
+		else
+		{
+			DeleteSkeleton(m_FrameRoot);
+		}
+		//メモリリーク回避の残骸
+		//DestroyMeshContainer(m_FrameRoot->pMeshContainer);
+
 		m_instanceVertexBuffer.Release();
 		m_numInstance = 0;
+	}
 
-		DestroyMeshContainer(m_FrameRoot->pMeshContainer);
+	void CSkinModelData::DeleteSkeleton(LPD3DXFRAME frame)
+	{
+		if (!frame) {
+			return;
+		}
+		if (frame->pMeshContainer != NULL)
+		{
+			//メッシュコンテナがある。
+			InnerDestroyMeshContainer(frame->pMeshContainer);
+		}
 
-		SAFE_DELETE(m_FrameRoot);
-		SAFE_RELEASE(m_AnimController);
+		if (frame->pFrameSibling != NULL)
+		{
+			//兄弟がいる。
+			DeleteSkeleton(frame->pFrameSibling);
+		}
 
+		if (frame->pFrameFirstChild != NULL)
+		{
+			//子供がいる。
+			DeleteSkeleton(frame->pFrameFirstChild);
+		}
+		SAFE_DELETE_ARRAY(frame->Name);
+		SAFE_DELETE(frame);
 	}
 
 	/*!
@@ -637,9 +664,11 @@ namespace nkEngine
 		);
 		NK_ASSERT(SUCCEEDED(hr), "D3DXLoadMeshHierarchyFromXに失敗しました");
 		SetupBoneMatrixPointers(m_FrameRoot, m_FrameRoot);
-		if (m_AnimController)
-		{
+		if (anim && m_AnimController) {
 			anim->Init(m_AnimController);
+		}
+		else {
+			SAFE_RELEASE(m_AnimController);
 		}
 	}
 
@@ -759,42 +788,43 @@ namespace nkEngine
 		UpdateFrameMatrices(m_FrameRoot, reinterpret_cast<const D3DXMATRIX*>(&matWorld));
 	}
 
-	HRESULT CSkinModelData::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase)
-	{
-		if (pMeshContainerBase->pNextMeshContainer != nullptr) {
-			DestroyMeshContainer(pMeshContainerBase->pNextMeshContainer);
-		}
-		
-		UINT iMaterial;
-		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
+	//メモリリーク回避の残骸
+	//HRESULT CSkinModelData::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase)
+	//{
+	//	if (pMeshContainerBase->pNextMeshContainer != nullptr) {
+	//		DestroyMeshContainer(pMeshContainerBase->pNextMeshContainer);
+	//	}
+	//	
+	//	UINT iMaterial;
+	//	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
 
-		SAFE_DELETE_ARRAY(pMeshContainer->pAttributeTable);
-		SAFE_DELETE_ARRAY(pMeshContainer->Name);
-		SAFE_DELETE_ARRAY(pMeshContainer->pAdjacency);
-		SAFE_DELETE_ARRAY(pMeshContainer->pMaterials);
-		SAFE_DELETE_ARRAY(pMeshContainer->pBoneOffsetMatrices);
+	//	SAFE_DELETE_ARRAY(pMeshContainer->pAttributeTable);
+	//	SAFE_DELETE_ARRAY(pMeshContainer->Name);
+	//	SAFE_DELETE_ARRAY(pMeshContainer->pAdjacency);
+	//	SAFE_DELETE_ARRAY(pMeshContainer->pMaterials);
+	//	SAFE_DELETE_ARRAY(pMeshContainer->pBoneOffsetMatrices);
 
-		// release all the allocated textures
-		if (pMeshContainer->ppTextures != NULL)
-		{
-			for (iMaterial = 0; iMaterial < pMeshContainer->NumMaterials; iMaterial++)
-			{
-				SAFE_RELEASE(pMeshContainer->ppTextures[iMaterial]);
-			}
-		}
+	//	// release all the allocated textures
+	//	if (pMeshContainer->ppTextures != NULL)
+	//	{
+	//		for (iMaterial = 0; iMaterial < pMeshContainer->NumMaterials; iMaterial++)
+	//		{
+	//			SAFE_RELEASE(pMeshContainer->ppTextures[iMaterial]);
+	//		}
+	//	}
 
-		SAFE_DELETE_ARRAY(pMeshContainer->ppTextures);
-		SAFE_DELETE_ARRAY(pMeshContainer->ppBoneMatrixPtrs);
-		SAFE_RELEASE(pMeshContainer->pBoneCombinationBuf);
-		SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
-		SAFE_RELEASE(pMeshContainer->pSkinInfo);
-		SAFE_RELEASE(pMeshContainer->pOrigMesh);
-		SAFE_DELETE(pMeshContainer);
+	//	SAFE_DELETE_ARRAY(pMeshContainer->ppTextures);
+	//	SAFE_DELETE_ARRAY(pMeshContainer->ppBoneMatrixPtrs);
+	//	SAFE_RELEASE(pMeshContainer->pBoneCombinationBuf);
+	//	SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
+	//	SAFE_RELEASE(pMeshContainer->pSkinInfo);
+	//	SAFE_RELEASE(pMeshContainer->pOrigMesh);
+	//	SAFE_DELETE(pMeshContainer);
 
-		
+	//	
 
-		return S_OK;
-	}
+	//	return S_OK;
+	//}
 
 	void CSkinModelData::CloneSkeleton(LPD3DXFRAME & dstFrame, D3DXFRAME * srcFrame)
 	{

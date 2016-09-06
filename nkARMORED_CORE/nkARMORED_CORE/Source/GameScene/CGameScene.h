@@ -4,6 +4,8 @@
 class CPlayer;
 #include"CGround.h"
 class CGround;
+#include"CObject.h"
+class CObject;
 
 #include"CGameCamera.h"
 
@@ -15,7 +17,7 @@ public:
 	void Render()override;
 	void Release()override;
 private:
-	CPlayer* m_player;
-	CPlayer m_p;
+	CPlayer m_player;
 	CGround m_ground;
+	CObject m_object;
 };

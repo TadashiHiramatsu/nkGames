@@ -40,6 +40,7 @@ namespace nkEngine
 		const CTexture* GetTexture() const
 		{
 			return m_blur.GetTexture();
+			//return m_shadowMapRT.GetTexture();
 		}
 
 		//ƒ‰ƒCƒg‚Ì•ûŒü‚ğİ’è

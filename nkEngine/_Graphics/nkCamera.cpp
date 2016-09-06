@@ -4,14 +4,15 @@
 namespace nkEngine
 {
 	CCamera::CCamera():
-		m_vNormalizeTarget(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+		m_vNormalizePosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
 		m_vTarget(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
 		m_vUp(D3DXVECTOR3(0.0f,1.0f,0.0f)),
 		m_Distance(10),
 		m_Fovy(D3DXToRadian(45.0f)),
 		m_Aspect(0.0f),
-		m_Near(1.0f),
-		m_Far(1000.0f)
+		m_Near(0.1f),
+		m_Far(1000.0f),
+		m_ePerson(EPerson::third)
 	{
 		D3DXMatrixIdentity(&m_mView);
 		D3DXMatrixIdentity(&m_mProj);
@@ -30,25 +31,19 @@ namespace nkEngine
 		m_Aspect = (float)Engine().GetFrameW() / (float)Engine().GetFrameH();
 		D3DXMatrixPerspectiveFovLH(&m_mProj, m_Fovy, m_Aspect, m_Near, m_Far);
 
-		//ビュー行列の計算
-		m_vPosition = m_vNormalizeTarget * m_Distance + m_vTarget;
+		//m_vPosition = m_vNormalizePosition * m_Distance + m_vTarget;
 
-		D3DXVECTOR3 zaxis;//注視点から視点への方向（正規化）
-		D3DXVec3Normalize(&zaxis, &D3DXVECTOR3(m_vTarget - m_vPosition));
-		D3DXVECTOR3 xaxis;//その方向と上方向の外積（正規化）
-		D3DXVec3Normalize(&xaxis, D3DXVec3Cross(&xaxis, &m_vUp, &zaxis));
-		D3DXVECTOR3 yaxis;//以上二つの外積
-		D3DXVec3Cross(&yaxis, &zaxis, &xaxis);
-		m_mView = D3DXMATRIX(
-			xaxis.x, yaxis.x, zaxis.x, 0,
-			xaxis.y, yaxis.y, zaxis.y, 0,
-			xaxis.z, yaxis.z, zaxis.z, 0,
-			-D3DXVec3Dot(&xaxis, &m_vPosition), -D3DXVec3Dot(&yaxis, &m_vPosition), -D3DXVec3Dot(&zaxis, &m_vPosition), 1);
+		if (m_ePerson == EPerson::third)
+		{
+			D3DXMatrixLookAtLH(&m_mView, &m_vPosition, &m_vTarget, &m_vUp);
+		}
+		else if (m_ePerson == EPerson::fast)
+		{
+			D3DXMatrixLookAtLH(&m_mView, &m_vTarget, &m_vPosition, &m_vUp);
+		}
 
-		D3DXMATRIX mViewInv;
-		D3DXMatrixIdentity(&mViewInv);
-		D3DXMatrixInverse(&mViewInv, NULL, &m_mView);
-		m_mRotation = mViewInv;
+		D3DXMatrixInverse(&m_mViewInv, NULL, &m_mView);
+		m_mRotation = m_mViewInv;
 		m_mRotation.m[3][0] = 0.0f;
 		m_mRotation.m[3][1] = 0.0f;
 		m_mRotation.m[3][2] = 0.0f;
@@ -59,14 +54,22 @@ namespace nkEngine
 	{
 		D3DXMATRIX tmp;
 		D3DXMatrixRotationY(&tmp, rot);
-		D3DXVec3TransformCoord(&m_vNormalizeTarget, &m_vNormalizeTarget, &tmp);
+		D3DXVec3TransformCoord(&m_vNormalizePosition, &m_vNormalizePosition, &tmp);
+		//m_vPosition = m_vNormalizePosition * m_Distance + m_vTarget;
 	}
 	void CCamera::SpinVertically(float rot)
 	{
+
 		D3DXQUATERNION qua;
 		D3DXMATRIX tmp;
-		D3DXQuaternionRotationAxis(&qua, &D3DXVECTOR3(-m_vNormalizeTarget.z, 0, m_vNormalizeTarget.x), rot);
+		D3DXVECTOR3 nor = m_vNormalizePosition;
+		D3DXQuaternionRotationAxis(&qua, &D3DXVECTOR3(-m_vNormalizePosition.z, 0, m_vNormalizePosition.x), rot);
 		D3DXMatrixRotationQuaternion(&tmp, &qua);
-		D3DXVec3TransformCoord(&m_vNormalizeTarget, &m_vNormalizeTarget, &tmp);
+		D3DXVec3TransformCoord(&m_vNormalizePosition, &m_vNormalizePosition, &tmp);
+		if (m_vNormalizePosition.y >= 0.9 || m_vNormalizePosition.y <= -0.9)
+		{
+			m_vNormalizePosition = nor;
+		}
+		//m_vPosition = m_vNormalizePosition * m_Distance + m_vTarget;
 	}
 }

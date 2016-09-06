@@ -31,6 +31,9 @@
     <Filter Include="Math">
       <UniqueIdentifier>{1bf93946-df91-45a3-b071-b6adc0930f28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{63b19cb6-a28d-4a0d-bc90-500d7213a20f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nkEngine.cpp">
@@ -89,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="_Graphics\nkBlur.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Input\nkInput.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="_Input\nkXinput.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +169,12 @@
     </ClInclude>
     <ClInclude Include="_Graphics\nkBlur.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Input\nkInput.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="_Input\nkXinput.h">
+      <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

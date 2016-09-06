@@ -31,11 +31,24 @@ public:
 
 	//アニメーション再生
 	void PlayAnimation(AnimationNo animNo);
+
 private:
-	CModelRender m_model;
-	CTransform m_trans;
-	CLight m_light;
-	CTexture normal; //法線
-	CAnimation* m_anim;
-	AnimationNo currentAnimSetNo;
+	//回転
+	void Rotation();
+	//移動
+	void Move();
+private:
+	CModelRender m_model; //モデル
+	CLight m_light; //ライト
+	CTexture m_normal; //法線テクスチャ
+	CTexture m_spec; //スペキュラテクスチャ
+	CAnimation* m_anim; //アニメーション
+	AnimationNo currentAnimSetNo; //現在のアニメーション
+
+	CTransform m_trans; //トランスフォーム
+	
+	D3DXVECTOR3 m_Target; //注視点
+	D3DXVECTOR3 m_direction_Z;
+	D3DXVECTOR3 m_direction_X;
+	float m_TargetLen;
 };
