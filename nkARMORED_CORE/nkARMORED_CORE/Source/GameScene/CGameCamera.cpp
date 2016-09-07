@@ -3,10 +3,11 @@
 
 CGameCamera g_camera;
 
-CGameCamera::CGameCamera():
+CGameCamera::CGameCamera() :
 	m_DefaultPosition(D3DXVECTOR3(0.0f, 2.0f, 0.0f)),
 	m_PlayerTarget(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
-	m_PlayerPosition(D3DXVECTOR3(0.0f,0.0f,0.0f))
+	m_PlayerPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+	m_Dir(EDir::Right)
 {
 
 }
@@ -23,7 +24,7 @@ void CGameCamera::Init()
 	m_camera.SetTarget(m_PlayerTarget);
 	m_camera.Update();
 }
-		
+
 void CGameCamera::Update()
 {
 	m_camera.SetTarget(m_PlayerTarget);
@@ -34,27 +35,30 @@ void CGameCamera::Update()
 	D3DXVec3Cross(&dirX, &dirZ, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	dirZ *= 5;
 	dirX *= 2;
-	static int dir = 1;
-	if (XInput().IsTrigger(enButtonA))
+
+	static float dir = 1.0f;
+	if (m_Dir == EDir::Left)
 	{
-		dir *= -1;
+		if (dir < 1.0f)
+		{
+			dir += 0.1;
+		}
+	}
+	if (m_Dir == EDir::Right)
+	{
+		if (dir > -1.0f)
+		{
+			dir -= 0.1;
+		}
 	}
 
-	D3DXVECTOR3 pos = dirZ + m_DefaultPosition + m_PlayerPosition + dirX * dir;
-	D3DXVECTOR3 toPos;
-	D3DXVECTOR3 pos0 = m_camera.GetPosition();
-	toPos = pos - pos0;
-	
-	float a = D3DXVec3Length(&toPos);
-	if (1.0 < a)
-	{
-		D3DXVec3Normalize(&toPos, &toPos);
-		toPos *= 0.9;
-	}
+	D3DXVECTOR3 pos = dirZ + m_DefaultPosition + m_PlayerPosition + dirX * dir; //移動先のポジション
 
-	m_camera.SetPosition(toPos + pos0);
+	D3DXVECTOR3 camerapos = m_camera.GetPosition(); //現在のポジション
+	D3DXVECTOR3 toPos = pos - camerapos; //現在のポジションから移動先のポジションへのベクトル
+
+	m_camera.SetPosition(toPos + camerapos);
 	m_camera.Update();
-
 }
 
 void CGameCamera::BeforeUpdate()

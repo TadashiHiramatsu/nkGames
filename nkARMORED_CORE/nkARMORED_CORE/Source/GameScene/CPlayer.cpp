@@ -86,13 +86,33 @@ void CPlayer::Rotation()
 	D3DXMATRIX tmp;
 	D3DXMatrixIdentity(&tmp);
 
+	static int time[2] = { 0 };
 	if (XInput().GetStickR_X() <= -1)
 	{
+		time[0]++;
 		D3DXMatrixRotationY(&tmp, -0.05);
+	}
+	else
+	{
+		time[0] = 0;
 	}
 	if (XInput().GetStickR_X() >= 1)
 	{
+		time[1]++;
 		D3DXMatrixRotationY(&tmp, 0.05);
+	}
+	else
+	{
+		time[1] = 0;
+	}
+
+	if (time[0] >= 10 && time[1] == 0)
+	{
+		g_camera.ReversalDirection(EDir::Right);
+	}
+	if (time[1] >= 10 && time[0] == 0)
+	{
+		g_camera.ReversalDirection(EDir::Left);
 	}
 
 	//‰ñ“]

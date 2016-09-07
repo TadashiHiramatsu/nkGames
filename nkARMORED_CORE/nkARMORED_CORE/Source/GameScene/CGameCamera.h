@@ -1,5 +1,11 @@
 #pragma once
 
+enum EDir
+{
+	Right = -1,
+	Left = 1
+};
+
 class CGameCamera : public CGameObject
 {
 public:
@@ -43,6 +49,11 @@ public:
 		return m_Direction;
 	}
 
+	void ReversalDirection(EDir dir)
+	{
+		m_Dir = dir;
+	}
+
 private:
 	CCamera m_camera;
 	D3DXVECTOR3 m_PlayerTarget;
@@ -50,6 +61,8 @@ private:
 	D3DXVECTOR3 m_DefaultPosition;
 
 	D3DXVECTOR3 m_Direction;
+	
+	EDir m_Dir;
 };
 
 extern CGameCamera g_camera;
