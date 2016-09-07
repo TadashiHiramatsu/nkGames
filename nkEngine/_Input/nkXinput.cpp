@@ -37,22 +37,22 @@ namespace nkEngine
 		DWORD keyCoord;			//!<キーボードのキーコード。
 	};
 	const VirtualPadToKeyboard vPadToKeyboardTable[enButtonNum] = {
-		{ enButtonUp		, DIK_8 },
-		{ enButtonDown		, DIK_2 },
-		{ enButtonLeft		, DIK_4 },
-		{ enButtonRight		, DIK_6 },
-		{ enButtonA			, DIK_J },
-		{ enButtonB			, DIK_K },
-		{ enButtonY			, DIK_I },
-		{ enButtonX			, DIK_O },
+		{ enButtonUp		, '8' },
+		{ enButtonDown		, '2' },
+		{ enButtonLeft		, '4' },
+		{ enButtonRight		, '6' },
+		{ enButtonA			, 'J' },
+		{ enButtonB			, 'K' },
+		{ enButtonY			, 'I' },
+		{ enButtonX			, 'O' },
 		{ enButtonSelect	, VK_SPACE },
 		{ enButtonStart		, VK_RETURN },
-		{ enButtonRB1		, DIK_7 },
-		{ enButtonRB2		, DIK_8 },
-		{ enButtonRB3		, DIK_9 },
-		{ enButtonLB1		, DIK_B },
-		{ enButtonLB2		, DIK_N },
-		{ enButtonLB3		, DIK_M },
+		{ enButtonRB1		, '7' },
+		{ enButtonRB2		, '8' },
+		{ enButtonRB3		, '9' },
+		{ enButtonLB1		, 'B' },
+		{ enButtonLB2		, 'N' },
+		{ enButtonLB3		, 'M' },
 	};
 
 	CXinput::CXinput():
