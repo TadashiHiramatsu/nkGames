@@ -39,6 +39,12 @@
     <ClCompile Include="Source\GameScene\CObject.cpp">
       <Filter>GameScene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameScene\CSkybox.cpp">
+      <Filter>GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameScene\CBuilding.cpp">
+      <Filter>GameScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -60,6 +66,12 @@
       <Filter>GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameScene\CObject.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameScene\CSkybox.h">
+      <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameScene\CBuilding.h">
       <Filter>GameScene</Filter>
     </ClInclude>
   </ItemGroup>

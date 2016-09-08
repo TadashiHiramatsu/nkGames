@@ -266,17 +266,17 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 			shadow_val = tex2D(g_ShadowTextureSampler, shadowMapUV).rg;
 			float depth = min(posInLVP.z, 1.0f);
 
-			if (depth > shadow_val.r) {
-				//チェビシェフ
-				float depth_sq = shadow_val.r * shadow_val.r;
-				float variance = max(shadow_val.g - depth_sq, 0.0006f);
-				float md = depth - shadow_val.r;
-				float P = variance / (variance + md * md);
-				lig *= pow(P, 5.0f);
-			}
-			/*if (depth > shadow_val.r + 0.0006f) {
+			//if (depth > shadow_val.r) {
+			//	//チェビシェフ
+			//	float depth_sq = shadow_val.r * shadow_val.r;
+			//	float variance = max(shadow_val.g - depth_sq, 0.0006f);
+			//	float md = depth - shadow_val.r;
+			//	float P = variance / (variance + md * md);
+			//	lig *= pow(P, 5.0f);
+			//}
+			if (depth > shadow_val.r + 0.0006f) {
 				lig = 0;
-			}*/
+			}
 		}
 	}
 

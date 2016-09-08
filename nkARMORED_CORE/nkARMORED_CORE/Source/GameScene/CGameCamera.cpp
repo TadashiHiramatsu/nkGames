@@ -7,7 +7,7 @@ CGameCamera::CGameCamera() :
 	m_DefaultPosition(D3DXVECTOR3(0.0f, 2.0f, 0.0f)),
 	m_PlayerTarget(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
 	m_PlayerPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
-	m_Dir(EDir::Right)
+	m_Dir(EDir::Left)
 {
 
 }
@@ -58,14 +58,18 @@ void CGameCamera::Update()
 	D3DXVECTOR3 toPos = pos - camerapos; //現在のポジションから移動先のポジションへのベクトル
 
 	m_camera.SetPosition(toPos + camerapos);
+
+
+	m_Direction = m_PlayerTarget - m_camera.GetPosition();
+	m_Direction.y = 0.0f;
+	D3DXVec3Normalize(&m_Direction, &m_Direction);
+
 	m_camera.Update();
 }
 
 void CGameCamera::BeforeUpdate()
 {
-	m_Direction = m_PlayerTarget - m_camera.GetPosition();
-	m_Direction.y = 0.0f;
-	D3DXVec3Normalize(&m_Direction, &m_Direction);
+	
 }
 
 void CGameCamera::Release()

@@ -1,11 +1,11 @@
 #pragma once
 
 #include"CPlayer.h"
-class CPlayer;
 #include"CGround.h"
-class CGround;
 #include"CObject.h"
-class CObject;
+#include"CSkybox.h"
+#include"CBuilding.h"
+class CBuilding;
 
 #include"CGameCamera.h"
 
@@ -20,4 +20,6 @@ private:
 	CPlayer m_player;
 	CGround m_ground;
 	CObject m_object;
+	CSkybox m_skybox;
+	CBuilding m_building;
 };

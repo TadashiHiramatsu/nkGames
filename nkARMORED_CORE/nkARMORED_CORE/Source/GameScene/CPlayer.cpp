@@ -13,25 +13,18 @@ CPlayer::~CPlayer()
 
 void CPlayer::Init()
 {
-	m_anim = new CAnimation();
-	m_model.Init("UnityChan_SD.x",m_anim);
+	m_model.Init("prototype.X",NULL);
 	m_model.SetCamera(g_camera.GetCamera());
 	m_model.SetTransform(&m_trans);
 	m_model.SetLight(&m_light);
 	m_model.SetShadowCasterFlag(true);
 	m_model.SetShadowReceiverFlag(true);
 
-	m_normal.Load("utc_nomal.tga");
-	m_model.SetNormalMap(&m_normal);
 
-	m_spec.Load("utc_spec.tga");
-	m_model.SetSpecMap(&m_spec);
-
-	m_anim->SetAnimationEndTime(AnimationRun, 0.8);
 	currentAnimSetNo = AnimationStand;
 	PlayAnimation(currentAnimSetNo);
 
-	Shadow().SetLightPosition(D3DXVECTOR3(3.5f, 3.5f, 3.5f));
+	Shadow().SetLightPosition(D3DXVECTOR3(1.0f, 1.0f, 1.0f)*10000);
 	Shadow().SetLightTarget(m_trans.GetPosition());
 	Shadow().SetCalcLightViewFunc(CShadowMap::enCalcLightViewFunc_PositionTarget);
 
@@ -51,7 +44,6 @@ void CPlayer::Update()
 	Rotation();
 	Move();
 	m_model.Update();
-	m_anim->Update(1.0f / 60.0f);
 	g_camera.SetPlayerTarget(m_Target);
 	g_camera.SetPlayerPosition(m_trans.GetPosition());
 
@@ -87,10 +79,11 @@ void CPlayer::Rotation()
 	D3DXMatrixIdentity(&tmp);
 
 	static int time[2] = { 0 };
+	static float rots = 0.1f;
 	if (XInput().GetStickR_X() <= -1)
 	{
 		time[0]++;
-		D3DXMatrixRotationY(&tmp, -0.05);
+		D3DXMatrixRotationY(&tmp, -rots);
 	}
 	else
 	{
@@ -99,18 +92,19 @@ void CPlayer::Rotation()
 	if (XInput().GetStickR_X() >= 1)
 	{
 		time[1]++;
-		D3DXMatrixRotationY(&tmp, 0.05);
+		D3DXMatrixRotationY(&tmp, rots);
 	}
 	else
 	{
 		time[1] = 0;
 	}
 
-	if (time[0] >= 10 && time[1] == 0)
+	static int timer = 6;
+	if (time[0] >= timer && time[1] == 0)
 	{
 		g_camera.ReversalDirection(EDir::Right);
 	}
-	if (time[1] >= 10 && time[0] == 0)
+	if (time[1] >= timer && time[0] == 0)
 	{
 		g_camera.ReversalDirection(EDir::Left);
 	}
@@ -160,6 +154,8 @@ void CPlayer::Move()
 	{
 		move += m_direction_Z;
 	}
+
+
 	D3DXVec3Normalize(&move, &move);
 	m_trans.AddPosition(move * Speed);
 }

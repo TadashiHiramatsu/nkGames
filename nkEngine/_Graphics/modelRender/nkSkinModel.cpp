@@ -349,17 +349,17 @@ namespace nkEngine
 				//インスタンシング
 				if (m_Skinmodel->GetNumInstance() != 0)
 				{
-					DrawMeshContainer_InstancingDrawCommon(pMeshContainer, 0);
+					DrawMeshContainer_InstancingDrawCommon(pMeshContainer, i);
 				}
 				//通常
 				else
 				{
 					pMeshContainer->MeshData.pMesh->DrawSubset(i);
 				}
-
-				m_Effect->EndPass();
-				m_Effect->End();
 			}
+
+			m_Effect->EndPass();
+			m_Effect->End();
 		}
 	}
 

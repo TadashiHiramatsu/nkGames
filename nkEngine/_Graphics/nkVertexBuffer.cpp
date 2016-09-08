@@ -63,7 +63,7 @@ namespace nkEngine
 		void* pDstVertexBuffer;
 
 		HRESULT hr = m_pVB->Lock(0, 0, &pDstVertexBuffer, D3DLOCK_DISCARD);
-		NK_ASSERT(SUBLANGID(hr), "頂点バッファをロックできませんでした");
+		NK_ASSERT(SUCCEEDED(hr), "頂点バッファをロックできませんでした");
 
 		//まるっとコピー
 		memcpy(pDstVertexBuffer, data, m_size);

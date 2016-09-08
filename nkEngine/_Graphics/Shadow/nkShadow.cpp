@@ -9,8 +9,8 @@ namespace nkEngine
 		m_near(1.0f),
 		m_far(100.0f),
 		m_Aspect(1.0f),
-		m_shadowAreaW(10.0f),
-		m_shadowAreaH(10.0f),
+		m_shadowAreaW(50.0f),
+		m_shadowAreaH(50.0f),
 		m_camera(nullptr),
 		m_calcLightViewFunc(enCalcLightViewFunc_PositionTarget),
 		m_vLTarget(D3DXVECTOR3(0.0f, 0.0f, 0.0f))
