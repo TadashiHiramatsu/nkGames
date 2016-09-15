@@ -33,21 +33,21 @@ void CBuilding::Init()
 	worldMatrixBuffer = new D3DXMATRIX[num];
 	
 	for (int i = 0; i < num; i++) {
-		D3DXMATRIX mWorld, mPosition, mScale, m_mRotation;
+		D3DXMATRIX mPosition, mScale, m_mRotation;
 
 		D3DXMatrixTranslation(&mPosition, param[i].pos.x, param[i].pos.y, param[i].pos.z);
 		D3DXMatrixRotationQuaternion(&m_mRotation, &param[i].rot);
 		D3DXMatrixScaling(&mScale, param[i].scale.x, param[i].scale.y, param[i].scale.z);
 
-		mWorld = mScale * m_mRotation * mPosition;
-		worldMatrixBuffer[i] = mWorld;
+		worldMatrixBuffer[i] = mScale * m_mRotation * mPosition;
 	}
 
 	skinModel.Init(&skinModelData);
 	skinModel.SetLight(&light);
 	skinModel.SetCamera(g_camera.GetCamera());
 	skinModel.SetTransform(&m_trans);
-
+	
+	skinModel.SetFogParam(enFogFuncDist, 80.0f, 160.0f);
 	skinModel.SetShadowCasterFlag(true);
 	skinModel.SetShadowReceiverFlag(true);
 }
@@ -55,13 +55,11 @@ void CBuilding::Init()
 void CBuilding::Update()
 {
 	skinModel.UpdateInstancinfDrawData(worldMatrixBuffer);
-	skinModel.Update();
-
 }
 
 void CBuilding::Render()
 {
-	skinModel.Draw();
+	skinModel.Render();
 }
 
 void CBuilding::Release()

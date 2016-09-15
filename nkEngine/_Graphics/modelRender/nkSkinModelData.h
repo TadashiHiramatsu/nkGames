@@ -72,6 +72,8 @@ namespace nkEngine
 		//param[in] ワールド行列
 		void UpdateBoneMatrix(const D3DXMATRIX& matWorld);
 
+		void UpdateFrameMatrices(LPD3DXFRAME pFrameBase, const D3DXMATRIX* pParentMatrix);
+
 		//インスタンシング描画用のデータを更新
 		//param[in] 頂点バッファにコピーするデータ
 		void UpdateInstancingDrawData(const void* data)

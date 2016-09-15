@@ -21,7 +21,7 @@ void CGround::Init()
 	m_model.SetShadowReceiverFlag(true);
 	m_model.SetFogParam(enFogFuncDist, 80.0f, 160.0f);
 
-	m_trans.SetPosition(D3DXVECTOR3(0.0f, -5.0f, 0.0f));
+	m_trans.SetPosition(D3DXVECTOR3(-80.0f, 0.0f, 0.0f));
 	m_trans.SetScale(D3DXVECTOR3(1, 1, 1));
 }
 
@@ -32,7 +32,7 @@ void CGround::Update()
 
 void CGround::Render()
 {
-	m_model.Draw();
+	m_model.Render();
 }
 
 void CGround::Release()

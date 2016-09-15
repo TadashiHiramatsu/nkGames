@@ -41,14 +41,14 @@ void CGameCamera::Update()
 	{
 		if (dir < 1.0f)
 		{
-			dir += 0.1;
+			dir += 0.1f;
 		}
 	}
 	if (m_Dir == EDir::Right)
 	{
 		if (dir > -1.0f)
 		{
-			dir -= 0.1;
+			dir -= 0.1f;
 		}
 	}
 

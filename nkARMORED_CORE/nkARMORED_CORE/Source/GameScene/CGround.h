@@ -20,6 +20,16 @@ public:
 
 	//ŠJ•ú
 	void Release()override;
+
+	LPD3DXMESH GetMesh()
+	{
+		return m_model.GetMesh();
+	}
+
+	D3DXMATRIX* GetWorldInv()
+	{
+		return m_model.GetWorldInv();
+	}
 private:
 	CModelRender m_model;
 	CTransform m_trans;

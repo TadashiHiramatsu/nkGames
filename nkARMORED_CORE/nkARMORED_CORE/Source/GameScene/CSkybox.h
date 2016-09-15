@@ -20,6 +20,12 @@ public:
 
 	//ŠJ•ú
 	void Release()override;
+
+	void SetPosition(D3DXVECTOR3& pos)
+	{
+		m_trans.SetPosition(pos);
+	}
+
 private:
 	CModelRender m_model;
 	CTransform m_trans;

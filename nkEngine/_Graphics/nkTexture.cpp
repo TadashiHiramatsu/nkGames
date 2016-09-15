@@ -7,7 +7,7 @@ namespace nkEngine
 	void CTexture::Load(const char * fileName)
 	{
 		IDirect3DDevice9* Device = Engine().GetDevice();
-		char* baseDir = "Texture/";
+		char* baseDir = "Asset/Texture/";
 		char filePath[64];
 		strcpy(filePath, baseDir);
 		strcat(filePath, fileName);

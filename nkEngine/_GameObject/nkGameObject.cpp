@@ -4,7 +4,6 @@
 namespace nkEngine
 {
 	CGameObject::CGameObject():
-		m_Priority(100),
 		m_Active(true),
 		m_Death(false)
 	{}

@@ -2,10 +2,8 @@
 
 #include"CPlayer.h"
 #include"CGround.h"
-#include"CObject.h"
 #include"CSkybox.h"
 #include"CBuilding.h"
-class CBuilding;
 
 #include"CGameCamera.h"
 
@@ -19,7 +17,6 @@ public:
 private:
 	CPlayer m_player;
 	CGround m_ground;
-	CObject m_object;
 	CSkybox m_skybox;
 	CBuilding m_building;
 };

@@ -20,7 +20,7 @@ namespace nkEngine
 		if (it == m_effectDictinary.end())
 		{
 			//V‹K
-			char* baseDir = "Shader/";
+			char* baseDir = "Asset/Shader/";
 			char fileP[64];
 			strcpy(fileP, baseDir);
 			strcat(fileP, filePath);

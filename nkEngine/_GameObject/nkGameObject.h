@@ -12,10 +12,6 @@ namespace nkEngine
 		virtual void Render() = 0;
 		virtual void Release() = 0;
 
-		int Priority()
-		{
-			return m_Priority;
-		}
 		bool Active()
 		{
 			return m_Active;
@@ -24,13 +20,8 @@ namespace nkEngine
 		{
 			return m_Death;
 		}
-		friend bool operator<(const CGameObject& go1, const CGameObject& go2)
-		{
-			return go1 < go2;
-		}
+	
 	private:
-		//優先度
-		int m_Priority;
 		//有効か
 		bool m_Active;
 		//生存フラグ

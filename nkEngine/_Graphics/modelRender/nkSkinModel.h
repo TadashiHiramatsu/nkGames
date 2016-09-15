@@ -37,7 +37,7 @@ namespace nkEngine
 		void Init(CSkinModelData* ModelData);
 
 		//更新
-		void Update();
+		virtual void Update();
 
 		//インスタンシング描画用の更新
 		//pram[in] 頂点バッファにコピーするデータ
@@ -47,7 +47,7 @@ namespace nkEngine
 		}
 
 		//描画
-		void Draw();
+		void Render();
 
 		//シャドウマップに描画
 		//シャドウマップに呼び出される
@@ -136,7 +136,29 @@ namespace nkEngine
 			m_fogParam[1] = idx1;
 		}
 
-	private:
+		LPD3DXMESH GetMesh()
+		{
+			static D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(m_Skinmodel->GetFrameRoot()->pMeshContainer);
+			return pMeshContainer->pOrigMesh;
+		}
+
+		D3DXFRAME* GetFrame()
+		{
+			return m_Skinmodel->GetFrameRoot();
+		}
+		D3DXFRAME* GetFrame(const char* name)
+		{
+			return D3DXFrameFind(GetFrame(), name);
+		}
+
+		D3DXMATRIX* GetWorldInv()
+		{
+			return &m_mWorldInv;
+		}
+
+
+
+	protected:
 
 		void DrawFrame(
 			LPD3DXFRAME pFrame,
@@ -150,7 +172,8 @@ namespace nkEngine
 		//DrawMeshContainerから呼ばれるインスタンシング描画の共通処理。
 		void DrawMeshContainer_InstancingDrawCommon(D3DXMESHCONTAINER_DERIVED* meshContainer, int materialID);
 
-	private:
+	protected:
+
 		CSkinModelData* m_Skinmodel; //スキンモデルのデータ
 		CLight* m_Light; //ライトクラス
 		ID3DXEffect* m_Effect; //エフェクト
@@ -159,6 +182,7 @@ namespace nkEngine
 
 		CTransform* m_Transform; // トランスフォーム 委譲したクラスのトランスフォームのアドレス
 		D3DXMATRIX m_mWorld; //ワールド行列
+		D3DXMATRIX m_mWorldInv; //ワールド行列
 		D3DXMATRIX m_mRotation; //ローテーション行列　
 
 		static const int MAX_MATRIX_PALLET = 128; //マトリクスパレットの最大数

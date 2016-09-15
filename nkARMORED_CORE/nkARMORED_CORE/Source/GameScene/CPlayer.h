@@ -1,15 +1,9 @@
 #pragma once
 
+#include"..\Armoredcore\CLeg.h" //足
+
 class CPlayer : public CGameObject
 {
-public:
-	enum AnimationNo {
-		AnimationInvalid = -1,
-		AnimationStand,		//立ち。
-		AnimationWalk,		//歩き。
-		AnimationRun,		//走り。
-		AnimationJump,		//ジャンプ。
-	};
 public:
 	//コンストラクタ
 	CPlayer();
@@ -29,21 +23,30 @@ public:
 	//開放
 	void Release()override;
 
-	//アニメーション再生
-	void PlayAnimation(AnimationNo animNo);
+	CTransform* GetTrans()
+	{
+		return &m_trans;
+	}
+
+	void SetMesh(LPD3DXMESH mesh)
+	{
+		jimen = mesh;
+	}
+
+	void SetMatrixInv(D3DXMATRIX*  mi)
+	{
+		jimenwInv = mi;
+	}
 
 private:
 	//回転
 	void Rotation();
 	//移動
 	void Move();
+	//地面との当たり判定
+	void Collision();
 private:
-	CModelRender m_model; //モデル
 	CLight m_light; //ライト
-	CTexture m_normal; //法線テクスチャ
-	CTexture m_spec; //スペキュラテクスチャ
-	CAnimation* m_anim; //アニメーション
-	AnimationNo currentAnimSetNo; //現在のアニメーション
 
 	CTransform m_trans; //トランスフォーム
 	
@@ -51,4 +54,10 @@ private:
 	D3DXVECTOR3 m_direction_Z;
 	D3DXVECTOR3 m_direction_X;
 	float m_TargetLen;
+
+	LPD3DXMESH jimen;
+	D3DXMATRIX* jimenwInv;
+
+	//体構成練習中
+	CLeg m_Leg;
 };

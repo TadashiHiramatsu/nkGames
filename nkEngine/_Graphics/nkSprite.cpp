@@ -43,21 +43,7 @@ namespace nkEngine
 	void CSprite::Load()
 	{
 		LPD3DXBUFFER  compileErrorBuffer = NULL;
-		HRESULT hr = D3DXCreateEffectFromFile(
-			Engine().GetDevice(),
-			"shader\\2Dshader.fx",
-			NULL,
-			NULL,
-			D3DXSHADER_DEBUG,
-			NULL,
-			&m_pEffect,
-			&compileErrorBuffer
-		);
-
-		if (FAILED(hr)) {
-			MessageBox(NULL, (char*)(compileErrorBuffer->GetBufferPointer()), "error", MB_OK);
-			abort();
-		}
+		m_pEffect = EffectManager().LoadEffect("2Dshader.fx");
 
 	}
 
@@ -116,7 +102,6 @@ namespace nkEngine
 	}
 	void CSprite::Release()
 	{
-		SAFE_RELEASE(m_pEffect);
 		SAFE_RELEASE(m_pTex);
 		SAFE_RELEASE(m_pVB);
 	}

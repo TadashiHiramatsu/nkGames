@@ -55,13 +55,15 @@ namespace nkEngine
 
 		m_mWorld = mScale * m_mRotation * mPosition;
 
+		D3DXMatrixInverse(&m_mWorldInv, NULL , &m_mWorld);
+
 		if (m_Skinmodel)
 		{
 			m_Skinmodel->UpdateBoneMatrix(m_mWorld);
 		}
 	}
 
-	void CModelRender::Draw()
+	void CModelRender::Render()
 	{
 		if (m_Skinmodel) {
 			DrawFrame(m_Skinmodel->GetFrameRoot(),false);
@@ -349,7 +351,8 @@ namespace nkEngine
 				//インスタンシング
 				if (m_Skinmodel->GetNumInstance() != 0)
 				{
-					DrawMeshContainer_InstancingDrawCommon(pMeshContainer, i);
+					DrawMeshContainer_InstancingDrawCommon(pMeshContainer, 0);
+					//DrawMeshContainer_InstancingDrawCommon(pMeshContainer, i);//ここiじゃね？
 				}
 				//通常
 				else

@@ -7,25 +7,7 @@ namespace {
 	//--------------------------------------------------------------------------------------
 	// update the frame matrices
 	//--------------------------------------------------------------------------------------
-	void UpdateFrameMatrices(LPD3DXFRAME pFrameBase, const D3DXMATRIX* pParentMatrix)
-	{
-		D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
-
-		if (pParentMatrix != NULL)
-			D3DXMatrixMultiply(&pFrame->CombinedTransformationMatrix, &pFrame->TransformationMatrix, pParentMatrix);
-		else
-			pFrame->CombinedTransformationMatrix = pFrame->TransformationMatrix;
-
-		if (pFrame->pFrameSibling != NULL)
-		{
-			UpdateFrameMatrices(pFrame->pFrameSibling, pParentMatrix);
-		}
-
-		if (pFrame->pFrameFirstChild != NULL)
-		{
-			UpdateFrameMatrices(pFrame->pFrameFirstChild, &pFrame->CombinedTransformationMatrix);
-		}
-	}
+	
 
 	void InnerDestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase)
 	{
@@ -311,7 +293,7 @@ namespace {
 		hr = AllocateName(Name, &pMeshContainer->Name);
 		if (FAILED(hr))
 			goto e_Exit;
-
+		
 		pMesh->GetDevice(&pd3dDevice);
 		NumFaces = pMesh->GetNumFaces();
 
@@ -355,7 +337,7 @@ namespace {
 			{
 				if (pMeshContainer->pMaterials[iMaterial].pTextureFilename != NULL)
 				{
-					char* baseDir = "Texture/";
+					char* baseDir = "Asset/Texture/";
 					char filePath[64];
 					strcpy(filePath, baseDir);
 					strcat(filePath, pMeshContainer->pMaterials[iMaterial].pTextureFilename);
@@ -456,6 +438,10 @@ namespace {
 				goto e_Exit;
 		}
 		else {
+
+			pMeshContainer->pOrigMesh = pMesh;
+			pMesh->AddRef();
+
 			LPD3DXMESH pOutMesh, pTmpMesh;
 			DWORD numVert = pMeshContainer->MeshData.pMesh->GetNumVertices();
 			hr = pMeshContainer->MeshData.pMesh->CloneMesh(
@@ -567,7 +553,7 @@ namespace nkEngine
 	{
 		//スケルトンの複製を作成
 		m_isClone = true;
-		m_FrameRoot = new D3DXFRAME_DERIVED;
+		m_FrameRoot = new D3DXFRAME_DERIVED();
 		m_FrameRoot->pFrameFirstChild = nullptr;
 		m_FrameRoot->pFrameSibling = nullptr;
 		m_FrameRoot->pMeshContainer = nullptr;
@@ -648,7 +634,7 @@ namespace nkEngine
 	*/
 	void CSkinModelData::LoadModelData(const char* filePath, CAnimation* anim)
 	{
-		char* baseDir = "Model/";
+		char* baseDir = "Asset/Model/";
 		char Path[64];
 		strcpy(Path, baseDir);
 		strcat(Path, filePath);
@@ -786,6 +772,30 @@ namespace nkEngine
 	void CSkinModelData::UpdateBoneMatrix(const D3DXMATRIX& matWorld)
 	{
 		UpdateFrameMatrices(m_FrameRoot, reinterpret_cast<const D3DXMATRIX*>(&matWorld));
+	}
+
+	void CSkinModelData::UpdateFrameMatrices(LPD3DXFRAME pFrameBase, const D3DXMATRIX* pParentMatrix)
+	{
+		D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
+
+		if (pParentMatrix != NULL)
+		{
+			D3DXMatrixMultiply(&pFrame->CombinedTransformationMatrix, &pFrame->TransformationMatrix, pParentMatrix);
+		}
+		else
+		{
+			pFrame->CombinedTransformationMatrix = pFrame->TransformationMatrix;
+		}
+
+		if (pFrame->pFrameSibling != NULL)
+		{
+			UpdateFrameMatrices(pFrame->pFrameSibling, pParentMatrix);
+		}
+
+		if (pFrame->pFrameFirstChild != NULL)
+		{
+			UpdateFrameMatrices(pFrame->pFrameFirstChild, &pFrame->CombinedTransformationMatrix);
+		}
 	}
 
 	//メモリリーク回避の残骸

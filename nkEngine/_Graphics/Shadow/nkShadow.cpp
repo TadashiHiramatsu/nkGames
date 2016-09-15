@@ -7,7 +7,7 @@ namespace nkEngine
 	CShadowMap::CShadowMap():
 		m_isActive(false),
 		m_near(1.0f),
-		m_far(100.0f),
+		m_far(1000.0f),
 		m_Aspect(1.0f),
 		m_shadowAreaW(50.0f),
 		m_shadowAreaH(50.0f),

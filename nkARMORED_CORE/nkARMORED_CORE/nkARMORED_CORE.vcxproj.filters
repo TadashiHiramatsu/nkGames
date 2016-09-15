@@ -13,6 +13,12 @@
     <Filter Include="Common">
       <UniqueIdentifier>{25185476-6365-4ac9-ad52-b9493a6d729a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphic">
+      <UniqueIdentifier>{693a015a-7aae-4738-b083-29524cf56471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Armoredcore">
+      <UniqueIdentifier>{5c4ddf83-82c5-437f-8e7f-7f52500fde74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -36,14 +42,35 @@
     <ClCompile Include="Source\GameScene\CGround.cpp">
       <Filter>GameScene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameScene\CObject.cpp">
-      <Filter>GameScene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameScene\CSkybox.cpp">
       <Filter>GameScene</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameScene\CBuilding.cpp">
       <Filter>GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Armoredcore\CLeftArm.cpp">
+      <Filter>Armoredcore</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\CACModelRender.cpp">
+      <Filter>Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Armoredcore\CCore.cpp">
+      <Filter>Armoredcore</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Armoredcore\CHead.cpp">
+      <Filter>Armoredcore</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Armoredcore\CLeg.cpp">
+      <Filter>Armoredcore</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Armoredcore\CRightArm.cpp">
+      <Filter>Armoredcore</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Armoredcore\CArmoredCore.cpp">
+      <Filter>Armoredcore</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Armoredcore\CParts.cpp">
+      <Filter>Armoredcore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,14 +92,35 @@
     <ClInclude Include="Source\GameScene\CGround.h">
       <Filter>GameScene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameScene\CObject.h">
-      <Filter>GameScene</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameScene\CSkybox.h">
       <Filter>GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameScene\CBuilding.h">
       <Filter>GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic\CACModelRender.h">
+      <Filter>Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Armoredcore\CLeftArm.h">
+      <Filter>Armoredcore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Armoredcore\CCore.h">
+      <Filter>Armoredcore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Armoredcore\CHead.h">
+      <Filter>Armoredcore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Armoredcore\CLeg.h">
+      <Filter>Armoredcore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Armoredcore\CRightArm.h">
+      <Filter>Armoredcore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Armoredcore\CArmoredCore.h">
+      <Filter>Armoredcore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Armoredcore\CParts.h">
+      <Filter>Armoredcore</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

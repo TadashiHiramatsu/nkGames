@@ -3,7 +3,8 @@
 #include"CGameCamera.h"
 
 CPlayer::CPlayer():
-	m_TargetLen(30)
+	m_TargetLen(30),
+	jimen(nullptr)
 {
 }
 
@@ -13,61 +14,41 @@ CPlayer::~CPlayer()
 
 void CPlayer::Init()
 {
-	m_model.Init("prototype.X",NULL);
-	m_model.SetCamera(g_camera.GetCamera());
-	m_model.SetTransform(&m_trans);
-	m_model.SetLight(&m_light);
-	m_model.SetShadowCasterFlag(true);
-	m_model.SetShadowReceiverFlag(true);
-
-
-	currentAnimSetNo = AnimationStand;
-	PlayAnimation(currentAnimSetNo);
-
-	Shadow().SetLightPosition(D3DXVECTOR3(1.0f, 1.0f, 1.0f)*10000);
-	Shadow().SetLightTarget(m_trans.GetPosition());
+	Shadow().SetLightPosition(D3DXVECTOR3(1.0f, 1.0f, 1.0f) * 100);
+	Shadow().SetLightTarget(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	Shadow().SetCalcLightViewFunc(CShadowMap::enCalcLightViewFunc_PositionTarget);
-
-	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(0.8f, 0.8f, 0.8f, 5.0f));
-	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(0.8f, 0.8f, 0.8f, 5.0f));
-	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(0.8f, 0.8f, 0.8f, 5.0f));
-	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.8f, 0.8f, 0.8f, 5.0f));
-	m_light.SetDiffuseLightColor(4, D3DXVECTOR4(0.8f, 0.8f, 0.8f, 5.0f));
-	m_light.SetDiffuseLightColor(5, D3DXVECTOR4(0.8f, 0.8f, 0.8f, 5.0f));
 
 	m_Target = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	m_Target *= m_TargetLen;
+
+	m_Leg.Init();
+	m_Leg.SetCamera(g_camera.GetCamera());
+	m_Leg.SetLight(&m_light);
 }
 
 void CPlayer::Update()
 {
 	Rotation();
 	Move();
-	m_model.Update();
+	Collision();
+
 	g_camera.SetPlayerTarget(m_Target);
 	g_camera.SetPlayerPosition(m_trans.GetPosition());
 
-	Shadow().SetLightPosition(m_trans.GetPosition() + D3DXVECTOR3(3.5f, 3.5f, 3.5f));
+	Shadow().SetLightPosition(D3DXVECTOR3(1.0f, 1.0f, 1.0f) * 10 + m_trans.GetPosition());
 	Shadow().SetLightTarget(m_trans.GetPosition());
+
+	m_Leg.Update();
 }
 
 void CPlayer::Render()
 {
-	m_model.Draw();
+	m_Leg.Render();
 }
 
 void CPlayer::Release()
 {
-	m_model.Release();
-}
-
-void CPlayer::PlayAnimation(AnimationNo animNo)
-{
-	if (currentAnimSetNo != animNo) {
-		//別のアニメーション
-		m_anim->PlayAnimation(animNo, 0.1f);
-		currentAnimSetNo = animNo;
-	}
+	m_Leg.Release();
 }
 
 void CPlayer::Rotation()
@@ -112,22 +93,21 @@ void CPlayer::Rotation()
 	//回転
 	D3DXVec3TransformCoord(&m_toTarget, &m_toTarget, &tmp);
 	//回転した注視点
+	m_toTarget.y = 0;
 	D3DXVec3Normalize(&m_toTarget, &m_toTarget);
 	m_Target = m_toTarget * m_TargetLen + m_trans.GetPosition();
-	
+	m_Target.y = m_trans.GetPosition().y;
 	//進行方向と横方向を作成
 	m_direction_Z = g_camera.GetDirection();
 	D3DXVec3Normalize(&m_direction_Z, &m_direction_Z);
 	D3DXVec3Cross(&m_direction_X, &m_direction_Z, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 
-
-	//逆な気がするけどできてる謎
 	{
-		float angle = acos(D3DXVec3Dot(&-m_direction_X, &D3DXVECTOR3(1.0f, 0.0f, 0.0f)));
+		float angle = acos(D3DXVec3Dot(&m_direction_X, &D3DXVECTOR3(1.0f, 0.0f, 0.0f)));
 		D3DXVECTOR3 axis;
 		D3DXVec3Cross(&axis, &m_direction_X, &D3DXVECTOR3(1.0f, 0.0f, 0.0f));
 		D3DXQUATERNION mRotation = m_trans.GetRotation();
-		D3DXQuaternionRotationAxis(&mRotation, &axis, angle);
+		D3DXQuaternionRotationAxis(&mRotation, &axis, -angle);
 		m_trans.SetRotation(mRotation);
 	}
 }
@@ -149,13 +129,29 @@ void CPlayer::Move()
 	if (XInput().GetStickL_Y() <= -1)
 	{
 		move -= m_direction_Z;
+		m_Target -= m_direction_Z;
 	}
 	if (XInput().GetStickL_Y() >= 1)
 	{
 		move += m_direction_Z;
+		m_Target += m_direction_Z;
 	}
 
-
 	D3DXVec3Normalize(&move, &move);
+
 	m_trans.AddPosition(move * Speed);
+}
+
+void CPlayer::Collision()
+{
+	BOOL flag = false;
+	FLOAT len = 0.0f;
+	D3DXVECTOR3 pos ,up;
+	up = D3DXVECTOR3(0,10,0);
+	D3DXVec3TransformCoord(&pos, &m_trans.GetPosition() , jimenwInv);
+	D3DXIntersect(jimen, &(pos + up), &D3DXVECTOR3(0.0f, -1.0f, 0.0f), &flag, NULL, NULL, NULL, &len, NULL, NULL);
+	if (flag)
+	{
+		m_trans.AddPosition(D3DXVECTOR3(0, -(len - up.y), 0));
+	}
 }

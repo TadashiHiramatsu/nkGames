@@ -32,7 +32,7 @@ void CSkybox::Update()
 
 void CSkybox::Render()
 {
-	m_model.Draw();
+	m_model.Render();
 }
 
 void CSkybox::Release()

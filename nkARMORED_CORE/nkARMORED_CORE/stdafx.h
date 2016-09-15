@@ -1,8 +1,6 @@
-#ifndef _STDAFX_
-#define _STDAFX_
+#pragma once
 
 #include"nkEngine/nkstdafx.h"
 using namespace nkEngine;
 
-#endif // !_STDAFX_
-
+#include"Source\Graphics\CACModelRender.h"
