@@ -7,7 +7,7 @@ namespace nkEngine
 	D3DXMATRIX viewMatrixRotInv;
 
 	CModelRender::CModelRender() :
-		m_Skinmodel(nullptr),
+		m_ModelData(nullptr),
 		m_Light(nullptr),
 		m_NormalMap(nullptr),
 		m_SpecMap(nullptr),
@@ -24,20 +24,17 @@ namespace nkEngine
 	{
 	}
 
-	void CModelRender::Init(LPCSTR FileName, CAnimation* anim)
+	void CModelRender::Load(LPCSTR FileName, CAnimation* anim)
 	{
-		m_Effect = EffectManager().LoadEffect("skinModel.fx");
-		m_Skinmodel = new CSkinModelData;
-
-		m_Skinmodel->LoadModelData(FileName, anim);
-
+		m_Effect = EffectManager().LoadEffect("ModelRender.fx");
+		m_ModelData = new CSkinModelData;
+		m_ModelData->LoadModelData(FileName, anim);
 	}
 
-	void CModelRender::Init(CSkinModelData * ModelData)
+	void CModelRender::Load(CSkinModelData* m_modeldata)
 	{
-		m_Effect = EffectManager().LoadEffect("skinModel.fx");
-
-		m_Skinmodel = ModelData;
+		m_Effect = EffectManager().LoadEffect("ModelRender.fx");
+		m_ModelData = m_modeldata;
 	}
 
 	void CModelRender::Update()
@@ -57,57 +54,57 @@ namespace nkEngine
 
 		D3DXMatrixInverse(&m_mWorldInv, NULL , &m_mWorld);
 
-		if (m_Skinmodel)
+		if (m_ModelData)
 		{
-			m_Skinmodel->UpdateBoneMatrix(m_mWorld);
+			m_ModelData->UpdateBoneMatrix(m_mWorld);
 		}
 	}
 
 	void CModelRender::Render()
 	{
-		if (m_Skinmodel) {
-			DrawFrame(m_Skinmodel->GetFrameRoot(),false);
+		if (m_ModelData) {
+			RenderFrame(m_ModelData->GetFrameRoot(),false);
 		}
 	}
 
-	void CModelRender::DrawToShadowMap()
+	void CModelRender::RenderToShadowMap()
 	{
-		if (m_Skinmodel) {
-			DrawFrame(m_Skinmodel->GetFrameRoot(), true);
+		if (m_ModelData) {
+			RenderFrame(m_ModelData->GetFrameRoot(), true);
 		}
 	}
 
-	void CModelRender::DrawFrame(LPD3DXFRAME pFrame, bool isDrawToShadowMap)
+	void CModelRender::RenderFrame(LPD3DXFRAME pFrame, bool isRenderToShadowMap)
 	{
 		LPD3DXMESHCONTAINER MeshContainer;
 
 		MeshContainer = pFrame->pMeshContainer;
 		while (MeshContainer != NULL)
 		{
-			DrawMeshContainer(
+			RenderMeshContainer(
 				MeshContainer,
-				pFrame, isDrawToShadowMap);
+				pFrame, isRenderToShadowMap);
 
 			MeshContainer = MeshContainer->pNextMeshContainer;
 		}
 
 		if (pFrame->pFrameSibling != NULL)
 		{
-			DrawFrame(
-				pFrame->pFrameSibling, isDrawToShadowMap);
+			RenderFrame(
+				pFrame->pFrameSibling, isRenderToShadowMap);
 		}
 
 		if (pFrame->pFrameFirstChild != NULL)
 		{
-			DrawFrame(
-				pFrame->pFrameFirstChild, isDrawToShadowMap);
+			RenderFrame(
+				pFrame->pFrameFirstChild, isRenderToShadowMap);
 		}
 	}
 
-	void CModelRender::DrawMeshContainer(
+	void CModelRender::RenderMeshContainer(
 		LPD3DXMESHCONTAINER pMeshContainerBase,
 		LPD3DXFRAME pFrameBase,
-		bool isDrawToShadowMap)
+		bool isRenderToShadowMap)
 	{
 		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
 		D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
@@ -122,13 +119,13 @@ namespace nkEngine
 		{
 			
 			//インスタンシング描画
-			if (m_Skinmodel->GetNumInstance() != 0)
+			if (m_ModelData->GetNumInstance() != 0)
 			{
 
 				//アニメーション
 				if (pMeshContainer->pSkinInfo != NULL)
 				{
-					if (isDrawToShadowMap)
+					if (isRenderToShadowMap)
 					{
 						//影
 						m_Effect->SetTechnique("SkinModelInstancingRenderToShadowMap");
@@ -142,7 +139,7 @@ namespace nkEngine
 				//ノンアニメーション
 				else
 				{
-					if (isDrawToShadowMap)
+					if (isRenderToShadowMap)
 					{
 						//影
 						m_Effect->SetTechnique("NoSkinModelInstancingRenderToShadowMap");
@@ -160,7 +157,7 @@ namespace nkEngine
 				//アニメーション
 				if (pMeshContainer->pSkinInfo != NULL)
 				{
-					if (isDrawToShadowMap)
+					if (isRenderToShadowMap)
 					{
 						//影
 						m_Effect->SetTechnique("SkinModelRenderShadowMap");
@@ -174,7 +171,7 @@ namespace nkEngine
 				//ノンアニメーション
 				else
 				{
-					if (isDrawToShadowMap)
+					if (isRenderToShadowMap)
 					{
 						//影
 						m_Effect->SetTechnique("NoSkinModelRenderShadowMap");
@@ -191,7 +188,7 @@ namespace nkEngine
 		//共通の定数レジスタを設定
 		{
 			//ビュープロジェクション行列
-			if (isDrawToShadowMap)
+			if (isRenderToShadowMap)
 			{
 				m_Effect->SetMatrix("g_mViewProj", Shadow().GetLVPMatrix());
 			}
@@ -216,7 +213,7 @@ namespace nkEngine
 			}
 
 			//シャドウレシーバー
-			if (!isDrawToShadowMap && m_isShadowReceiver)
+			if (!isRenderToShadowMap && m_isShadowReceiver)
 			{
 				flag[1] = true;
 				m_Effect->SetTexture("g_ShadowTexture", Shadow().GetTexture()->GetTextureDX());
@@ -270,9 +267,8 @@ namespace nkEngine
 			else {
 				fogParam.z = 0.0f;
 			}
-			
-			m_Effect->SetVector("g_fogParam",&fogParam);
 
+			m_Effect->SetVector("g_fogParam", &fogParam);
 		}
 
 		//アニメーション
@@ -309,9 +305,9 @@ namespace nkEngine
 				m_Effect->CommitChanges();
 
 				//インスタンシング
-				if (m_Skinmodel->GetNumInstance() != 0)
+				if (m_ModelData->GetNumInstance() != 0)
 				{
-					DrawMeshContainer_InstancingDrawCommon(pMeshContainer, iAttrib);
+					RenderMeshContainer_InstancingRenderCommon(pMeshContainer, iAttrib);
 				}
 				//通常
 				else
@@ -349,10 +345,10 @@ namespace nkEngine
 				m_Effect->CommitChanges();
 
 				//インスタンシング
-				if (m_Skinmodel->GetNumInstance() != 0)
+				if (m_ModelData->GetNumInstance() != 0)
 				{
-					DrawMeshContainer_InstancingDrawCommon(pMeshContainer, 0);
-					//DrawMeshContainer_InstancingDrawCommon(pMeshContainer, i);//ここiじゃね？
+					RenderMeshContainer_InstancingRenderCommon(pMeshContainer, 0);
+					//RenderMeshContainer_InstancingRenderCommon(pMeshContainer, i);//ここiじゃね？
 				}
 				//通常
 				else
@@ -366,7 +362,7 @@ namespace nkEngine
 		}
 	}
 
-	void CModelRender::DrawMeshContainer_InstancingDrawCommon(D3DXMESHCONTAINER_DERIVED * meshContainer, int materialID)
+	void CModelRender::RenderMeshContainer_InstancingRenderCommon(D3DXMESHCONTAINER_DERIVED * meshContainer, int materialID)
 	{
 		IDirect3DVertexBuffer9* vb;
 		IDirect3DIndexBuffer9* ib;
@@ -374,25 +370,25 @@ namespace nkEngine
 		ID3DXMesh* mesh = meshContainer->MeshData.pMesh;
 		mesh->GetVertexBuffer(&vb);
 		mesh->GetIndexBuffer(&ib);
-		DWORD sttributeTableSize = 256;
+		//DWORD sttributeTableSize = 256;
 
-		DWORD stride = m_Skinmodel->GetVertexBufferStride();
+		DWORD stride = m_ModelData->GetVertexBufferStride();
 
 		IDirect3DDevice9* d3dDevice = Engine().GetDevice();
 
-		d3dDevice->SetStreamSourceFreq(0, D3DSTREAMSOURCE_INDEXEDDATA | m_Skinmodel->GetNumInstance());
+		d3dDevice->SetStreamSourceFreq(0, D3DSTREAMSOURCE_INDEXEDDATA | m_ModelData->GetNumInstance());
 		d3dDevice->SetStreamSourceFreq(1, D3DSTREAMSOURCE_INSTANCEDATA | 1);
 
-		d3dDevice->SetVertexDeclaration(m_Skinmodel->GetVertexDeclForInstancingDraw());
+		d3dDevice->SetVertexDeclaration(m_ModelData->GetVertexDeclForInstancingRender());
 
 		//頂点バッファをストリーム０番目に設定
 		d3dDevice->SetStreamSource(0, vb, 0, stride);
 
 		d3dDevice->SetStreamSource(
 			1,
-			m_Skinmodel->GetInstancingVertexBuffer().GetBody(),
+			m_ModelData->GetInstancingVertexBuffer().GetBody(),
 			0,
-			m_Skinmodel->GetInstancingVertexBuffer().GetStride());
+			m_ModelData->GetInstancingVertexBuffer().GetStride());
 
 		d3dDevice->SetIndices(ib);
 		d3dDevice->DrawIndexedPrimitive(

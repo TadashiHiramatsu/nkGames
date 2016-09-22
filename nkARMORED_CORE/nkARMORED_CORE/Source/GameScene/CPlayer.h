@@ -1,6 +1,6 @@
 #pragma once
 
-#include"..\Armoredcore\CLeg.h" //足
+#include"..\Armoredcore\CArmoredCore.h"
 
 class CPlayer : public CGameObject
 {
@@ -47,17 +47,17 @@ private:
 	void Collision();
 private:
 	CLight m_light; //ライト
-
 	CTransform m_trans; //トランスフォーム
 	
+	//ターゲットに向かって進む
 	D3DXVECTOR3 m_Target; //注視点
 	D3DXVECTOR3 m_direction_Z;
 	D3DXVECTOR3 m_direction_X;
 	float m_TargetLen;
 
+	//地面とのレイメッシュ判定
 	LPD3DXMESH jimen;
 	D3DXMATRIX* jimenwInv;
 
-	//体構成練習中
-	CLeg m_Leg;
+	CArmoredCore m_ArmoredCore;
 };

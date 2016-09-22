@@ -29,21 +29,21 @@ namespace nkEngine
 		//デストラクタ
 		~CModelRender();
 
-		//初期化
+		//読み取り
 		//param[in] Xファイルのファイルパス
-		void Init(LPCSTR Filepass, CAnimation* anim);
-		//初期化
-		//param[in] スキンモデルデータ
-		void Init(CSkinModelData* ModelData);
+		void Load(LPCSTR Filepass, CAnimation* anim);
+		//読み取り
+		//param[in] Xファイルのファイルパス
+		void Load(CSkinModelData* m_modeldata);
 
 		//更新
 		virtual void Update();
 
 		//インスタンシング描画用の更新
 		//pram[in] 頂点バッファにコピーするデータ
-		void UpdateInstancinfDrawData(const void* data)
+		void UpdateInstancinfRenderData(const void* data)
 		{
-			m_Skinmodel->UpdateInstancingDrawData(data);
+			m_ModelData->UpdateInstancingRenderData(data);
 		}
 
 		//描画
@@ -51,7 +51,7 @@ namespace nkEngine
 
 		//シャドウマップに描画
 		//シャドウマップに呼び出される
-		void DrawToShadowMap();
+		void RenderToShadowMap();
 
 		//ライトを設定
 		//param[in] ライトのアドレス
@@ -119,7 +119,7 @@ namespace nkEngine
 		//リリース関数
 		void Release()
 		{
-			m_Skinmodel->Release();
+			m_ModelData->Release();
 			m_Light = nullptr;
 			m_camera = nullptr;
 			m_Transform = nullptr;
@@ -136,15 +136,17 @@ namespace nkEngine
 			m_fogParam[1] = idx1;
 		}
 
+	
+
 		LPD3DXMESH GetMesh()
 		{
-			static D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(m_Skinmodel->GetFrameRoot()->pMeshContainer);
+			static D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(m_ModelData->GetFrameRoot()->pMeshContainer);
 			return pMeshContainer->pOrigMesh;
 		}
 
 		D3DXFRAME* GetFrame()
 		{
-			return m_Skinmodel->GetFrameRoot();
+			return m_ModelData->GetFrameRoot();
 		}
 		D3DXFRAME* GetFrame(const char* name)
 		{
@@ -160,21 +162,21 @@ namespace nkEngine
 
 	protected:
 
-		void DrawFrame(
+		void RenderFrame(
 			LPD3DXFRAME pFrame,
-			bool isDrawToShadowMap);
+			bool isRenderToShadowMap);
 
-		void DrawMeshContainer(
+		void RenderMeshContainer(
 			LPD3DXMESHCONTAINER pMeshContainerBase,
 			LPD3DXFRAME pFrameBase,
-			bool isDrawToShadowMap);
+			bool isRenderToShadowMap);
 
-		//DrawMeshContainerから呼ばれるインスタンシング描画の共通処理。
-		void DrawMeshContainer_InstancingDrawCommon(D3DXMESHCONTAINER_DERIVED* meshContainer, int materialID);
+		//RenderMeshContainerから呼ばれるインスタンシング描画の共通処理。
+		void RenderMeshContainer_InstancingRenderCommon(D3DXMESHCONTAINER_DERIVED* meshContainer, int materialID);
 
 	protected:
 
-		CSkinModelData* m_Skinmodel; //スキンモデルのデータ
+		CSkinModelData* m_ModelData; //スキンモデルのデータ
 		CLight* m_Light; //ライトクラス
 		ID3DXEffect* m_Effect; //エフェクト
 

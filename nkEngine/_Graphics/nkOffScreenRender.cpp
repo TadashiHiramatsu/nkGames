@@ -13,7 +13,7 @@ namespace nkEngine
 	}
 	void COffScreenRender::Update()
 	{
-		full.Update(D3DXVECTOR3(Engine().GetFrameW() / 2, Engine().GetFrameH() / 2, 0), D3DXVECTOR3(Engine().GetFrameW(), Engine().GetFrameH(), 0));
+		full.Update(D3DXVECTOR3(Engine().GetFrameW() / 2, Engine().GetFrameH() / 2, 0), D3DXVECTOR3(Engine().GetFrameW(), Engine().GetFrameH(), 0.0f));
 		SceneManager().UpdateScene();
 		Shadow().Update();
 	}

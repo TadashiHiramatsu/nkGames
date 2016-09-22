@@ -44,28 +44,28 @@ namespace nkEngine
 
 		//左スティックのX軸の傾き量
 		//return	-1.0～1.0の正規化された値を返す
-		short GetStickL_X()
+		float GetStickL_X()
 		{
 			return m_LeftStickX;
 		}
 
 		//左スティックのY軸の傾き量
 		//return	-1.0～1.0の正規化された値を返す
-		short GetStickL_Y()
+		float GetStickL_Y()
 		{
 			return m_LeftStickY;
 		}
 
 		//右スティックのX軸の傾き量
 		//return	-1.0～1.0の正規化された値を返す
-		short GetStickR_X()
+		float GetStickR_X()
 		{
 			return m_RightStickX;
 		}
 		
 		//右スティックのY軸の傾き量
 		//return	-1.0～1.0の正規化された値を返す
-		short GetStickR_Y()
+		float GetStickR_Y()
 		{
 			return m_RightStickY;
 		}

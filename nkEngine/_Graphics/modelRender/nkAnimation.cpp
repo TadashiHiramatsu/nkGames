@@ -101,8 +101,8 @@ namespace nkEngine
 				m_pAnimationController->AdvanceTime(deltaTime, NULL);
 			}
 			if (m_isInterpolate) {
-				ID3DXAnimationSet* animSet = m_animationSets[2];
-				float period = animSet->GetPeriod();
+				/*ID3DXAnimationSet* animSet = m_animationSets[2];
+				double period = animSet->GetPeriod();*/
 				//•âŠÔ’†B
 				m_interpolateTime += deltaTime;
 				float weight = 0.0f;

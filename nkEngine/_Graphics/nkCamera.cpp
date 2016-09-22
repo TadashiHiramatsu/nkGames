@@ -11,7 +11,7 @@ namespace nkEngine
 		m_Fovy(D3DXToRadian(45.0f)),
 		m_Aspect(0.0f),
 		m_Near(0.1f),
-		m_Far(1000.0f),
+		m_Far(1200.0f),
 		m_ePerson(EPerson::third)
 	{
 		D3DXMatrixIdentity(&m_mView);

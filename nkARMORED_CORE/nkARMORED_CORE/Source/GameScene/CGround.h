@@ -34,4 +34,6 @@ private:
 	CModelRender m_model;
 	CTransform m_trans;
 	CLight m_light;
+
+	CTexture m_NormalMap; //法線マップ用テクスチャ
 };

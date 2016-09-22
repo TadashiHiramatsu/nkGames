@@ -32,8 +32,8 @@ void CACModelRender::Update()
 
 	D3DXMatrixInverse(&m_mWorldInv, NULL, &m_mWorld);
 
-	if (m_Skinmodel)
+	if (m_ModelData)
 	{
-		m_Skinmodel->UpdateBoneMatrix(m_mWorld);
+		m_ModelData->UpdateBoneMatrix(m_mWorld);
 	}
 }

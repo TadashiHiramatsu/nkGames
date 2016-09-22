@@ -177,7 +177,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "Sunny_06A_back.png";
+    "backImage.png";
    }
   }
   Material {
@@ -186,7 +186,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "Sunny_06A_down.png";
+    "downImage.png";
    }
   }
   Material {
@@ -195,7 +195,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "Sunny_06A_front.png";
+    "frontImage.png";
    }
   }
   Material {
@@ -204,7 +204,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "Sunny_06A_left.png";
+    "leftImage.png";
    }
   }
   Material {
@@ -213,7 +213,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "Sunny_06A_right.png";
+    "rightImage.png";
    }
   }
   Material {
@@ -222,7 +222,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "Sunny_06A_up.png";
+    "upImage.png";
    }
   }
  }

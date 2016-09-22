@@ -21,6 +21,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 
 	//CTitleScene* title = new CTitleScene();
 	//SceneManager().ChangeScene(title);
+	Shadow().SetCalcLightViewFunc(CShadowMap::enCalcLightViewFunc_PositionTarget);
 
 
 	Engine().RunGameLoop();

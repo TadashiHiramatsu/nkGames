@@ -537,7 +537,7 @@ namespace nkEngine
 		m_FrameRoot(nullptr),
 		m_isClone(false),
 		m_AnimController(nullptr),
-		m_vertexDeclForInstancingDraw(nullptr),
+		m_vertexDeclForInstancingRender(nullptr),
 		m_numInstance(0),
 		m_vertexBufferStride(0)
 	{
@@ -553,7 +553,7 @@ namespace nkEngine
 	{
 		//スケルトンの複製を作成
 		m_isClone = true;
-		m_FrameRoot = new D3DXFRAME_DERIVED();
+		m_FrameRoot = new D3DXFRAME_DERIVED;
 		m_FrameRoot->pFrameFirstChild = nullptr;
 		m_FrameRoot->pFrameSibling = nullptr;
 		m_FrameRoot->pMeshContainer = nullptr;
@@ -584,7 +584,7 @@ namespace nkEngine
 	*/
 	void CSkinModelData::Release()
 	{
-		SAFE_RELEASE(m_vertexDeclForInstancingDraw);
+		SAFE_RELEASE(m_vertexDeclForInstancingRender);
 
 		if (m_isClone && m_FrameRoot) {
 			//クローン
@@ -658,13 +658,13 @@ namespace nkEngine
 		}
 	}
 
-	void CSkinModelData::CreateInstancingDrawData(int numInstance, D3DVERTEXELEMENT9 * vertexElement)
+	void CSkinModelData::CreateInstancingRenderData(int numInstance, D3DVERTEXELEMENT9 * vertexElement)
 	{
 		m_numInstance = numInstance;
-		CreateInstancingDrawData(m_FrameRoot, numInstance, vertexElement);
+		CreateInstancingRenderData(m_FrameRoot, numInstance, vertexElement);
 	}
 
-	bool CSkinModelData::CreateInstancingDrawData(D3DXFRAME * frame, int numInstance, D3DVERTEXELEMENT9 * vertexElement)
+	bool CSkinModelData::CreateInstancingRenderData(D3DXFRAME * frame, int numInstance, D3DVERTEXELEMENT9 * vertexElement)
 	{
 		if (frame->pMeshContainer)
 		{
@@ -696,7 +696,7 @@ namespace nkEngine
 			//頂点定義の作成
 			IDirect3DDevice9* d3dDevice;
 			frame->pMeshContainer->MeshData.pMesh->GetDevice(&d3dDevice);
-			d3dDevice->CreateVertexDeclaration(declElement, &m_vertexDeclForInstancingDraw);
+			d3dDevice->CreateVertexDeclaration(declElement, &m_vertexDeclForInstancingRender);
 
 			//頂点バッファの作成
 			DWORD vertexBufferStride = D3DXGetDeclVertexSize(vertexElement, 1);
@@ -706,13 +706,13 @@ namespace nkEngine
 		}
 		if (frame->pFrameSibling != nullptr) {
 			//兄弟がいる
-			if (CreateInstancingDrawData(frame->pFrameSibling, numInstance, vertexElement)) {
+			if (CreateInstancingRenderData(frame->pFrameSibling, numInstance, vertexElement)) {
 				return true;
 			}
 		}
 		if (frame->pFrameFirstChild != nullptr) {
 			//子供がいる。
-			if (CreateInstancingDrawData(frame->pFrameFirstChild, numInstance, vertexElement)) {
+			if (CreateInstancingRenderData(frame->pFrameFirstChild, numInstance, vertexElement)) {
 				return true;
 			}
 		}

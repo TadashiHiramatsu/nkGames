@@ -58,7 +58,7 @@ namespace nkEngine
 	void CEffectManager::Release()
 	{
 		for (auto p : m_effectDictinary) {
-			SAFE_RELEASE(p.second);
+			//SAFE_RELEASE(p.second);
 		}
 		m_effectDictinary.clear();
 	}

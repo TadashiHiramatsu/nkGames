@@ -14,16 +14,20 @@ CPlayer::~CPlayer()
 
 void CPlayer::Init()
 {
-	Shadow().SetLightPosition(D3DXVECTOR3(1.0f, 1.0f, 1.0f) * 100);
-	Shadow().SetLightTarget(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	Shadow().SetCalcLightViewFunc(CShadowMap::enCalcLightViewFunc_PositionTarget);
+	m_trans.SetPosition(D3DXVECTOR3(0.0f,100.0f,0.0f));
+	m_trans.SetScale(D3DXVECTOR3(3, 3, 3));
+
+	Shadow().SetLightPosition(D3DXVECTOR3(1.0f, 1.0f, 1.0f) * 10 + m_trans.GetPosition());
+	Shadow().SetLightTarget(m_trans.GetPosition());
 
 	m_Target = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	m_Target *= m_TargetLen;
 
-	m_Leg.Init();
-	m_Leg.SetCamera(g_camera.GetCamera());
-	m_Leg.SetLight(&m_light);
+	m_ArmoredCore.SetTranceform(&m_trans);
+	m_ArmoredCore.SetLight(&m_light);
+	m_ArmoredCore.SetCamera(g_camera.GetCamera());
+	m_ArmoredCore.Init();
+
 }
 
 void CPlayer::Update()
@@ -38,17 +42,17 @@ void CPlayer::Update()
 	Shadow().SetLightPosition(D3DXVECTOR3(1.0f, 1.0f, 1.0f) * 10 + m_trans.GetPosition());
 	Shadow().SetLightTarget(m_trans.GetPosition());
 
-	m_Leg.Update();
+	m_ArmoredCore.Update();
 }
 
 void CPlayer::Render()
 {
-	m_Leg.Render();
+	m_ArmoredCore.Render();
 }
 
 void CPlayer::Release()
 {
-	m_Leg.Release();
+	m_ArmoredCore.Release();
 }
 
 void CPlayer::Rotation()

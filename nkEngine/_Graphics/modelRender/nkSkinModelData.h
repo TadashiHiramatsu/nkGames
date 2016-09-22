@@ -43,7 +43,7 @@ namespace nkEngine
 		//インスタンシング描画を行うためのデータを作成する
 		//param[in] インスタンスの数
 		//param[in] インスタンシング描画用の頂点ストリーム１に流し込む頂点バッファの頂点レイアウト
-		void CreateInstancingDrawData(int numInstance, D3DVERTEXELEMENT9* vertexElement);
+		void CreateInstancingRenderData(int numInstance, D3DVERTEXELEMENT9* vertexElement);
 
 		//モデルデータのクローンを作成
 		//param[in] モデルデータ
@@ -76,16 +76,16 @@ namespace nkEngine
 
 		//インスタンシング描画用のデータを更新
 		//param[in] 頂点バッファにコピーするデータ
-		void UpdateInstancingDrawData(const void* data)
+		void UpdateInstancingRenderData(const void* data)
 		{
 			m_instanceVertexBuffer.Update(data);
 		}
 
 		//インスタンシング描画用のときに使用する頂点定義を取得
 		//return 頂点定義
-		IDirect3DVertexDeclaration9* GetVertexDeclForInstancingDraw()const
+		IDirect3DVertexDeclaration9* GetVertexDeclForInstancingRender()const
 		{
-			return m_vertexDeclForInstancingDraw;
+			return m_vertexDeclForInstancingRender;
 		}
 
 		//インスタンシング描画用の頂点バッファを取得
@@ -133,7 +133,7 @@ namespace nkEngine
 		//param[in] インスタンスの数
 		//param[in] インスタンシング描画用の頂点ストリーム1に流し込む頂点バッファの頂点レイアウト
 		//return trueが帰ってきたら再帰処理終了
-		bool CreateInstancingDrawData(D3DXFRAME* frame, int numInstance, D3DVERTEXELEMENT9* vertexElement);
+		bool CreateInstancingRenderData(D3DXFRAME* frame, int numInstance, D3DVERTEXELEMENT9* vertexElement);
 
 		//謎
 		HRESULT SetupBoneMatrixPointers(D3DXFRAME* pFrame, D3DXFRAME* pRootFrame);
@@ -142,7 +142,7 @@ namespace nkEngine
 		ID3DXAnimationController* m_AnimController; //アニメーションコントローラー
 		bool m_isClone; //クローン
 		CVertexBuffer m_instanceVertexBuffer; //インスタンシング描画用の頂点バッファのリスト
-		IDirect3DVertexDeclaration9* m_vertexDeclForInstancingDraw; //インスタンシング描画用の頂点定義
+		IDirect3DVertexDeclaration9* m_vertexDeclForInstancingRender; //インスタンシング描画用の頂点定義
 		int m_numInstance; //インスタンスの数
 		int m_vertexBufferStride; //頂点ストライド
 	};

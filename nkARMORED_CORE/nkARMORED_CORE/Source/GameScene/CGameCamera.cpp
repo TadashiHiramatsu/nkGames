@@ -4,7 +4,7 @@
 CGameCamera g_camera;
 
 CGameCamera::CGameCamera() :
-	m_DefaultPosition(D3DXVECTOR3(0.0f, 2.0f, 0.0f)),
+	m_DefaultPosition(D3DXVECTOR3(0.0f, 8.0f, 0.0f)),
 	m_PlayerTarget(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
 	m_PlayerPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
 	m_Dir(EDir::Left)
@@ -33,8 +33,8 @@ void CGameCamera::Update()
 	dirZ = m_PlayerPosition - m_PlayerTarget;
 	D3DXVec3Normalize(&dirZ, &dirZ);
 	D3DXVec3Cross(&dirX, &dirZ, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-	dirZ *= 5;
-	dirX *= 2;
+	dirZ *= 15;
+	dirX *= 8;
 
 	static float dir = 1.0f;
 	if (m_Dir == EDir::Left)

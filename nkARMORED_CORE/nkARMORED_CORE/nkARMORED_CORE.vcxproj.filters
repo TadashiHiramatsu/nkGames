@@ -45,9 +45,6 @@
     <ClCompile Include="Source\GameScene\CSkybox.cpp">
       <Filter>GameScene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameScene\CBuilding.cpp">
-      <Filter>GameScene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Armoredcore\CLeftArm.cpp">
       <Filter>Armoredcore</Filter>
     </ClCompile>
@@ -93,9 +90,6 @@
       <Filter>GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameScene\CSkybox.h">
-      <Filter>GameScene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameScene\CBuilding.h">
       <Filter>GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Graphic\CACModelRender.h">

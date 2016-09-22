@@ -18,22 +18,7 @@ namespace nkEngine
 
 	void CSprite::Load(const char * filepass)
 	{
-		LPD3DXBUFFER  compileErrorBuffer = NULL;
-		HRESULT hr = D3DXCreateEffectFromFile(
-			Engine().GetDevice(),
-			"shader\\2Dshader.fx",
-			NULL,
-			NULL,
-			D3DXSHADER_DEBUG,
-			NULL,
-			&m_pEffect,
-			&compileErrorBuffer
-		);
-
-		if (FAILED(hr)) {
-			MessageBox(NULL, (char*)(compileErrorBuffer->GetBufferPointer()), "error", MB_OK);
-			abort();
-		}
+		m_pEffect = EffectManager().LoadEffect("2Dshader.fx");
 
 		D3DXCreateTextureFromFile(Engine().GetDevice(), filepass, &m_pTex);
 
@@ -42,9 +27,7 @@ namespace nkEngine
 
 	void CSprite::Load()
 	{
-		LPD3DXBUFFER  compileErrorBuffer = NULL;
 		m_pEffect = EffectManager().LoadEffect("2Dshader.fx");
-
 	}
 
 	void CSprite::Init()
