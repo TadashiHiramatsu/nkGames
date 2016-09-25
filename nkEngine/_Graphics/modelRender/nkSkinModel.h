@@ -136,8 +136,6 @@ namespace nkEngine
 			m_fogParam[1] = idx1;
 		}
 
-	
-
 		LPD3DXMESH GetMesh()
 		{
 			static D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(m_ModelData->GetFrameRoot()->pMeshContainer);

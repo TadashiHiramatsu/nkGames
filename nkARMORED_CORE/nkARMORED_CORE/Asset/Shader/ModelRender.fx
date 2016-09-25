@@ -1,6 +1,7 @@
 //スキンモデルシェーダー
 
 #include"LightingFunction.h"
+#include"ShadowFunction.h"
 
 //スキン行列。
 #define MAX_MATRICES  26
@@ -12,8 +13,6 @@ float4x4 g_mRotation; //回転行列
 float4x4 g_mViewProj : VIEWPROJECTION;
 
 float4x4 g_mViewMatrixRotInv;	//カメラの回転行列の逆行列。
-
-float4x4 g_mLVP;	//ライトビュープロジェクション
 
 int4 g_flags;				//xに法線マップの保持フラグ、yはシャドウレシーバー、zはフレネル、wは輝度
 
@@ -34,19 +33,6 @@ sampler_state
     MagFilter = NONE;
     AddressU = Wrap;
 	AddressV = Wrap;
-};
-
-//シャドウテクスチャ。
-texture g_ShadowTexture;	
-sampler g_ShadowTextureSampler =
-sampler_state
-{
-	Texture = <g_ShadowTexture>;
-	MipFilter = NONE;
-	MinFilter = LINEAR;
-	MagFilter = LINEAR;
-	AddressU = Clamp;
-	AddressV = Clamp;
 };
 
 //法線マップ
@@ -89,9 +75,11 @@ struct VS_OUTPUT
 	float4 Pos      : POSITION;
 	float3 Normal   : NORMAL;
     float2 Tex0     : TEXCOORD0;
-	float3 Tangent	: TEXCOORD1;//接ベクトル
-	float4 lightViewPos : TEXCOORD2;
-	float3 worldPos : TEXCOORD3;
+	float3 Tangent	: TEXCOORD1; //接ベクトル
+	float4 WorldPos_Depth : TEXCOORD2; //xyzにワールド座標。wには射影空間でのdepthが格納される。
+	float4 LightViewPos_0 : TEXCOORD3;
+	float4 LightViewPos_1 : TEXCOORD4;
+	float4 LightViewPos_2 : TEXCOORD5;
 };
 
 //シャドウマップ出力頂点
@@ -178,14 +166,17 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
 		//スキンなし。
 		CalcWorldPosAndNormal(In, Pos, Normal, Tangent, true);
 	}
-	Out.worldPos = Pos.xyz;
+	Out.WorldPos_Depth.xyz = Pos.xyz;
 	Out.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
+	Out.WorldPos_Depth.w = Out.Pos.w;
 	Out.Normal = normalize(Normal);
 	Out.Tangent = normalize(Tangent);
 	Out.Tex0 = In.Tex0;
 	if (g_flags.y) {
 		//シャドウレシーバー。
-		Out.lightViewPos = mul(float4(Pos.xyz, 1.0f), g_mLVP);
+		Out.LightViewPos_0 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[0]);
+		Out.LightViewPos_1 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[1]);
+		Out.LightViewPos_2 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[2]);
 	}
 	return Out;
 }
@@ -212,13 +203,16 @@ VS_OUTPUT VSMainInstancing(VS_INPUT_INSTANCING In, uniform bool hasSkin)
 	worldMat[2] = In.mWorld3;
 	worldMat[3] = In.mWorld4;
 	Pos = mul(float4(Pos.xyz, 1.0f), worldMat);	//ワールド行列をかける。
-	Out.worldPos = Pos.xyz;
+	Out.WorldPos_Depth.xyz = Pos.xyz;
 	Out.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
+	Out.WorldPos_Depth.w = Out.Pos.w;
 	Out.Normal = mul(normalize(Normal), worldMat);
 	Out.Tex0 = In.base.Tex0;
 	if (g_flags.y) {
 		//シャドウレシーバー。
-		Out.lightViewPos = mul(float4(Pos.xyz, 1.0f), g_mLVP);
+		Out.LightViewPos_0 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[0]);
+		Out.LightViewPos_1 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[1]);
+		Out.LightViewPos_2 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[2]);
 	}
 	return Out;
 }
@@ -229,7 +223,6 @@ VS_OUTPUT VSMainInstancing(VS_INPUT_INSTANCING In, uniform bool hasSkin)
 float4 PSMain(VS_OUTPUT In) : COLOR
 {
 	float4 color = tex2D(g_diffuseTextureSampler,In.Tex0);
-	
 	float3 normal = 0.0f;
 	if (g_flags.x)
 	{
@@ -254,50 +247,32 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 
 	if (g_flags.y)
 	{
-		//影落とす
-		float4 posInLVP = In.lightViewPos;
-		posInLVP.xyz /= posInLVP.w;
-
-		//uv座標に変換
-		float2 shadowMapUV = float2(0.5f, -0.5f) * posInLVP.xy + float2(0.5f, 0.5f);
-		float2 shadow_val = 1.0f;
-
-		if (shadowMapUV.x <= 1.0f && shadowMapUV.y <= 1.0f && shadowMapUV.x >= 0.0f && shadowMapUV.y >= 0.0f) {
-			shadow_val = tex2D(g_ShadowTextureSampler, shadowMapUV).rg;
-			float depth = min(posInLVP.z, 1.0f);
-
-			//if (depth > shadow_val.r) {
-			//	//チェビシェフ
-			//	float depth_sq = shadow_val.r * shadow_val.r;
-			//	float variance = max(shadow_val.g - depth_sq, 0.0006f);
-			//	float md = depth - shadow_val.r;
-			//	float P = variance / (variance + md * md);
-			//	lig *= pow(P, 5.0f);
-			//}
-			if (depth > shadow_val.r + 0.006f) {
-				lig = 0;
-			}
-		}
+		//影
+		lig *= CalcShadow(In.LightViewPos_0, In.LightViewPos_1, In.LightViewPos_2);
 	}
 
 	if (g_isSpec)
 	{
 		//スペキュラライト。
-		lig.xyz += CalcSpecular(In.worldPos, normal, In.Tex0);
+		lig.xyz += CalcSpecular(In.WorldPos_Depth, normal, In.Tex0);
 	}
-
-	//アンビエントライト
-	lig.xyz += g_light.ambient.xyz;
-	color.xyz *= lig;
 
 	if (g_flags.z)
 	{
 		//リムライト
+		float lim = 0.0f;
 		float3 normalInCamera = mul(normal, g_mViewMatrixRotInv);
 		float t = 1.0f - abs(dot(normalInCamera, float3(0.0f, 0.0f, 1.0f)));
 		t = pow(t, 1.5f);
 		color.xyz += t * 0.7f;
 	}
+
+
+	//アンビエントライト
+	lig.xyz += g_light.ambient.xyz;
+	color.xyz *= lig;
+
+
 
 	//アルファに輝度を埋め込む
 	if (g_flags.w){
@@ -306,13 +281,13 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 
 	if (g_fogParam.z > 1.9f) {
 		//高さフォグ
-		float h = max(In.worldPos.y - g_fogParam.y, 0.0f);
+		float h = max(In.WorldPos_Depth.y - g_fogParam.y, 0.0f);
 		float t = min(h / g_fogParam.x, 1.0f);
 		color.xyz = lerp(float3(0.25f, 0.05f, 0.05f), color.xyz, t);
 	}
 	else if (g_fogParam.z > 0.0f) {
 		//距離フォグ
-		float z = length(In.worldPos - g_cameraPos);
+		float z = length(In.WorldPos_Depth.xyz - g_cameraPos);
 		z = max(z - g_fogParam.x, 0.0f);
 		float t = z / g_fogParam.y;
 		color.xyz = lerp(color.xyz, float3(0.25f, 0.05f, 0.05f), t);

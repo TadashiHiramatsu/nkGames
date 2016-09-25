@@ -190,7 +190,7 @@ namespace nkEngine
 			//ビュープロジェクション行列
 			if (isRenderToShadowMap)
 			{
-				m_Effect->SetMatrix("g_mViewProj", Shadow().GetLVPMatrix());
+				m_Effect->SetMatrix("g_mViewProj", &Shadow().GetLightViewProjectionMatrix());
 			}
 			else
 			{
@@ -216,8 +216,11 @@ namespace nkEngine
 			if (!isRenderToShadowMap && m_isShadowReceiver)
 			{
 				flag[1] = true;
-				m_Effect->SetTexture("g_ShadowTexture", Shadow().GetTexture()->GetTextureDX());
-				m_Effect->SetMatrix("g_mLVP", Shadow().GetLVPMatrix());
+				m_Effect->SetTexture("g_ShadowMap_0", Shadow().GetTexture(0)->GetTextureDX());
+				m_Effect->SetTexture("g_ShadowMap_1", Shadow().GetTexture(1)->GetTextureDX());
+				m_Effect->SetTexture("g_ShadowMap_2", Shadow().GetTexture(2)->GetTextureDX());
+				const CShadowMap::SShadowReceiverParam& param = Shadow().GetShadowReceiverParam();
+				m_Effect->SetValue("g_ShadowReceiverParam", &param, sizeof(param));
 			}
 
 			//リムライト

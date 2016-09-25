@@ -48,6 +48,7 @@ namespace nkEngine
 			{
 				Input().Update();
 				XInput().Update();
+				Shadow().Update();
 				Shadow().Render();
 				OffScreenRender().Update();
 				OffScreenRender().Render();

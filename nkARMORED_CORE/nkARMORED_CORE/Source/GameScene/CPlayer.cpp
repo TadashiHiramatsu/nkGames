@@ -15,9 +15,8 @@ CPlayer::~CPlayer()
 void CPlayer::Init()
 {
 	m_trans.SetPosition(D3DXVECTOR3(0.0f,100.0f,0.0f));
-	m_trans.SetScale(D3DXVECTOR3(3, 3, 3));
 
-	Shadow().SetLightPosition(D3DXVECTOR3(1.0f, 1.0f, 1.0f) * 10 + m_trans.GetPosition());
+	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 20.5f, 19.5f) + m_trans.GetPosition());
 	Shadow().SetLightTarget(m_trans.GetPosition());
 
 	m_Target = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
@@ -39,7 +38,7 @@ void CPlayer::Update()
 	g_camera.SetPlayerTarget(m_Target);
 	g_camera.SetPlayerPosition(m_trans.GetPosition());
 
-	Shadow().SetLightPosition(D3DXVECTOR3(1.0f, 1.0f, 1.0f) * 10 + m_trans.GetPosition());
+	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 20.5f, 19.5f) + m_trans.GetPosition());
 	Shadow().SetLightTarget(m_trans.GetPosition());
 
 	m_ArmoredCore.Update();

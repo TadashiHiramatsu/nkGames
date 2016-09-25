@@ -12,12 +12,24 @@ namespace nkEngine
 	class CShadowMap
 	{
 	public:
-		//!<ライトビューの計算の仕方。
+
+		//シャドウマップの数
+		static const int MAX_SHADOW_MAP = 3;
+
+		//シャドウレシーバー用のパラメータ
+		struct SShadowReceiverParam
+		{
+			D3DXMATRIX mLightViewProjection[MAX_SHADOW_MAP]; //ライトビューマトリクス
+			bool vsmFlag; //バリアンスシャドウマップを行うかのフラグ
+			int numShadowMap; //シャドウマップの枚数
+		};
+
+		//ライトビューの計算の仕方。
 		enum EnCalcLightViewFunc {
 			enCalcLightViewFunc_PositionDirection,	//ライトの位置と方向で計算する。
 			enCalcLightViewFunc_PositionTarget,		//ライトの位置と注視点で計算する。
 		};
-			
+
 		//作成
 		//param[in] 横幅
 		//param[in] 縦幅
@@ -37,34 +49,29 @@ namespace nkEngine
 		void Entry(CModelRender* SkinModel);
 
 		//テクスチャを取得
-		const CTexture* GetTexture() const
+		//param[in] テクスチャーナンバー
+		const CTexture* GetTexture(int texNumber) const
 		{
-			return m_blur.GetTexture();
-			//return m_shadowMapRT.GetTexture();
+			//return m_blur[texNumber].GetTexture();
+			return m_shadowMapRT[texNumber].GetTexture();
 		}
 
 		//ライトの方向を設定
 		void SetLightDirection(const D3DXVECTOR3& dir)
 		{
-			m_vLDirection = dir;
+			m_vLightDirection = dir;
 		}
 
 		//ライトの視点を設定
 		void SetLightPosition(const D3DXVECTOR3& pos)
 		{
-			m_vLPosition = pos;
+			m_vLightPosition = pos;
 		}
 
 		//ライトの注視点を設定
 		void SetLightTarget(const D3DXVECTOR3& ter)
 		{
-			m_vLTarget = ter;
-		}
-
-		//ライトビュープロジェクション行列の取得
-		D3DXMATRIX* GetLVPMatrix()
-		{
-			return &m_mLViewProj;
+			m_vLightTarget = ter;
 		}
 
 		//近平面を取得
@@ -78,7 +85,7 @@ namespace nkEngine
 		{
 			m_near = fnear;
 		}
-		
+
 		//遠平面を取得
 		float GetFar() const
 		{
@@ -90,17 +97,11 @@ namespace nkEngine
 		{
 			m_far = ffar;
 		}
-		
+
 		//有効フラグの取得
 		bool IsActive()const
 		{
 			return m_isActive;
-		}
-
-		//カメラを設定。PSMを行うときに使用される
-		void SetCamera(CCamera* camera)
-		{
-			m_camera = camera;
 		}
 
 		//ライトビューの設定の仕方を設定
@@ -115,6 +116,20 @@ namespace nkEngine
 			static CShadowMap instance;
 			return instance;
 		}
+
+		//シャドウレシーバー用のパラメータを取得
+		//return シャドウレシーバー用のパラメータ
+		const SShadowReceiverParam& GetShadowReceiverParam()
+		{
+			return m_shadowReceiverParam;
+		}
+
+		//ライトビュープロジェクション行列の取得
+		const D3DXMATRIX& GetLightViewProjectionMatrix() const
+		{
+			return m_mLightViewProjection;
+		}
+
 	private:
 		//コンストラクタ
 		CShadowMap();
@@ -122,30 +137,30 @@ namespace nkEngine
 		~CShadowMap();
 	private:
 		bool m_isActive; //有効フラグ	
-		
-		CRenderTarget m_shadowMapRT; //シャドウマップ用レンダーターゲット
-		vector<CModelRender*> m_shadowModels; //影を書き込むモデル
-	
-		D3DXVECTOR3 m_vLPosition; //ライトの視点
-		D3DXVECTOR3 m_vLDirection; //ライトの方向
-		D3DXVECTOR3 m_vLTarget; //ライトの注視点
 
-		D3DXMATRIX m_mLView; //ライトビュー行列
-		D3DXMATRIX m_mLViewProj; //ライトビュープロジェクション行列
-		D3DXMATRIX m_mProj; //プロジェクション行列
+		CRenderTarget m_shadowMapRT[MAX_SHADOW_MAP]; //シャドウマップ用レンダーターゲット
+		vector<CModelRender*> m_shadowModels; //影を書き込むモデル
+
+		D3DXVECTOR3 m_vLightPosition; //ライトの視点
+		D3DXVECTOR3 m_vLightDirection; //ライトの方向
+		D3DXVECTOR3 m_vLightTarget; //ライトの注視点
+
+		D3DXMATRIX m_mLightView; //ライトビュー行列
+		D3DXMATRIX m_mProjection; //プロジェクション行列
+		D3DXMATRIX m_mLightViewProjection; //ライトビュープロジェクション行列
 
 		EnCalcLightViewFunc	m_calcLightViewFunc; //ライトビューの計算方法。
 
 		float m_near; //近平面
 		float m_far; //遠平面
 		float m_Aspect; //アスペクト比
-		float m_shadowAreaW; //影を落とす範囲の幅
-		float m_shadowAreaH; //影を落とす範囲の高さ
+		float m_shadowAreaW[MAX_SHADOW_MAP]; //影を落とす範囲の幅
+		float m_shadowAreaH[MAX_SHADOW_MAP]; //影を落とす範囲の高さ
 
-		CCamera* m_camera; //PSMを計算するときに使用するカメラ
-
-		CBlur m_blur;
+		//CBlur m_blur[MAX_SHADOW_MAP]; //ブラー処理クラス
+		SShadowReceiverParam m_shadowReceiverParam; //シャドウレシーバー用のパラメータ
 	};
+
 	inline static CShadowMap& Shadow()
 	{
 		return CShadowMap::instance();

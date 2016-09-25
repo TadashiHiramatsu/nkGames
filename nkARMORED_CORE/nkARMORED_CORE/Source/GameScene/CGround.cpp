@@ -19,6 +19,7 @@ void CGround::Init()
 	m_model.SetTransform(&m_trans);
 	m_model.SetLight(&m_light);
 	m_model.SetShadowReceiverFlag(true);
+	m_model.SetShadowCasterFlag(true);
 	m_model.SetFogParam(enFogFuncDist, 300.0f, 400.0f);
 	//m_model.SetFogColor(D3DXVECTOR4(0.25f, 0.05f, 0.05f,0.0f));
 
