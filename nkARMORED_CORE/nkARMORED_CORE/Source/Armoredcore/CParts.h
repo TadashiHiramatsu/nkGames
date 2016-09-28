@@ -37,8 +37,7 @@ public:
 
 	inline D3DXMATRIX* GetMatrix(const char* pass)
 	{
-		D3DXFRAME_DERIVED* frame = (D3DXFRAME_DERIVED*)D3DXFrameFind(m_ACModel.GetFrame(), pass);
-		return &frame->CombinedTransformationMatrix;
+		return m_ACModel.FindBoneWorldMatrix(pass);
 	}
 
 protected:

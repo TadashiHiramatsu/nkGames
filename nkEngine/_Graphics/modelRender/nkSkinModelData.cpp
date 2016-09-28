@@ -4,10 +4,6 @@
 
 namespace {
 	using namespace nkEngine;
-	//--------------------------------------------------------------------------------------
-	// update the frame matrices
-	//--------------------------------------------------------------------------------------
-	
 
 	void InnerDestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase)
 	{
@@ -528,11 +524,10 @@ namespace {
 
 
 }
+
 namespace nkEngine
 {
-	/*!
-	*@brief	コンストラクタ。
-	*/
+	
 	CSkinModelData::CSkinModelData() :
 		m_FrameRoot(nullptr),
 		m_isClone(false),
@@ -542,13 +537,12 @@ namespace nkEngine
 		m_vertexBufferStride(0)
 	{
 	}
-	/*!
-	*@brief	デストラクタ。
-	*/
+
 	CSkinModelData::~CSkinModelData()
 	{
 		Release();
 	}
+
 	void CSkinModelData::CloneModelData(const CSkinModelData & ModelData, CAnimation * anim)
 	{
 		//スケルトンの複製を作成
@@ -579,9 +573,7 @@ namespace nkEngine
 		}
 		SetupBoneMatrixPointers(m_FrameRoot, m_FrameRoot);
 	}
-	/*!
-	* @brief	リリース。
-	*/
+	
 	void CSkinModelData::Release()
 	{
 		SAFE_RELEASE(m_vertexDeclForInstancingRender);
@@ -628,10 +620,6 @@ namespace nkEngine
 		SAFE_DELETE(frame);
 	}
 
-	/*!
-	* @brief	モデルデータをロード。
-	*@param[in]	filePath	ファイルパス。
-	*/
 	void CSkinModelData::LoadModelData(const char* filePath, CAnimation* anim)
 	{
 		char* baseDir = "Asset/Model/";
@@ -751,6 +739,37 @@ namespace nkEngine
 		return S_OK;
 	}
 
+	LPD3DXMESH CSkinModelData::GetOrgMesh(LPD3DXFRAME frame) const
+	{
+		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(frame->pMeshContainer);
+		if (pMeshContainer != nullptr) {
+			return pMeshContainer->pOrigMesh;
+		}
+		if (frame->pFrameSibling != nullptr) {
+			//兄弟
+			LPD3DXMESH mesh = GetOrgMesh(frame->pFrameSibling);
+
+			if (mesh) {
+				return mesh;
+			}
+		}
+		if (frame->pFrameFirstChild != nullptr)
+		{
+			//子供。
+			LPD3DXMESH mesh = GetOrgMesh(frame->pFrameFirstChild);
+			if (mesh) {
+				return mesh;
+			}
+		}
+
+		return nullptr;
+	}
+
+	LPD3DXMESH CSkinModelData::GetOrgMeshFirst() const
+	{
+		return GetOrgMesh(m_FrameRoot);
+	}
+
 	void CSkinModelData::SetupOutputAnimationRegist(D3DXFRAME * frame, ID3DXAnimationController * aniCon)
 	{
 		if (aniCon == nullptr) {
@@ -766,9 +785,6 @@ namespace nkEngine
 		}
 	}
 
-	/*!
-	* @brief	ボーン行列を更新。
-	*/
 	void CSkinModelData::UpdateBoneMatrix(const D3DXMATRIX& matWorld)
 	{
 		UpdateFrameMatrices(m_FrameRoot, reinterpret_cast<const D3DXMATRIX*>(&matWorld));
@@ -797,44 +813,6 @@ namespace nkEngine
 			UpdateFrameMatrices(pFrame->pFrameFirstChild, &pFrame->CombinedTransformationMatrix);
 		}
 	}
-
-	//メモリリーク回避の残骸
-	//HRESULT CSkinModelData::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase)
-	//{
-	//	if (pMeshContainerBase->pNextMeshContainer != nullptr) {
-	//		DestroyMeshContainer(pMeshContainerBase->pNextMeshContainer);
-	//	}
-	//	
-	//	UINT iMaterial;
-	//	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
-
-	//	SAFE_DELETE_ARRAY(pMeshContainer->pAttributeTable);
-	//	SAFE_DELETE_ARRAY(pMeshContainer->Name);
-	//	SAFE_DELETE_ARRAY(pMeshContainer->pAdjacency);
-	//	SAFE_DELETE_ARRAY(pMeshContainer->pMaterials);
-	//	SAFE_DELETE_ARRAY(pMeshContainer->pBoneOffsetMatrices);
-
-	//	// release all the allocated textures
-	//	if (pMeshContainer->ppTextures != NULL)
-	//	{
-	//		for (iMaterial = 0; iMaterial < pMeshContainer->NumMaterials; iMaterial++)
-	//		{
-	//			SAFE_RELEASE(pMeshContainer->ppTextures[iMaterial]);
-	//		}
-	//	}
-
-	//	SAFE_DELETE_ARRAY(pMeshContainer->ppTextures);
-	//	SAFE_DELETE_ARRAY(pMeshContainer->ppBoneMatrixPtrs);
-	//	SAFE_RELEASE(pMeshContainer->pBoneCombinationBuf);
-	//	SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
-	//	SAFE_RELEASE(pMeshContainer->pSkinInfo);
-	//	SAFE_RELEASE(pMeshContainer->pOrigMesh);
-	//	SAFE_DELETE(pMeshContainer);
-
-	//	
-
-	//	return S_OK;
-	//}
 
 	void CSkinModelData::CloneSkeleton(LPD3DXFRAME & dstFrame, D3DXFRAME * srcFrame)
 	{

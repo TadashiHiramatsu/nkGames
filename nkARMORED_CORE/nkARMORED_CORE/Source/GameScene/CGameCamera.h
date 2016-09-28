@@ -34,14 +34,14 @@ public:
 		return &m_camera;
 	}
 
-	void SetPlayerTarget(const D3DXVECTOR3& target)
+	void SetPlayerTarget(D3DXVECTOR3* target)
 	{
 		m_PlayerTarget = target;
 	}
 
-	void SetPlayerPosition(const D3DXVECTOR3& pos)
+	void SetPlayerTranceform(CTransform* trans)
 	{
-		m_PlayerPosition = pos;
+		m_PlayerTranceform = trans;
 	}
 
 	D3DXVECTOR3 GetDirection()
@@ -56,8 +56,8 @@ public:
 
 private:
 	CCamera m_camera;
-	D3DXVECTOR3 m_PlayerTarget;
-	D3DXVECTOR3 m_PlayerPosition;
+	D3DXVECTOR3* m_PlayerTarget;
+	CTransform* m_PlayerTranceform;
 	D3DXVECTOR3 m_DefaultPosition;
 
 	D3DXVECTOR3 m_Direction;

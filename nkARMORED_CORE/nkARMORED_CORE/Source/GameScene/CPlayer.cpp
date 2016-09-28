@@ -27,6 +27,8 @@ void CPlayer::Init()
 	m_ArmoredCore.SetCamera(g_camera.GetCamera());
 	m_ArmoredCore.Init();
 
+	g_camera.SetPlayerTarget(&m_Target);
+	g_camera.SetPlayerTranceform(&m_trans);
 }
 
 void CPlayer::Update()
@@ -35,10 +37,7 @@ void CPlayer::Update()
 	Move();
 	Collision();
 
-	g_camera.SetPlayerTarget(m_Target);
-	g_camera.SetPlayerPosition(m_trans.GetPosition());
-
-	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 20.5f, 19.5f) + m_trans.GetPosition());
+	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 20.5f, 19.5f)*3 + m_trans.GetPosition());
 	Shadow().SetLightTarget(m_trans.GetPosition());
 
 	m_ArmoredCore.Update();

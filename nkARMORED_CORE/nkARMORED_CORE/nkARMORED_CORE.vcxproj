@@ -71,11 +71,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(ProjectDir);$(SolutionDir)/../;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)/Debug;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)../;$(SolutionDir)/bulletPhysics/src;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(SolutionDir)/nkARMORED_CORE;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)/Debug;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)/bulletPhysics/lib/Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)/bulletPhysics/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -95,7 +96,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>nkEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>nkEngine.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -109,6 +110,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>BulletCollision_Debug.lib;BulletDynamics_Debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -160,6 +162,10 @@
     <ClCompile Include="Source\GameScene\CPlayer.cpp" />
     <ClCompile Include="Source\GameScene\CSkybox.cpp" />
     <ClCompile Include="Source\Graphics\CACModelRender.cpp" />
+    <ClCompile Include="Source\Physics\CBoxCollider.cpp" />
+    <ClCompile Include="Source\Physics\CMeshCollider.cpp" />
+    <ClCompile Include="Source\Physics\CPhysics.cpp" />
+    <ClCompile Include="Source\Physics\CRigidBody.cpp" />
     <ClCompile Include="Source\TitleScene\CTitleScene.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
@@ -177,6 +183,11 @@
     <ClInclude Include="Source\GameScene\CGround.h" />
     <ClInclude Include="Source\GameScene\CPlayer.h" />
     <ClInclude Include="Source\GameScene\CSkybox.h" />
+    <ClInclude Include="Source\Physics\CBoxCollider.h" />
+    <ClInclude Include="Source\Physics\CCollider.h" />
+    <ClInclude Include="Source\Physics\CMeshCollider.h" />
+    <ClInclude Include="Source\Physics\CPhysics.h" />
+    <ClInclude Include="Source\Physics\CRigidBody.h" />
     <ClInclude Include="Source\TitleScene\CTitleScene.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>

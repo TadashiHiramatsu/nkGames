@@ -2,6 +2,7 @@
 #include"Source\GameScene\CGameScene.h"
 #include"Source\TitleScene\CTitleScene.h"
 
+
 int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdshow)
 {
 	SInitParam initparam;

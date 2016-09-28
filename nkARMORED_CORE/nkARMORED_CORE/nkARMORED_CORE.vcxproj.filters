@@ -19,6 +19,9 @@
     <Filter Include="Armoredcore">
       <UniqueIdentifier>{5c4ddf83-82c5-437f-8e7f-7f52500fde74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{00aed3f5-a632-4c17-83db-44f3abb72b15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -69,6 +72,18 @@
     <ClCompile Include="Source\Armoredcore\CParts.cpp">
       <Filter>Armoredcore</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Physics\CPhysics.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics\CRigidBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics\CMeshCollider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics\CBoxCollider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -115,6 +130,21 @@
     </ClInclude>
     <ClInclude Include="Source\Armoredcore\CParts.h">
       <Filter>Armoredcore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\CCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\CPhysics.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\CRigidBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\CMeshCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics\CBoxCollider.h">
+      <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

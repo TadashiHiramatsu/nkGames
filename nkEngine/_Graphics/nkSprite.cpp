@@ -85,8 +85,8 @@ namespace nkEngine
 	}
 	void CSprite::Release()
 	{
-		//SAFE_RELEASE(m_pTex);
-		//SAFE_RELEASE(m_pVB);
+		SAFE_RELEASE(m_pTex);
+		SAFE_RELEASE(m_pVB);
 	}
 	void CSprite::DrawPrimitiveOnly()
 	{

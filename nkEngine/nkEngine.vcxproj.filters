@@ -22,9 +22,6 @@
     <Filter Include="Graphics\2DRender">
       <UniqueIdentifier>{87509d2d-b699-44ae-a9e9-fbbe5270094b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Shadow">
-      <UniqueIdentifier>{2af43d90-50b3-44e0-8d21-eaecdc06871a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Component">
       <UniqueIdentifier>{8f348ce0-094a-4018-ab04-8e3c34ebe489}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,12 @@
     </Filter>
     <Filter Include="Input">
       <UniqueIdentifier>{63b19cb6-a28d-4a0d-bc90-500d7213a20f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\PostEffect">
+      <UniqueIdentifier>{6489dc6b-31e5-4e3e-af9b-a758284cb0b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Prerender">
+      <UniqueIdentifier>{2af43d90-50b3-44e0-8d21-eaecdc06871a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -76,7 +79,7 @@
       <Filter>Graphics\2DRender</Filter>
     </ClCompile>
     <ClCompile Include="_Graphics\Shadow\nkShadow.cpp">
-      <Filter>Graphics\Shadow</Filter>
+      <Filter>Graphics\Prerender</Filter>
     </ClCompile>
     <ClCompile Include="_Graphics\nkVertexBuffer.cpp">
       <Filter>Graphics</Filter>
@@ -98,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="_Input\nkXinput.cpp">
       <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\PostEffect\nkAntiAliasing.cpp">
+      <Filter>Graphics\PostEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,7 +156,7 @@
       <Filter>Graphics\2DRender</Filter>
     </ClInclude>
     <ClInclude Include="_Graphics\Shadow\nkShadow.h">
-      <Filter>Graphics\Shadow</Filter>
+      <Filter>Graphics\Prerender</Filter>
     </ClInclude>
     <ClInclude Include="_Graphics\nkVertexBuffer.h">
       <Filter>Graphics</Filter>
@@ -175,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="_Input\nkXinput.h">
       <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\PostEffect\nkAntiAliasing.h">
+      <Filter>Graphics\PostEffect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

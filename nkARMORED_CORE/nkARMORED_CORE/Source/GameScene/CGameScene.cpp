@@ -4,8 +4,10 @@
 
 void CGameScene::Init()
 {
-	g_camera.Init();
+	g_Physics.Init();
+
 	m_player.Init();
+	g_camera.Init();
 	m_ground.Init();
 
 	//’n–Ê‚ÌMesh‚ð“n‚·
@@ -17,6 +19,8 @@ void CGameScene::Init()
 
 void CGameScene::Update()
 {
+	g_Physics.Update();
+
 	g_camera.BeforeUpdate();
 
 	m_ground.Update();

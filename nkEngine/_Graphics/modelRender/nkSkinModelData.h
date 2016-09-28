@@ -6,11 +6,12 @@
 namespace nkEngine
 {
 	struct D3DXFRAME_DERIVED : public D3DXFRAME {
-		D3DXMATRIXA16	CombinedTransformationMatrix;	//合成済み行列。
+		D3DXMATRIXA16	CombinedTransformationMatrix;	//合成済み行列
 	};
+
 	struct D3DXMESHCONTAINER_DERIVED : public D3DXMESHCONTAINER {
-		LPDIRECT3DTEXTURE9* ppTextures;
-		LPD3DXMESH pOrigMesh;
+		LPDIRECT3DTEXTURE9* ppTextures; //テクスチャ
+		LPD3DXMESH pOrigMesh; //オリジナルメッシュ
 		LPD3DXATTRIBUTERANGE pAttributeTable;
 		DWORD NumAttributeGroups;
 		DWORD NumInfl;
@@ -63,6 +64,13 @@ namespace nkEngine
 			return m_FrameRoot;
 		}
 
+		//オリジナルメッシュを取得
+		LPD3DXMESH GetOrgMesh(LPD3DXFRAME frame) const;
+
+		//先頭のメッシュを取得
+		LPD3DXMESH GetOrgMeshFirst() const;
+
+
 		//テスト 意味不
 		//param[in] フレーム
 		//param[in] アニメーションコントローラ
@@ -114,9 +122,6 @@ namespace nkEngine
 			return m_vertexBufferStride;
 		}
 
-		//メッシュコンテナの削除
-		//HRESULT DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase);
-
 	private:
 
 		//スケルトンのクローンを作成
@@ -137,6 +142,7 @@ namespace nkEngine
 
 		//謎
 		HRESULT SetupBoneMatrixPointers(D3DXFRAME* pFrame, D3DXFRAME* pRootFrame);
+
 	private:
 		D3DXFRAME* m_FrameRoot; //フレームルート
 		ID3DXAnimationController* m_AnimController; //アニメーションコントローラー

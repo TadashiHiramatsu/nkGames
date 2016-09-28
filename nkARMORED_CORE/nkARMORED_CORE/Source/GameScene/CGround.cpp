@@ -26,6 +26,19 @@ void CGround::Init()
 	m_NormalMap.Load("Field_02_Normal.tga");
 	m_model.SetNormalMap(&m_NormalMap);
 
+	Update();
+	m_mWorld = m_model.FindBoneWorldMatrix("Plane001");
+
+	//メッシュコライダー作成
+	m_MeshCollider.Create(&m_model, m_mWorld);
+
+	//剛体作成
+	SRigidBodyInfo rbInfo;
+	rbInfo.Collider = &m_MeshCollider;
+	rbInfo.Mass = 0.0f;
+	m_RigidBody.Create(rbInfo);
+
+	g_Physics.AddRigidBody(&m_RigidBody);
 }
 
 void CGround::Update()

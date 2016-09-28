@@ -52,8 +52,8 @@ namespace nkEngine
 		//param[in] テクスチャーナンバー
 		const CTexture* GetTexture(int texNumber) const
 		{
-			//return m_blur[texNumber].GetTexture();
-			return m_shadowMapRT[texNumber].GetTexture();
+			return m_blur[texNumber].GetTexture();
+			//return m_shadowMapRT[texNumber].GetTexture();
 		}
 
 		//ライトの方向を設定
@@ -157,7 +157,7 @@ namespace nkEngine
 		float m_shadowAreaW[MAX_SHADOW_MAP]; //影を落とす範囲の幅
 		float m_shadowAreaH[MAX_SHADOW_MAP]; //影を落とす範囲の高さ
 
-		//CBlur m_blur[MAX_SHADOW_MAP]; //ブラー処理クラス
+		CBlur m_blur[MAX_SHADOW_MAP]; //ブラー処理クラス
 		SShadowReceiverParam m_shadowReceiverParam; //シャドウレシーバー用のパラメータ
 	};
 

@@ -84,9 +84,7 @@ float CalcShadow(
 		float2 shadowMapUV = float2(0.5f, -0.5f) * posInLVP.xy + float2(0.5f, 0.5f);
 		float2 shadow_val = 1.0f;
 
-		//’l‚ª•Ï‚í‚Á‚Ä‚¢‚é
-		//if (shadowMapUV.x < 0.99f && shadowMapUV.y < 0.99f && shadowMapUV.x > 0.01f && shadowMapUV.y > 0.01f)
-		if (shadowMapUV.x <= 1.0f && shadowMapUV.y <= 1.0f && shadowMapUV.x >= 0.0f && shadowMapUV.y >= 0.0f) 
+		if (shadowMapUV.x < 0.99f && shadowMapUV.y < 0.99f && shadowMapUV.x > 0.01f && shadowMapUV.y > 0.01f)
 		{
 			shadow_val = tex2D(texSampler[i], shadowMapUV).rg;
 			float depth = min(posInLVP.z, 1.0f);

@@ -1,5 +1,8 @@
 #pragma once
 
+#include"../Physics/CMeshCollider.h"
+#include"../Physics/CRigidBody.h"
+
 class CGround : public CGameObject
 {
 public:
@@ -36,4 +39,8 @@ private:
 	CLight m_light;
 
 	CTexture m_NormalMap; //法線マップ用テクスチャ
+
+	D3DXMATRIX* m_mWorld; //ワールド行列
+	CMeshCollider m_MeshCollider; //メッシュコライダー
+	CRigidBody m_RigidBody; //剛体
 };

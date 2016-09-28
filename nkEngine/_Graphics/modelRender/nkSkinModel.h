@@ -136,10 +136,17 @@ namespace nkEngine
 			m_fogParam[1] = idx1;
 		}
 
+		//メッシュを取得
 		LPD3DXMESH GetMesh()
 		{
 			static D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(m_ModelData->GetFrameRoot()->pMeshContainer);
 			return pMeshContainer->pOrigMesh;
+		}
+
+		//先頭のメッシュを取得
+		LPD3DXMESH GetOrgMeshFirst() const
+		{
+			return m_ModelData->GetOrgMeshFirst();
 		}
 
 		D3DXFRAME* GetFrame()
@@ -149,6 +156,12 @@ namespace nkEngine
 		D3DXFRAME* GetFrame(const char* name)
 		{
 			return D3DXFrameFind(GetFrame(), name);
+		}
+
+		D3DXMATRIX* FindBoneWorldMatrix(const char* name)
+		{
+			D3DXFRAME_DERIVED* frame = (D3DXFRAME_DERIVED*)D3DXFrameFind(m_ModelData->GetFrameRoot(), name);
+			return &frame->CombinedTransformationMatrix;
 		}
 
 		D3DXMATRIX* GetWorldInv()
