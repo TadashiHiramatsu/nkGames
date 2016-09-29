@@ -31,9 +31,8 @@ namespace nkEngine
 		};
 
 		//作成
-		//param[in] 横幅
-		//param[in] 縦幅
-		void Create(int w, int h);
+		//param[in] コンフィグ
+		void Create(const SShadowConfig& config);
 
 		//更新
 		void Update();
@@ -99,9 +98,9 @@ namespace nkEngine
 		}
 
 		//有効フラグの取得
-		bool IsActive()const
+		bool isEnable()const
 		{
-			return m_isActive;
+			return m_isEnable;
 		}
 
 		//ライトビューの設定の仕方を設定
@@ -136,7 +135,7 @@ namespace nkEngine
 		//デストラクタ
 		~CShadowMap();
 	private:
-		bool m_isActive; //有効フラグ	
+		bool m_isEnable; //有効フラグ	
 
 		CRenderTarget m_shadowMapRT[MAX_SHADOW_MAP]; //シャドウマップ用レンダーターゲット
 		vector<CModelRender*> m_shadowModels; //影を書き込むモデル

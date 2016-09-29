@@ -18,23 +18,23 @@ namespace nkEngine
 		m_isEnable = true;
 		m_effect = EffectManager().LoadEffect("AntiAliasing.fx");
 
-		full.Load();
 		full.Init();
+
+		texSize[0] = Engine().GetFrameW();
+		texSize[1] = Engine().GetFrameH();
 	}
 
-	void CAntiAliasing::Render(const CTexture* tex)
+	void CAntiAliasing::Render()
 	{	
 		if (m_isEnable)
 		{
 			//ƒAƒ“ƒ`—LŒø
-			float texSize[] = {
-				Engine().GetFrameW(),
-				Engine().GetFrameH()
-			};
+			
 			m_effect->SetTechnique("FXAA");
+
 			m_effect->Begin(0, D3DXFX_DONOTSAVESTATE);
 			m_effect->BeginPass(0);
-			m_effect->SetTexture("g_Texture", tex->GetTextureDX());
+			m_effect->SetTexture("g_Texture", ScreenRender().GetMainRenderTarget().GetTexture()->GetTextureDX());
 			m_effect->SetValue("g_TexSize", texSize, sizeof(texSize));
 			m_effect->CommitChanges();
 			
@@ -42,7 +42,6 @@ namespace nkEngine
 			
 			m_effect->EndPass();
 			m_effect->End();
-
 		}
 	}
 

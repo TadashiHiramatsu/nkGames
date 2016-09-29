@@ -15,7 +15,7 @@ namespace nkEngine
 		};
 	}
 	CShadowMap::CShadowMap():
-		m_isActive(false),
+		m_isEnable(false),
 		m_near(1.0f),
 		m_far(1000.0f),
 		m_Aspect(1.0f),
@@ -37,13 +37,15 @@ namespace nkEngine
 		Release();
 	}
 
-	void CShadowMap::Create(int w, int h)
+	void CShadowMap::Create(const SShadowConfig& config)
 	{
 		Release();
 
-		m_near = 1.0f;
-		m_far = 100.0f;
-		m_isActive = true;
+		m_near = config.Near;
+		m_far = config.Fur;
+		m_isEnable = config.isEnable;
+		int w = config.ShadowMapW;
+		int h = config.ShadowMapH;
 
 		m_Aspect = (float)w / (float)h;
 
@@ -62,7 +64,7 @@ namespace nkEngine
 
 	void CShadowMap::Update()
 	{
-		if (m_isActive)
+		if (m_isEnable)
 		{
 			if (m_calcLightViewFunc == enCalcLightViewFunc_PositionTarget)
 			{
@@ -104,7 +106,7 @@ namespace nkEngine
 
 	void CShadowMap::Render()
 	{
-		if (m_isActive)
+		if (m_isEnable)
 		{
 			IDirect3DDevice9* Device = Engine().GetDevice();
 

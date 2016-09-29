@@ -4,6 +4,12 @@
 
 void CGameScene::Init()
 {
+	m_GraphicsConfig.ShadowConfig.isEnable = true;
+	m_GraphicsConfig.ShadowConfig.isSoftShadowMap = true;
+	m_GraphicsConfig.ShadowConfig.ShadowMapW = 2048;
+	m_GraphicsConfig.ShadowConfig.ShadowMapH = 2048;
+	m_GraphicsConfig.ShadowConfig.Fur = 100.0f;
+
 	g_Physics.Init();
 
 	m_player.Init();

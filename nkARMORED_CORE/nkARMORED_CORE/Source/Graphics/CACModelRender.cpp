@@ -12,7 +12,7 @@ CACModelRender::~CACModelRender()
 
 void CACModelRender::Update()
 {
-	if (m_isShadowCaster && Shadow().IsActive()) {
+	if (m_isShadowCaster && Shadow().isEnable()) {
 		//シャドウキャスター。
 		Shadow().Entry(this);
 	}

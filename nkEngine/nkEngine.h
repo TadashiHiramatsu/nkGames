@@ -8,7 +8,6 @@ namespace nkEngine
 		SInitParam()
 		{
 			memset(this, 0, sizeof(SInitParam));
-			ShadowActive = false;
 		}
 		HINSTANCE hInstance;
 		int screenW;
@@ -16,7 +15,6 @@ namespace nkEngine
 		int frameBufferW;
 		int frameBufferH;
 		const char* GameName;
-		bool ShadowActive;
 	};
 
 	//シングルトンのエンジンクラス

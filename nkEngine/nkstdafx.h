@@ -43,7 +43,7 @@ using namespace std;
 
 #include"_Graphics\nkTexture.h"
 #include"_Graphics\nkRenderTarget.h"
-#include"_Graphics\nkOffScreenRender.h"
+#include"_Graphics\nkScreenRender.h"
 
 #include"_Scene\nkScene.h"
 #include"_Scene\nkSceneManager.h"
@@ -63,3 +63,5 @@ using namespace std;
 
 #include"_Input\nkInput.h"
 #include"_Input\nkXinput.h"
+
+#include"_Graphics\nkGraphicsConfig.h"

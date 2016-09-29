@@ -42,7 +42,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -75,8 +75,10 @@
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(ProjectDir)../;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(ProjectDir)/../;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -101,11 +103,17 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeaderFile>nkEngine/nkstdafx.h</PrecompiledHeaderFile>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>d3dx9.lib;d3d9.lib;dinput8.lib;dxguid.lib;Xinput.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -154,7 +162,8 @@
     <ClInclude Include="_Graphics\nkBlur.h" />
     <ClInclude Include="_Graphics\nkCamera.h" />
     <ClInclude Include="_Graphics\nkEffectManager.h" />
-    <ClInclude Include="_Graphics\nkOffScreenRender.h" />
+    <ClInclude Include="_Graphics\nkGraphicsConfig.h" />
+    <ClInclude Include="_Graphics\nkScreenRender.h" />
     <ClInclude Include="_Graphics\nkRenderTarget.h" />
     <ClInclude Include="_Graphics\nkSprite.h" />
     <ClInclude Include="_Graphics\nkTexture.h" />
@@ -171,6 +180,7 @@
     <ClCompile Include="nkEngine.cpp" />
     <ClCompile Include="nkstdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="_Component\nkTransform.cpp" />
     <ClCompile Include="_GameObject\nkGameObject.cpp" />
@@ -181,7 +191,7 @@
     <ClCompile Include="_Graphics\nkBlur.cpp" />
     <ClCompile Include="_Graphics\nkCamera.cpp" />
     <ClCompile Include="_Graphics\nkEffectManager.cpp" />
-    <ClCompile Include="_Graphics\nkOffScreenRender.cpp" />
+    <ClCompile Include="_Graphics\nkScreenRender.cpp" />
     <ClCompile Include="_Graphics\nkRenderTarget.cpp" />
     <ClCompile Include="_Graphics\nkSprite.cpp" />
     <ClCompile Include="_Graphics\nkTexture.cpp" />

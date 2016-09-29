@@ -15,7 +15,8 @@ namespace nkEngine
 
 	void CSceneManager::Init()
 	{
-
+		m_nowscene->Init();
+		Shadow().Create(m_nowscene->GetGraphicsConfig().ShadowConfig);
 	}
 
 	void CSceneManager::UpdateScene()
@@ -30,11 +31,8 @@ namespace nkEngine
 
 	void CSceneManager::ChangeScene(CScene* nextscene)
 	{
-		if (m_nowscene != nullptr)
-		{
-			SAFE_DELETE(m_nowscene);
-		}
+		SAFE_DELETE(m_nowscene);
 		m_nowscene = nextscene;
-		m_nowscene->Init();
+		Init();
 	}
 }

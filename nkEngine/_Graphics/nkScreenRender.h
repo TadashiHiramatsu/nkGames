@@ -6,7 +6,7 @@
 
 namespace nkEngine
 {
-	class COffScreenRender
+	class CScreenRender
 	{
 	public:
 
@@ -19,33 +19,36 @@ namespace nkEngine
 		//描画
 		void Render();
 
-		//インスタンス取得
-		inline static COffScreenRender& GetInstance()
+		//メインレンダーターゲットを取得
+		CRenderTarget& GetMainRenderTarget()
 		{
-			static COffScreenRender instance;
+			return m_rtMain;
+		}
+
+		//インスタンス取得
+		inline static CScreenRender& GetInstance()
+		{
+			static CScreenRender instance;
 			return instance;
 		}
 		
 	private:
 
 		//コンストラクタ
-		COffScreenRender();
+		CScreenRender();
 		
 		//デストラクタ
-		~COffScreenRender();
+		~CScreenRender();
 
 	private:
-
-		CRenderTarget m_RenderTarget;
-		D3DVIEWPORT9 m_viewport;
+		CRenderTarget m_rtBackBuffer;
+		CRenderTarget m_rtMain;
 
 		CAntiAliasing m_AntiAliasing;
-
-		CSprite full;
 	};
 
-	inline static COffScreenRender& OffScreenRender()
+	inline static CScreenRender& ScreenRender()
 	{
-		return COffScreenRender::GetInstance();
+		return CScreenRender::GetInstance();
 	}
 }

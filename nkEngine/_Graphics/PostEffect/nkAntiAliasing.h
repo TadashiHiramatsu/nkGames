@@ -19,7 +19,7 @@ namespace nkEngine
 		void Init();
 
 		//描画 
-		void Render(const CTexture* tex);
+		void Render();
 
 		//解放
 		void Release();
@@ -27,6 +27,8 @@ namespace nkEngine
 	private:
 		bool m_isEnable; //有効フラグ
 		ID3DXEffect* m_effect; //エフェクト
+
+		float texSize[2];
 
 		CSprite full;
 	};
