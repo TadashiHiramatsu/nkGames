@@ -173,7 +173,6 @@
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Graphic\CACModelRender.h" />
     <ClInclude Include="Source\Armoredcore\CArmoredCore.h" />
     <ClInclude Include="Source\Armoredcore\CCore.h" />
     <ClInclude Include="Source\Armoredcore\CHead.h" />
@@ -186,6 +185,7 @@
     <ClInclude Include="Source\GameScene\CGround.h" />
     <ClInclude Include="Source\GameScene\CPlayer.h" />
     <ClInclude Include="Source\GameScene\CSkybox.h" />
+    <ClInclude Include="Source\Graphics\CACModelRender.h" />
     <ClInclude Include="Source\Physics\CBoxCollider.h" />
     <ClInclude Include="Source\Physics\CCollider.h" />
     <ClInclude Include="Source\Physics\CMeshCollider.h" />

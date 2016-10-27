@@ -3,11 +3,21 @@
 
 namespace nkEngine
 {
-	CGameObject::CGameObject():
-		m_Active(true),
-		m_Death(false)
+	CGameObject::CGameObject()
 	{}
 	CGameObject::~CGameObject()
+	{
+	}
+	void CGameObject::Init()
+	{
+	}
+	void CGameObject::Update()
+	{
+	}
+	void CGameObject::Render()
+	{
+	}
+	void CGameObject::Release()
 	{
 	}
 }

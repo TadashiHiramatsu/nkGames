@@ -32,6 +32,11 @@ using namespace std;
 #define		s_cast		static_cast
 #define		c_cast		const_cast
 
+//先にインクルード
+#include "btBulletDynamicsCommon.h"
+#include "BulletCollision\CollisionDispatch\btGhostObject.h"
+#include"_Physics\nkCollisionAttr.h"
+
 //自作ヘッダのインクルード
 #include"nkEngine/nkEngine.h"
 #include"nkEngine/nkOriginalDefine.h"
@@ -65,3 +70,7 @@ using namespace std;
 #include"_Input\nkXinput.h"
 
 #include"_Graphics\nkGraphicsConfig.h"
+
+
+
+static const float GAME_DELTA_TIME = 1.0f / 60.0f; //1フレームの経過時間(単位:秒)。固定FPS

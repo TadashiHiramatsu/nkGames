@@ -1,6 +1,7 @@
 #include"nkEngine/nkstdafx.h"
 #include"nkEngine/nkEngine.h"
 
+
 namespace nkEngine
 {
 	bool CEngine::Init(const SInitParam& initParam)
@@ -12,19 +13,21 @@ namespace nkEngine
 			return false;
 		}
 
+		m_Physics.Init();
+
 		ShowWindow(m_hWnd, SW_SHOWDEFAULT);
 		UpdateWindow(m_hWnd);
 
 		ScreenRender().Init(initParam);
 		
-		Input().Init(m_hWnd);
+		Input.Init(m_hWnd);
 
 		return true;
 	}
 	
 	void CEngine::Final()
 	{
-		Input().Release();
+		Input.Release();
 		SAFE_RELEASE(m_pD3DDevice);
 		SAFE_RELEASE(m_pD3D);
 	}
@@ -42,8 +45,9 @@ namespace nkEngine
 			}
 			else
 			{
-				Input().Update();
+				Input.Update();
 				XInput().Update();
+				m_Physics.Update();
 				ScreenRender().Update();
 				ScreenRender().Render();
 			}
@@ -62,7 +66,9 @@ namespace nkEngine
 			MsgProc,
 			0L, 0L,
 			GetModuleHandle(nullptr),
-			nullptr, nullptr, nullptr, nullptr,
+			nullptr, 
+			LoadCursor(NULL, IDC_ARROW),
+			nullptr, nullptr,
 			TEXT("nkmtGames"), nullptr
 		};
 		RegisterClassEx(&wc);
@@ -129,7 +135,7 @@ namespace nkEngine
 
 		// Create the D3DDevice
 		if (FAILED(m_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,
-			D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+			D3DCREATE_HARDWARE_VERTEXPROCESSING,
 			&d3dpp, &m_pD3DDevice)))
 		{
 			return false;

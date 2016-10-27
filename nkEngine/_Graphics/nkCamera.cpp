@@ -4,15 +4,16 @@
 namespace nkEngine
 {
 	CCamera::CCamera():
-		m_vNormalizePosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
 		m_vTarget(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+		m_vPosDirection(D3DXVECTOR3(0.0f, 0.0f, -1.0f)),
 		m_vUp(D3DXVECTOR3(0.0f,1.0f,0.0f)),
-		m_Distance(10),
+		m_Distance(1),
 		m_Fovy(D3DXToRadian(45.0f)),
 		m_Aspect(0.0f),
 		m_Near(0.1f),
 		m_Far(1200.0f),
-		m_ePerson(EPerson::third)
+		m_LowerLimit(-0.8f),
+		m_UpperLimit(0.8f)
 	{
 		D3DXMatrixIdentity(&m_mView);
 		D3DXMatrixIdentity(&m_mProj);
@@ -31,16 +32,13 @@ namespace nkEngine
 		m_Aspect = (float)Engine().GetFrameW() / (float)Engine().GetFrameH();
 		D3DXMatrixPerspectiveFovLH(&m_mProj, m_Fovy, m_Aspect, m_Near, m_Far);
 
-		//m_vPosition = m_vNormalizePosition * m_Distance + m_vTarget;
+		D3DXVec3Normalize(&m_vPosDirection, &m_vPosDirection);
+		m_vPosDirection.y = min(m_UpperLimit, m_vPosDirection.y);
+		m_vPosDirection.y = max(m_LowerLimit, m_vPosDirection.y);
 
-		if (m_ePerson == EPerson::third)
-		{
-			D3DXMatrixLookAtLH(&m_mView, &m_vPosition, &m_vTarget, &m_vUp);
-		}
-		else if (m_ePerson == EPerson::fast)
-		{
-			D3DXMatrixLookAtLH(&m_mView, &m_vTarget, &m_vPosition, &m_vUp);
-		}
+		m_vPosition = m_vPosDirection * m_Distance + m_vTarget;
+
+		D3DXMatrixLookAtLH(&m_mView, &m_vPosition, &m_vTarget, &m_vUp);
 
 		D3DXMatrixInverse(&m_mViewInv, NULL, &m_mView);
 		m_mRotation = m_mViewInv;
@@ -54,22 +52,15 @@ namespace nkEngine
 	{
 		D3DXMATRIX tmp;
 		D3DXMatrixRotationY(&tmp, rot);
-		D3DXVec3TransformCoord(&m_vNormalizePosition, &m_vNormalizePosition, &tmp);
-		//m_vPosition = m_vNormalizePosition * m_Distance + m_vTarget;
+		D3DXVec3TransformCoord(&m_vPosDirection, &m_vPosDirection, &tmp);
 	}
 	void CCamera::SpinVertically(float rot)
 	{
-
 		D3DXQUATERNION qua;
 		D3DXMATRIX tmp;
-		D3DXVECTOR3 nor = m_vNormalizePosition;
-		D3DXQuaternionRotationAxis(&qua, &D3DXVECTOR3(-m_vNormalizePosition.z, 0, m_vNormalizePosition.x), rot);
+		//‰¡•ûŒü
+		D3DXQuaternionRotationAxis(&qua, &D3DXVECTOR3(-m_vPosDirection.z, 0, m_vPosDirection.x), rot);
 		D3DXMatrixRotationQuaternion(&tmp, &qua);
-		D3DXVec3TransformCoord(&m_vNormalizePosition, &m_vNormalizePosition, &tmp);
-		if (m_vNormalizePosition.y >= 0.9 || m_vNormalizePosition.y <= -0.9)
-		{
-			m_vNormalizePosition = nor;
-		}
-		//m_vPosition = m_vNormalizePosition * m_Distance + m_vTarget;
+		D3DXVec3TransformCoord(&m_vPosDirection, &m_vPosDirection, &tmp);
 	}
 }

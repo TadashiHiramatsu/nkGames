@@ -75,7 +75,7 @@
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(ProjectDir)/../;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(ProjectDir)/../;$(ProjectDir)/bulletPhysics/src;$(ProjectDir)/exlib/bulletPhysics/src;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
@@ -173,6 +173,13 @@
     <ClInclude Include="_Input\nkInput.h" />
     <ClInclude Include="_Input\nkXinput.h" />
     <ClInclude Include="_Math\nkHash.h" />
+    <ClInclude Include="_Physics\CBoxCollider.h" />
+    <ClInclude Include="_Physics\CCollider.h" />
+    <ClInclude Include="_Physics\CMeshCollider.h" />
+    <ClInclude Include="_Physics\CPhysics.h" />
+    <ClInclude Include="_Physics\CRigidBody.h" />
+    <ClInclude Include="_Physics\nkCapsuleCollider.h" />
+    <ClInclude Include="_Physics\nkCollisionAttr.h" />
     <ClInclude Include="_Scene\nkScene.h" />
     <ClInclude Include="_Scene\nkSceneManager.h" />
   </ItemGroup>
@@ -200,6 +207,11 @@
     <ClCompile Include="_Graphics\Shadow\nkShadow.cpp" />
     <ClCompile Include="_Input\nkInput.cpp" />
     <ClCompile Include="_Input\nkXinput.cpp" />
+    <ClCompile Include="_Physics\CBoxCollider.cpp" />
+    <ClCompile Include="_Physics\CMeshCollider.cpp" />
+    <ClCompile Include="_Physics\CPhysics.cpp" />
+    <ClCompile Include="_Physics\CRigidBody.cpp" />
+    <ClCompile Include="_Physics\nkCapsuleCollider.cpp" />
     <ClCompile Include="_Scene\nkScene.cpp" />
     <ClCompile Include="_Scene\nkSceneManager.cpp" />
   </ItemGroup>

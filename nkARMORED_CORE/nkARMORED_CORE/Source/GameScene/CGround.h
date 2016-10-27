@@ -1,6 +1,7 @@
 #pragma once
 
 #include"../Physics/CMeshCollider.h"
+#include"../Physics/CBoxCollider.h"
 #include"../Physics/CRigidBody.h"
 
 class CGround : public CGameObject

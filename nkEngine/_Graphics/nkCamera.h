@@ -3,12 +3,6 @@
 
 namespace nkEngine
 {
-	enum EPerson
-	{
-		fast,
-		third
-	};
-
 	class CCamera
 	{
 	public:
@@ -65,20 +59,6 @@ namespace nkEngine
 			return m_mRotationInv;
 		}
 
-		//カメラの正規化された視点の取得
-		//return カメラの視点
-		const D3DXVECTOR3& GetNormalizePosition()
-		{
-			return m_vNormalizePosition;
-		}
-
-		//カメラの正規化された視点の設定
-		//param[in] 視点ベクトル
-		void SetNormalizePosition(const D3DXVECTOR3& pos)
-		{
-			D3DXVec3Normalize(&m_vNormalizePosition, &pos);
-		}
-
 		//カメラの視点の取得
 		//return カメラの視点
 		const D3DXVECTOR3& GetPosition()
@@ -91,6 +71,20 @@ namespace nkEngine
 		void SetPosition(const D3DXVECTOR3& pos)
 		{
 			m_vPosition = pos;
+		}
+
+		//カメラの視点の取得
+		//return カメラの視点
+		const D3DXVECTOR3& GetPosDirection()
+		{
+			return m_vPosDirection;
+		}
+
+		//カメラの視点の設定
+		//param[in] 視点ベクトル
+		void SetPosDirection(const D3DXVECTOR3& _dir)
+		{
+			m_vPosDirection = _dir;
 		}
 	
 
@@ -122,18 +116,18 @@ namespace nkEngine
 			m_vUp = up;
 		}
 
-		//カメラの視点と注視点の距離を取得
+		//カメラの距離を取得
 		//return カメラの距離
 		const float GetDistance()
 		{
 			return m_Distance;
 		}
 
-		//カメラの視点と注視点の処理を設定
+		//カメラの距離を設定
 		//param[in] 距離
-		void SetDistance(const float dis)
+		void SetDistance(const float _distance)
 		{
-			m_Distance = dis;
+			m_Distance = _distance;
 		}
 
 		//カメラの画角を取得
@@ -192,18 +186,6 @@ namespace nkEngine
 			m_Far = ffar;
 		}
 
-		//視点の設定
-		void SetPetson(const EPerson& person)
-		{
-			m_ePerson = person;
-		}
-
-		//視点の設定
-		EPerson GetPerson()
-		{
-			return m_ePerson;
-		}
-
 	private:
 		D3DXMATRIX m_mView; //ビュー行列
 		D3DXMATRIX m_mViewInv; //ビュー行列の逆行列
@@ -212,16 +194,18 @@ namespace nkEngine
 		D3DXMATRIX m_mRotationInv; //回転行列の逆行列
 
 		D3DXVECTOR3 m_vPosition; //カメラの視点
-		D3DXVECTOR3 m_vNormalizePosition; //カメラの正規化された視点
 		D3DXVECTOR3 m_vTarget; //カメラの注視点
 		D3DXVECTOR3 m_vUp; //カメラの上方向
-		float m_Distance; //カメラの視点と注視点の距離
+
+		D3DXVECTOR3 m_vPosDirection; //ポジションの方向ベクトル
+		float m_Distance; //距離
 
 		float m_Fovy;		//画角
 		float m_Aspect;	//アスペクト比
 		float m_Near;		//ニア
 		float m_Far;		//ファー
 
-		EPerson m_ePerson;
+		float m_LowerLimit; //下限
+		float m_UpperLimit; //上限
 	};
 }

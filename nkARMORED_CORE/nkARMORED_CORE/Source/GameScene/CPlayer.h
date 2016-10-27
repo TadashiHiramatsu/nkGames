@@ -45,6 +45,7 @@ private:
 	void Move();
 	//地面との当たり判定
 	void Collision();
+
 private:
 	CLight m_light; //ライト
 	CTransform m_trans; //トランスフォーム
@@ -60,4 +61,10 @@ private:
 	D3DXMATRIX* jimenwInv;
 
 	CArmoredCore m_ArmoredCore;
+
+	const float gravity;
+
+
+	float boost;
+	D3DXVECTOR3 move;
 };

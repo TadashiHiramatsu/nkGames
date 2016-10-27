@@ -1,6 +1,8 @@
 //スキンモデルのアニメーションを管理するクラス
 #pragma once
 
+#include <deque>
+
 namespace nkEngine
 {
 	//アニメーションクラス
@@ -19,7 +21,7 @@ namespace nkEngine
 		//第２引数 エンドタイム
 		void SetAnimationEndTime(int animationIndex, double endTime)
 		{
-			m_animationEndTime[animationIndex] = endTime;
+			AnimationEndTime[animationIndex] = endTime;
 		}
 		//アニメーションの再生
 		void PlayAnimation(int aniSetIndex);
@@ -29,23 +31,54 @@ namespace nkEngine
 		//アニメーションセットの取得
 		int GetNumAnimationSet()const
 		{
-			return m_numAnimSet;
+			return AnimNum;
 		}
 		//アニメーションの更新
 		void Update(float deltaTime);
-	private:
-		ID3DXAnimationController* m_pAnimationController; //アニメーションコントローラ
-		int m_numAnimSet; //アニメーションの数
-		unique_ptr<ID3DXAnimationSet*[]> m_animationSets; //アニメーションセットの配列
-		unique_ptr<float[]> blendRateTable; //ブレンディングレートのテーブル。
-		unique_ptr<double[]> m_animationEndTime; //アニメーションのエンドタイム
-		double m_localAnimationTime; //ローカルアニメーションタイム
-		int m_currentAnimationSetNo; //現在再生中のアニメーショントラックの番号
-		int m_currentTrackNo; //現在のトラックの番号
-		int m_numMaxTracks; //アニメーショントラックの最大数
 
-		bool m_isInterpolate; //補間中か？｛補間中：true、未補間：false｝
-		float m_interpolateEndTime; //補間終了時間
-		float m_interpolateTime; //補間時間
+		//現在再生中のアニメーショントラックの番号を取得
+		int GetNowAnimationNo()
+		{
+			return CurrentAnimationSetNo;
+		}
+	private:
+		//アニメーション再生リクエスト
+		struct RequestPlayAnimation
+		{
+			int AnimationSetIndex;
+			float InterpolateTime;
+		};
+		//アニメーションコントローラ
+		ID3DXAnimationController* pAnimController;
+		//アニメーションの数
+		int AnimNum;
+		//アニメーションセットの配列
+		unique_ptr<ID3DXAnimationSet*[]> AnimationSets;
+		//ブレンディングレートのテーブル。
+		unique_ptr<float[]> BlendRateTable;
+		//アニメーションのエンドタイム
+		unique_ptr<double[]> AnimationEndTime;
+		//アニメーションループフラグ
+		unique_ptr<bool[]> AnimationLoopFlags;
+		//ローカルアニメーションタイム
+		double LocalAnimationTime; 
+		//現在再生中のアニメーショントラックの番号
+		int CurrentAnimationSetNo; 
+		//現在のトラックの番号
+		int CurrentTrackNo;
+		//アニメーショントラックの最大数
+		int NumMaxTracks; 
+		//アニメーションブレンディング
+		bool isBlending;
+		//アニメーションの終了フラグ
+		bool isAnimEnd;
+		//補間中か？｛補間中：true、未補間：false｝
+		bool isInterpolate; 
+		//補間終了時間
+		float InterpolateEndTime; 
+		//補間時間
+		float InterpolateTime;
+		//アニメーション再生のリクエスト
+		deque<RequestPlayAnimation> PlayAnimRequest;
 	};
 }

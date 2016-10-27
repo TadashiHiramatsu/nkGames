@@ -164,6 +164,12 @@ namespace nkEngine
 			return &frame->CombinedTransformationMatrix;
 		}
 
+		void FindBoneRotationMatrix(const char* name, D3DXMATRIX* rot)
+		{
+			D3DXFRAME_DERIVED* frame = (D3DXFRAME_DERIVED*)D3DXFrameFind(m_ModelData->GetFrameRoot(), name);
+			frame->RotationMatrix = rot;
+		}
+
 		D3DXMATRIX* GetWorldInv()
 		{
 			return &m_mWorldInv;

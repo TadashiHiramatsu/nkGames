@@ -4,6 +4,7 @@
 CACModelRender::CACModelRender():
 	m_mParent(nullptr)
 {
+	D3DXMatrixIdentity(&m_mP);
 }
 
 CACModelRender::~CACModelRender()
@@ -27,8 +28,10 @@ void CACModelRender::Update()
 
 	if (m_mParent != nullptr)
 	{
-		m_mWorld  = m_mWorld * (*m_mParent);
+		m_mP = (*m_mParent);
 	}
+
+	m_mWorld = m_mWorld * m_mP;
 
 	D3DXMatrixInverse(&m_mWorldInv, NULL, &m_mWorld);
 

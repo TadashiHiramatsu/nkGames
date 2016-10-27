@@ -1,8 +1,11 @@
-#ifndef _NKENGINE_
-#define _NKENGINE_
+#pragma once
+
+#include"_Physics\CPhysics.h"
 
 namespace nkEngine
 {
+
+
 	struct SInitParam
 	{
 		SInitParam()
@@ -44,6 +47,13 @@ namespace nkEngine
 		{
 			return m_pD3DDevice;
 		}
+
+		//物理ワールドの取得
+		CPhysics& GetPhysics()
+		{
+			return m_Physics;
+		}
+
 		int GetFrameW() { return m_frameBufferW; }
 		int GetFrameH() { return m_frameBufferH; }
 	private:
@@ -66,11 +76,16 @@ namespace nkEngine
 		IDirect3D9* m_pD3D;
 		//DirectXデバイス
 		IDirect3DDevice9* m_pD3DDevice;
+		//物理ワールド
+		CPhysics m_Physics;
 	};
 	inline static CEngine& Engine()
 	{
 		return CEngine::instance();
 	}
+	inline static CPhysics& Physics()
+	{
+		return CEngine::instance().GetPhysics();
+	}
 }
 
-#endif // !_NKENGINE_

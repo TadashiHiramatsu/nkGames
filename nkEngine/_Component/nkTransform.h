@@ -9,35 +9,35 @@ namespace nkEngine
 		~CTransform();
 		D3DXVECTOR3 GetPosition()
 		{
-			return m_position;
+			return Position;
 		}
 		D3DXVECTOR3 GetScale()
 		{
-			return m_scale;
+			return Scale;
 		}
 		D3DXQUATERNION GetRotation()
 		{
-			return m_rotation;
+			return Rotation;
 		}
 		void SetPosition(D3DXVECTOR3& pos)
 		{
-			m_position = pos;
+			Position = pos;
 		}
 		void SetScale(D3DXVECTOR3& sca)
 		{
-			m_scale = sca;
+			Scale = sca;
 		}
 		void SetRotation(D3DXQUATERNION& rot)
 		{
-			m_rotation = rot;
+			Rotation = rot;
 		}
 		void AddPosition(D3DXVECTOR3& pos)
 		{
-			m_position += pos;
+			Position += pos;
 		}
-	private:
-		D3DXVECTOR3 m_position;
-		D3DXVECTOR3 m_scale;
-		D3DXQUATERNION m_rotation;
+	public:
+		D3DXVECTOR3 Position;
+		D3DXVECTOR3 Scale;
+		D3DXQUATERNION Rotation;
 	};
 }

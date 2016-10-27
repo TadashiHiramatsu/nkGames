@@ -21,12 +21,18 @@ namespace nkEngine
 
 	void CSceneManager::UpdateScene()
 	{
-		m_nowscene->Update();
+		if (m_nowscene)
+		{
+			m_nowscene->Update();
+		}
 	}
 
 	void CSceneManager::RenderScene()
 	{
-		m_nowscene->Render();
+		if (m_nowscene)
+		{
+			m_nowscene->Render();
+		}
 	}
 
 	void CSceneManager::ChangeScene(CScene* nextscene)

@@ -15,6 +15,7 @@ void CArmoredCore::Init()
 {
 	m_Leg.Init();
 	m_Leg.LoadModel("prototype_04_Leg.X");
+	m_Leg.InitRigidBody();
 	m_Leg.GetACModel()->SetTransform(m_Tranceform);
 	m_Leg.GetACModel()->SetLight(m_Light);
 	m_Leg.GetACModel()->SetCamera(m_Camera);
@@ -32,7 +33,7 @@ void CArmoredCore::Init()
 	m_Head.GetACModel()->SetParentMatrix(m_Core.GetMatrix("Head"));
 
 	m_LeftArm.Init();
-	m_LeftArm.LoadModel("prototype_04_LeftArm.X");
+	m_LeftArm.LoadModel("prototype_05_LeftArm.X");
 	m_LeftArm.GetACModel()->SetLight(m_Light);
 	m_LeftArm.GetACModel()->SetCamera(m_Camera);
 	m_LeftArm.GetACModel()->SetParentMatrix(m_Core.GetMatrix("LeftArm"));
@@ -51,6 +52,7 @@ void CArmoredCore::Update()
 	m_Head.Update();
 	m_LeftArm.Update();
 	m_RightArm.Update();
+
 }
 
 void CArmoredCore::Render()

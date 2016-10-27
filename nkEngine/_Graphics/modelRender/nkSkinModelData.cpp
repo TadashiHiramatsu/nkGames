@@ -803,6 +803,18 @@ namespace nkEngine
 			pFrame->CombinedTransformationMatrix = pFrame->TransformationMatrix;
 		}
 
+		if (pFrame->RotationMatrix != nullptr)
+		{
+			D3DXMATRIX pos;
+			D3DXMatrixIdentity(&pos);
+			pos.m[3][0] = pFrame->CombinedTransformationMatrix.m[3][0];
+			pos.m[3][1] = pFrame->CombinedTransformationMatrix.m[3][1];
+			pos.m[3][2] = pFrame->CombinedTransformationMatrix.m[3][2];
+
+			pFrame->CombinedTransformationMatrix = *pFrame->RotationMatrix * pos;
+
+		}
+
 		if (pFrame->pFrameSibling != NULL)
 		{
 			UpdateFrameMatrices(pFrame->pFrameSibling, pParentMatrix);

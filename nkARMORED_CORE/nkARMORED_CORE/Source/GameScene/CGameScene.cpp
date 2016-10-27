@@ -43,7 +43,6 @@ void CGameScene::Render()
 	m_player.Render();
 	m_ground.Render();
 	m_skybox.Render();
-
 }
 
 void CGameScene::Release()

@@ -7,6 +7,7 @@ namespace nkEngine
 {
 	struct D3DXFRAME_DERIVED : public D3DXFRAME {
 		D3DXMATRIXA16	CombinedTransformationMatrix;	//çáê¨çœÇ›çsóÒ
+		D3DXMATRIX* RotationMatrix = nullptr;
 	};
 
 	struct D3DXMESHCONTAINER_DERIVED : public D3DXMESHCONTAINER {

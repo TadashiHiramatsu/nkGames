@@ -27,28 +27,29 @@ void CGameCamera::Init()
 
 void CGameCamera::Update()
 {
+	static const float lenX = 8, LenZ = 15;
 	m_camera.SetTarget(*m_PlayerTarget);
 
 	D3DXVECTOR3 dirZ, dirX;
 	dirZ = m_PlayerTranceform->GetPosition() - *m_PlayerTarget;
 	D3DXVec3Normalize(&dirZ, &dirZ);
 	D3DXVec3Cross(&dirX, &dirZ, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-	dirZ *= 20;
-	dirX *= 8;
+	dirZ *= LenZ;
+	dirX *= lenX;
 
 	static float dir = 1.0f;
 	if (m_Dir == EDir::Left)
 	{
 		if (dir < 1.0f)
 		{
-			dir += 0.1f;
+			dir += 0.2f;
 		}
 	}
 	if (m_Dir == EDir::Right)
 	{
 		if (dir > -1.0f)
 		{
-			dir -= 0.1f;
+			dir -= 0.2f;
 		}
 	}
 

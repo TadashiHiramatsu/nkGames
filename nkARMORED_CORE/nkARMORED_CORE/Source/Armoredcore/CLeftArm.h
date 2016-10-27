@@ -9,6 +9,8 @@ public:
 	//デストラクタ
 	~CLeftArm();
 
-private:
+	void Update()override;
 
+private:
+	D3DXMATRIX rot;
 };

@@ -23,7 +23,7 @@ void CSkybox::Init()
 	//m_model.SetFogColor(D3DXVECTOR4(0.25f, 0.05f, 0.05f, 0.0f));
 
 	m_trans.SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	m_trans.SetScale(D3DXVECTOR3(700.0f, 700.0f, 700.0f));
+	m_trans.SetScale(D3DXVECTOR3(500.0f, 500.0f, 500.0f));
 
 	m_light.SetAmbientLight(D3DXVECTOR3(1.0f,1.0f,1.0f));
 }

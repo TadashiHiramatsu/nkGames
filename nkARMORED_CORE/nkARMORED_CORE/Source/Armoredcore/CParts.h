@@ -1,5 +1,8 @@
 #pragma once
 
+#include"../Physics/CMeshCollider.h"
+#include"../Physics/CRigidBody.h"
+
 class CParts : public CGameObject
 {
 public:
@@ -25,6 +28,9 @@ public:
 	//読み込み
 	void LoadModel(const char* filepass);
 
+	//剛体初期化
+	void InitRigidBody();
+
 	inline CACModelRender* GetACModel()
 	{
 		return &m_ACModel;
@@ -44,4 +50,9 @@ protected:
 	CACModelRender m_ACModel; //モデル
 	CTransform m_Transform; //トランスフォーム
 	CAnimation m_Animation; //アニメーション管理
+
+	bool m_isBreak;
+	D3DXMATRIX* m_mWorld; //ワールド行列
+	CMeshCollider m_MeshCollider; //メッシュコライダー
+	CRigidBody m_RigidBody; //剛体
 };

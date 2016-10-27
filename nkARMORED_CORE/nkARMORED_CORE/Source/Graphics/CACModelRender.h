@@ -16,5 +16,6 @@ public:
 	}
 
 private:
-	D3DXMATRIX* m_mParent; //親のワールド行列
+	D3DXMATRIX* m_mParent; //親のワールド行列のアドレス
+	D3DXMATRIX m_mP; //親のワールド行列
 };

@@ -37,6 +37,9 @@
     <Filter Include="Graphics\Prerender">
       <UniqueIdentifier>{2af43d90-50b3-44e0-8d21-eaecdc06871a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{4533291b-7636-4341-9361-4b917e62dbb6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nkEngine.cpp">
@@ -104,6 +107,21 @@
     </ClCompile>
     <ClCompile Include="_Graphics\nkScreenRender.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Physics\CBoxCollider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Physics\CMeshCollider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Physics\CPhysics.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Physics\CRigidBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Physics\nkCapsuleCollider.cpp">
+      <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +205,27 @@
     </ClInclude>
     <ClInclude Include="_Graphics\nkScreenRender.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\CBoxCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\CCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\CMeshCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\CPhysics.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\CRigidBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\nkCapsuleCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\nkCollisionAttr.h">
+      <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

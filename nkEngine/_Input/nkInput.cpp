@@ -16,7 +16,6 @@ namespace nkEngine
 
 		InitMouse(hWnd);
 		InitKeyboard(hWnd);
-		//InitJoystick(hWnd);
 
 		return S_OK;
 	}
@@ -65,129 +64,6 @@ namespace nkEngine
 		m_DInputKeyboard->SetCooperativeLevel(hWnd,DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
 	}
 
-	//void CInput::InitJoystick(HWND hWnd)
-	//{
-	//	DIOBJECTDATAFORMAT ObjectFormats[] =
-	//	{
-	//		{ &GUID_XAxis, FIELD_OFFSET(JoystickState, LeftStick[0]),    
-	//		DIDFT_RELAXIS | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_YAxis, FIELD_OFFSET(JoystickState, LeftStick[1]),  
-	//		DIDFT_RELAXIS | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_XAxis, FIELD_OFFSET(JoystickState, RightStick[0]),
-	//		DIDFT_RELAXIS | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_YAxis, FIELD_OFFSET(JoystickState, RightStick[1]),
-	//		DIDFT_RELAXIS | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[0]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[1]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[2]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[3]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[4]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[5]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[6]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[7]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[8]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[9]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[10]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[11]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[12]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[13]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[14]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[15]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[16]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[17]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[18]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Button, FIELD_OFFSET(JoystickState, Button[19]),
-	//		DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Slider, FIELD_OFFSET(JoystickState, Shoulder[0]),
-	//		DIDFT_RELAXIS | DIDFT_ANYINSTANCE, 0 },
-	//		{ &GUID_Slider, FIELD_OFFSET(JoystickState, Shoulder[1]),
-	//		DIDFT_RELAXIS | DIDFT_ANYINSTANCE, 0 }
-	//	};
-
-	//	DIDATAFORMAT dfJoystick =
-	//	{
-	//		sizeof(DIDATAFORMAT),
-	//		sizeof(DIOBJECTDATAFORMAT),
-	//		DIDF_ABSAXIS,
-	//		sizeof(MouseState),
-	//		sizeof(ObjectFormats) / sizeof(DIOBJECTDATAFORMAT),
-	//		ObjectFormats
-	//	};
-
-	//	m_DInput->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticksCallback, NULL, DIEDFL_ATTACHEDONLY);
-
-	//	if (m_DInputJoystick != nullptr)
-	//	{
-	//		m_DInputJoystick->SetDataFormat(&dfJoystick);
-
-	//		m_DInputJoystick->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
-
-	//		m_DInputJoystick->EnumObjects(EnumAxesCallback, NULL, DIDFT_AXIS);
-
-	//		m_DInputJoystick->Acquire();
-	//	}
-	//	else
-	//	{
-	//		m_isJoystick = false;
-	//	}
-	//}
-
-	//BOOL CInput::EnumJoysticksCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef)
-	//{
-
-	//	HRESULT hr;
-
-	//	hr = GetInstance().m_DInput->CreateDevice(lpddi->guidInstance, &GetInstance().m_DInputJoystick, NULL);
-	//	if (FAILED(hr)) return DIENUM_CONTINUE;
-
-	//	// ジョイスティックの能力を調べる
-	//	GetInstance().m_diDevCaps.dwSize = sizeof(DIDEVCAPS);
-	//	hr = GetInstance().m_DInputJoystick->GetCapabilities(&GetInstance().m_diDevCaps);
-	//	if (FAILED(hr))
-	//	{
-	//		return DIENUM_CONTINUE;
-	//	}
-	//	return DIENUM_STOP;
-
-	//}
-
-	//BOOL CALLBACK CInput::EnumAxesCallback(LPCDIDEVICEOBJECTINSTANCE lpddoi, LPVOID pvRef)
-	//{
-	//	HRESULT hr;
-
-	//	// 軸の値の範囲を設定（-1000～1000）
-	//	DIPROPRANGE diprg;
-	//	ZeroMemory(&diprg, sizeof(diprg));
-	//	diprg.diph.dwSize = sizeof(diprg);
-	//	diprg.diph.dwHeaderSize = sizeof(diprg.diph);
-	//	diprg.diph.dwObj = lpddoi->dwType;
-	//	diprg.diph.dwHow = DIPH_BYID;
-	//	diprg.lMin = -1000;
-	//	diprg.lMax = +1000;
-	//	hr = GetInstance().m_DInputJoystick->SetProperty(DIPROP_RANGE, &diprg.diph);
-	//	if (FAILED(hr))     return DIENUM_STOP;
-	//	return DIENUM_CONTINUE;
-	//}
-
 	void CInput::Update()
 	{
 		HRESULT hr;
@@ -213,17 +89,6 @@ namespace nkEngine
 			}
 		}
 
-		/*if (m_isJoystick)
-		{
-			m_JoystickState;
-			hr = m_DInputJoystick->GetDeviceState(sizeof(m_JoystickState), &m_JoystickState);
-			if (FAILED(hr))
-			{
-				m_DInputJoystick->Acquire();
-				m_DInputJoystick->GetDeviceState(sizeof(m_JoystickState), &m_JoystickState);
-			}
-		}*/
-		
 	}
 
 	void CInput::Release()
