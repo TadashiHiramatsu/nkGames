@@ -45,7 +45,11 @@ using namespace std;
 #include"nkEngine/_Debug/nkLog.h"
 
 #include"_Math\nkHash.h"
+#include"_Math\nkRandom.h"
 
+#include"_Timer\nkTime.h"
+
+#include"_Graphics\nkPrimitive.h"
 #include"_Graphics\nkTexture.h"
 #include"_Graphics\nkRenderTarget.h"
 #include"_Graphics\nkScreenRender.h"
@@ -53,7 +57,7 @@ using namespace std;
 #include"_Scene\nkScene.h"
 #include"_Scene\nkSceneManager.h"
 
-#include"_Graphics\Shadow\nkShadow.h"
+#include"_Graphics\Prerender\nkShadow.h"
 #include"_Graphics\nkCamera.h"
 
 #include"_Graphics\nkSprite.h"
@@ -70,7 +74,5 @@ using namespace std;
 #include"_Input\nkXinput.h"
 
 #include"_Graphics\nkGraphicsConfig.h"
-
-
 
 static const float GAME_DELTA_TIME = 1.0f / 60.0f; //1フレームの経過時間(単位:秒)。固定FPS

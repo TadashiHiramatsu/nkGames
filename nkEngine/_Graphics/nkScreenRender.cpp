@@ -16,6 +16,7 @@ namespace nkEngine
 		m_rtMain.Create(initParam.frameBufferW, initParam.frameBufferH, 1, D3DFMT_A8R8G8B8, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);
 
 		m_AntiAliasing.Init();
+		m_Bloom.Create(false);
 
 		LPDIRECT3DSURFACE9 rt, depth;
 		Engine().GetDevice()->GetRenderTarget(0, &rt);
@@ -45,6 +46,8 @@ namespace nkEngine
 		
 		//Œ»Ý‚ÌƒV[ƒ“‚Ì•`‰æ
 		SceneManager().RenderScene();
+
+		m_Bloom.Render();
 
 		Device->SetRenderTarget(0, m_rtBackBuffer.GetSurface());
 		Device->SetDepthStencilSurface(m_rtBackBuffer.GetDepthSurface());

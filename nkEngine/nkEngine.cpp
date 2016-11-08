@@ -45,6 +45,7 @@ namespace nkEngine
 			}
 			else
 			{
+				Time().Update();
 				Input.Update();
 				XInput().Update();
 				m_Physics.Update();
@@ -125,7 +126,7 @@ namespace nkEngine
 		d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
 		d3dpp.BackBufferFormat = D3DFMT_A8R8G8B8;
 		d3dpp.EnableAutoDepthStencil = TRUE;
-		d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
+		d3dpp.AutoDepthStencilFormat = D3DFMT_D16; //D3DFMT_D24X8Ç…Ç∑ÇÈÇ∆ÇøÇÁÇ¬Ç´Ç™è¡Ç¶ÇÈ
 		d3dpp.BackBufferWidth = initParam.frameBufferW;
 		d3dpp.BackBufferHeight = initParam.frameBufferH;
 		d3dpp.MultiSampleType = D3DMULTISAMPLE_4_SAMPLES;

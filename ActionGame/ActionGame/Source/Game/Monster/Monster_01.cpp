@@ -5,6 +5,7 @@
 
 Monster_01::Monster_01()
 {
+
 }
 
 Monster_01::~Monster_01()
@@ -17,16 +18,25 @@ void Monster_01::Init()
 	Model.SetTransform(&Transform);
 	Model.SetLight(&Light);
 	Model.SetCamera(MainCamera.GetCamera());
+	Model.SetRimLight(true);
 
 	Transform.Position = D3DXVECTOR3(1, 1, 0);
+	DefaultPosition = D3DXVECTOR2(Transform.Position.x, Transform.Position.z);
+	
+	Animation.PlayAnimation(AnimationWaiting);
 
-	Animation.PlayAnimation(0);
-
+	CharacterController.Init(0.4f, 0.3f, Transform.Position);
 }
 
 void Monster_01::Update()
 {
-	Animation.Update(1.0f / 120.0f);
+	D3DXVECTOR3 move = D3DXVECTOR3(0, 0, 0);
+
+	CharacterController.SetMoveSpeed(move);
+	CharacterController.Update();
+	Transform.Position = CharacterController.GetPosition();
+
+	Animation.Update(1.0f / 60.0f);
 	Model.Update();
 }
 

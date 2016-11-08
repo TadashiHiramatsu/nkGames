@@ -165,8 +165,10 @@ namespace {
 
 			for (iBone = 0; iBone < cBones; iBone++)
 			{
+				pMeshContainer->ppBoneMatrixPtrs[iBone] = NULL;
+				LPCSTR boneName = pMeshContainer->pSkinInfo->GetBoneName(iBone);
 				pFrame = (D3DXFRAME_DERIVED*)D3DXFrameFind(rootFrame,
-					pMeshContainer->pSkinInfo->GetBoneName(iBone));
+					boneName);
 				if (pFrame == NULL)
 					return E_FAIL;
 
@@ -801,18 +803,6 @@ namespace nkEngine
 		else
 		{
 			pFrame->CombinedTransformationMatrix = pFrame->TransformationMatrix;
-		}
-
-		if (pFrame->RotationMatrix != nullptr)
-		{
-			D3DXMATRIX pos;
-			D3DXMatrixIdentity(&pos);
-			pos.m[3][0] = pFrame->CombinedTransformationMatrix.m[3][0];
-			pos.m[3][1] = pFrame->CombinedTransformationMatrix.m[3][1];
-			pos.m[3][2] = pFrame->CombinedTransformationMatrix.m[3][2];
-
-			pFrame->CombinedTransformationMatrix = *pFrame->RotationMatrix * pos;
-
 		}
 
 		if (pFrame->pFrameSibling != NULL)

@@ -7,14 +7,20 @@
     <Filter Include="Game">
       <UniqueIdentifier>{8dd70691-259e-43a7-965f-09a957371155}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player">
-      <UniqueIdentifier>{259fa4cd-3cc5-4427-b482-6c16b8785af6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Map">
       <UniqueIdentifier>{06b70e90-9920-4d31-a103-895c507fa0e8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Monster">
       <UniqueIdentifier>{f5275407-e648-4b3a-9fc4-a6be56e8eaaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Boss">
+      <UniqueIdentifier>{c579dc89-3dad-4638-9117-f8857ca780a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{259fa4cd-3cc5-4427-b482-6c16b8785af6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\AnimationEvent">
+      <UniqueIdentifier>{00e1ddd0-2d2c-458b-8f50-c33957bef66f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +48,12 @@
     <ClCompile Include="Source\Game\Monster\Monster_01.cpp">
       <Filter>Game\Monster</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\AnimationEvent\CollisionWorld.cpp">
+      <Filter>Game\AnimationEvent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\AnimationEvent\AnimationEventController.cpp">
+      <Filter>Game\AnimationEvent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -64,6 +76,15 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Monster\Monster_01.h">
       <Filter>Game\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\AnimationEvent\CollisionWorld.h">
+      <Filter>Game\AnimationEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\AnimationEvent\AnimationEventController.h">
+      <Filter>Game\AnimationEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\AnimationEvent\AnimationEventMacro.h">
+      <Filter>Game\AnimationEvent</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

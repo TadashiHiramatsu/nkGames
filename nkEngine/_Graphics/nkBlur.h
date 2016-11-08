@@ -27,6 +27,16 @@ namespace nkEngine
 			return m_rt[1].GetTexture();
 		}
 
+		int GetSizeW()
+		{
+			return m_srcTexWH[0];
+		}
+
+		int GetSizeH()
+		{
+			return m_srcTexWH[1];
+		}
+
 	private:
 		CRenderTarget m_rt[2]; //ガウシアンブラーの結果を描きこむレンダリングターゲット
 		const CTexture*	m_srcTexture; //ソースとなるテクスチャ

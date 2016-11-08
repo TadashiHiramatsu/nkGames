@@ -147,6 +147,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Source\Game\AnimationEvent\AnimationEventController.cpp" />
+    <ClCompile Include="Source\Game\AnimationEvent\CollisionWorld.cpp" />
     <ClCompile Include="Source\Game\GameCamera.cpp" />
     <ClCompile Include="Source\Game\GameScene.cpp" />
     <ClCompile Include="Source\Game\Map\Ground.cpp" />
@@ -156,6 +158,9 @@
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\AnimationEvent\AnimationEventController.h" />
+    <ClInclude Include="Source\Game\AnimationEvent\AnimationEventMacro.h" />
+    <ClInclude Include="Source\Game\AnimationEvent\CollisionWorld.h" />
     <ClInclude Include="Source\Game\GameCamera.h" />
     <ClInclude Include="Source\Game\GameScene.h" />
     <ClInclude Include="Source\Game\Map\Ground.h" />

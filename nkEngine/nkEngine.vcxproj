@@ -153,6 +153,7 @@
     <ClInclude Include="nkEngine.h" />
     <ClInclude Include="nkOriginalDefine.h" />
     <ClInclude Include="nkstdafx.h" />
+    <ClInclude Include="_Component\nkCharacterController.h" />
     <ClInclude Include="_Component\nkTransform.h" />
     <ClInclude Include="_GameObject\nkGameObject.h" />
     <ClInclude Include="_Graphics\modelRender\nkAnimation.h" />
@@ -163,16 +164,22 @@
     <ClInclude Include="_Graphics\nkCamera.h" />
     <ClInclude Include="_Graphics\nkEffectManager.h" />
     <ClInclude Include="_Graphics\nkGraphicsConfig.h" />
+    <ClInclude Include="_Graphics\nkIndexBuffer.h" />
     <ClInclude Include="_Graphics\nkScreenRender.h" />
     <ClInclude Include="_Graphics\nkRenderTarget.h" />
     <ClInclude Include="_Graphics\nkSprite.h" />
     <ClInclude Include="_Graphics\nkTexture.h" />
     <ClInclude Include="_Graphics\nkVertexBuffer.h" />
+    <ClInclude Include="_Graphics\Particle\nkParticle.h" />
+    <ClInclude Include="_Graphics\Particle\nkParticleEmitter.h" />
     <ClInclude Include="_Graphics\PostEffect\nkAntiAliasing.h" />
-    <ClInclude Include="_Graphics\Shadow\nkShadow.h" />
+    <ClInclude Include="_Graphics\nkPrimitive.h" />
+    <ClInclude Include="_Graphics\PostEffect\nkBloom.h" />
+    <ClInclude Include="_Graphics\Prerender\nkShadow.h" />
     <ClInclude Include="_Input\nkInput.h" />
     <ClInclude Include="_Input\nkXinput.h" />
     <ClInclude Include="_Math\nkHash.h" />
+    <ClInclude Include="_Math\nkRandom.h" />
     <ClInclude Include="_Physics\CBoxCollider.h" />
     <ClInclude Include="_Physics\CCollider.h" />
     <ClInclude Include="_Physics\CMeshCollider.h" />
@@ -180,8 +187,11 @@
     <ClInclude Include="_Physics\CRigidBody.h" />
     <ClInclude Include="_Physics\nkCapsuleCollider.h" />
     <ClInclude Include="_Physics\nkCollisionAttr.h" />
+    <ClInclude Include="_Physics\nkSphereCollider.h" />
     <ClInclude Include="_Scene\nkScene.h" />
     <ClInclude Include="_Scene\nkSceneManager.h" />
+    <ClInclude Include="_Timer\nkStopwatch.h" />
+    <ClInclude Include="_Timer\nkTime.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nkEngine.cpp" />
@@ -189,6 +199,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="_Component\nkCharacterController.cpp" />
     <ClCompile Include="_Component\nkTransform.cpp" />
     <ClCompile Include="_GameObject\nkGameObject.cpp" />
     <ClCompile Include="_Graphics\modelRender\nkAnimation.cpp" />
@@ -198,13 +209,18 @@
     <ClCompile Include="_Graphics\nkBlur.cpp" />
     <ClCompile Include="_Graphics\nkCamera.cpp" />
     <ClCompile Include="_Graphics\nkEffectManager.cpp" />
+    <ClCompile Include="_Graphics\nkIndexBuffer.cpp" />
     <ClCompile Include="_Graphics\nkScreenRender.cpp" />
     <ClCompile Include="_Graphics\nkRenderTarget.cpp" />
     <ClCompile Include="_Graphics\nkSprite.cpp" />
     <ClCompile Include="_Graphics\nkTexture.cpp" />
     <ClCompile Include="_Graphics\nkVertexBuffer.cpp" />
+    <ClCompile Include="_Graphics\Particle\nkParticle.cpp" />
+    <ClCompile Include="_Graphics\Particle\nkParticleEmitter.cpp" />
     <ClCompile Include="_Graphics\PostEffect\nkAntiAliasing.cpp" />
-    <ClCompile Include="_Graphics\Shadow\nkShadow.cpp" />
+    <ClCompile Include="_Graphics\nkPrimitive.cpp" />
+    <ClCompile Include="_Graphics\PostEffect\nkBloom.cpp" />
+    <ClCompile Include="_Graphics\Prerender\nkShadow.cpp" />
     <ClCompile Include="_Input\nkInput.cpp" />
     <ClCompile Include="_Input\nkXinput.cpp" />
     <ClCompile Include="_Physics\CBoxCollider.cpp" />
@@ -212,6 +228,7 @@
     <ClCompile Include="_Physics\CPhysics.cpp" />
     <ClCompile Include="_Physics\CRigidBody.cpp" />
     <ClCompile Include="_Physics\nkCapsuleCollider.cpp" />
+    <ClCompile Include="_Physics\nkSphereCollider.cpp" />
     <ClCompile Include="_Scene\nkScene.cpp" />
     <ClCompile Include="_Scene\nkSceneManager.cpp" />
   </ItemGroup>

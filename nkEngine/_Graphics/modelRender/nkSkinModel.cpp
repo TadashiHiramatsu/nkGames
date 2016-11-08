@@ -286,6 +286,7 @@ namespace nkEngine
 					if (iMatrixIndex != UINT_MAX)
 					{
 						NK_ASSERT(iPaletteEntry < MAX_MATRIX_PALLET, "ボーン行列パレットの最大数を超えた");
+						NK_ASSERT(pMeshContainer->ppBoneMatrixPtrs[iMatrixIndex] != NULL, "NULL");
 						D3DXMatrixMultiply(
 							&m_BoneMatrixPallet[iPaletteEntry],
 							&pMeshContainer->pBoneOffsetMatrices[iMatrixIndex],

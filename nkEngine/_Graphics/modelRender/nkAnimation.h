@@ -16,23 +16,43 @@ namespace nkEngine
 		//初期化
 		//引数 アニメーションコントローラ
 		void Init(ID3DXAnimationController* animcon);
+
 		//アニメーションの終了タイムを設定する
 		//第１引数 アニメーションナンバー
 		//第２引数 エンドタイム
 		void SetAnimationEndTime(int animationIndex, double endTime)
 		{
-			AnimationEndTime[animationIndex] = endTime;
+			if (animationIndex < AnimNum)
+			{
+				AnimationEndTime[animationIndex] = endTime;
+			}
 		}
+
+		//アニメーションのループフラグを設定する
+		//第１引数 アニメーションナンバー
+		//第２引数 ループフラグ
+		void SetAnimationLoopFlags(int animationIndex, bool _loopflag)
+		{
+			if (animationIndex < AnimNum)
+			{
+				AnimationLoopFlags[animationIndex] = _loopflag;
+			}
+		}
+
 		//アニメーションの再生
 		void PlayAnimation(int aniSetIndex);
+
 		//アニメーションの再生
 		//補間時間
 		void PlayAnimation(int aniSetIndex, float interpolateTime);
+		
+		
 		//アニメーションセットの取得
 		int GetNumAnimationSet()const
 		{
 			return AnimNum;
 		}
+
 		//アニメーションの更新
 		void Update(float deltaTime);
 
@@ -41,6 +61,26 @@ namespace nkEngine
 		{
 			return CurrentAnimationSetNo;
 		}
+
+		//アニメーションが再生中判定
+		bool IsPlayAnim()
+		{
+			return !isAnimEnd;
+		}
+
+		//ローカルアニメーションタイムを取得
+		float GetLocalAnimationTime()const
+		{
+			return(float)LocalAnimationTime;
+		}
+		
+	private:
+		//保管時間をもとにトラックの重みを更新
+		void UpdateTrackWeights();
+
+		//アニメーション再生リクエストをポップ
+		void PopRequestPlayAnimation();
+
 	private:
 		//アニメーション再生リクエスト
 		struct RequestPlayAnimation

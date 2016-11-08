@@ -3,6 +3,7 @@
 #include"nkRenderTarget.h"
 #include"nkSprite.h"
 #include"PostEffect\nkAntiAliasing.h"
+#include"PostEffect\nkBloom.h"
 
 namespace nkEngine
 {
@@ -12,7 +13,7 @@ namespace nkEngine
 
 		//初期化
 		void Init(const SInitParam& initParam);
-		
+
 		//更新
 		void Update();
 
@@ -31,12 +32,12 @@ namespace nkEngine
 			static CScreenRender instance;
 			return instance;
 		}
-		
+
 	private:
 
 		//コンストラクタ
 		CScreenRender();
-		
+
 		//デストラクタ
 		~CScreenRender();
 
@@ -45,6 +46,7 @@ namespace nkEngine
 		CRenderTarget m_rtMain;
 
 		CAntiAliasing m_AntiAliasing;
+		CBloom m_Bloom;
 	};
 
 	inline static CScreenRender& ScreenRender()

@@ -18,7 +18,7 @@ void GameCamera::Init()
 {
 	Camera.SetPosDirection(D3DXVECTOR3(0,0.2f,1.0f));
 	Camera.SetTarget(m_PlayerTranceform->Position + D3DXVECTOR3(0, 0.4f, 0));
-	Camera.SetDistance(4.0f);
+	Camera.SetDistance(3.0f);
 	Camera.Update();
 
 	mViewInv = &Camera.GetViewInvMatrix();
@@ -26,21 +26,22 @@ void GameCamera::Init()
 
 void GameCamera::Update()
 {
+	static float speed = 0.05f;
 	if (Input.GetKeyButton(KeyCode::Up))
 	{
-		Camera.SpinVertically(0.1f);
+		Camera.SpinVertically(-speed);
 	}
 	if (Input.GetKeyButton(KeyCode::Down))
 	{
-		Camera.SpinVertically(-0.1f);
+		Camera.SpinVertically(speed);
 	}
 	if (Input.GetKeyButton(KeyCode::Left))
 	{
-		Camera.SpinHorizontally(-0.1f);
+		Camera.SpinHorizontally(-speed);
 	}
 	if (Input.GetKeyButton(KeyCode::Right))
 	{
-		Camera.SpinHorizontally(0.1f);
+		Camera.SpinHorizontally(speed);
 	}
 	
 	Camera.SetTarget(m_PlayerTranceform->Position + D3DXVECTOR3(0, 0.4f, 0));

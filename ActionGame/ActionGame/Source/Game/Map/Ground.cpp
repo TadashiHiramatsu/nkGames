@@ -17,6 +17,8 @@ void Ground::Init()
 	Model.SetTransform(&Transform);
 	Model.SetLight(&Light);
 	Model.SetCamera(MainCamera.GetCamera());
+	Model.SetShadowCasterFlag(true);
+	Model.SetShadowReceiverFlag(true);
 
 	Update();
 

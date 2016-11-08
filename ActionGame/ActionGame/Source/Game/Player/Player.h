@@ -1,21 +1,26 @@
 #pragma once
 
-#include "nkEngine/_Physics/nkCapsuleCollider.h"
-#include "nkEngine/_Physics/CRigidBody.h"
+#include"nkEngine/_Component/nkCharacterController.h"
+#include"nkEngine/_Graphics/Particle/nkParticleEmitter.h"
+#include"..\AnimationEvent\AnimationEventController.h"
 
 class Player : public CGameObject
 {
 public:
 	enum AnimationCode
 	{
+		AnimationInvalid = -1,
 		AnimationWaiting = 0,
 		AnimationRun,
+		AnimationAttack,
 		AnimationNum,
 	};
 	enum StateCode
 	{
 		StateWaiting = 0,
 		StateRun,
+		StateAttack,
+		StateJump,
 	};
 public:
 	Player();
@@ -42,13 +47,12 @@ private:
 	CModelRender Model;
 	CAnimation Animation;
 
-	StateCode					state;				//状態。
-	StateCode					lastFrameState;		//前のフレームの状態。
+	//状態。
+	StateCode State;			
 
-	CRigidBody RigidBody;
-	CCapsuleCollider CapsuleCollider;
+	CharacterController CharacterController;
 
-	float m_height;
-	float m_radius;
-	bool m_isOnGround = true;
+	CParticleEmitter Particle;
+	D3DXMATRIX* mParticle;
+	D3DXVECTOR3 ParticlePos;
 };
