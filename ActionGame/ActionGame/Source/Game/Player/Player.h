@@ -37,7 +37,6 @@ public:
 	}
 
 private:
-
 	void ChangeState(StateCode _NextState);
 	void AnimationControl();
 	void PlayAnimation(AnimationCode _AnimCode, float interpolateTime);

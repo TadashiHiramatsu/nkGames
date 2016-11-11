@@ -26,6 +26,7 @@ void GameScene::Init()
 
 	Player.Init();
 	Monster.Init();
+	Monster.SetPlayerPos(&Player.GetPos());
 	Ground.Init();
 	Skybox.Init();
 	MainCamera.Init();

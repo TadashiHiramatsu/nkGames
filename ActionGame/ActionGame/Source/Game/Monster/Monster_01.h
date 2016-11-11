@@ -1,20 +1,22 @@
 #pragma once
 
-#include"nkEngine/_Component/nkCharacterController.h"
+#include"IMonster.h"
 
-class Monster_01 : public CGameObject
+class Monster_01 : public IMonster
 {
 public:
 	enum AnimationCode
 	{
 		AnimationInvalid = -1,
 		AnimationWaiting = 0,
+		AnimationWalk,
+		AnimationRun,
+		AnimationAttack_01,
+		AnimationAttack_02,
+		AnimationHit,
+		AnimationDeath,
 	};
-	enum StateCode
-	{
-		StateWaiting = 0,
-		StateLoitering,
-	};
+
 public:
 	Monster_01();
 	~Monster_01();
@@ -23,20 +25,20 @@ public:
 	void Render()override;
 	void Release()override;
 
-	void ChangeState(StateCode _NextState)
+	//アニメーションを変更する
+	void PlayAnimation(AnimationCode _AnimCode, float interpolateTime)
 	{
-		State = _NextState;
+		if (Animation.GetNowAnimationNo() != _AnimCode)
+		{
+			Animation.PlayAnimation(_AnimCode, interpolateTime);
+		}
 	}
+	//現在のアニメーションに関係なく設定する
+	void PlayAnimationAbs(AnimationCode _AnimCode, float interpolateTime)
+	{
+		Animation.PlayAnimation(_AnimCode, interpolateTime);
+	}
+
+	void AnimationControl()override;
 private:
-	CTransform Transform;
-	CLight Light;
-	CModelRender Model;
-	CAnimation Animation;
-
-	StateCode State;
-
-	D3DXVECTOR2 Destination;
-	D3DXVECTOR2 DefaultPosition;
-
-	CharacterController CharacterController;
 };

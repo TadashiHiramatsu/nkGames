@@ -26,7 +26,7 @@ namespace
 		"fire_02.png",						//!<テクスチャのファイルパス。
 		D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!<初速度。
 		0.1f,								//!<寿命。単位は秒。
-		0.01f,								//!<発生時間。単位は秒。
+		0.001f,								//!<発生時間。単位は秒。
 		0.5f,								//!<パーティクルの幅。
 		0.5f,								//!<パーティクルの高さ。
 		D3DXVECTOR3(0.05f, 0.05f, 0.05f),		//!<初期位置のランダム幅。
@@ -201,6 +201,7 @@ void Player::AnimationControl()
 		break;
 	case StateAttack:
 		PlayAnimation(AnimationCode::AnimationAttack, 0.1f);
+		time = 1.0f / 60.0f;
 		break;
 	default:
 		break;

@@ -54,6 +54,9 @@
     <ClCompile Include="Source\Game\AnimationEvent\AnimationEventController.cpp">
       <Filter>Game\AnimationEvent</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Monster\IMonster.cpp">
+      <Filter>Game\Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="Source\Game\AnimationEvent\AnimationEventMacro.h">
       <Filter>Game\AnimationEvent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Monster\IMonster.h">
+      <Filter>Game\Monster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

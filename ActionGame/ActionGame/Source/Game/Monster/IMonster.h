@@ -1,0 +1,104 @@
+#pragma once
+
+#include"nkEngine/_Component/nkCharacterController.h"
+#include"..\Player\Player.h"
+
+class IMonster : public CGameObject
+{
+public:
+	enum StateCode
+	{
+		StateSpawn, //出現
+		StateWaiting, //立ち止まり
+		StateLoitering, //徘徊
+		StateChase, //追いかけ
+		StateAttack, //攻撃
+		StateDamage, //ダメージ
+		StateDead, //そして死
+	};
+
+public:
+	IMonster();
+	virtual ~IMonster();
+	virtual void Init()override;
+	virtual void Update()override;
+	virtual void Render()override;
+	virtual void Release()override;
+
+	void SetPlayerPos(D3DXVECTOR3* _pos)
+	{
+		pPlayerPos = _pos;
+	}
+
+protected:
+
+	//Stateを変更する
+	//param[in] 変更後のStateCode
+	void ChangeState(StateCode _NextState)
+	{
+		State = _NextState;
+	}
+
+	//アニメーション管理
+	virtual void AnimationControl() {}
+
+	//プレイヤーへの方向ベクトルを計算
+	D3DXVECTOR2& GetToPlayerDir()
+	{
+		D3DXVECTOR2 toP = D3DXVECTOR2(pPlayerPos->x,pPlayerPos->z) - D3DXVECTOR2(Transform.Position.x, Transform.Position.z);
+		D3DXVec2Normalize(&toP, &toP);
+		return toP;
+	}
+
+	//プレイヤーとの距離を計算
+	//高さを考慮しない距離を返します
+	float GetToPlayerDis()
+	{
+		D3DXVECTOR3 toP = *pPlayerPos - Transform.Position;
+		return D3DXVec2Length(&D3DXVECTOR2(toP.x, toP.z));
+	}
+
+
+	//目的地までの方向ベクトルを取得
+	D3DXVECTOR2& GetToDestination()
+	{
+		D3DXVECTOR2 toD = Destination - D3DXVECTOR2(Transform.Position.x, Transform.Position.z);
+		D3DXVec2Normalize(&toD, &toD);
+		return toD;
+	}
+
+	//目的地までの距離を計算
+	//高さを考慮しない距離を返します
+	float GetToDestinationDis()
+	{
+		D3DXVECTOR2 toD = Destination - D3DXVECTOR2(Transform.Position.x, Transform.Position.z);
+		return D3DXVec2Length(&toD);
+	}
+
+protected:
+	CModelRender Model;
+	CTransform Transform;
+	CLight Light;
+	CAnimation Animation;
+
+	//スポーン位置
+	//ここからの距離移動できる
+	D3DXVECTOR3 DefaultPosition;
+	float Distance; //距離
+	D3DXVECTOR2 Destination; //目的地
+
+	//プレイヤーを追いかける最大距離
+	//見つける距離も兼用
+	float toPlayerMaxDis; 
+
+	D3DXVECTOR3* pPlayerPos;//プレイヤーのポジションのアドレス
+	float PlayerAttackDis;
+
+	float WaitingTime; //立ち止まる時間
+	float LocalTime; //ローカルタイム
+
+	D3DXVECTOR3 MoveDir;
+
+	StateCode State;
+	CharacterController m_CharacterController;
+};

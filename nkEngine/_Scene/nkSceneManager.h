@@ -6,6 +6,11 @@ namespace nkEngine
 {
 	class CSceneManager
 	{
+	private:
+		//コンストラクタ
+		CSceneManager();
+		//デストラクタ
+		~CSceneManager();
 	public:
 		void Init();
 		void UpdateScene();
@@ -16,9 +21,7 @@ namespace nkEngine
 			static CSceneManager instance;
 			return instance;
 		}
-	private:
-		CSceneManager();
-		~CSceneManager();
+
 	private:
 		CScene* m_nowscene;
 	};
