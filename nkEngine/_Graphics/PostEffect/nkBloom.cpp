@@ -53,7 +53,10 @@ namespace nkEngine
 				m_pEffect->SetTexture("g_Scene", ScreenRender().GetMainRenderTarget().GetTexture()->GetTextureDX());
 				m_pEffect->CommitChanges();
 
-				fullscreen.DrawPrimitiveOnly();
+				Device->SetStreamSource(0, Primitive.GetVertexBuffer()->GetBody(), 0, Primitive.GetVertexBuffer()->GetStride());
+				Device->SetIndices(Primitive.GetIndexBuffer()->GetBody());
+				Device->SetVertexDeclaration(Primitive.GetVertexDecl());
+				Device->DrawIndexedPrimitive(Primitive.GetD3DPrimitiveType(), 0, 0, Primitive.GetNumVertex(), 0, Primitive.GetNumPolygon());
 
 				m_pEffect->EndPass();
 				m_pEffect->End();
@@ -86,7 +89,10 @@ namespace nkEngine
 				m_pEffect->SetValue("g_offset", offset, sizeof(offset));
 				m_pEffect->CommitChanges();
 
-				fullscreen.DrawPrimitiveOnly();
+				Device->SetStreamSource(0, Primitive.GetVertexBuffer()->GetBody(), 0, Primitive.GetVertexBuffer()->GetStride());
+				Device->SetIndices(Primitive.GetIndexBuffer()->GetBody());
+				Device->SetVertexDeclaration(Primitive.GetVertexDecl());
+				Device->DrawIndexedPrimitive(Primitive.GetD3DPrimitiveType(), 0, 0, Primitive.GetNumVertex(), 0, Primitive.GetNumPolygon());
 
 				m_pEffect->EndPass();
 				m_pEffect->End();
@@ -114,7 +120,42 @@ namespace nkEngine
 			m_pEffect = EffectManager().LoadEffect("bloom.fx");
 			m_isEnable = true;
 
-			fullscreen.Init();
+			static SShapeVertex_PT vertex[]{
+				{
+					-1.0f, 1.0f, 0.0f, 1.0f,
+					0.0f, 0.0f
+				},
+				{
+					1.0f, 1.0f, 0.0f, 1.0f,
+					1.0f, 0.0f
+				},
+				{
+					-1.0f, -1.0f, 0.0f, 1.0f,
+					0.0f, 1.0f
+				},
+				{
+					1.0f, -1.0f, 0.0f, 1.0f,
+					1.0f, 1.0f
+				},
+			};
+			static unsigned short index[] = {
+				0,1,2,3
+			};
+			static const D3DVERTEXELEMENT9 scShapeVertex_PT_Element[] = {
+				{ 0, 0 ,   D3DDECLTYPE_FLOAT4		, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION	, 0 },
+				{ 0, 16 ,  D3DDECLTYPE_FLOAT2		, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD	, 0 },
+				D3DDECL_END()
+			};
+			Primitive.Create(
+				CPrimitive::eTriangleStrip,
+				4,
+				sizeof(SShapeVertex_PT),
+				scShapeVertex_PT_Element,
+				vertex,
+				4,
+				eIndexFormat16,
+				index
+			);
 		}
 	}
 }

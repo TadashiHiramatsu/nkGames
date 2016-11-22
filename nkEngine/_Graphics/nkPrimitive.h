@@ -5,6 +5,11 @@
 
 namespace nkEngine
 {
+	struct SShapeVertex_PT {
+		float		pos[4];
+		float		uv[2];
+	};
+
 	//プリミティブ
 	class CPrimitive {
 	public:
@@ -15,6 +20,7 @@ namespace nkEngine
 			eTriangleStrip,		//トライアングルストリップ。
 			eTypeNum,
 		};
+
 	public:
 		//コンストラクタ
 		CPrimitive();

@@ -42,6 +42,7 @@ namespace nkEngine
 		const CTexture*	m_srcTexture; //ソースとなるテクスチャ
 		ID3DXEffect* m_Effect; //エフェクト
 		int m_srcTexWH[2]; //テクスチャの幅
-		CSprite m_fullscreen;
+
+		CPrimitive Primitive;
 	};
 }

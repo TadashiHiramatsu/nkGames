@@ -7,10 +7,6 @@ namespace nkEngine
 {
 	struct SParicleEmitParameter;
 
-	struct SShapeVertex_PT {
-		float		pos[4];
-		float		uv[2];
-	};
 	class CParticle
 	{
 	public:

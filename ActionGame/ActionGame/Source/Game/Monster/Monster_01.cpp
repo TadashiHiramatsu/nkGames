@@ -1,6 +1,49 @@
 #include"stdafx.h"
 #include"Monster_01.h"
 
+#include"..\GameScene.h"
+#include"../Item/DropItemManager.h"
+
+namespace
+{
+	AnimationEventGroup AnimationEventTbl[Monster_01::AnimationNum]
+	{
+		//AnimationWaiting
+		{
+			END_ANIMATION_EVENT(),
+		},
+		//AnimationWalk
+		{
+			END_ANIMATION_EVENT(),
+		},
+		//AnimationRun
+		{
+			END_ANIMATION_EVENT(),
+		},
+		//AnimationAttack_01
+		{
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.0f, 1.0f, 1.0f, 2, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.1f, 1.0f, 1.0f, 2, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.2f, 1.0f, 1.0f, 2, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.3f, 1.0f, 1.0f, 2, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.4f, 1.0f, 1.0f, 2, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			END_ANIMATION_EVENT(),
+		},
+		//AnimationAttack_02
+		{
+			END_ANIMATION_EVENT(),
+		},
+		//AnimationHit
+		{
+			END_ANIMATION_EVENT(),
+		},
+		//AnimationDeath
+		{
+			END_ANIMATION_EVENT(),
+		},
+	};
+}
+
 Monster_01::Monster_01()
 {
 
@@ -17,17 +60,28 @@ void Monster_01::Init()
 	Model.SetRimLight(true);
 
 	Transform.Position = DefaultPosition = D3DXVECTOR3(1, 1, 0);
+
+	pPlayerPos = &g_Player->GetPos();
 	
 	ChangeState(StateCode::StateWaiting);
 	PlayAnimation(AnimationWaiting,0.3f);
 	Animation.SetAnimationLoopFlags(AnimationAttack_01, false);
+	Animation.SetAnimationLoopFlags(AnimationHit, false);
+	Animation.SetAnimationLoopFlags(AnimationDeath, false);
 
-	m_CharacterController.Init(0.4f, 0.3f, Transform.Position);
+	m_CharacterController.Init(Radius, Height, Transform.Position);
+	
+	animEvent.Init(&Model, &Animation, AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
+
+	sphereShape.reset(new CSphereCollider);
+	sphereShape->Create(Radius);
+	collisionObject.reset(new btCollisionObject());
+	collisionObject->setCollisionShape(sphereShape->GetBody());
 }
 
 void Monster_01::Update()
 {
-
+	D3DXVECTOR3 MoveSpeed = m_CharacterController.GetMoveSpeed();
 	switch (State)
 	{
 	case StateWaiting:
@@ -37,7 +91,7 @@ void Monster_01::Update()
 			ChangeState(StateCode::StateChase);
 			break;
 		}
-		MoveDir *= 0.8f;
+		MoveSpeed *= 0.8f;
 		if (LocalTime >= WaitingTime)
 		{
 			ChangeState(StateCode::StateLoitering);
@@ -61,8 +115,8 @@ void Monster_01::Update()
 			break;
 		}
 		D3DXVECTOR2 toD = GetToDestination();
-		MoveDir = D3DXVECTOR3(toD.x, 0, toD.y);
-		D3DXQuaternionRotationAxis(&Transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(MoveDir.x, MoveDir.z) + D3DXToRadian(180.0f));
+		MoveSpeed = D3DXVECTOR3(toD.x, 0, toD.y);
+		D3DXQuaternionRotationAxis(&Transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(MoveSpeed.x, MoveSpeed.z) + D3DXToRadian(180.0f));
 	}
 	break;
 	case StateChase:
@@ -78,8 +132,8 @@ void Monster_01::Update()
 			break;
 		}
 		D3DXVECTOR2 toP = GetToPlayerDir();
-		MoveDir = D3DXVECTOR3(toP.x, 0, toP.y);
-		D3DXQuaternionRotationAxis(&Transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(MoveDir.x, MoveDir.z) + D3DXToRadian(180.0f));
+		MoveSpeed = D3DXVECTOR3(toP.x, 0, toP.y);
+		D3DXQuaternionRotationAxis(&Transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(MoveSpeed.x, MoveSpeed.z) + D3DXToRadian(180.0f));
 	}
 	break;
 	case StateAttack:
@@ -96,16 +150,35 @@ void Monster_01::Update()
 				PlayAnimationAbs(AnimationAttack_01, 0.3f);
 			}
 		}
-		MoveDir = D3DXVECTOR3(0, 0, 0);
+		MoveSpeed = D3DXVECTOR3(0, 0, 0);
+	}
+	break;
+	case StateDamage:
+	{
+		if (!Animation.IsPlayAnim())
+		{
+			ChangeState(StateChase);
+			break;
+		}
+		MoveSpeed = D3DXVECTOR3(0, 0, 0);
+	}
+	break;
+	case StateDead:
+	{
+		MoveSpeed = D3DXVECTOR3(0, 0, 0);
 	}
 	break;
 	default:
 		break;
 	}
 
-	m_CharacterController.SetMoveSpeed(MoveDir);
+	m_CharacterController.SetMoveSpeed(MoveSpeed);
 	m_CharacterController.Update();
 	Transform.Position = m_CharacterController.GetPosition();
+
+	animEvent.Update();
+
+	Damage();
 
 	AnimationControl();
 	IMonster::Update();
@@ -143,9 +216,62 @@ void Monster_01::AnimationControl()
 void Monster_01::Render()
 {
 	IMonster::Render();
+
 }
 
 void Monster_01::Release()
 {
 	IMonster::Release();
+}
+
+void Monster_01::Damage()
+{
+	if (State == StateDead) {
+		//死んでる。
+		return;
+	}
+
+	float offset = Radius + Height * 0.5f;
+	D3DXVECTOR3 centerPos;
+	centerPos = Transform.Position;
+	centerPos.y += offset;
+
+	btTransform trans;
+	trans.setOrigin(btVector3(centerPos.x, centerPos.y, centerPos.z));
+	collisionObject->setWorldTransform(trans);
+
+	//当たっているコリジョンを検出
+	const CollisionWorld::Collision* dmgCol = g_CollisionWorld->FindOverlappedDamageCollision(
+		CollisionWorld::enDamageToEnemy,
+		collisionObject.get()
+	);
+
+	if (!dmgCol) {
+		centerPos.y += offset;
+		trans.setOrigin(btVector3(centerPos.x, centerPos.y, centerPos.z));
+		collisionObject->setWorldTransform(trans);
+		const CollisionWorld::Collision* dmgCol = g_CollisionWorld->FindOverlappedDamageCollision(
+			CollisionWorld::enDamageToEnemy,
+			collisionObject.get()
+		);
+	}
+	if (dmgCol != NULL && State != StateDamage) {
+		//ダメージを食らっている。
+		Hp -= dmgCol->Damage;
+		if (Hp <= 0) {
+			//死亡。
+			ChangeState(StateDead);
+			g_Player->AddExperience(10);
+
+			DropItem* DI = new DropItem;
+			DI->Init();
+			DI->SetTransform(Transform);
+
+			DIManager().SetDropItem(DI);
+		}
+		else 
+		{
+			ChangeState(StateDamage);
+		}
+	}
 }

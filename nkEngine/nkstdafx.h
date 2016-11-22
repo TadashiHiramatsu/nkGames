@@ -75,4 +75,6 @@ using namespace std;
 
 #include"_Graphics\nkGraphicsConfig.h"
 
+#include"_Graphics\nkTestFont.h"
+
 static const float GAME_DELTA_TIME = 1.0f / 60.0f; //1フレームの経過時間(単位:秒)。固定FPS

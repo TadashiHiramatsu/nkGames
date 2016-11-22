@@ -14,6 +14,13 @@ namespace nkEngine
 		}
 	};
 
+	enum MouseButton
+	{
+		MouseLeft,
+		MouseRight,
+		MouseWheel,
+	};
+
 	enum KeyCode
 	{
 		Escape = DIK_ESCAPE,
@@ -58,7 +65,7 @@ namespace nkEngine
 		Apostrophe = DIK_APOSTROPHE, //@
 //#define DIK_GRAVE               /* accent grave */
 		Shift_L = DIK_LSHIFT,
-		BackSlash = DIK_BACKSLASH,	// \
+		BackSlash = DIK_BACKSLASH,	// 
 		Z = DIK_Z,               
 		X = DIK_X,
 		C = DIK_C,
@@ -175,20 +182,57 @@ namespace nkEngine
 		void Release();
 
 		//X軸の移動量を返す
-		LONG GetMoudeX()
+		LONG GetMouseX()
 		{
 			return m_MouseState0.PosX - m_MouseState.PosX;
 		}
 
 		//Y軸の移動量を返す
-		LONG GetMoudeY()
+		LONG GetMouseY()
 		{
 			return m_MouseState0.PosY - m_MouseState.PosY;
 		}
 
+		//X軸の座標を返す
+		LONG GetMousePosX()
+		{
+			return MousePos.x;
+		}
+
+		//Y軸の座標を返す
+		LONG GetMousePosY()
+		{
+			return MousePos.y;
+		}
+
+		//マウスのボタンが押されているか
 		bool GetMoudeButton(int idx)
 		{
 			return (m_MouseState.Button[idx] & 0x80);
+		}
+		bool GetMoudeButton(MouseButton idx)
+		{
+			return (m_MouseState.Button[idx] & 0x80);
+		}
+
+		//マウスのボタンが押された
+		bool GetMoudeButtonDown(int idx)
+		{
+			return(!m_MouseState0.Button[idx] && m_MouseState.Button[idx]) & 0x80;
+		}
+		bool GetMoudeButtonDown(MouseButton idx)
+		{
+			return(!m_MouseState0.Button[idx] && m_MouseState.Button[idx]) & 0x80;
+		}
+
+		//マウスのボタンがはなされた
+		bool GetMoudeButtonUp(int idx)
+		{
+			return (m_MouseState0.Button[idx] && !m_MouseState.Button[idx]) & 0x80;
+		}
+		bool GetMoudeButtonUp(MouseButton idx)
+		{
+			return(m_MouseState0.Button[idx] && !m_MouseState.Button[idx]) & 0x80;
 		}
 
 		bool GetKeyButton(int idx)
@@ -226,6 +270,7 @@ namespace nkEngine
 	private:
 		MouseState m_MouseState; //現在のマウスステータス
 		MouseState m_MouseState0; //一回前のマウスステータス
+		POINT MousePos;
 		BYTE m_Keyboard[256]; //現在のキーボードステータス
 		
 		IDirectInputDevice8* m_DInputMouse = nullptr; //マウスデバイス
@@ -236,11 +281,11 @@ namespace nkEngine
 		bool m_isMouse; //マウスを使用する
 	};
 
-	inline static CInput& Input()
+	inline static CInput& GetInput()
 	{
 		return CInput::GetInstance();
 	}
 
-#define Input Input()
+#define Input GetInput()
 }
 

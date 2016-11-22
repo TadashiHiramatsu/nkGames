@@ -30,6 +30,6 @@ namespace nkEngine
 
 		float texSize[2];
 
-		CSprite full;
+		CPrimitive Primitive;
 	};
 }

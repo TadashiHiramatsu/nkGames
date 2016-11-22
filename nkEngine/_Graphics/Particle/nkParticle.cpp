@@ -211,6 +211,7 @@ namespace nkEngine
 		Effect->SetValue("g_mWVP", &m, sizeof(D3DXMATRIX));
 		Effect->SetValue("g_alpha", &alpha, sizeof(alpha));
 		Effect->SetValue("g_brightness", &brightness, sizeof(brightness));
+
 		if (_pTextures) 
 		{
 			Effect->SetTexture("g_texture", _pTextures);

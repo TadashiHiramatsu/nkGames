@@ -25,7 +25,8 @@ namespace nkEngine
 		CRenderTarget m_luminanceRenderTarget;
 		bool m_isEnable;
 		float m_weights[NUM_WEIGHTS];
-		CSprite fullscreen;
+
+		CPrimitive Primitive;
 
 		CBlur Blur[2];
 	};

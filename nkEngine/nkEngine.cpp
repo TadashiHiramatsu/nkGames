@@ -60,6 +60,11 @@ namespace nkEngine
 		NK_ASSERT(initParam.screenH != 0, "screenHeight is zero");
 		NK_ASSERT(initParam.screenW != 0, "screenWigth is zero");
 
+		m_screenBufferW = initParam.screenW;
+		m_screenBufferH = initParam.screenH;
+		m_frameBufferW = initParam.frameBufferW;
+		m_frameBufferH = initParam.frameBufferH;
+
 		WNDCLASSEX wc =
 		{
 			sizeof(WNDCLASSEX),
@@ -131,8 +136,7 @@ namespace nkEngine
 		d3dpp.BackBufferHeight = initParam.frameBufferH;
 		d3dpp.MultiSampleType = D3DMULTISAMPLE_4_SAMPLES;
 		d3dpp.MultiSampleQuality = quality - 1;
-		m_frameBufferW = initParam.frameBufferW;
-		m_frameBufferH = initParam.frameBufferH;
+		
 
 		// Create the D3DDevice
 		if (FAILED(m_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, m_hWnd,

@@ -11,9 +11,14 @@ namespace nkEngine
 		virtual void Update();
 		virtual void Render();
 		virtual void Release();
+
+		//¶‚«‚Ä‚¢‚é‚©
+		bool GetActive()
+		{
+			return isActive;
+		}
 	
-	private:
-
+	protected:
+		bool isActive;
 	};
-
 }

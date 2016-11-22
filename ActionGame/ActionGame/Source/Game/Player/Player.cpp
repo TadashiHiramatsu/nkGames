@@ -10,15 +10,31 @@ namespace
 		{
 			END_ANIMATION_EVENT(),
 		},
+		//AnimationWalk
+		{
+			END_ANIMATION_EVENT(),
+		},
 		//AnimationRun
 		{
 			END_ANIMATION_EVENT(),
 		},
 		//AnimationAttack
 		{
-			
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.0f, 1.0f, 1.0f, 11, "LeftWeapon", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.1f, 1.0f, 1.0f, 11, "LeftWeapon", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.2f, 1.0f, 1.0f, 11, "LeftWeapon", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.3f, 1.0f, 1.0f, 11, "LeftWeapon", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.4f, 1.0f, 1.0f, 11, "LeftWeapon", D3DXVECTOR3(0,0,0), 0),
 			END_ANIMATION_EVENT(),
 		},
+		//AnimationHit
+		{
+			END_ANIMATION_EVENT(),
+		},
+		//AnimationDead
+		{
+			END_ANIMATION_EVENT(),
+		}
 	};
 
 	SParicleEmitParameter AttackParticle
@@ -59,7 +75,7 @@ Player::~Player()
 
 void Player::Init()
 {
-	Model.Load("Player.X",&Animation);
+	Model.Load("StealthChar.X",&Animation);
 	Model.SetTransform(&Transform);
 	Model.SetLight(&Light);
 	Model.SetCamera(MainCamera.GetCamera());
@@ -70,25 +86,58 @@ void Player::Init()
 
 	Transform.Position = D3DXVECTOR3(0, 1, 0);
 
-	CharacterController.Init(0.4f, 0.3f, Transform.Position);
+	Radius = 0.4f;
+	Height = 0.3f;
+	CharacterController.Init(Radius, Height, Transform.Position);
 	ChangeState(StateCode::StateWaiting);
-	Animation.SetAnimationLoopFlags(StateCode::StateAttack, false);
+	Animation.SetAnimationLoopFlags(AnimationCode::AnimationAttack, false);
+	Animation.SetAnimationLoopFlags(AnimationCode::AnimationDead, false);
+	Animation.SetAnimationLoopFlags(AnimationCode::AnimationHit, false);
+
+	animEvent.Init(&Model,&Animation,AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
 
 	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + Transform.GetPosition());
 	Shadow().SetLightTarget(Transform.GetPosition());
 
-	mParticle = Model.FindBoneWorldMatrix("Bip01_R_Finger0");
-	ParticlePos = D3DXVECTOR3(mParticle->m[3][0], mParticle->m[3][1], mParticle->m[3][2]);
+	//mParticle = Model.FindBoneWorldMatrix("Bip01_R_Finger0");
+	//ParticlePos = D3DXVECTOR3(mParticle->m[3][0], mParticle->m[3][1], mParticle->m[3][2]);
 
-	Particle.Init(MainCamera.GetCamera(), AttackParticle, &ParticlePos);
+	//Particle.Init(MainCamera.GetCamera(), AttackParticle, &ParticlePos);
+
+	LWeaponModel.Load("Weapon_Scythe.X",nullptr);
+	LWeaponModel.SetTransform(&LWeaponTransform);
+	LWeaponModel.SetLight(&LWeaponLight);
+	LWeaponModel.SetCamera(MainCamera.GetCamera());
+	LWeaponModel.SetParentMatrix(Model.FindBoneWorldMatrix("LeftWeapon"));
+	RWeaponModel.Load("Weapon_Scythe.X", nullptr);
+	RWeaponModel.SetTransform(&RWeaponTransform);
+	RWeaponModel.SetLight(&RWeaponLight);
+	RWeaponModel.SetCamera(MainCamera.GetCamera());
+	RWeaponModel.SetParentMatrix(Model.FindBoneWorldMatrix("RightWeapon"));
+
+	sphereShape.reset(new CSphereCollider);
+	sphereShape->Create(Radius);
+	collisionObject.reset(new btCollisionObject());
+	collisionObject->setCollisionShape(sphereShape->GetBody());
+
+
+	TF.Create(50,20,TestFont::FontWeights::NORMAL);
 }
 
 void Player::Update()
 {
-	if (State == StateCode::StateWaiting || State == StateCode::StateRun)
+	ParameterUpdate();
+
+	D3DXVECTOR3 moveSpeed = CharacterController.GetMoveSpeed();
+
+	switch (State)
 	{
-		ChangeState(StateCode::StateWaiting);
-		D3DXVECTOR3 moveSpeed = CharacterController.GetMoveSpeed();
+	case Player::StateWaiting:
+	case Player::AnimationWalk:
+	case Player::StateRun:
+	{
+
+		//ジャンプ処理
 		if (Input.GetKeyButton(KeyCode::Space) && !CharacterController.IsJump())
 		{
 			moveSpeed.y = 5.0f;
@@ -134,29 +183,51 @@ void Player::Update()
 			ChangeState(StateCode::StateRun);
 			D3DXQuaternionRotationAxis(&Transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(moveDir.x, moveDir.z) + D3DXToRadian(180.0f));
 		}
-		CharacterController.SetMoveSpeed(moveSpeed);
-		CharacterController.Update();
-
+		else
+		{
+			ChangeState(StateCode::StateWaiting);
+		}
 
 		if (Input.GetKeyButton(KeyCode::Shift_L) && !CharacterController.IsJump())
 		{
 			ChangeState(StateCode::StateAttack);
-			Particle.SetCreate(true);
+			//Particle.SetCreate(true);
 		}
 	}
-	else if (State == StateCode::StateAttack)
+	break;
+	case Player::StateAttack:
 	{
-		D3DXVECTOR3 moveSpeed = CharacterController.GetMoveSpeed();
 		moveSpeed *= 0.8f;
-		CharacterController.SetMoveSpeed(moveSpeed);
-		CharacterController.Update();
-
+		
 		if (!Animation.IsPlayAnim())
 		{
 			ChangeState(StateCode::StateWaiting);
-			Particle.SetCreate(false);
+			//Particle.SetCreate(false);
 		}
 	}
+	break;
+	case Player::StateDamage:
+	{
+		if (!Animation.IsPlayAnim())
+		{
+			ChangeState(StateWaiting);
+			break;
+		}
+		moveSpeed = D3DXVECTOR3(0, 0, 0);
+	}
+	break;
+	case Player::StateDead:
+	{
+		moveSpeed = D3DXVECTOR3(0, 0, 0);
+	}
+	break;
+	default:
+		break;
+	}
+
+	CharacterController.SetMoveSpeed(moveSpeed);
+	CharacterController.Update();
+
 
 	Transform.Position = CharacterController.GetPosition();
 	
@@ -165,21 +236,99 @@ void Player::Update()
 	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + Transform.GetPosition());
 	Shadow().SetLightTarget(Transform.GetPosition());
 
+	animEvent.Update();
+
+	Damage();
+
 	Model.Update();
-	ParticlePos = D3DXVECTOR3(mParticle->m[3][0], mParticle->m[3][1], mParticle->m[3][2]);
-	Particle.Update();
+	LWeaponModel.Update();
+	RWeaponModel.Update();
+//	ParticlePos = D3DXVECTOR3(mParticle->m[3][0], mParticle->m[3][1], mParticle->m[3][2]);
+	//Particle.Update();
 }
 
 void Player::Render()
 {
 	Model.Render();
-	Particle.Render();
+	LWeaponModel.Render();
+	RWeaponModel.Render();
+	//Particle.Render();
 
+	TF.Render("Level",PP.Level);
 }
 
 void Player::Release()
 {
 	Model.Release();
+}
+
+void Player::Damage()
+{
+	if (State == StateDead)
+	{
+		//死んでる...
+		return;
+	}
+	float offset = Radius + Height * 0.5f;
+	D3DXVECTOR3 centerPos;
+	centerPos = Transform.Position;
+	centerPos.y += offset;
+
+	btTransform trans;
+	trans.setOrigin(btVector3(centerPos.x, centerPos.y, centerPos.z));
+	collisionObject->setWorldTransform(trans);
+
+	//当たっているコリジョンを検出
+	const CollisionWorld::Collision* dmgCol = g_CollisionWorld->FindOverlappedDamageCollision(
+		CollisionWorld::enDamageToPlayer,
+		collisionObject.get()
+	);
+
+	if (!dmgCol) {
+		centerPos.y += offset;
+		trans.setOrigin(btVector3(centerPos.x, centerPos.y, centerPos.z));
+		collisionObject->setWorldTransform(trans);
+		const CollisionWorld::Collision* dmgCol = g_CollisionWorld->FindOverlappedDamageCollision(
+			CollisionWorld::enDamageToPlayer,
+			collisionObject.get()
+		);
+	}
+	if (PP.HitTime <= LocalTime)
+	{
+		if (dmgCol != NULL && State != StateDamage) {
+			//ダメージを食らっている。
+			PP.Hp -= dmgCol->Damage;
+			if (PP.Hp <= 0) {
+				//死亡。
+				ChangeState(StateDead);
+			}
+			else
+			{
+				ChangeState(StateDamage);
+			}
+		}
+		LocalTime = 0;
+	}
+	else if(State != StateDamage)
+	{
+		LocalTime += Time().DeltaTime();
+	}
+}
+
+void Player::ParameterUpdate()
+{
+	if (PP.Experience >= PP.NextLevelExperience)
+	{
+		PP.Experience -= PP.NextLevelExperience;
+
+		int a = PP.NextLevelExperience * 1.1;
+		int b = PP.Level * 15;
+
+		PP.NextLevelExperience = (a + b) / 2;
+
+		PP.Attack *= 1.1;
+		PP.Level++;
+	}
 }
 
 void Player::ChangeState(StateCode _NextState)
@@ -192,17 +341,23 @@ void Player::AnimationControl()
 	float time = 1.0f / 60.0f;
 	switch (State)
 	{
-	case AnimationWaiting:
+	case StateWaiting:
 		PlayAnimation(AnimationCode::AnimationWaiting, 0.1f);
+		break;
+	case StateWalk:
+		PlayAnimation(AnimationCode::AnimationWalk, 0.1f);
 		break;
 	case StateRun:
 		PlayAnimation(AnimationCode::AnimationRun, 0.1f);
-		time = 1.0f / 30.0f;
 		break;
 	case StateAttack:
 		PlayAnimation(AnimationCode::AnimationAttack, 0.1f);
-		time = 1.0f / 60.0f;
 		break;
+	case StateDamage:
+		PlayAnimation(AnimationCode::AnimationHit, 0.1f);
+		break;
+	case StateDead:
+		PlayAnimation(AnimationCode::AnimationDead, 0.1f);
 	default:
 		break;
 	}

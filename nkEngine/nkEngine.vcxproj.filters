@@ -19,9 +19,6 @@
     <Filter Include="Graphics\ModelRender">
       <UniqueIdentifier>{eb31b30e-ab18-4ecc-bec0-c99f34f8f78e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\2DRender">
-      <UniqueIdentifier>{87509d2d-b699-44ae-a9e9-fbbe5270094b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Component">
       <UniqueIdentifier>{8f348ce0-094a-4018-ab04-8e3c34ebe489}</UniqueIdentifier>
     </Filter>
@@ -45,6 +42,9 @@
     </Filter>
     <Filter Include="Graphics\Particle">
       <UniqueIdentifier>{879c7de2-9b92-4215-bf2a-8b48ff63c56e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\UI">
+      <UniqueIdentifier>{87509d2d-b699-44ae-a9e9-fbbe5270094b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -82,7 +82,7 @@
       <Filter>Graphics\ModelRender</Filter>
     </ClCompile>
     <ClCompile Include="_Graphics\nkSprite.cpp">
-      <Filter>Graphics\2DRender</Filter>
+      <Filter>Graphics\UI</Filter>
     </ClCompile>
     <ClCompile Include="_Graphics\nkVertexBuffer.cpp">
       <Filter>Graphics</Filter>
@@ -150,6 +150,9 @@
     <ClCompile Include="_Physics\nkSphereCollider.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
+    <ClCompile Include="_Graphics\nkTestFont.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nkEngine.h">
@@ -195,7 +198,7 @@
       <Filter>Graphics\ModelRender</Filter>
     </ClInclude>
     <ClInclude Include="_Graphics\nkSprite.h">
-      <Filter>Graphics\2DRender</Filter>
+      <Filter>Graphics\UI</Filter>
     </ClInclude>
     <ClInclude Include="_Graphics\nkVertexBuffer.h">
       <Filter>Graphics</Filter>
@@ -283,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="_Physics\nkSphereCollider.h">
       <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\nkTestFont.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

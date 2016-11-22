@@ -70,7 +70,7 @@ void AnimationEventController::Update()
 		eventGroupEx.eventGroup.event[i].eventType != eAnimationEventType_Invalid;
 		i++)
 	{
-		if (eventGroupEx.invokeFlags[i] = false)
+		if (eventGroupEx.invokeFlags[i] == false)
 		{
 			//まだイベントが発生していない
 			if (eventGroupEx.eventGroup.event[i].time <= animTime)
@@ -102,7 +102,7 @@ void AnimationEventController::InvokeAnimationEvent(const AnimationEvent & _even
 		}
 	}
 	break;
-	case eAnimationEventType_EmitDamageToPlayerCOllision:
+	case eAnimationEventType_EmitDamageToPlayerCollision:
 		//プレイヤーにダメージを与えるコリジョン発生.
 	{
 		D3DXMATRIX* bone = skinModel->FindBoneWorldMatrix(_event.strArg[0]);
@@ -111,7 +111,7 @@ void AnimationEventController::InvokeAnimationEvent(const AnimationEvent & _even
 		{
 			//登録
 			D3DXVec3TransformCoord(&pos, &pos, bone);
-			//g_CollisionWorld->Add(_event.fArg[1], pos, _event.fArg[0], _event.iArg[0], CollisionWorld::enDamageToPlayer, _event.iArg[1]);
+			g_CollisionWorld->Add(_event.fArg[1], pos, _event.fArg[0], _event.iArg[0], CollisionWorld::enDamageToPlayer, _event.iArg[1]);
 		}
 	}
 	break;

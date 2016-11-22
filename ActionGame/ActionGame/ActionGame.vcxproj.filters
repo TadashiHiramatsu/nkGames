@@ -22,6 +22,12 @@
     <Filter Include="Game\AnimationEvent">
       <UniqueIdentifier>{00e1ddd0-2d2c-458b-8f50-c33957bef66f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Item">
+      <UniqueIdentifier>{f3d5eb1f-998f-41a6-b243-0d1a20ce8497}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GUIWindow">
+      <UniqueIdentifier>{84cc74a1-ae9d-443d-af64-6c0298353050}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -57,6 +63,24 @@
     <ClCompile Include="Source\Game\Monster\IMonster.cpp">
       <Filter>Game\Monster</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Item\IItem.cpp">
+      <Filter>Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\ItemManager.cpp">
+      <Filter>Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\GUIWindow\IWindow.cpp">
+      <Filter>Game\GUIWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\GUIWindow\InventoryWindow.cpp">
+      <Filter>Game\GUIWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\DropItem.cpp">
+      <Filter>Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\DropItemManager.cpp">
+      <Filter>Game\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -91,6 +115,24 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Monster\IMonster.h">
       <Filter>Game\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\IItem.h">
+      <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\ItemManager.h">
+      <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GUIWindow\IWindow.h">
+      <Filter>Game\GUIWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GUIWindow\InventoryWindow.h">
+      <Filter>Game\GUIWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\DropItem.h">
+      <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\DropItemManager.h">
+      <Filter>Game\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

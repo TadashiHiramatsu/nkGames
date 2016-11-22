@@ -3,7 +3,8 @@
 
 namespace nkEngine
 {
-	CGameObject::CGameObject()
+	CGameObject::CGameObject() :
+		isActive(true)
 	{}
 	CGameObject::~CGameObject()
 	{

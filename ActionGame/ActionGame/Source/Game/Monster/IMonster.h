@@ -1,7 +1,12 @@
 #pragma once
 
+#include"..\AnimationEvent\AnimationEventController.h"
+#include"..\AnimationEvent\CollisionWorld.h"
+
 #include"nkEngine/_Component/nkCharacterController.h"
 #include"..\Player\Player.h"
+#include"..\Item\DropItem.h"
+
 
 class IMonster : public CGameObject
 {
@@ -25,10 +30,7 @@ public:
 	virtual void Render()override;
 	virtual void Release()override;
 
-	void SetPlayerPos(D3DXVECTOR3* _pos)
-	{
-		pPlayerPos = _pos;
-	}
+	virtual void Damage(){}
 
 protected:
 
@@ -81,6 +83,11 @@ protected:
 	CLight Light;
 	CAnimation Animation;
 
+	float Radius;
+	float Height;
+
+	int Hp;
+
 	//スポーン位置
 	//ここからの距離移動できる
 	D3DXVECTOR3 DefaultPosition;
@@ -97,8 +104,8 @@ protected:
 	float WaitingTime; //立ち止まる時間
 	float LocalTime; //ローカルタイム
 
-	D3DXVECTOR3 MoveDir;
-
 	StateCode State;
 	CharacterController m_CharacterController;
+
+	AnimationEventController animEvent;
 };

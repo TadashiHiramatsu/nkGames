@@ -175,7 +175,10 @@ namespace nkEngine
 			return &m_mWorldInv;
 		}
 
-
+		void SetParentMatrix(D3DXMATRIX* _w)
+		{
+			m_mParentWorld = _w;
+		}
 
 	protected:
 
@@ -203,6 +206,7 @@ namespace nkEngine
 		D3DXMATRIX m_mWorld; //ワールド行列
 		D3DXMATRIX m_mWorldInv; //ワールド行列
 		D3DXMATRIX m_mRotation; //ローテーション行列　
+		D3DXMATRIX* m_mParentWorld; //親のWorld行列
 
 		static const int MAX_MATRIX_PALLET = 128; //マトリクスパレットの最大数
 		D3DXMATRIX m_BoneMatrixPallet[MAX_MATRIX_PALLET]; //マトリクスパレット

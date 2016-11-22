@@ -3,7 +3,13 @@
 #include"AnimationEvent\CollisionWorld.h"
 #include"GameCamera.h"
 
+#include"GUIWindow\InventoryWindow.h"
+
+#include"Item\DropItemManager.h"
+
 CollisionWorld* g_CollisionWorld = NULL;
+
+Player* g_Player = nullptr;
 
 GameScene::GameScene()
 {
@@ -25,11 +31,19 @@ void GameScene::Init()
 	g_CollisionWorld->Init();
 
 	Player.Init();
+	g_Player = &Player;
+
 	Monster.Init();
-	Monster.SetPlayerPos(&Player.GetPos());
 	Ground.Init();
 	Skybox.Init();
 	MainCamera.Init();
+
+	Inventory().Init();
+
+	MouseX.Create(50, 50, TestFont::FontWeights::NORMAL);
+	MouseY.Create(50, 50, TestFont::FontWeights::NORMAL);
+
+	DIManager().Init();
 }
 
 void GameScene::Update()
@@ -41,6 +55,10 @@ void GameScene::Update()
 	Skybox.SetPosition(Player.GetPos());
 	Skybox.Update();
 	MainCamera.Update();
+
+	Inventory().Update();
+
+	DIManager().Update();
 }
 
 void GameScene::Render()
@@ -50,6 +68,13 @@ void GameScene::Render()
 	Ground.Render();
 	Skybox.Render();
 	Player.Render();
+
+	Inventory().Render();
+
+	DIManager().Render();
+
+	MouseX.Render("X", Input.GetMousePosX(), D3DXVECTOR2(0, 100));
+	MouseY.Render("Y", Input.GetMousePosY(), D3DXVECTOR2(0, 150));
 }
 
 void GameScene::Release()

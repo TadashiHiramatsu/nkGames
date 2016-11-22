@@ -19,4 +19,9 @@ private:
 	Ground Ground;
 	Skybox Skybox;
 	Monster_01 Monster;
+
+	TestFont MouseX;
+	TestFont MouseY;
 };
+
+extern Player* g_Player;

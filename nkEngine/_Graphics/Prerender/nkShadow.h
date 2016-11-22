@@ -110,7 +110,7 @@ namespace nkEngine
 		}
 
 		//インスタンス取得
-		inline static CShadowMap& instance()
+		inline static CShadowMap& GetInstance()
 		{
 			static CShadowMap instance;
 			return instance;
@@ -162,6 +162,6 @@ namespace nkEngine
 
 	inline static CShadowMap& Shadow()
 	{
-		return CShadowMap::instance();
+		return CShadowMap::GetInstance();
 	}
 }

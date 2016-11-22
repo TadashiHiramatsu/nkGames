@@ -20,6 +20,11 @@ void Ground::Init()
 	Model.SetShadowCasterFlag(true);
 	Model.SetShadowReceiverFlag(true);
 
+	Normal.Load("ground4_Normal.tga");
+	Model.SetNormalMap(&Normal);
+	Specular.Load("ground4_Specular.tga");
+	Model.SetSpecMap(&Specular);
+
 	Update();
 
 	mWorld = Model.FindBoneWorldMatrix("Plane001");

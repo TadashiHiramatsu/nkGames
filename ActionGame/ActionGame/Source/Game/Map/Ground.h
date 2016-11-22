@@ -20,4 +20,7 @@ private:
 	CRigidBody RigidBody;
 	CMeshCollider MeshCollider;
 	D3DXMATRIX* mWorld;
+
+	CTexture Normal;
+	CTexture Specular;
 };

@@ -168,6 +168,7 @@
     <ClInclude Include="_Graphics\nkScreenRender.h" />
     <ClInclude Include="_Graphics\nkRenderTarget.h" />
     <ClInclude Include="_Graphics\nkSprite.h" />
+    <ClInclude Include="_Graphics\nkTestFont.h" />
     <ClInclude Include="_Graphics\nkTexture.h" />
     <ClInclude Include="_Graphics\nkVertexBuffer.h" />
     <ClInclude Include="_Graphics\Particle\nkParticle.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="_Graphics\nkScreenRender.cpp" />
     <ClCompile Include="_Graphics\nkRenderTarget.cpp" />
     <ClCompile Include="_Graphics\nkSprite.cpp" />
+    <ClCompile Include="_Graphics\nkTestFont.cpp" />
     <ClCompile Include="_Graphics\nkTexture.cpp" />
     <ClCompile Include="_Graphics\nkVertexBuffer.cpp" />
     <ClCompile Include="_Graphics\Particle\nkParticle.cpp" />

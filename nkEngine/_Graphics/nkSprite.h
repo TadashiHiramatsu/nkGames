@@ -1,50 +1,60 @@
 #pragma once
 
-#define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZW | D3DFVF_DIFFUSE | D3DFVF_TEX1)
-
 namespace nkEngine
 {
-
-	struct SVertex
+	struct SpriteTransform
 	{
-		FLOAT x, y, z, w;
-		DWORD color;
-		FLOAT u, v;
+		D3DXVECTOR2 Position = D3DXVECTOR2(0, 0); //ポジション
+		D3DXVECTOR2 Size = D3DXVECTOR2(100, 100);	//サイズ
+		D3DXVECTOR2 Pivot = D3DXVECTOR2(0.5f, 0.5f);	//中心
+		D3DXQUATERNION Rotation = D3DXQUATERNION(0, 0, 0, 1);	//回転
 	};
 
 	class CSprite
 	{
 	public:
+
+		//コンストラクタ
 		CSprite();
+		
+		//デストラクタ
 		~CSprite();
+
 		//ファイルのロードを行う
 		void Load(const char* filepass);
 		void Load();
+
 		//初期化のみを行う
 		void Init();
+		
 		//更新
-		void Update(D3DXVECTOR3, D3DXVECTOR3, float angle = 0);
+		void Update();
+		
 		//描画
 		void Render();
-		//削除
+		
+		//解放
 		void Release();
 		
-		//フルスクリーンでプリミティブのみを描画する
-		void DrawPrimitiveOnly();
-
 		//テクスチャを設定する
-		void SetTexture(IDirect3DTexture9* tex)
+		void SetTexture(CTexture* tex)
 		{
-			m_pTex = tex;
+			Texture = tex;
 		}
+
+		//トランスフォーム設定
+		void SetSTransform(SpriteTransform* _ST)
+		{
+			STransform = _ST;
+		}
+
 	private:
-		IDirect3DTexture9* m_pTex;
-		ID3DXEffect* m_pEffect;
-		IDirect3DVertexBuffer9* m_pVB;
+		ID3DXEffect* m_pEffect = nullptr;
+		CPrimitive Primitive;
+		CTexture* Texture = nullptr;
 
-		D3DXMATRIX  m_mWorld, m_mTrans, m_mScale, m_mRot;
+		D3DXMATRIX  m_mWorld;
 
-		bool isLuminance;
-		float Luminance;
+		SpriteTransform* STransform;
 	};
 }

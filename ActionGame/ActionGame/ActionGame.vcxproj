@@ -151,6 +151,12 @@
     <ClCompile Include="Source\Game\AnimationEvent\CollisionWorld.cpp" />
     <ClCompile Include="Source\Game\GameCamera.cpp" />
     <ClCompile Include="Source\Game\GameScene.cpp" />
+    <ClCompile Include="Source\Game\GUIWindow\InventoryWindow.cpp" />
+    <ClCompile Include="Source\Game\GUIWindow\IWindow.cpp" />
+    <ClCompile Include="Source\Game\Item\DropItem.cpp" />
+    <ClCompile Include="Source\Game\Item\DropItemManager.cpp" />
+    <ClCompile Include="Source\Game\Item\IItem.cpp" />
+    <ClCompile Include="Source\Game\Item\ItemManager.cpp" />
     <ClCompile Include="Source\Game\Map\Ground.cpp" />
     <ClCompile Include="Source\Game\Map\Skybox.cpp" />
     <ClCompile Include="Source\Game\Monster\IMonster.cpp" />
@@ -164,6 +170,12 @@
     <ClInclude Include="Source\Game\AnimationEvent\CollisionWorld.h" />
     <ClInclude Include="Source\Game\GameCamera.h" />
     <ClInclude Include="Source\Game\GameScene.h" />
+    <ClInclude Include="Source\Game\GUIWindow\InventoryWindow.h" />
+    <ClInclude Include="Source\Game\GUIWindow\IWindow.h" />
+    <ClInclude Include="Source\Game\Item\DropItem.h" />
+    <ClInclude Include="Source\Game\Item\DropItemManager.h" />
+    <ClInclude Include="Source\Game\Item\IItem.h" />
+    <ClInclude Include="Source\Game\Item\ItemManager.h" />
     <ClInclude Include="Source\Game\Map\Ground.h" />
     <ClInclude Include="Source\Game\Map\Skybox.h" />
     <ClInclude Include="Source\Game\Monster\IMonster.h" />

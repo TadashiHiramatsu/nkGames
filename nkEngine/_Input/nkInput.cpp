@@ -70,6 +70,11 @@ namespace nkEngine
 
 		if (m_isMouse)
 		{
+			GetCursorPos(&MousePos);
+			ScreenToClient(Engine().GetHWND(), &MousePos);
+			MousePos.y -= Engine().GetScreenH();
+			MousePos.y *= -1;
+
 			m_MouseState0 = m_MouseState;
 			hr = m_DInputMouse->GetDeviceState(sizeof(MouseState), &m_MouseState);
 			if (FAILED(hr))
@@ -88,7 +93,6 @@ namespace nkEngine
 				m_DInputKeyboard->GetDeviceState(sizeof(m_Keyboard), &m_Keyboard);
 			}
 		}
-
 	}
 
 	void CInput::Release()

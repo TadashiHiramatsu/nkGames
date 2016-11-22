@@ -34,6 +34,7 @@ namespace nkEngine
 		std::list<CParticle*>::iterator p = particleList.begin();
 		while (p != particleList.end()) {
 			if ((*p)->GetDead()) {
+				delete (*p);
 				p = particleList.erase(p);
 			}
 			else {

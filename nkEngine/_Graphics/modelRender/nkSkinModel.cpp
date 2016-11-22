@@ -14,7 +14,8 @@ namespace nkEngine
 		m_isShadowCaster(false),
 		m_isShadowReceiver(false),
 		m_isRimLight(false),
-		m_fogFunc(enFogFuncNone)
+		m_fogFunc(enFogFuncNone),
+		m_mParentWorld(nullptr)
 	{
 		m_fogParam[0] = 0.0f;
 		m_fogParam[1] = 0.0f;
@@ -51,6 +52,11 @@ namespace nkEngine
 		D3DXMatrixScaling(&mScale, m_Transform->GetScale().x, m_Transform->GetScale().y, m_Transform->GetScale().z);
 
 		m_mWorld = mScale * m_mRotation * mPosition;
+
+		if (m_mParentWorld)
+		{
+			m_mWorld *= *m_mParentWorld;
+		}
 
 		D3DXMatrixInverse(&m_mWorldInv, NULL , &m_mWorld);
 

@@ -8,7 +8,7 @@ const int ANIMATION_EVENT_MAX = 32;
 enum EAnimationEventType
 {
 	eAnimationEventType_EmitDamageToEnemyCollision, //敵に対してダメージを与えるコリジョン
-	eAnimationEventType_EmitDamageToPlayerCOllision, //プレイヤーにダメージを与えるコリジョン
+	eAnimationEventType_EmitDamageToPlayerCollision, //プレイヤーにダメージを与えるコリジョン
 	eAnimationEventType_Invalid = 0xffffffff,
 };
 

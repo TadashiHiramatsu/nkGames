@@ -15,8 +15,8 @@ public:
 		AnimationAttack_02,
 		AnimationHit,
 		AnimationDeath,
+		AnimationNum,
 	};
-
 public:
 	Monster_01();
 	~Monster_01();
@@ -24,6 +24,7 @@ public:
 	void Update()override;
 	void Render()override;
 	void Release()override;
+	void Damage()override;
 
 	//アニメーションを変更する
 	void PlayAnimation(AnimationCode _AnimCode, float interpolateTime)
@@ -41,4 +42,7 @@ public:
 
 	void AnimationControl()override;
 private:
+	std::unique_ptr<btCollisionObject>	collisionObject;		//コリジョンオブジェクト。
+	std::unique_ptr<CSphereCollider>	sphereShape;			//球体
+
 };

@@ -48,6 +48,11 @@ namespace nkEngine
 			return m_pD3DDevice;
 		}
 
+		HWND GetHWND()
+		{
+			return m_hWnd;
+		}
+
 		//物理ワールドの取得
 		CPhysics& GetPhysics()
 		{
@@ -56,6 +61,8 @@ namespace nkEngine
 
 		int GetFrameW() { return m_frameBufferW; }
 		int GetFrameH() { return m_frameBufferH; }
+		int GetScreenW() { return m_screenBufferW; }
+		int GetScreenH() { return m_screenBufferH; }
 	private:
 		//ウィンドウの初期化
 		bool InitWindow(const SInitParam& initParam);
@@ -72,6 +79,10 @@ namespace nkEngine
 		int m_frameBufferW;
 		//フレームバッファの高さ。これが内部解像度。
 		int m_frameBufferH;
+		//スクリーンバッファの幅。
+		int m_screenBufferW;
+		//スクリーンバッファの高さ。
+		int m_screenBufferH;
 		//DirectXオブジェクト
 		IDirect3D9* m_pD3D;
 		//DirectXデバイス
