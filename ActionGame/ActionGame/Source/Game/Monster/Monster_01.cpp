@@ -55,7 +55,10 @@ Monster_01::~Monster_01()
 
 void Monster_01::Init()
 {
-	Model.Load("Monster_01.X", &Animation);
+	SMDResources().Load(SkinModelData, "Monster_01.X", &Animation);
+
+	Model.Load(SkinModelData.GetBody());
+
 	IMonster::Init();
 	Model.SetRimLight(true);
 
@@ -165,6 +168,11 @@ void Monster_01::Update()
 	break;
 	case StateDead:
 	{
+		if (!Animation.IsPlayAnim())
+		{
+			isActive = false;
+			break;
+		}
 		MoveSpeed = D3DXVECTOR3(0, 0, 0);
 	}
 	break;
@@ -216,7 +224,6 @@ void Monster_01::AnimationControl()
 void Monster_01::Render()
 {
 	IMonster::Render();
-
 }
 
 void Monster_01::Release()

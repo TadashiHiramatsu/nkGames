@@ -18,6 +18,7 @@ IMonster::IMonster():
 
 IMonster::~IMonster()
 {
+	Release();
 }
 
 void IMonster::Init()
@@ -39,5 +40,5 @@ void IMonster::Render()
 
 void IMonster::Release()
 {
-	Model.Release();
+	m_CharacterController.RemoveRigidBody();
 }

@@ -33,7 +33,8 @@ void GameScene::Init()
 	Player.Init();
 	g_Player = &Player;
 
-	Monster.Init();
+	TestMH.Init();
+
 	Ground.Init();
 	Skybox.Init();
 	MainCamera.Init();
@@ -50,7 +51,9 @@ void GameScene::Update()
 {
 	g_CollisionWorld->Update();
 	Player.Update();
-	Monster.Update();
+
+	TestMH.Update();
+
 	Ground.Update();
 	Skybox.SetPosition(Player.GetPos());
 	Skybox.Update();
@@ -64,7 +67,9 @@ void GameScene::Update()
 void GameScene::Render()
 {
 	g_CollisionWorld->Render();
-	Monster.Render();
+
+	TestMH.Render();
+
 	Ground.Render();
 	Skybox.Render();
 	Player.Render();
@@ -80,7 +85,6 @@ void GameScene::Render()
 void GameScene::Release()
 {
 	Player.Release();
-	Monster.Release();
 	Ground.Release();
 	Skybox.Release();
 	MainCamera.Release();

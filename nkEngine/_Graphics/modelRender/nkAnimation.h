@@ -73,6 +73,11 @@ namespace nkEngine
 		{
 			return(float)LocalAnimationTime;
 		}
+
+		ID3DXAnimationController* GetAnimCon()
+		{
+			return pAnimController;
+		}
 		
 	private:
 		//保管時間をもとにトラックの重みを更新

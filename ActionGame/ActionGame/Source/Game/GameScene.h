@@ -3,7 +3,8 @@
 #include"Player\Player.h"
 #include"Map\Ground.h"
 #include"Map\Skybox.h"
-#include"Monster\Monster_01.h"
+
+#include"Monster\MonsterHabitat.h"
 
 class GameScene : public CScene
 {
@@ -18,7 +19,8 @@ private:
 	Player Player;
 	Ground Ground;
 	Skybox Skybox;
-	Monster_01 Monster;
+
+	MonsterHabitat TestMH;
 
 	TestFont MouseX;
 	TestFont MouseY;

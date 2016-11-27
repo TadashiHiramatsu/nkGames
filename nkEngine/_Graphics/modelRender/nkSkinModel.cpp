@@ -82,9 +82,8 @@ namespace nkEngine
 
 	void CModelRender::RenderFrame(LPD3DXFRAME pFrame, bool isRenderToShadowMap)
 	{
-		LPD3DXMESHCONTAINER MeshContainer;
+		LPD3DXMESHCONTAINER MeshContainer = pFrame->pMeshContainer;
 
-		MeshContainer = pFrame->pMeshContainer;
 		while (MeshContainer != NULL)
 		{
 			RenderMeshContainer(

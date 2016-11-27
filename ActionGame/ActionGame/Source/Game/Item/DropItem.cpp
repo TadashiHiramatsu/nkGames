@@ -6,7 +6,7 @@
 #include"..\GUIWindow\InventoryWindow.h"
 
 DropItem::DropItem():
-	DeleteTime(5)
+	DeleteTime(300)
 {
 }
 
@@ -26,41 +26,35 @@ void DropItem::Init()
 
 void DropItem::Update()
 {
-	if (isActive)
+	//プレイヤーとの距離を測って
+	D3DXVECTOR3 pPos = g_Player->GetPos();
+	D3DXVECTOR3 toPlayer = pPos - Transform.Position;
+	if (D3DXVec3Length(&toPlayer) <= 3)
 	{
-		//プレイヤーとの距離を測って
-		D3DXVECTOR3 pPos = g_Player->GetPos();
-		D3DXVECTOR3 toPlayer = pPos - Transform.Position;
-		if (D3DXVec3Length(&toPlayer) <= 3)
-		{
-			//近い状態で特定のキーが押されたらゲットさせる
-			if (Input.GetKeyButton(KeyCode::Z))
-			{
-				isActive = false;
-				IItem* item = new IItem;
-				item->Load();
-				if (!Inventory().SetItem(item))
-				{
-					SAFE_DELETE(item);
-				}
-			}
-		}
-		Model.Update();
-
-		if (LocalTime >= DeleteTime)
+		//近い状態で特定のキーが押されたらゲットさせる
+		if (Input.GetKeyButton(KeyCode::Z))
 		{
 			isActive = false;
+			IItem* item = new IItem;
+			item->Load();
+			if (!Inventory().SetItem(item))
+			{
+				SAFE_DELETE(item);
+			}
 		}
-		LocalTime += Time().DeltaTime();
 	}
+	Model.Update();
+
+	if (LocalTime >= DeleteTime)
+	{
+		isActive = false;
+	}
+	LocalTime += Time().DeltaTime();
 }
 
 void DropItem::Render()
 {
-	if (isActive)
-	{
-		Model.Render();
-	}
+	Model.Render();
 }
 
 void DropItem::Release()

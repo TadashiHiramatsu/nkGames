@@ -153,7 +153,7 @@ namespace nkEngine
 	{
 		switch (msg)
 		{
-#ifdef _DEBUG
+//#ifdef _DEBUG
 		case WM_KEYDOWN: // キーを押したとき
 			switch (wParam) {
 				//エスケープキー
@@ -163,7 +163,7 @@ namespace nkEngine
 				return 0;
 			}
 			break;
-#endif
+//#endif
 		case WM_DESTROY:
 			instance().Final();
 			PostQuitMessage(0);

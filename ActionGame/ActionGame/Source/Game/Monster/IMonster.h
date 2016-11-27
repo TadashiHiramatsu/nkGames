@@ -78,6 +78,7 @@ protected:
 	}
 
 protected:
+	CSkinModelDataHandle SkinModelData;
 	CModelRender Model;
 	CTransform Transform;
 	CLight Light;

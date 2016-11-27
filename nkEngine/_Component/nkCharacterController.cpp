@@ -56,7 +56,8 @@ namespace nkEngine
 		isOnGround(true),
 		Radius(0.0f),
 		Height(0.0f),
-		Gravity(-9.8f)
+		Gravity(-9.8f),
+		MoveSpeed(D3DXVECTOR3(0,0,0))
 	{
 	}
 

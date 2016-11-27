@@ -81,6 +81,12 @@
     <ClCompile Include="Source\Game\Item\DropItemManager.cpp">
       <Filter>Game\Item</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Monster\MonsterHabitat.cpp">
+      <Filter>Game\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Map\MapChip.cpp">
+      <Filter>Game\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -133,6 +139,12 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Item\DropItemManager.h">
       <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Monster\MonsterHabitat.h">
+      <Filter>Game\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Map\MapChip.h">
+      <Filter>Game\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -31,13 +31,13 @@ void InventoryWindow::Init()
 	}
 
 	//Test
-	IItem* item = new IItem;
+	/*IItem* item = new IItem;
 	item->Load();
 
 	if (!SetItem(item))
 	{
 		SAFE_DELETE(item);
-	}
+	}*/
 }
 
 void InventoryWindow::Update()
@@ -78,6 +78,7 @@ bool InventoryWindow::SetItem(IItem * _item)
 			{
 				//‘‚¦‚½‚æ
 				a->ItemNum++;
+				break;
 			}
 		}
 		else
