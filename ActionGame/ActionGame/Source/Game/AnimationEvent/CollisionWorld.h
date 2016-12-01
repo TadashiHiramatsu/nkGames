@@ -2,7 +2,7 @@
 
 #include"nkEngine/_Physics/nkSphereCollider.h"
 
-class CollisionWorld
+class CollisionWorld : public IGameObject
 {
 public:
 	//属性
@@ -36,13 +36,10 @@ public:
 	~CollisionWorld();
 
 	//初期化
-	void Init();
+	void Start()override;
 
 	//更新
-	void Update();
-
-	//描画
-	void Render();
+	void Update()override;
 
 	//コリジョンを追加
 	inline void CollisionWorld::Add(float _Radius, const D3DXVECTOR3 & _Pos, float _Life, int _Damage, EnAttr _Attr, int _GroupID)

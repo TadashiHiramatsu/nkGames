@@ -21,15 +21,17 @@ IMonster::~IMonster()
 	Release();
 }
 
-void IMonster::Init()
+void IMonster::Start()
 {
-	Model.SetTransform(&Transform);
+	Model.SetTransform(&transform);
 	Model.SetLight(&Light);
-	Model.SetCamera(MainCamera.GetCamera());
+	Model.SetCamera(g_MainCamera->GetCamera());
 }
 
 void IMonster::Update()
 {
+	transform.Update();
+
 	Model.Update();
 }
 

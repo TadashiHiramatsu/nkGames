@@ -73,22 +73,20 @@ Player::~Player()
 {
 }
 
-void Player::Init()
+void Player::Start()
 {
 	Model.Load("StealthChar.X",&Animation);
-	Model.SetTransform(&Transform);
+	Model.SetTransform(&transform);
 	Model.SetLight(&Light);
-	Model.SetCamera(MainCamera.GetCamera());
+	Model.SetCamera(g_MainCamera->GetCamera());
 	Model.SetShadowCasterFlag(true);
 	Model.SetShadowReceiverFlag(true);
 
-	MainCamera.SetPlayerTranceform(&Transform);
-
-	Transform.Position = D3DXVECTOR3(0, 1, 0);
+	transform.Position = D3DXVECTOR3(0, 1, 0);
 
 	Radius = 0.4f;
 	Height = 0.3f;
-	CharacterController.Init(Radius, Height, Transform.Position);
+	CharacterController.Init(Radius, Height, transform.Position);
 	ChangeState(StateCode::StateWaiting);
 	Animation.SetAnimationLoopFlags(AnimationCode::AnimationAttack, false);
 	Animation.SetAnimationLoopFlags(AnimationCode::AnimationDead, false);
@@ -96,30 +94,31 @@ void Player::Init()
 
 	animEvent.Init(&Model,&Animation,AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
 
-	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + Transform.GetPosition());
-	Shadow().SetLightTarget(Transform.GetPosition());
+	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + transform.Position);
+	Shadow().SetLightTarget(transform.Position);
 
 	//mParticle = Model.FindBoneWorldMatrix("Bip01_R_Finger0");
 	//ParticlePos = D3DXVECTOR3(mParticle->m[3][0], mParticle->m[3][1], mParticle->m[3][2]);
 
 	//Particle.Init(MainCamera.GetCamera(), AttackParticle, &ParticlePos);
 
+	//¶Žè•Ší
 	LWeaponModel.Load("Weapon_Scythe.X",nullptr);
 	LWeaponModel.SetTransform(&LWeaponTransform);
 	LWeaponModel.SetLight(&LWeaponLight);
-	LWeaponModel.SetCamera(MainCamera.GetCamera());
-	LWeaponModel.SetParentMatrix(Model.FindBoneWorldMatrix("LeftWeapon"));
+	LWeaponModel.SetCamera(g_MainCamera->GetCamera());
+	LWeaponTransform.ParentMatrix = Model.FindBoneWorldMatrix("LeftWeapon");
+	//‰EŽè•Ší
 	RWeaponModel.Load("Weapon_Scythe.X", nullptr);
 	RWeaponModel.SetTransform(&RWeaponTransform);
 	RWeaponModel.SetLight(&RWeaponLight);
-	RWeaponModel.SetCamera(MainCamera.GetCamera());
-	RWeaponModel.SetParentMatrix(Model.FindBoneWorldMatrix("RightWeapon"));
+	RWeaponModel.SetCamera(g_MainCamera->GetCamera());
+	RWeaponTransform.ParentMatrix = Model.FindBoneWorldMatrix("RightWeapon");
 
 	sphereShape.reset(new CSphereCollider);
 	sphereShape->Create(Radius);
 	collisionObject.reset(new btCollisionObject());
 	collisionObject->setCollisionShape(sphereShape->GetBody());
-
 
 	TF.Create(50,20,TestFont::FontWeights::NORMAL);
 }
@@ -164,8 +163,8 @@ void Player::Update()
 		}
 
 		//ƒJƒƒ‰‚Ì³–Ê•ûŒü‚É‡‚í‚¹‚é
-		D3DXVECTOR3 dirForward = MainCamera.GetDirectionForward();
-		D3DXVECTOR3 dirRight = MainCamera.GetDirectionRight();
+		D3DXVECTOR3 dirForward = g_MainCamera->GetDirectionForward();
+		D3DXVECTOR3 dirRight = g_MainCamera->GetDirectionRight();
 		D3DXVECTOR3 moveDir;
 		moveDir.x = dirRight.x * move.x + dirForward.x * move.z;
 		moveDir.y = 0.0f;	//YŽ²‚Í‚¢‚ç‚È‚¢B
@@ -181,7 +180,7 @@ void Player::Update()
 		if (len > 0.0f)
 		{
 			ChangeState(StateCode::StateRun);
-			D3DXQuaternionRotationAxis(&Transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(moveDir.x, moveDir.z) + D3DXToRadian(180.0f));
+			D3DXQuaternionRotationAxis(&transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(moveDir.x, moveDir.z) + D3DXToRadian(180.0f));
 		}
 		else
 		{
@@ -229,16 +228,20 @@ void Player::Update()
 	CharacterController.Update();
 
 
-	Transform.Position = CharacterController.GetPosition();
+	transform.Position = CharacterController.GetPosition();
 	
 	AnimationControl();
 
-	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + Transform.GetPosition());
-	Shadow().SetLightTarget(Transform.GetPosition());
+	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + transform.Position);
+	Shadow().SetLightTarget(transform.Position);
 
 	animEvent.Update();
 
 	Damage();
+
+	transform.Update();
+	RWeaponTransform.Update();
+	LWeaponTransform.Update();
 
 	Model.Update();
 	LWeaponModel.Update();
@@ -271,7 +274,7 @@ void Player::Damage()
 	}
 	float offset = Radius + Height * 0.5f;
 	D3DXVECTOR3 centerPos;
-	centerPos = Transform.Position;
+	centerPos = transform.Position;
 	centerPos.y += offset;
 
 	btTransform trans;

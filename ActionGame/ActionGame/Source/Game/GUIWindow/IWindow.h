@@ -1,28 +1,24 @@
 #pragma once
 
+//ウィンドウの基底クラス
 class IWindow
 {
 public:
 
 	//コンストラクタ
 	IWindow();
-
 	//デストラクタ
 	virtual ~IWindow();
 
 	//初期化
-	virtual void Init();
+	virtual void Init() {}
 
 	//更新
-	virtual void Update();
+	virtual void Update() {}
 
 	//描画
-	virtual void Render();
-
-	//解放
-	virtual void Release();
+	virtual void Render() {}
 
 protected:
-
 
 };

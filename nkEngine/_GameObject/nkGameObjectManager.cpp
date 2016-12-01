@@ -5,8 +5,6 @@ namespace nkEngine
 {
 	CGameObjectManager::CGameObjectManager()
 	{
-		m_lGameObject.clear();
-		m_mGameObject.clear();
 	}
 
 	CGameObjectManager::~CGameObjectManager()
@@ -14,34 +12,102 @@ namespace nkEngine
 
 	}
 
-	void CGameObjectManager::Init()
+	void CGameObjectManager::StartGOM(int _prioValue)
 	{
-
+		goPriority = _prioValue;
+		gameObjectArray.resize(goPriority);
+		deleteObjectArray.resize(goPriority);
 	}
 
+	void CGameObjectManager::Start()
+	{
+		for (GameObjectList objList : gameObjectArray) {
+			for (IGameObject* obj : objList) {
+				obj->StartWrapper();
+			}
+		}
+	}
 
+	void CGameObjectManager::PreUpdate()
+	{
+		for (GameObjectList objList : gameObjectArray) {
+			for (IGameObject* obj : objList) {
+				obj->PreUpdateWrapper();
+			}
+		}
+	}
 
 	void CGameObjectManager::Update()
 	{
-		m_lGameObject.sort();
-		for(auto game : m_lGameObject)
-		{
-			game->Update();
+		for (GameObjectList objList : gameObjectArray) {
+			for (IGameObject* obj : objList) {
+				obj->UpdateWrapper();
+			}
+		}
+	}
+
+	void CGameObjectManager::PostUpdate()
+	{
+		for (GameObjectList objList : gameObjectArray) {
+			for (IGameObject* obj : objList) {
+				obj->PostUpdateWrapper();
+			}
+		}
+	}
+
+	void CGameObjectManager::PreRender()
+	{
+		for (GameObjectList objList : gameObjectArray) {
+			for (IGameObject* obj : objList) {
+				obj->PreRenderWrapper();
+			}
 		}
 	}
 
 	void CGameObjectManager::Render()
 	{
-		for (auto game : m_lGameObject)
-		{
-			game->Render();
+		for (GameObjectList objList : gameObjectArray) {
+			for (IGameObject* obj : objList) {
+				obj->RenderWrapper();
+			}
 		}
 	}
 
-	void CGameObjectManager::AddGameObject(shared_ptr<CGameObject> go)
+	void CGameObjectManager::PostRender()
 	{
-		unsigned int hash = CHash::MakeHash(typeid(go).name());
-		m_mGameObject.insert(map<unsigned int, shared_ptr<CGameObject>>::value_type(hash, go));
-		m_lGameObject.push_back(go);
+		for (GameObjectList objList : gameObjectArray) {
+			for (IGameObject* obj : objList) {
+				obj->PostRenderWrapper();
+			}
+		}
+	}
+
+	void CGameObjectManager::Delete()
+	{
+		//デリート予定のオブジェクトを全網羅
+		for (GameObjectList& goList : deleteObjectArray) {
+			for (IGameObject* go : goList) {
+				//優先度から取得
+				GOPriority prio = go->GetPriority();
+				GameObjectList& goExecList = gameObjectArray.at(prio);
+				//取得
+				auto it = std::find(goExecList.begin(), goExecList.end(), go);
+				if (it != goExecList.end()) {
+					//解放
+					(*it)->Release();
+					//削除
+					delete (*it);
+				}
+				goExecList.erase(it);
+			}
+			goList.clear();
+		}
+	}
+
+	void CGameObjectManager::AllDelete()
+	{
+		for (GameObjectList objList : gameObjectArray) {
+			objList.clear();
+		}
 	}
 }

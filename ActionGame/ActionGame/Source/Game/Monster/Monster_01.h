@@ -20,7 +20,7 @@ public:
 public:
 	Monster_01();
 	~Monster_01();
-	void Init()override;
+	void Start()override;
 	void Update()override;
 	void Render()override;
 	void Release()override;
@@ -44,5 +44,4 @@ public:
 private:
 	std::unique_ptr<btCollisionObject>	collisionObject;		//コリジョンオブジェクト。
 	std::unique_ptr<CSphereCollider>	sphereShape;			//球体
-
 };

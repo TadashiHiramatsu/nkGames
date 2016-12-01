@@ -86,6 +86,11 @@ namespace nkEngine
 
 		if (m_isKeyboard)
 		{
+			/*for (int i = 0; i < 256; i++)
+			{
+				m_Keyboard0[i] = m_Keyboard[i];
+			}*/
+			memcpy(m_Keyboard0, m_Keyboard, 256);
 			hr = m_DInputKeyboard->GetDeviceState(sizeof(m_Keyboard), &m_Keyboard);
 			if (FAILED(hr))
 			{

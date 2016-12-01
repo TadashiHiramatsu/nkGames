@@ -9,7 +9,6 @@ namespace nkEngine
 {
 	class CSkinModelData;
 	class CLight;
-	class CTransform;
 	class CCamera;
 
 	enum EFogFunc
@@ -111,7 +110,7 @@ namespace nkEngine
 
 		//トランスフォームを設定
 		//param[in] トランスフォームのアドレス
-		void SetTransform(CTransform* trans)
+		void SetTransform(Transform* trans)
 		{
 			m_Transform = trans;
 		}
@@ -149,6 +148,7 @@ namespace nkEngine
 			return m_ModelData->GetOrgMeshFirst();
 		}
 
+		//フレームの検索
 		D3DXFRAME* GetFrame()
 		{
 			return m_ModelData->GetFrameRoot();
@@ -158,26 +158,11 @@ namespace nkEngine
 			return D3DXFrameFind(GetFrame(), name);
 		}
 
+		//フレームのワールド行列の取得
 		D3DXMATRIX* FindBoneWorldMatrix(const char* name)
 		{
-			D3DXFRAME_DERIVED* frame = (D3DXFRAME_DERIVED*)D3DXFrameFind(m_ModelData->GetFrameRoot(), name);
+			D3DXFRAME_DERIVED* frame = (D3DXFRAME_DERIVED*)GetFrame(name);
 			return &frame->CombinedTransformationMatrix;
-		}
-
-		void FindBoneRotationMatrix(const char* name, D3DXMATRIX* rot)
-		{
-			D3DXFRAME_DERIVED* frame = (D3DXFRAME_DERIVED*)D3DXFrameFind(m_ModelData->GetFrameRoot(), name);
-			frame->RotationMatrix = rot;
-		}
-
-		D3DXMATRIX* GetWorldInv()
-		{
-			return &m_mWorldInv;
-		}
-
-		void SetParentMatrix(D3DXMATRIX* _w)
-		{
-			m_mParentWorld = _w;
 		}
 
 	protected:
@@ -202,11 +187,7 @@ namespace nkEngine
 
 		CCamera* m_camera; //カメラのアドレス
 
-		CTransform* m_Transform; // トランスフォーム 委譲したクラスのトランスフォームのアドレス
-		D3DXMATRIX m_mWorld; //ワールド行列
-		D3DXMATRIX m_mWorldInv; //ワールド行列
-		D3DXMATRIX m_mRotation; //ローテーション行列　
-		D3DXMATRIX* m_mParentWorld; //親のWorld行列
+		Transform* m_Transform; // トランスフォーム 委譲したクラスのトランスフォームのアドレス
 
 		static const int MAX_MATRIX_PALLET = 128; //マトリクスパレットの最大数
 		D3DXMATRIX m_BoneMatrixPallet[MAX_MATRIX_PALLET]; //マトリクスパレット

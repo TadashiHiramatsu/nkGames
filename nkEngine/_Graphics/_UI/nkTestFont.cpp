@@ -34,8 +34,8 @@ namespace nkEngine
 		RECT rc = {
 			_Pos.x,		// 左上のx座標
 			_Pos.y,		// 左上のy座標
-			Engine().GetFrameW(),	// 右下のx座標
-			Engine().GetFrameH()		// 右下のy座標
+			Engine().GetScreenW(),	// 右下のx座標
+			Engine().GetScreenH()		// 右下のy座標
 		};
 
 		char num[10];

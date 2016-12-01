@@ -1,7 +1,8 @@
 #include"stdafx.h"
 #include"InventoryWindow.h"
 
-InventoryWindow::InventoryWindow()
+InventoryWindow::InventoryWindow():
+	isRender(false)
 {
 }
 
@@ -11,65 +12,64 @@ InventoryWindow::~InventoryWindow()
 
 void InventoryWindow::Init()
 {
-	//Sprite.Load("window.png");
-	//Sprite.SetSTransform(&STransform);
+	IWSkin.Load("window.png");
+	IWSkin.SetTransform(&IWSkinTransform);
 
-	//STransform.Size = D3DXVECTOR2(500, 500);
+	IWSkinTransform.Size = D3DXVECTOR2(500, 500);
+	IWSkinTransform.Position.x = Engine().GetScreenW() / 2;
+	IWSkinTransform.Position.y = Engine().GetScreenH() / 2;
 
-	IFrameNum = 10;
+	ISlotNum = 10;
 
-	IFrameTex.Load("Frame.png");
+	IFrameTex.reset(new CTexture);
+	IFrameTex->Load("Icon/Frame.png");
 
-	for (int i = 0; i < IFrameNum; i++)
+	for (int i = 0; i < ISlotNum; i++)
 	{
 		ItemSlot* IS = new ItemSlot;
 		IS->Init();
-		IS->STransform.Position = D3DXVECTOR2(890, 530 - i * 40);
-		IS->Frame.SetTexture(&IFrameTex);
-
-		IFrames.push_back(IS);
+		IS->Transform.Position = D3DXVECTOR2(0,i * 40);
+		IS->Frame.SetTexture(IFrameTex);
+		ISlotVec.push_back(IS);
 	}
-
-	//Test
-	/*IItem* item = new IItem;
-	item->Load();
-
-	if (!SetItem(item))
-	{
-		SAFE_DELETE(item);
-	}*/
 }
 
 void InventoryWindow::Update()
 {
-	//Sprite.Update();
-	for (auto a : IFrames)
+	if (Input.GetKeyButtonDown(KeyCode::I))
 	{
-		a->Update();
+		isRender = !isRender;
+	}
+
+	if (isRender)
+	{
+		IWSkin.Update();
+		for (auto a : ISlotVec)
+		{
+			a->Update();
+		}
 	}
 }
 
 void InventoryWindow::Render()
 {
-	//Sprite.Render();
-	for (auto a : IFrames)
+	if (isRender)
 	{
-		a->Render();
+		IWSkin.Render();
+		for (auto a : ISlotVec)
+		{
+			a->Render();
+		}
 	}
-}
-
-void InventoryWindow::Release()
-{
-
 }
 
 bool InventoryWindow::SetItem(IItem * _item)
 {
-	for (auto a : IFrames)
+	for (auto it : ISlotVec)
 	{
-		if (a->Item != nullptr)
+		if (it->Item != nullptr)
 		{
-			if (a->Item->GetID() != _item->GetID())
+			if (it->Item->GetParameter().ID != _item->GetParameter().ID)
 			{
 				//“ü‚ç‚È‚¢‚æ
 				return false;
@@ -77,16 +77,16 @@ bool InventoryWindow::SetItem(IItem * _item)
 			else
 			{
 				//‘‚¦‚½‚æ
-				a->ItemNum++;
+				it->ItemNum++;
 				break;
 			}
 		}
 		else
 		{
-			a->Item = _item;
-			a->Item->SetSTramsform(&a->STransform);
-			a->Item->Update();
-			a->ItemNum++;
+			it->Item = _item;
+			it->Item->SetSTramsform(&it->Transform);
+			it->Item->Update();
+			it->ItemNum++;
 			break;
 		}
 	}
@@ -95,26 +95,27 @@ bool InventoryWindow::SetItem(IItem * _item)
 
 void ItemSlot::Init()
 {
-	STransform.Size = D3DXVECTOR2(30, 30);
-	STransform.Pivot = D3DXVECTOR2(1, 1);
+	Transform.Size = D3DXVECTOR2(30, 30);
+	Transform.Pivot = D3DXVECTOR2(1, 1);
 	Frame.Load();
-	Frame.SetSTransform(&STransform);
+	Frame.SetTransform(&Transform);
 }
 
 void ItemSlot::Update()
 {
-	Frame.Update();
+	Transform.Update();
 	if (Item != nullptr)
 	{
 		Item->Update();
 	}
+	Frame.Update();
 }
 
 void ItemSlot::Render()
 {
-	Frame.Render();
 	if (Item != nullptr)
 	{
 		Item->Render();
 	}
+	Frame.Render();
 }

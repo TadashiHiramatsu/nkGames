@@ -1,13 +1,12 @@
 #pragma once
 
-#include"../modelRender/nkSkinModel.h"
 #include"..\nkCamera.h"
 #include"..\nkBlur.h"
 
 namespace nkEngine
 {
 
-	class CCamera;
+	class CModelRender;
 
 	class CShadowMap
 	{

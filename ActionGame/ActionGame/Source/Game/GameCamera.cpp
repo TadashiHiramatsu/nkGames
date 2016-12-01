@@ -1,10 +1,8 @@
 #include"stdafx.h"
 #include"GameCamera.h"
 
-GameCamera MainCamera;
-
 GameCamera::GameCamera() :
-	m_PlayerTranceform(nullptr),
+	player(nullptr),
 	mViewInv(nullptr)
 {
 }
@@ -14,10 +12,10 @@ GameCamera::~GameCamera()
 
 }
 
-void GameCamera::Init()
+void GameCamera::Start()
 {
 	Camera.SetPosDirection(D3DXVECTOR3(0,0.2f,1.0f));
-	Camera.SetTarget(m_PlayerTranceform->Position + D3DXVECTOR3(0, 0.4f, 0));
+	Camera.SetTarget(player->transform.Position + D3DXVECTOR3(0, 0.4f, 0));
 	Camera.SetDistance(3.0f);
 	Camera.Update();
 
@@ -44,11 +42,7 @@ void GameCamera::Update()
 		Camera.SpinHorizontally(speed);
 	}
 	
-	Camera.SetTarget(m_PlayerTranceform->Position + D3DXVECTOR3(0, 0.4f, 0));
+	Camera.SetTarget(player->transform.Position + D3DXVECTOR3(0, 0.4f, 0));
 	Camera.Update();
 }
 
-void GameCamera::Release()
-{
-
-}

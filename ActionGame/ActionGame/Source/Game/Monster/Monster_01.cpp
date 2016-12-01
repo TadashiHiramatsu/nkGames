@@ -2,7 +2,6 @@
 #include"Monster_01.h"
 
 #include"..\GameScene.h"
-#include"../Item/DropItemManager.h"
 
 namespace
 {
@@ -53,16 +52,14 @@ Monster_01::~Monster_01()
 {
 }
 
-void Monster_01::Init()
+void Monster_01::Start()
 {
 	SMDResources().Load(SkinModelData, "Monster_01.X", &Animation);
 
 	Model.Load(SkinModelData.GetBody());
 
-	IMonster::Init();
+	IMonster::Start();
 	Model.SetRimLight(true);
-
-	Transform.Position = DefaultPosition = D3DXVECTOR3(1, 1, 0);
 
 	pPlayerPos = &g_Player->GetPos();
 	
@@ -72,7 +69,7 @@ void Monster_01::Init()
 	Animation.SetAnimationLoopFlags(AnimationHit, false);
 	Animation.SetAnimationLoopFlags(AnimationDeath, false);
 
-	m_CharacterController.Init(Radius, Height, Transform.Position);
+	m_CharacterController.Init(Radius, Height, transform.Position);
 	
 	animEvent.Init(&Model, &Animation, AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
 
@@ -119,7 +116,7 @@ void Monster_01::Update()
 		}
 		D3DXVECTOR2 toD = GetToDestination();
 		MoveSpeed = D3DXVECTOR3(toD.x, 0, toD.y);
-		D3DXQuaternionRotationAxis(&Transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(MoveSpeed.x, MoveSpeed.z) + D3DXToRadian(180.0f));
+		D3DXQuaternionRotationAxis(&transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(MoveSpeed.x, MoveSpeed.z) + D3DXToRadian(180.0f));
 	}
 	break;
 	case StateChase:
@@ -136,7 +133,7 @@ void Monster_01::Update()
 		}
 		D3DXVECTOR2 toP = GetToPlayerDir();
 		MoveSpeed = D3DXVECTOR3(toP.x, 0, toP.y);
-		D3DXQuaternionRotationAxis(&Transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(MoveSpeed.x, MoveSpeed.z) + D3DXToRadian(180.0f));
+		D3DXQuaternionRotationAxis(&transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(MoveSpeed.x, MoveSpeed.z) + D3DXToRadian(180.0f));
 	}
 	break;
 	case StateAttack:
@@ -182,7 +179,7 @@ void Monster_01::Update()
 
 	m_CharacterController.SetMoveSpeed(MoveSpeed);
 	m_CharacterController.Update();
-	Transform.Position = m_CharacterController.GetPosition();
+	transform.Position = m_CharacterController.GetPosition();
 
 	animEvent.Update();
 
@@ -240,7 +237,7 @@ void Monster_01::Damage()
 
 	float offset = Radius + Height * 0.5f;
 	D3DXVECTOR3 centerPos;
-	centerPos = Transform.Position;
+	centerPos = transform.Position;
 	centerPos.y += offset;
 
 	btTransform trans;
@@ -270,11 +267,8 @@ void Monster_01::Damage()
 			ChangeState(StateDead);
 			g_Player->AddExperience(10);
 
-			DropItem* DI = new DropItem;
-			DI->Init();
-			DI->SetTransform(Transform);
-
-			DIManager().SetDropItem(DI);
+			DropItem* DI = NewGO<DropItem>();
+			DI->SetTransform(transform);
 		}
 		else 
 		{

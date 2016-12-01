@@ -92,6 +92,14 @@ namespace nkEngine
 		{
 			return GetRandInt()*(1.0 / 4294967295.0);
 		}
+		/*!
+		* @brief	倍精度小数点型のランダム値を取得。
+		*@retrn	-1.0～1.0のランダム値を返す。
+		*/
+		__inline double GetRandDouble0()
+		{
+			return (GetRandInt()*(1.0 / 4294967295.0)) * 2 - 1;
+		}
 	private:
 		static const unsigned long N = 624;
 		static const unsigned long M = 397;

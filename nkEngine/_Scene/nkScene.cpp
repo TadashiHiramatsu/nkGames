@@ -3,11 +3,11 @@
 
 namespace nkEngine
 {
-	CScene::CScene()
+	IScene::IScene()
 	{
 	}
 
-	CScene::~CScene()
+	IScene::~IScene()
 	{
 	}
 }

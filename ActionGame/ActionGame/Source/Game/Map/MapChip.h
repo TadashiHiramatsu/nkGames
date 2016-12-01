@@ -8,7 +8,7 @@ struct SMapChipInfo
 	D3DXVECTOR3 Scale; //КgСе
 };
 
-class MapChip : public CGameObject
+class MapChip : public IGameObject
 {
 
 };

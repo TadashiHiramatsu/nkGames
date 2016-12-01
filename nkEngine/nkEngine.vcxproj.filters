@@ -10,9 +10,6 @@
     <Filter Include="debug">
       <UniqueIdentifier>{bb1c3770-8a38-47b0-81fa-c9f7408ebccb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{bafd3229-5fdd-4794-8782-dd6842ad98e9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameObject">
       <UniqueIdentifier>{62f38837-f2b8-4852-8b46-adbeef9b05c4}</UniqueIdentifier>
     </Filter>
@@ -31,9 +28,6 @@
     <Filter Include="Graphics\PostEffect">
       <UniqueIdentifier>{6489dc6b-31e5-4e3e-af9b-a758284cb0b3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Prerender">
-      <UniqueIdentifier>{2af43d90-50b3-44e0-8d21-eaecdc06871a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Physics">
       <UniqueIdentifier>{4533291b-7636-4341-9361-4b917e62dbb6}</UniqueIdentifier>
     </Filter>
@@ -49,6 +43,12 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{f7dffd69-f16c-4727-a281-50b3f62593e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{96decccf-cfb7-4d69-8a9e-90361b1e1ccf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\PreRender">
+      <UniqueIdentifier>{2af43d90-50b3-44e0-8d21-eaecdc06871a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nkEngine.cpp">
@@ -56,12 +56,6 @@
     </ClCompile>
     <ClCompile Include="nkstdafx.cpp">
       <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="_Scene\nkScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="_Scene\nkSceneManager.cpp">
-      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="_Graphics\nkRenderTarget.cpp">
       <Filter>Graphics</Filter>
@@ -71,21 +65,6 @@
     </ClCompile>
     <ClCompile Include="_GameObject\nkGameObject.cpp">
       <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\modelRender\nkAnimation.cpp">
-      <Filter>Graphics\ModelRender</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\modelRender\nkSkinModelData.cpp">
-      <Filter>Graphics\ModelRender</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\modelRender\nkSkinModel.cpp">
-      <Filter>Graphics\ModelRender</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\modelRender\nkLight.cpp">
-      <Filter>Graphics\ModelRender</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\nkSprite.cpp">
-      <Filter>Graphics\UI</Filter>
     </ClCompile>
     <ClCompile Include="_Graphics\nkVertexBuffer.cpp">
       <Filter>Graphics</Filter>
@@ -108,12 +87,6 @@
     <ClCompile Include="_Input\nkXinput.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="_Graphics\PostEffect\nkAntiAliasing.cpp">
-      <Filter>Graphics\PostEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\nkScreenRender.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="_Physics\CBoxCollider.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
@@ -135,32 +108,65 @@
     <ClCompile Include="_Graphics\nkPrimitive.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="_Graphics\Particle\nkParticle.cpp">
-      <Filter>Graphics\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\Particle\nkParticleEmitter.cpp">
-      <Filter>Graphics\Particle</Filter>
-    </ClCompile>
     <ClCompile Include="_Graphics\nkIndexBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="_Graphics\PostEffect\nkBloom.cpp">
-      <Filter>Graphics\PostEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\Prerender\nkShadow.cpp">
-      <Filter>Graphics\Prerender</Filter>
-    </ClCompile>
     <ClCompile Include="_Physics\nkSphereCollider.cpp">
       <Filter>Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\nkTestFont.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="_Resources\nkSkinModelDataHandle.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
     <ClCompile Include="_Resources\nkSkinModelDataResources.cpp">
       <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="_GameObject\nkGameObjectManager.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\nkScreenRender.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Scene\nkSceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="_Scene\nkScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_PostEffect\nkAntiAliasing.cpp">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_PostEffect\nkBloom.cpp">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_PreRender\nkShadow.cpp">
+      <Filter>Graphics\PreRender</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_UI\nkImage.cpp">
+      <Filter>Graphics\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_UI\nkTestFont.cpp">
+      <Filter>Graphics\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_UI\nkUITransform.cpp">
+      <Filter>Graphics\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_Particle\nkParticle.cpp">
+      <Filter>Graphics\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_Particle\nkParticleEmitter.cpp">
+      <Filter>Graphics\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_ModelRender\nkAnimation.cpp">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_ModelRender\nkLight.cpp">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_ModelRender\nkSkinModelData.cpp">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_ModelRender\nkModelRender.cpp">
+      <Filter>Graphics\ModelRender</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -176,12 +182,6 @@
     <ClInclude Include="debug\nkLog.h">
       <Filter>debug</Filter>
     </ClInclude>
-    <ClInclude Include="_Scene\nkScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="_Scene\nkSceneManager.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="_Graphics\nkRenderTarget.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -193,21 +193,6 @@
     </ClInclude>
     <ClInclude Include="nkOriginalDefine.h">
       <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="_Graphics\modelRender\nkAnimation.h">
-      <Filter>Graphics\ModelRender</Filter>
-    </ClInclude>
-    <ClInclude Include="_Graphics\modelRender\nkSkinModelData.h">
-      <Filter>Graphics\ModelRender</Filter>
-    </ClInclude>
-    <ClInclude Include="_Graphics\modelRender\nkSkinModel.h">
-      <Filter>Graphics\ModelRender</Filter>
-    </ClInclude>
-    <ClInclude Include="_Graphics\modelRender\nkLight.h">
-      <Filter>Graphics\ModelRender</Filter>
-    </ClInclude>
-    <ClInclude Include="_Graphics\nkSprite.h">
-      <Filter>Graphics\UI</Filter>
     </ClInclude>
     <ClInclude Include="_Graphics\nkVertexBuffer.h">
       <Filter>Graphics</Filter>
@@ -233,13 +218,7 @@
     <ClInclude Include="_Input\nkXinput.h">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="_Graphics\PostEffect\nkAntiAliasing.h">
-      <Filter>Graphics\PostEffect</Filter>
-    </ClInclude>
     <ClInclude Include="_Graphics\nkGraphicsConfig.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="_Graphics\nkScreenRender.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="_Physics\CBoxCollider.h">
@@ -278,32 +257,65 @@
     <ClInclude Include="_Graphics\nkPrimitive.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="_Graphics\Particle\nkParticle.h">
-      <Filter>Graphics\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="_Graphics\Particle\nkParticleEmitter.h">
-      <Filter>Graphics\Particle</Filter>
-    </ClInclude>
     <ClInclude Include="_Graphics\nkIndexBuffer.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="_Graphics\PostEffect\nkBloom.h">
-      <Filter>Graphics\PostEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="_Graphics\Prerender\nkShadow.h">
-      <Filter>Graphics\Prerender</Filter>
-    </ClInclude>
     <ClInclude Include="_Physics\nkSphereCollider.h">
       <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="_Graphics\nkTestFont.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="_Resources\nkSkinModelDataHandle.h">
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="_Resources\nkSkinModelDataResources.h">
       <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="_GameObject\nkGameObjectManager.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\nkScreenRender.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Scene\nkScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="_Scene\nkSceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_PostEffect\nkAntiAliasing.h">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_PostEffect\nkBloom.h">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_PreRender\nkShadow.h">
+      <Filter>Graphics\PreRender</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_UI\nkImage.h">
+      <Filter>Graphics\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_UI\nkTestFont.h">
+      <Filter>Graphics\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_UI\nkUITransform.h">
+      <Filter>Graphics\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_Particle\nkParticle.h">
+      <Filter>Graphics\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_Particle\nkParticleEmitter.h">
+      <Filter>Graphics\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_ModelRender\nkAnimation.h">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_ModelRender\nkLight.h">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_ModelRender\nkSkinModelData.h">
+      <Filter>Graphics\ModelRender</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_ModelRender\nkModelRender.h">
+      <Filter>Graphics\ModelRender</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

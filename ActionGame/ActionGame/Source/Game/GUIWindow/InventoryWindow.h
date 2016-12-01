@@ -19,9 +19,9 @@ public:
 
 public:
 	IItem* Item;
-	SpriteTransform STransform;
+	UITransform Transform;
 
-	CSprite Frame;
+	Image Frame;
 
 	int ItemNum;
 };
@@ -41,17 +41,18 @@ public:
 	void Init()override;
 	void Update()override;
 	void Render()override;
-	void Release()override;
 
 	bool SetItem(IItem* _item);
 
 private:
-	//CSprite Sprite;
-	//SpriteTransform STransform;
+	Image IWSkin;
+	UITransform IWSkinTransform;
 
-	int IFrameNum;
-	CTexture IFrameTex;
-	vector<ItemSlot*> IFrames;
+	int ISlotNum;
+	shared_ptr<CTexture> IFrameTex;
+	vector<ItemSlot*> ISlotVec;
+
+	bool isRender;
 };
 
 static InventoryWindow& Inventory()

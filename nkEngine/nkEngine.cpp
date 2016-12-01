@@ -18,7 +18,9 @@ namespace nkEngine
 		ShowWindow(m_hWnd, SW_SHOWDEFAULT);
 		UpdateWindow(m_hWnd);
 
-		ScreenRender().Init(initParam);
+		ScreenRender().Start(initParam);
+
+		GameObjectManager().StartGOM(10);
 		
 		Input.Init(m_hWnd);
 
@@ -45,12 +47,8 @@ namespace nkEngine
 			}
 			else
 			{
-				Time().Update();
-				Input.Update();
-				XInput().Update();
 				m_Physics.Update();
-				ScreenRender().Update();
-				ScreenRender().Render();
+				ScreenRender().Loop();
 			}
 		}
 	}
@@ -102,12 +100,16 @@ namespace nkEngine
 		int new_width = (rw.right - rw.left) - (m_cRect.right - m_cRect.left) + initParam.screenW;
 		int new_height = (rw.bottom - rw.top) - (m_cRect.bottom - m_cRect.top) + initParam.screenH;
 
-		//スクリーン座標中央にウィンドウを初期配置
-		SetWindowPos(m_hWnd, NULL, (rd.right - new_width) / 2, (rd.bottom - new_height) / 2, new_width, new_height, SWP_SHOWWINDOW);
-		
-		//スクリーン座標（0,0）にウィンドウを初期配置
-		//SetWindowPos(m_hWnd, NULL, 0,0, new_width, new_height, SWP_SHOWWINDOW);
-
+		if (initParam.isCenter)
+		{
+			//スクリーン座標中央にウィンドウを初期配置
+			SetWindowPos(m_hWnd, NULL, (rd.right - new_width) / 2, (rd.bottom - new_height) / 2, new_width, new_height, SWP_SHOWWINDOW);
+		}
+		else
+		{
+			//スクリーン座標（0,0）にウィンドウを初期配置
+			SetWindowPos(m_hWnd, NULL, (rd.right - new_width) / 2,0, new_width, new_height, SWP_SHOWWINDOW);
+		}
 		return m_hWnd != nullptr;
 	}
 

@@ -1,14 +1,18 @@
 #include"stdafx.h"
 #include"GameScene.h"
+
+#include"Player\Player.h"
 #include"AnimationEvent\CollisionWorld.h"
 #include"GameCamera.h"
+#include"Map\Ground.h"
+#include"Map\Skybox.h"
+#include"Monster\MonsterHabitat.h"
 
-#include"GUIWindow\InventoryWindow.h"
+//#include"GUIWindow\InventoryWindow.h"
+//#include"Item\DropItemManager.h"
 
-#include"Item\DropItemManager.h"
-
-CollisionWorld* g_CollisionWorld = NULL;
-
+CollisionWorld* g_CollisionWorld = nullptr;
+GameCamera* g_MainCamera = nullptr;
 Player* g_Player = nullptr;
 
 GameScene::GameScene()
@@ -19,7 +23,7 @@ GameScene::~GameScene()
 {
 }
 
-void GameScene::Init()
+void GameScene::Start()
 {
 	m_GraphicsConfig.ShadowConfig.isEnable = true;
 	m_GraphicsConfig.ShadowConfig.isSoftShadowMap = true;
@@ -27,65 +31,15 @@ void GameScene::Init()
 	m_GraphicsConfig.ShadowConfig.ShadowMapH = 2048;
 	m_GraphicsConfig.ShadowConfig.Fur = 100.0f;
 
-	g_CollisionWorld = new CollisionWorld;
-	g_CollisionWorld->Init();
+	g_CollisionWorld = NewGO<CollisionWorld>();
+	g_MainCamera = NewGO<GameCamera>();
 
-	Player.Init();
-	g_Player = &Player;
+	g_Player = NewGO<Player>();
+	g_MainCamera->SetPlayerPointer(g_Player);
+	
+	NewGO<Ground>();
+	Skybox* skybox = NewGO<Skybox>();
+	skybox->SetPlayerPointer(g_Player);
 
-	TestMH.Init();
-
-	Ground.Init();
-	Skybox.Init();
-	MainCamera.Init();
-
-	Inventory().Init();
-
-	MouseX.Create(50, 50, TestFont::FontWeights::NORMAL);
-	MouseY.Create(50, 50, TestFont::FontWeights::NORMAL);
-
-	DIManager().Init();
-}
-
-void GameScene::Update()
-{
-	g_CollisionWorld->Update();
-	Player.Update();
-
-	TestMH.Update();
-
-	Ground.Update();
-	Skybox.SetPosition(Player.GetPos());
-	Skybox.Update();
-	MainCamera.Update();
-
-	Inventory().Update();
-
-	DIManager().Update();
-}
-
-void GameScene::Render()
-{
-	g_CollisionWorld->Render();
-
-	TestMH.Render();
-
-	Ground.Render();
-	Skybox.Render();
-	Player.Render();
-
-	Inventory().Render();
-
-	DIManager().Render();
-
-	MouseX.Render("X", Input.GetMousePosX(), D3DXVECTOR2(0, 100));
-	MouseY.Render("Y", Input.GetMousePosY(), D3DXVECTOR2(0, 150));
-}
-
-void GameScene::Release()
-{
-	Player.Release();
-	Ground.Release();
-	Skybox.Release();
-	MainCamera.Release();
+	NewGO<MonsterHabitat>();
 }

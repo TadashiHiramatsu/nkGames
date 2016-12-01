@@ -29,9 +29,7 @@ namespace nkEngine
 		//param[in]  インスタンシングフラグ
 		//param[in]  インスタンス数
 		void Load(CSkinModelDataHandle& _SkinModelDataHandle, const char* _FilePath, CAnimation* _Anim, bool _isInstancing = false, int _NumInstancing = 0);
-
-		//更新
-		void Update();
+		void Load(const char* _FilePath);
 
 	private:
 		typedef map<int, CSkinModelDataPtr> CSkinModelDataMap;

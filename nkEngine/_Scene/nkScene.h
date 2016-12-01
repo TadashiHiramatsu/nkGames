@@ -6,27 +6,19 @@ namespace nkEngine
 {
 	//シーンの基底クラス
 	//このクラスを継承する
-	class CScene
+	class IScene
 	{
 	public:
 
 		//コンストラクタ
-		CScene();
-
+		IScene();
 		//デストラクタ
-		virtual ~CScene();
+		virtual ~IScene();
+
+	public:
 
 		//初期化
-		virtual void Init() = 0;
-
-		//更新
-		virtual void Update() = 0;
-		
-		//描画
-		virtual void Render() = 0;
-		
-		//解放
-		virtual void Release() = 0;
+		virtual void Start() {}
 
 		//グラフィックコンフィグの取得
 		const SGraphicsConfig& GetGraphicsConfig()

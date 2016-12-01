@@ -14,28 +14,29 @@ DropItem::~DropItem()
 {
 }
 
-void DropItem::Init()
+void DropItem::Start()
 {
-	Model.Load("chest.X", nullptr);
-	Model.SetTransform(&Transform);
-	Model.SetLight(&Light);
-	Model.SetCamera(MainCamera.GetCamera());
+	SMDResources().Load(SkinModelData, "chest.X", nullptr);
 
-	Transform.Position.y = 1;
+	Model.Load(SkinModelData.GetBody());
+	Model.SetTransform(&transform);
+	Model.SetLight(&Light);
+	Model.SetCamera(g_MainCamera->GetCamera());
+
 }
 
 void DropItem::Update()
 {
 	//プレイヤーとの距離を測って
 	D3DXVECTOR3 pPos = g_Player->GetPos();
-	D3DXVECTOR3 toPlayer = pPos - Transform.Position;
+	D3DXVECTOR3 toPlayer = pPos - transform.Position;
 	if (D3DXVec3Length(&toPlayer) <= 3)
 	{
 		//近い状態で特定のキーが押されたらゲットさせる
-		if (Input.GetKeyButton(KeyCode::Z))
+		if (Input.GetKeyButtonDown(KeyCode::Z))
 		{
-			isActive = false;
-			IItem* item = new IItem;
+			DeleteGO(this);
+			IItem* item = new EquipmentItem;
 			item->Load();
 			if (!Inventory().SetItem(item))
 			{
@@ -43,11 +44,14 @@ void DropItem::Update()
 			}
 		}
 	}
+
+	transform.Update();
+
 	Model.Update();
 
 	if (LocalTime >= DeleteTime)
 	{
-		isActive = false;
+		DeleteGO(this);
 	}
 	LocalTime += Time().DeltaTime();
 }
@@ -55,9 +59,4 @@ void DropItem::Update()
 void DropItem::Render()
 {
 	Model.Render();
-}
-
-void DropItem::Release()
-{
-	Model.Release();
 }

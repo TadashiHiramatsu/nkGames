@@ -8,9 +8,9 @@
 #include"..\Item\DropItem.h"
 
 
-class IMonster : public CGameObject
+class IMonster : public IGameObject
 {
-public:
+protected:
 	enum StateCode
 	{
 		StateSpawn, //出現
@@ -25,12 +25,17 @@ public:
 public:
 	IMonster();
 	virtual ~IMonster();
-	virtual void Init()override;
+	virtual void Start()override;
 	virtual void Update()override;
 	virtual void Render()override;
 	virtual void Release()override;
 
 	virtual void Damage(){}
+
+	void SetPosition(D3DXVECTOR3& _pos)
+	{
+		transform.Position = _pos;
+	}
 
 protected:
 
@@ -47,7 +52,7 @@ protected:
 	//プレイヤーへの方向ベクトルを計算
 	D3DXVECTOR2& GetToPlayerDir()
 	{
-		D3DXVECTOR2 toP = D3DXVECTOR2(pPlayerPos->x,pPlayerPos->z) - D3DXVECTOR2(Transform.Position.x, Transform.Position.z);
+		D3DXVECTOR2 toP = D3DXVECTOR2(pPlayerPos->x,pPlayerPos->z) - D3DXVECTOR2(transform.Position.x, transform.Position.z);
 		D3DXVec2Normalize(&toP, &toP);
 		return toP;
 	}
@@ -56,7 +61,7 @@ protected:
 	//高さを考慮しない距離を返します
 	float GetToPlayerDis()
 	{
-		D3DXVECTOR3 toP = *pPlayerPos - Transform.Position;
+		D3DXVECTOR3 toP = *pPlayerPos - transform.Position;
 		return D3DXVec2Length(&D3DXVECTOR2(toP.x, toP.z));
 	}
 
@@ -64,7 +69,7 @@ protected:
 	//目的地までの方向ベクトルを取得
 	D3DXVECTOR2& GetToDestination()
 	{
-		D3DXVECTOR2 toD = Destination - D3DXVECTOR2(Transform.Position.x, Transform.Position.z);
+		D3DXVECTOR2 toD = Destination - D3DXVECTOR2(transform.Position.x, transform.Position.z);
 		D3DXVec2Normalize(&toD, &toD);
 		return toD;
 	}
@@ -73,14 +78,15 @@ protected:
 	//高さを考慮しない距離を返します
 	float GetToDestinationDis()
 	{
-		D3DXVECTOR2 toD = Destination - D3DXVECTOR2(Transform.Position.x, Transform.Position.z);
+		D3DXVECTOR2 toD = Destination - D3DXVECTOR2(transform.Position.x, transform.Position.z);
 		return D3DXVec2Length(&toD);
 	}
+
+
 
 protected:
 	CSkinModelDataHandle SkinModelData;
 	CModelRender Model;
-	CTransform Transform;
 	CLight Light;
 	CAnimation Animation;
 

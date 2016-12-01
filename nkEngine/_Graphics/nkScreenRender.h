@@ -1,30 +1,20 @@
 #pragma once
 
-#include"nkRenderTarget.h"
-#include"nkSprite.h"
-#include"PostEffect\nkAntiAliasing.h"
-#include"PostEffect\nkBloom.h"
+#include"_PostEffect\nkAntiAliasing.h"
+#include"_PostEffect\nkBloom.h"
 
 namespace nkEngine
 {
 	class CScreenRender
 	{
+	private:
+
+		//コンストラクタ
+		CScreenRender();
+		//デストラクタ
+		~CScreenRender();
+
 	public:
-
-		//初期化
-		void Init(const SInitParam& initParam);
-
-		//更新
-		void Update();
-
-		//描画
-		void Render();
-
-		//メインレンダーターゲットを取得
-		CRenderTarget& GetMainRenderTarget()
-		{
-			return m_rtMain;
-		}
 
 		//インスタンス取得
 		inline static CScreenRender& GetInstance()
@@ -33,13 +23,16 @@ namespace nkEngine
 			return instance;
 		}
 
-	private:
+		//初期化
+		void Start(const SInitParam& initParam);
 
-		//コンストラクタ
-		CScreenRender();
+		void Loop();
 
-		//デストラクタ
-		~CScreenRender();
+		//メインレンダーターゲットを取得
+		CRenderTarget& GetMainRenderTarget()
+		{
+			return m_rtMain;
+		}
 
 	private:
 		CRenderTarget m_rtBackBuffer;

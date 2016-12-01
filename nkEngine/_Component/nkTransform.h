@@ -2,42 +2,31 @@
 
 namespace nkEngine
 {
-	class CTransform
+	class Transform
 	{
 	public:
-		CTransform();
-		~CTransform();
-		D3DXVECTOR3 GetPosition()
-		{
-			return Position;
-		}
-		D3DXVECTOR3 GetScale()
-		{
-			return Scale;
-		}
-		D3DXQUATERNION GetRotation()
-		{
-			return Rotation;
-		}
-		void SetPosition(D3DXVECTOR3& pos)
-		{
-			Position = pos;
-		}
-		void SetScale(D3DXVECTOR3& sca)
-		{
-			Scale = sca;
-		}
-		void SetRotation(D3DXQUATERNION& rot)
-		{
-			Rotation = rot;
-		}
-		void AddPosition(D3DXVECTOR3& pos)
-		{
-			Position += pos;
-		}
+
+		//コンストラクタ
+		Transform();
+
+		//デストラクタ
+		~Transform();
+
+		//ワールド行列などの更新
+		void Update();
+	
 	public:
+		//メンバ変数(外部から見える)
+		Transform* Parent; //親
+		D3DXMATRIX* ParentMatrix;
+
 		D3DXVECTOR3 Position;
 		D3DXVECTOR3 Scale;
 		D3DXQUATERNION Rotation;
+
+		D3DXMATRIX LocalMatrix; //ローカルのワールド行列
+		D3DXMATRIX WorldMatrix; //ワールド行列
+		D3DXMATRIX WorldMatrixInv; //ワールド行列の逆行列
+		D3DXMATRIX RotationMatrix; //回転行列
 	};
 }

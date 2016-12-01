@@ -57,7 +57,7 @@ CollisionWorld::~CollisionWorld()
 {
 }
 
-void CollisionWorld::Init()
+void CollisionWorld::Start()
 {
 	m_CollisionConfig.reset(new btDefaultCollisionConfiguration);
 	m_CollisionDispatcher.reset(new btCollisionDispatcher(m_CollisionConfig.get()));
@@ -84,10 +84,6 @@ void CollisionWorld::Update()
 	}
 	//—LŒø‚È‚çXV
 	m_CollisionWorld->updateAabbs();
-}
-
-void CollisionWorld::Render()
-{
 }
 
 const CollisionWorld::Collision* CollisionWorld::FindOverlappedDamageCollision(EnAttr _Attr, const D3DXVECTOR3 & _Pos, float _Radius) const

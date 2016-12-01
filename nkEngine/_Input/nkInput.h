@@ -218,30 +218,34 @@ namespace nkEngine
 		//マウスのボタンが押された
 		bool GetMoudeButtonDown(int idx)
 		{
-			return(!m_MouseState0.Button[idx] && m_MouseState.Button[idx]) & 0x80;
+			return(!(m_MouseState0.Button[idx] & 0x80) && m_MouseState.Button[idx] & 0x80) ;
 		}
 		bool GetMoudeButtonDown(MouseButton idx)
 		{
-			return(!m_MouseState0.Button[idx] && m_MouseState.Button[idx]) & 0x80;
+			return(!(m_MouseState0.Button[idx] & 0x80) && m_MouseState.Button[idx] & 0x80) ;
 		}
 
 		//マウスのボタンがはなされた
 		bool GetMoudeButtonUp(int idx)
 		{
-			return (m_MouseState0.Button[idx] && !m_MouseState.Button[idx]) & 0x80;
+			return (m_MouseState0.Button[idx] & 0x80 && !(m_MouseState.Button[idx] & 0x80)) ;
 		}
 		bool GetMoudeButtonUp(MouseButton idx)
 		{
-			return(m_MouseState0.Button[idx] && !m_MouseState.Button[idx]) & 0x80;
+			return(m_MouseState0.Button[idx] & 0x80 && !(m_MouseState.Button[idx] & 0x80)) ;
 		}
 
-		bool GetKeyButton(int idx)
-		{
-			return (bool)(m_Keyboard[idx] & 0x80);
-		}
 		bool GetKeyButton(KeyCode key)
 		{
 			return (bool)(m_Keyboard[key] & 0x80);
+		}
+		bool GetKeyButtonDown(KeyCode key)
+		{
+			return (bool)(!(m_Keyboard0[key] & 0x80) && m_Keyboard[key] & 0x80);
+		}
+		bool GetKeyButtonUp(KeyCode key)
+		{
+			return (bool)(m_Keyboard0[key] & 0x80 && !(m_Keyboard[key] & 0x80));
 		}
 
 		inline static CInput& GetInstance()
@@ -272,6 +276,7 @@ namespace nkEngine
 		MouseState m_MouseState0; //一回前のマウスステータス
 		POINT MousePos;
 		BYTE m_Keyboard[256]; //現在のキーボードステータス
+		BYTE m_Keyboard0[256]; //一回前のキーボードステータス
 		
 		IDirectInputDevice8* m_DInputMouse = nullptr; //マウスデバイス
 		IDirectInputDevice8* m_DInputKeyboard = nullptr; //キーボードデバイス

@@ -59,22 +59,20 @@ namespace nkEngine
 			}
 		}
 	}
-	
-	void CSkinModelDataResources::Update()
+
+	void CSkinModelDataResources::Load(const char * _FilePath)
 	{
-		//std::vector<CSkinModelDataMap::iterator>	deleteItList;
-		//for (
-		//	CSkinModelDataMap::iterator it = SkinModelDataMap.begin();
-		//	it != SkinModelDataMap.end();
-		//	it++
-		//	) {
-		//	if (it->second.unique()) {
-		//		//‚±‚¢‚Â‚ðŽQÆ‚µ‚Ä‚¢‚éƒ‚ƒfƒ‹‚Í‚à‚¤‚¢‚È‚¢B
-		//		deleteItList.push_back(it);
-		//	}
-		//}
-		//for (auto& delIt : deleteItList) {
-		//	SkinModelDataMap.erase(delIt);
-		//}
+		//’Êíƒ‚ƒfƒ‹
+		int hash = CHash::MakeHash(_FilePath);
+		auto& it = SkinModelDataMap.find(hash);
+
+		if (it == SkinModelDataMap.end())
+		{
+			//–¢“o˜^
+			CSkinModelDataPtr SkinModelData(new CSkinModelData);
+			SkinModelData->LoadModelData(_FilePath, nullptr);
+			SkinModelDataMap.insert(pair<int, CSkinModelDataPtr>(hash, SkinModelData));
+		}
 	}
+	
 }

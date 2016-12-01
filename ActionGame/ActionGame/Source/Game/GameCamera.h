@@ -1,25 +1,24 @@
 #pragma once
 
-class GameCamera : public CGameObject
+#include"Player\Player.h"
+
+class GameCamera : public IGameObject
 {
 public:
 	GameCamera();
 	~GameCamera();
-	void Init()override;
+	void Start()override;
 	void Update()override;
-	void Render()override{}
-	void Release()override;
 
 	CCamera* GetCamera()
 	{
 		return &Camera;
 	}
 
-	void SetPlayerTranceform(CTransform* trans)
+	void SetPlayerPointer(Player* _pla)
 	{
-		m_PlayerTranceform = trans;
+		player = _pla;
 	}
-
 
 	D3DXVECTOR3& GetDirectionForward()
 	{
@@ -43,9 +42,9 @@ public:
 
 private:
 	CCamera Camera;
-	CTransform* m_PlayerTranceform;
+	Player* player;
 
 	const D3DXMATRIX* mViewInv;
 };
 
-extern GameCamera MainCamera;
+extern GameCamera* g_MainCamera;

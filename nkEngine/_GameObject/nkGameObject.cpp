@@ -3,22 +3,13 @@
 
 namespace nkEngine
 {
-	CGameObject::CGameObject() :
-		isActive(true)
-	{}
-	CGameObject::~CGameObject()
+	IGameObject::IGameObject() :
+		isActive(true),
+		isStart(false)
 	{
 	}
-	void CGameObject::Init()
-	{
-	}
-	void CGameObject::Update()
-	{
-	}
-	void CGameObject::Render()
-	{
-	}
-	void CGameObject::Release()
+
+	IGameObject::~IGameObject()
 	{
 	}
 }

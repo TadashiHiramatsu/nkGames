@@ -1,11 +1,10 @@
 #pragma once
 
 #include"nkEngine/_Component/nkCharacterController.h"
-#include"nkEngine/_Graphics/Particle/nkParticleEmitter.h"
 #include"..\AnimationEvent\AnimationEventController.h"
 #include"..\AnimationEvent\CollisionWorld.h"
 
-class Player : public CGameObject
+class Player : public IGameObject
 {
 public:
 	struct PlayerParameter
@@ -50,10 +49,11 @@ public:
 public:
 	Player();
 	~Player();
-	void Init()override;
+	void Start()override;
 	void Update()override;
 	void Render()override;
 	void Release()override;
+
 	void Damage();
 
 	void ParameterUpdate();
@@ -66,7 +66,7 @@ public:
 
 	D3DXVECTOR3& GetPos()
 	{
-		return Transform.Position;
+		return transform.Position;
 	}
 
 private:
@@ -74,7 +74,6 @@ private:
 	void AnimationControl();
 	void PlayAnimation(AnimationCode _AnimCode, float interpolateTime);
 private:
-	CTransform Transform;
 	CLight Light;
 	CModelRender Model;
 	CAnimation Animation;
@@ -94,10 +93,10 @@ private:
 	D3DXMATRIX* mParticle;
 	D3DXVECTOR3 ParticlePos;
 
-	CTransform LWeaponTransform;
+	Transform LWeaponTransform;
 	CLight LWeaponLight;
 	CModelRender LWeaponModel;
-	CTransform RWeaponTransform;
+	Transform RWeaponTransform;
 	CLight RWeaponLight;
 	CModelRender RWeaponModel;
 

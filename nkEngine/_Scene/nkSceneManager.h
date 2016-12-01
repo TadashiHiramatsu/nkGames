@@ -12,18 +12,19 @@ namespace nkEngine
 		//デストラクタ
 		~CSceneManager();
 	public:
-		void Init();
-		void UpdateScene();
-		void RenderScene();
-		void ChangeScene(CScene* nextscene);
+
+		//インスタンスの取得
 		static CSceneManager& GetInstance()
 		{
 			static CSceneManager instance;
 			return instance;
 		}
 
+		//初期化を呼び出してGameObjectManagerを初期化
+		void ChangeScene(IScene* nextscene);
+
 	private:
-		CScene* m_nowscene;
+		IScene* nowScene;
 	};
 	inline CSceneManager& SceneManager()
 	{

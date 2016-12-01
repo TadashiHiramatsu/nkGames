@@ -4,7 +4,7 @@
 namespace nkEngine
 {
 	CSceneManager::CSceneManager():
-		m_nowscene(nullptr)
+		nowScene(nullptr)
 	{
 	}
 
@@ -13,32 +13,17 @@ namespace nkEngine
 
 	}
 
-	void CSceneManager::Init()
+	void CSceneManager::ChangeScene(IScene* nextscene)
 	{
-		m_nowscene->Init();
-		Shadow().Create(m_nowscene->GetGraphicsConfig().ShadowConfig);
-	}
+		SAFE_DELETE(nowScene);
+		nowScene = nextscene;
 
-	void CSceneManager::UpdateScene()
-	{
-		if (m_nowscene)
-		{
-			m_nowscene->Update();
-		}
-	}
+		//登録されているゲームオブジェクトを全削除
+		GameObjectManager().AllDelete();
 
-	void CSceneManager::RenderScene()
-	{
-		if (m_nowscene)
-		{
-			m_nowscene->Render();
-		}
-	}
+		//シャドウ設定
+		Shadow().Create(nowScene->GetGraphicsConfig().ShadowConfig);
 
-	void CSceneManager::ChangeScene(CScene* nextscene)
-	{
-		SAFE_DELETE(m_nowscene);
-		m_nowscene = nextscene;
-		Init();
+		nowScene->Start();
 	}
 }

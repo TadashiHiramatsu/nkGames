@@ -11,6 +11,7 @@ namespace nkEngine
 		SInitParam()
 		{
 			memset(this, 0, sizeof(SInitParam));
+			isCenter = true;
 		}
 		HINSTANCE hInstance;
 		int screenW;
@@ -18,6 +19,7 @@ namespace nkEngine
 		int frameBufferW;
 		int frameBufferH;
 		const char* GameName;
+		bool isCenter;
 	};
 
 	//シングルトンのエンジンクラス
@@ -59,9 +61,14 @@ namespace nkEngine
 			return m_Physics;
 		}
 
+		//フレームの幅：x
 		int GetFrameW() { return m_frameBufferW; }
+		//フレームの高さ：y
 		int GetFrameH() { return m_frameBufferH; }
+		
+		//スクリーンの幅：x
 		int GetScreenW() { return m_screenBufferW; }
+		//スクリーンの高さ：y
 		int GetScreenH() { return m_screenBufferH; }
 	private:
 		//ウィンドウの初期化

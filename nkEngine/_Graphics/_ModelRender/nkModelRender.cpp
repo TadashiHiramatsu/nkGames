@@ -1,5 +1,5 @@
 #include"nkEngine/nkstdafx.h"
-#include"nkSkinModel.h"
+#include"nkModelRender.h"
 
 namespace nkEngine
 {
@@ -14,8 +14,7 @@ namespace nkEngine
 		m_isShadowCaster(false),
 		m_isShadowReceiver(false),
 		m_isRimLight(false),
-		m_fogFunc(enFogFuncNone),
-		m_mParentWorld(nullptr)
+		m_fogFunc(enFogFuncNone)
 	{
 		m_fogParam[0] = 0.0f;
 		m_fogParam[1] = 0.0f;
@@ -44,25 +43,10 @@ namespace nkEngine
 			//シャドウキャスター。
 			Shadow().Entry(this);
 		}
-
-		D3DXMATRIX mPosition, mScale;
 		
-		D3DXMatrixTranslation(&mPosition, m_Transform->GetPosition().x, m_Transform->GetPosition().y, m_Transform->GetPosition().z);
-		D3DXMatrixRotationQuaternion(&m_mRotation, &m_Transform->GetRotation());
-		D3DXMatrixScaling(&mScale, m_Transform->GetScale().x, m_Transform->GetScale().y, m_Transform->GetScale().z);
-
-		m_mWorld = mScale * m_mRotation * mPosition;
-
-		if (m_mParentWorld)
-		{
-			m_mWorld *= *m_mParentWorld;
-		}
-
-		D3DXMatrixInverse(&m_mWorldInv, NULL , &m_mWorld);
-
 		if (m_ModelData)
 		{
-			m_ModelData->UpdateBoneMatrix(m_mWorld);
+			m_ModelData->UpdateBoneMatrix(m_Transform->WorldMatrix);
 		}
 	}
 
@@ -338,11 +322,11 @@ namespace nkEngine
 			}
 			else
 			{
-				mWorld = m_mWorld;
+				mWorld = m_Transform->WorldMatrix;
 			}
 
 			m_Effect->SetMatrix("g_mWorldMatrix", &mWorld);
-			m_Effect->SetMatrix("g_mRotation", &m_mRotation);
+			m_Effect->SetMatrix("g_mRotation", &m_Transform->RotationMatrix);
 
 			m_Effect->Begin(0, D3DXFX_DONOTSAVESTATE);
 			m_Effect->BeginPass(0);

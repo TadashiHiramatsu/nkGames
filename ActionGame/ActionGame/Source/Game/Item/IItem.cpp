@@ -1,9 +1,7 @@
 #include"stdafx.h"
 #include"IItem.h"
 
-IItem::IItem():
-	ID(0),
-	Name("–¼–³‚µ‚ÌƒAƒCƒeƒ€")
+IItem::IItem()
 {
 }
 
@@ -14,7 +12,7 @@ IItem::~IItem()
 
 void IItem::Load()
 {
-	Sprite.Load("NonData.png");
+	Image.Load(IP.IconFilePath);
 }
 
 void IItem::Init()
@@ -22,14 +20,9 @@ void IItem::Init()
 
 }
 
-void IItem::Update()
-{
-	Sprite.Update();
-}
-
 void IItem::Render()
 {
-	Sprite.Render();
+	Image.Render();
 }
 
 void IItem::Release()
@@ -37,7 +30,3 @@ void IItem::Release()
 
 }
 
-void IItem::Click()
-{
-
-}

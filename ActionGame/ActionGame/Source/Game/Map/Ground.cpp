@@ -11,12 +11,12 @@ Ground::~Ground()
 {
 }
 
-void Ground::Init()
+void Ground::Start()
 {
 	Model.Load("Ground.X",nullptr);
-	Model.SetTransform(&Transform);
+	Model.SetTransform(&transform);
 	Model.SetLight(&Light);
-	Model.SetCamera(MainCamera.GetCamera());
+	Model.SetCamera(g_MainCamera->GetCamera());
 	Model.SetShadowCasterFlag(true);
 	Model.SetShadowReceiverFlag(true);
 
@@ -39,6 +39,8 @@ void Ground::Init()
 
 void Ground::Update()
 {
+	transform.Update();
+
 	Model.Update();
 }
 

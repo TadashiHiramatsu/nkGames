@@ -2,19 +2,25 @@
 
 #include"Game/GameScene.h"
 
-int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdshow)
+void InitEngine(HINSTANCE _hInstance)
 {
 	SInitParam initparam;
-	initparam.hInstance = hInstance;
-	initparam.screenW = 900;
-	initparam.screenH = 540;
-	initparam.frameBufferW = 900*2;
-	initparam.frameBufferH = 540*2;
+	initparam.hInstance = _hInstance;
+	initparam.screenW = 1200;
+	initparam.screenH = 675;
+	initparam.frameBufferW = initparam.screenW * 1;
+	initparam.frameBufferH = initparam.screenH * 1;
 	initparam.GameName = "アクションゲーム";
+	initparam.isCenter = false;
 	Engine().Init(initparam);
+}
 
-	GameScene* gscene = new GameScene;
-	SceneManager().ChangeScene(gscene);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdshow)
+{
+	InitEngine(hInstance);
+
+	GameScene* game = new GameScene;
+	SceneManager().ChangeScene(game);
 
 	Engine().RunGameLoop();
 }

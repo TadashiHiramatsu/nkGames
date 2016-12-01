@@ -1,24 +1,24 @@
 #pragma once
 
-#include"IItem.h"
+#include"EquipmentItem.h"
 
-class DropItem : public CGameObject
+class DropItem : public IGameObject
 {
 public:
 	DropItem();
 	~DropItem();
-	void Init()override;
+	void Start()override;
 	void Update()override;
 	void Render()override;
-	void Release()override;
 
-	void SetTransform(CTransform& _tf)
+	void SetTransform(const Transform& _tf)
 	{
-		Transform = _tf;
+		transform = _tf;
 	}
+
 private:
+	CSkinModelDataHandle SkinModelData;
 	CModelRender Model;
-	CTransform Transform;
 	CLight Light;
 
 	//è¡ñ≈éûä‘

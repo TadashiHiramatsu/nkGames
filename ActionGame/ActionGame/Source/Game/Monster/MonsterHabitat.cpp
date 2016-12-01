@@ -11,31 +11,21 @@ MonsterHabitat::~MonsterHabitat()
 {
 }
 
-void MonsterHabitat::Init(MHParameter& _mhp)
+void MonsterHabitat::Start()
 {
-	MHP = _mhp;
-}
-
-void MonsterHabitat::Init()
-{
-	MHP.Distance = 10;
-	MHP.MonsterID = 1;
-	MHP.MonsterMax = 10;
-	MHP.Position = D3DXVECTOR3(0, 1, 0);
-	MHP.Time = 5;
+	for (int i = 0; i < Parameter.InitMonsterNum; i++)
+	{
+		Appearance();
+	}
 }
 
 void MonsterHabitat::Update()
 {
-	if (NowMonsterNum <= MHP.MonsterMax)
+	if (NowMonsterNum <= Parameter.MonsterMax)
 	{
-		if (MHP.Time <= LocalTime)
+		if (Parameter.Time <= LocalTime)
 		{
-			Monster_01* m = new Monster_01;
-			m->Init();
-			MonsterList.push_back(m);
-			NowMonsterNum++;
-			LocalTime = 0;
+			Appearance();
 		}
 		LocalTime += Time().DeltaTime();
 	}
@@ -65,6 +55,17 @@ void MonsterHabitat::Render()
 	}
 }
 
-void MonsterHabitat::Release()
+void MonsterHabitat::Appearance()
 {
+	Monster_01* m = new Monster_01;
+
+	D3DXVECTOR3 pos = D3DXVECTOR3(Random().GetRandDouble0() * Parameter.Distance, 0, Random().GetRandDouble0() * Parameter.Distance);
+	pos += Parameter.Position;
+	m->SetPosition(pos);
+
+	m->Start();
+
+	MonsterList.push_back(m);
+	NowMonsterNum++;
+	LocalTime = 0;
 }

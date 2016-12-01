@@ -11,7 +11,7 @@ namespace nkEngine
 	{
 	}
 
-	void CScreenRender::Init(const SInitParam & initParam)
+	void CScreenRender::Start(const SInitParam & initParam)
 	{
 		m_rtMain.Create(initParam.frameBufferW, initParam.frameBufferH, 1, D3DFMT_A8R8G8B8, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);
 
@@ -25,38 +25,61 @@ namespace nkEngine
 		m_rtBackBuffer.SetDepthSurface(depth);
 	}
 
-	void CScreenRender::Update()
+	void CScreenRender::Loop()
 	{
-		SceneManager().UpdateScene();
-		Shadow().Update(); 
-	}
+		Time().Update();
+		Input.Update();
+		XInput().Update();
 
-	void CScreenRender::Render()
-	{
+		//初期化されていないオブジェクトを初期化
+		GameObjectManager().Start();
+
+		//プリレンダリング前の更新
+		GameObjectManager().PreUpdate();
+
+		//プリレンダリング
+		Shadow().Update(); 
+
+		//更新
+		GameObjectManager().Update();
+
+		//Updateの後の更新
+		GameObjectManager().PostUpdate();
+
+
 		IDirect3DDevice9* Device = Engine().GetDevice();
 
 		Device->BeginScene();
 
-		//プリレンダーの描画
-		Shadow().Render();
-
 		Device->SetRenderTarget(0, m_rtMain.GetSurface());
 		Device->SetDepthStencilSurface(m_rtMain.GetDepthSurface());
 		Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
-		
-		//現在のシーンの描画
-		SceneManager().RenderScene();
 
-		m_Bloom.Render();
+		//プリレンダーの描画
+		Shadow().Render();
+
+		//Renderの前の描画
+		GameObjectManager().PreRender();
+
+		//描画
+		GameObjectManager().Render();
+
+		//ポストエフェクト
+		//m_Bloom.Render();
 
 		Device->SetRenderTarget(0, m_rtBackBuffer.GetSurface());
 		Device->SetDepthStencilSurface(m_rtBackBuffer.GetDepthSurface());
 		Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
 
-		//ポストエフェクト
 		m_AntiAliasing.Render();
+
+		//ポストエフェクトの後の描画
+		GameObjectManager().PostRender();
 
 		Device->EndScene();
 		Device->Present(NULL, NULL, NULL, NULL);
+
+		//削除登録されたGameObjectを削除
+		GameObjectManager().Delete();
 	}
 }
