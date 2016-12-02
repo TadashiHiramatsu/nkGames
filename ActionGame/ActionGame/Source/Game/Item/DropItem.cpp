@@ -2,8 +2,8 @@
 #include"DropItem.h"
 
 #include"../GameScene.h"
-#include"..\GameCamera.h"
-#include"..\GUIWindow\InventoryWindow.h"
+#include"../GameCamera.h"
+#include"../Window/InventoryWindow.h"
 
 DropItem::DropItem():
 	DeleteTime(300)
@@ -38,7 +38,7 @@ void DropItem::Update()
 			DeleteGO(this);
 			IItem* item = new EquipmentItem;
 			item->Load();
-			if (!Inventory().SetItem(item))
+			if (!g_Inventory->SetItem(item))
 			{
 				SAFE_DELETE(item);
 			}

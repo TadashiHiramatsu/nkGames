@@ -13,7 +13,7 @@ namespace nkEngine
 		strcat(filePath, fileName);
 
 		if(FAILED(D3DXCreateTextureFromFile(
-		Device,
+			Device,
 			filePath,
 			&m_tex)))
 		{

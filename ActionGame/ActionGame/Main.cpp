@@ -2,6 +2,8 @@
 
 #include"Game/GameScene.h"
 
+#include"Test/TestScene.h"
+
 void InitEngine(HINSTANCE _hInstance)
 {
 	SInitParam initparam;
@@ -19,8 +21,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 	InitEngine(hInstance);
 
-	GameScene* game = new GameScene;
-	SceneManager().ChangeScene(game);
+	SceneManager().ChangeScene<GameScene>();
+
+	//SceneManager().ChangeScene<TestScene>();
 
 	Engine().RunGameLoop();
 }

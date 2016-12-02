@@ -7,13 +7,12 @@
 #include"Map\Ground.h"
 #include"Map\Skybox.h"
 #include"Monster\MonsterHabitat.h"
-
-//#include"GUIWindow\InventoryWindow.h"
-//#include"Item\DropItemManager.h"
+#include"Window\InventoryWindow.h"
 
 CollisionWorld* g_CollisionWorld = nullptr;
 GameCamera* g_MainCamera = nullptr;
 Player* g_Player = nullptr;
+InventoryWindow* g_Inventory = nullptr;
 
 GameScene::GameScene()
 {
@@ -32,9 +31,11 @@ void GameScene::Start()
 	m_GraphicsConfig.ShadowConfig.Fur = 100.0f;
 
 	g_CollisionWorld = NewGO<CollisionWorld>();
-	g_MainCamera = NewGO<GameCamera>();
+	g_MainCamera = NewGO<GameCamera>(1);
 
 	g_Player = NewGO<Player>();
+
+
 	g_MainCamera->SetPlayerPointer(g_Player);
 	
 	NewGO<Ground>();
@@ -42,4 +43,6 @@ void GameScene::Start()
 	skybox->SetPlayerPointer(g_Player);
 
 	NewGO<MonsterHabitat>();
+
+	g_Inventory = NewGO<InventoryWindow>();
 }

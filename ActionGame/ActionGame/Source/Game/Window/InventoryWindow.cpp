@@ -10,25 +10,30 @@ InventoryWindow::~InventoryWindow()
 {
 }
 
-void InventoryWindow::Init()
+void InventoryWindow::Start()
 {
 	IWSkin.Load("window.png");
-	IWSkin.SetTransform(&IWSkinTransform);
+	IWSkin.SetTransform(&rectTransform);
 
-	IWSkinTransform.Size = D3DXVECTOR2(500, 500);
-	IWSkinTransform.Position.x = Engine().GetScreenW() / 2;
-	IWSkinTransform.Position.y = Engine().GetScreenH() / 2;
+	rectTransform.Width = 500;
+	rectTransform.Height = 500;
 
-	ISlotNum = 10;
+	ISlotNum = 40;
 
 	IFrameTex.reset(new CTexture);
 	IFrameTex->Load("Icon/Frame.png");
 
-	for (int i = 0; i < ISlotNum; i++)
+	for (int i = 0 , j = 0; i < ISlotNum; i++)
 	{
+		if (i % 5 == 0)
+		{
+			j++;
+		}
+
 		ItemSlot* IS = new ItemSlot;
-		IS->Init();
-		IS->Transform.Position = D3DXVECTOR2(0,i * 40);
+		IS->Start();
+		IS->rectTransform.Position = D3DXVECTOR2(20 + (i % 5) * 40, 170 + j * -40);
+		IS->rectTransform.Parent = &rectTransform;
 		IS->Frame.SetTexture(IFrameTex);
 		ISlotVec.push_back(IS);
 	}
@@ -43,10 +48,10 @@ void InventoryWindow::Update()
 
 	if (isRender)
 	{
-		IWSkin.Update();
-		for (auto a : ISlotVec)
+		rectTransform.Update();
+		for (auto it : ISlotVec)
 		{
-			a->Update();
+			it->Update();
 		}
 	}
 }
@@ -56,9 +61,9 @@ void InventoryWindow::Render()
 	if (isRender)
 	{
 		IWSkin.Render();
-		for (auto a : ISlotVec)
+		for (auto it : ISlotVec)
 		{
-			a->Render();
+			it->Render();
 		}
 	}
 }
@@ -83,39 +88,13 @@ bool InventoryWindow::SetItem(IItem * _item)
 		}
 		else
 		{
+			//新しくセットするよ
 			it->Item = _item;
-			it->Item->SetSTramsform(&it->Transform);
+			it->Item->SetSTramsform(&it->rectTransform);
 			it->Item->Update();
 			it->ItemNum++;
 			break;
 		}
 	}
 	return true;
-}
-
-void ItemSlot::Init()
-{
-	Transform.Size = D3DXVECTOR2(30, 30);
-	Transform.Pivot = D3DXVECTOR2(1, 1);
-	Frame.Load();
-	Frame.SetTransform(&Transform);
-}
-
-void ItemSlot::Update()
-{
-	Transform.Update();
-	if (Item != nullptr)
-	{
-		Item->Update();
-	}
-	Frame.Update();
-}
-
-void ItemSlot::Render()
-{
-	if (Item != nullptr)
-	{
-		Item->Render();
-	}
-	Frame.Render();
 }

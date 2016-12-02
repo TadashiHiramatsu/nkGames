@@ -25,8 +25,14 @@
     <Filter Include="Game\Item">
       <UniqueIdentifier>{f3d5eb1f-998f-41a6-b243-0d1a20ce8497}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\GUIWindow">
+    <Filter Include="Game\Window">
       <UniqueIdentifier>{84cc74a1-ae9d-443d-af64-6c0298353050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{84780237-4215-4750-873c-3601a50aeb80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\UI">
+      <UniqueIdentifier>{9ff32e16-4ea3-40e7-8b28-8ede05cd1924}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -66,12 +72,6 @@
     <ClCompile Include="Source\Game\Item\IItem.cpp">
       <Filter>Game\Item</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\GUIWindow\IWindow.cpp">
-      <Filter>Game\GUIWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\GUIWindow\InventoryWindow.cpp">
-      <Filter>Game\GUIWindow</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Item\DropItem.cpp">
       <Filter>Game\Item</Filter>
     </ClCompile>
@@ -86,6 +86,18 @@
     </ClCompile>
     <ClCompile Include="Source\Game\Item\EquipmentItem.cpp">
       <Filter>Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Window\ItemSlot.cpp">
+      <Filter>Game\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Window\InventoryWindow.cpp">
+      <Filter>Game\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Test\TestScene.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Test\UI\TestUI.cpp">
+      <Filter>Test\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,12 +137,6 @@
     <ClInclude Include="Source\Game\Item\IItem.h">
       <Filter>Game\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\GUIWindow\IWindow.h">
-      <Filter>Game\GUIWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\GUIWindow\InventoryWindow.h">
-      <Filter>Game\GUIWindow</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Item\DropItem.h">
       <Filter>Game\Item</Filter>
     </ClInclude>
@@ -145,6 +151,18 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Item\EquipmentItem.h">
       <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Window\ItemSlot.h">
+      <Filter>Game\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Window\InventoryWindow.h">
+      <Filter>Game\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\TestScene.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\UI\TestUI.h">
+      <Filter>Test\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

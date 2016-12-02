@@ -147,9 +147,6 @@
     <ClCompile Include="_Graphics\_UI\nkTestFont.cpp">
       <Filter>Graphics\UI</Filter>
     </ClCompile>
-    <ClCompile Include="_Graphics\_UI\nkUITransform.cpp">
-      <Filter>Graphics\UI</Filter>
-    </ClCompile>
     <ClCompile Include="_Graphics\_Particle\nkParticle.cpp">
       <Filter>Graphics\Particle</Filter>
     </ClCompile>
@@ -167,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="_Graphics\_ModelRender\nkModelRender.cpp">
       <Filter>Graphics\ModelRender</Filter>
+    </ClCompile>
+    <ClCompile Include="_Component\nkRectTransform.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -296,9 +296,6 @@
     <ClInclude Include="_Graphics\_UI\nkTestFont.h">
       <Filter>Graphics\UI</Filter>
     </ClInclude>
-    <ClInclude Include="_Graphics\_UI\nkUITransform.h">
-      <Filter>Graphics\UI</Filter>
-    </ClInclude>
     <ClInclude Include="_Graphics\_Particle\nkParticle.h">
       <Filter>Graphics\Particle</Filter>
     </ClInclude>
@@ -316,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="_Graphics\_ModelRender\nkModelRender.h">
       <Filter>Graphics\ModelRender</Filter>
+    </ClInclude>
+    <ClInclude Include="_Component\nkRectTransform.h">
+      <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,19 +4,18 @@
 namespace nkEngine
 {
 	Image::Image():
-		Transform(nullptr)
+		rectTransform(nullptr),
+		pEffect(nullptr)
 	{
-
 	}
 
 	Image::~Image()
 	{
-		Release();
 	}
 
 	void Image::Load(const char * filepass)
 	{
-		m_pEffect = EffectManager().LoadEffect("2Dshader.fx");
+		pEffect = EffectManager().LoadEffect("2Dshader.fx");
 
 		Texture.reset(new CTexture);
 		Texture->Load(filepass);
@@ -24,30 +23,40 @@ namespace nkEngine
 		Init();
 	}
 
-	void Image::Load()
+	void Image::Load(shared_ptr<CTexture>& _tex)
 	{
-		m_pEffect = EffectManager().LoadEffect("2Dshader.fx");
+		pEffect = EffectManager().LoadEffect("2Dshader.fx");
+
+		Texture = _tex;
 
 		Init();
 	}
-		
+
+	void Image::Load()
+	{
+		pEffect = EffectManager().LoadEffect("2Dshader.fx");
+
+		Init();
+	}
+
 	void Image::Init()
 	{
-		static SShapeVertex_PT vertex[]{
+		static SShapeVertex_PT vertex[] =
+		{
 			{
-				-1.0f, 1.0f, 0.0f, 1.0f,
+				-0.5f, 0.5f, 0.0f, 1.0f,
 				0.0f, 0.0f
 			},
 			{
-				1.0f, 1.0f, 0.0f, 1.0f,
+				0.5f, 0.5f, 0.0f, 1.0f,
 				1.0f, 0.0f
 			},
 			{
-				-1.0f, -1.0f, 0.0f, 1.0f,
+				-0.5f, -0.5f, 0.0f, 1.0f,
 				0.0f, 1.0f
 			},
 			{
-				1.0f, -1.0f, 0.0f, 1.0f,
+				0.5f, -0.5f, 0.0f, 1.0f,
 				1.0f, 1.0f
 			},
 		};
@@ -71,11 +80,6 @@ namespace nkEngine
 		);
 	}
 
-	void Image::Update()
-	{
-		
-	}
-
 	void Image::Render()
 	{
 		IDirect3DDevice9* Device = Engine().GetDevice();
@@ -85,28 +89,24 @@ namespace nkEngine
 		//“§‰ßˆ—‚ðs‚¤
 		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
-		m_pEffect->SetTechnique("Tech");
-		m_pEffect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
-		m_pEffect->BeginPass(0);
+		pEffect->SetTechnique("Tech");
+		pEffect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
+		pEffect->BeginPass(0);
 
-		m_pEffect->SetMatrix("matWorld", &Transform->mWorld);
-		m_pEffect->SetTexture("g_diffuseTexture", Texture->GetTextureDX());
-		m_pEffect->CommitChanges();
+		pEffect->SetMatrix("matWorld", &rectTransform->WorldProjMatrix);
+		pEffect->SetTexture("g_diffuseTexture", Texture->GetTextureDX());
+		pEffect->CommitChanges();
 
 		Device->SetStreamSource(0, Primitive.GetVertexBuffer()->GetBody(), 0, Primitive.GetVertexBuffer()->GetStride());
 		Device->SetIndices(Primitive.GetIndexBuffer()->GetBody());
 		Device->SetVertexDeclaration(Primitive.GetVertexDecl());
 		Device->DrawIndexedPrimitive(Primitive.GetD3DPrimitiveType(), 0, 0, Primitive.GetNumVertex(), 0, Primitive.GetNumPolygon());
 
-		m_pEffect->EndPass();
-		m_pEffect->End();
+		pEffect->EndPass();
+		pEffect->End();
 
 		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
 	}
 
-	void Image::Release()
-	{
-
-	}
 }

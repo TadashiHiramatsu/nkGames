@@ -196,7 +196,8 @@ void Player::Update()
 	break;
 	case Player::StateAttack:
 	{
-		moveSpeed *= 0.8f;
+		moveSpeed.x *= 0.8f;
+		moveSpeed.z *= 0.8f;
 		
 		if (!Animation.IsPlayAnim())
 		{
@@ -212,7 +213,9 @@ void Player::Update()
 			ChangeState(StateWaiting);
 			break;
 		}
-		moveSpeed = D3DXVECTOR3(0, 0, 0);
+
+		moveSpeed.x *= 0.8f;
+		moveSpeed.z *= 0.8f;
 	}
 	break;
 	case Player::StateDead:
@@ -227,27 +230,26 @@ void Player::Update()
 	CharacterController.SetMoveSpeed(moveSpeed);
 	CharacterController.Update();
 
-
 	transform.Position = CharacterController.GetPosition();
-	
-	AnimationControl();
 
-	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + transform.Position);
-	Shadow().SetLightTarget(transform.Position);
+	AnimationControl();
 
 	animEvent.Update();
 
 	Damage();
 
 	transform.Update();
-	RWeaponTransform.Update();
-	LWeaponTransform.Update();
-
 	Model.Update();
+	LWeaponTransform.Update();
 	LWeaponModel.Update();
+	RWeaponTransform.Update();
 	RWeaponModel.Update();
-//	ParticlePos = D3DXVECTOR3(mParticle->m[3][0], mParticle->m[3][1], mParticle->m[3][2]);
+	
+	//ParticlePos = D3DXVECTOR3(mParticle->m[3][0], mParticle->m[3][1], mParticle->m[3][2]);
 	//Particle.Update();
+
+	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + transform.Position);
+	Shadow().SetLightTarget(transform.Position);
 }
 
 void Player::Render()
@@ -352,6 +354,7 @@ void Player::AnimationControl()
 		break;
 	case StateRun:
 		PlayAnimation(AnimationCode::AnimationRun, 0.1f);
+		time = 1.0f / 60;
 		break;
 	case StateAttack:
 		PlayAnimation(AnimationCode::AnimationAttack, 0.1f);

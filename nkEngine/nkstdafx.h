@@ -45,6 +45,8 @@ using namespace std;
 
 //コンポーネント
 #include"_Component\nkTransform.h"
+#include"_Component\nkRectTransform.h"
+#include"_Component\nkCharacterController.h"
 
 //カメラ
 #include"_Graphics\nkCamera.h"

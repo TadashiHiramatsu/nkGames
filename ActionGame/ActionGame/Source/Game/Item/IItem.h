@@ -56,9 +56,9 @@ public:
 		return IP;
 	}
 
-	void SetSTramsform(UITransform* _tf)
+	void SetSTramsform(RectTransform* _rt)
 	{
-		Image.SetTransform(_tf);
+		Image.SetTransform(_rt);
 	}
 		
 protected:
