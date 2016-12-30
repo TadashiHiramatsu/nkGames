@@ -188,12 +188,14 @@
     <ClInclude Include="_Graphics\_PostEffect\nkAntiAliasing.h" />
     <ClInclude Include="_Graphics\_PostEffect\nkBloom.h" />
     <ClInclude Include="_Graphics\_PreRender\nkShadow.h" />
+    <ClInclude Include="_Graphics\_UI\nkButton.h" />
     <ClInclude Include="_Graphics\_UI\nkImage.h" />
     <ClInclude Include="_Graphics\_UI\nkTestFont.h" />
     <ClInclude Include="_Input\nkInput.h" />
     <ClInclude Include="_Input\nkXinput.h" />
     <ClInclude Include="_Math\nkHash.h" />
     <ClInclude Include="_Math\nkRandom.h" />
+    <ClInclude Include="_Math\nkVector.h" />
     <ClInclude Include="_Physics\CBoxCollider.h" />
     <ClInclude Include="_Physics\CCollider.h" />
     <ClInclude Include="_Physics\CMeshCollider.h" />
@@ -239,10 +241,12 @@
     <ClCompile Include="_Graphics\_PostEffect\nkAntiAliasing.cpp" />
     <ClCompile Include="_Graphics\_PostEffect\nkBloom.cpp" />
     <ClCompile Include="_Graphics\_PreRender\nkShadow.cpp" />
+    <ClCompile Include="_Graphics\_UI\nkButton.cpp" />
     <ClCompile Include="_Graphics\_UI\nkImage.cpp" />
     <ClCompile Include="_Graphics\_UI\nkTestFont.cpp" />
     <ClCompile Include="_Input\nkInput.cpp" />
     <ClCompile Include="_Input\nkXinput.cpp" />
+    <ClCompile Include="_Math\nkVector.cpp" />
     <ClCompile Include="_Physics\CBoxCollider.cpp" />
     <ClCompile Include="_Physics\CMeshCollider.cpp" />
     <ClCompile Include="_Physics\CPhysics.cpp" />

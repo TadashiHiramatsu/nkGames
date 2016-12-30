@@ -41,10 +41,13 @@ public:
 	}
 
 private:
+
 	CCamera Camera;
 	Player* player;
 
 	const D3DXMATRIX* mViewInv;
+
+	float distance; //‹——£
 };
 
 extern GameCamera* g_MainCamera;

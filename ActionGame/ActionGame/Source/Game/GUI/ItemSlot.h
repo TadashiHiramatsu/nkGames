@@ -18,9 +18,12 @@ public:
 
 public:
 	IItem* Item;
+	Image ItemIcon;
+
+	//ƒtƒŒ[ƒ€
+	Image Frame;
 	RectTransform rectTransform;
 
-	Image Frame;
 
 	int ItemNum;
 };

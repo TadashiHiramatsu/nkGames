@@ -3,17 +3,17 @@
 
 namespace
 {
-	static const D3DXVECTOR3 AnchorOffset[] =
+	static const D3DXVECTOR2 AnchorOffset[] =
 	{
-		{ D3DXVECTOR3(-1, 1, 0) },
-		{ D3DXVECTOR3(0	, 1, 0) },
-		{ D3DXVECTOR3(1	, 1, 0) },
-		{ D3DXVECTOR3(-1, 0, 0) },
-		{ D3DXVECTOR3(0	, 0 ,0) },
-		{ D3DXVECTOR3(1	, 0, 0) },
-		{ D3DXVECTOR3(-1,-1, 0) },
-		{ D3DXVECTOR3(0	,-1, 0) },
-		{ D3DXVECTOR3(1	,-1, 0) }
+		{ D3DXVECTOR2(-1, 1) },
+		{ D3DXVECTOR2(0	, 1) },
+		{ D3DXVECTOR2(1	, 1) },
+		{ D3DXVECTOR2(-1, 0) },
+		{ D3DXVECTOR2(0	, 0) },
+		{ D3DXVECTOR2(1	, 0) },
+		{ D3DXVECTOR2(-1,-1) },
+		{ D3DXVECTOR2(0	,-1) },
+		{ D3DXVECTOR2(1	,-1) }
 	};
 }
 
@@ -45,36 +45,35 @@ namespace nkEngine
 	{
 		D3DXMATRIX mScale;
 
-		int screenW = Engine().GetScreenW() / 2;
-		int screenH = Engine().GetScreenH() / 2;
+		int screenWCenter = Engine().GetScreenW() / 2;
+		int screenHCenter = Engine().GetScreenH() / 2;
 
-		D3DXVECTOR3 trans;
-		trans.x = Position.x;
-		trans.y = Position.y;
-		trans.z = 0;
+		D3DXVECTOR2 trans = Position;
+
+		//アンカーを画面に設定
+		D3DXVECTOR2 AnchorValue;
+		AnchorValue.x = screenWCenter;
+		AnchorValue.y = screenHCenter;
 
 		if (Parent)
 		{
-			//アンカー計算
-			trans.x += AnchorOffset[Anchor].x * (Parent->Width /2);
-			trans.y += AnchorOffset[Anchor].y * (Parent->Height / 2);
-		}
-		else
-		{
-			//アンカー計算
-			trans.x += AnchorOffset[Anchor].x * screenW;
-			trans.y += AnchorOffset[Anchor].y * screenH;
+			//アンカーを親に設定
+			AnchorValue.x = Parent->Width / 2;
+			AnchorValue.y = Parent->Height / 2;
 		}
 
+		//アンカー計算
+		trans.x += AnchorOffset[Anchor].x * AnchorValue.x;
+		trans.y += AnchorOffset[Anchor].y * AnchorValue.y;
+
 		//ピボットの分のオフセットを計算。
-		D3DXVECTOR3 pivotOffset;
+		D3DXVECTOR2 pivotOffset;
 		pivotOffset.x = (Width  * Scale.x) * (0.5f - Pivot.x);
 		pivotOffset.y = (Height * Scale.y) * (0.5f - Pivot.y);
-		pivotOffset.z = 0.0f;
 		trans += pivotOffset;
 
 		//移動行列作成
-		D3DXMatrixTranslation(&TransMatrix, trans.x, trans.y, trans.z);
+		D3DXMatrixTranslation(&TransMatrix, trans.x, trans.y, 0.0f);
 
 		//拡大
 		D3DXVECTOR3 scale;
@@ -95,6 +94,26 @@ namespace nkEngine
 			WorldSizeOffMatrix *= Parent->WorldSizeOffMatrix;
 		}
 
+		//コリジョン計算
+		{
+			//中心座標を設定
+			ColRect.Left = screenWCenter;
+			ColRect.Top = screenHCenter;
+
+			//中心の位置を設定
+			ColRect.Left += WorldMatrix._41;
+			ColRect.Top -= WorldMatrix._42;
+
+			//画像サイズ分ずらす
+			ColRect.Left -= WorldMatrix._11 / 2;
+			ColRect.Top -= WorldMatrix._22 / 2;
+
+			//右と下も設定
+			ColRect.Right = ColRect.Left + WorldMatrix._11;
+			ColRect.Bottom = ColRect.Top + WorldMatrix._22;
+		}
+
+		//プロジェクション行列を計算
 		WorldProjMatrix = WorldMatrix * ProjectionMatrix;
 	}
 }

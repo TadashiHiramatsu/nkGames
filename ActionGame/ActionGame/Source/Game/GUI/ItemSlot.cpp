@@ -13,17 +13,13 @@ void ItemSlot::Start()
 void ItemSlot::Update()
 {
 	rectTransform.Update();
-	if (Item != nullptr)
-	{
-		Item->Update();
-	}
 }
 
 void ItemSlot::Render()
 {
 	if (Item != nullptr)
 	{
-		Item->Render();
+		ItemIcon.Render();
 	}
 	Frame.Render();
 }

@@ -22,7 +22,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	InitEngine(hInstance);
 
 	SceneManager().ChangeScene<GameScene>();
-
 	//SceneManager().ChangeScene<TestScene>();
 
 	Engine().RunGameLoop();

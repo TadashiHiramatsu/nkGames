@@ -36,8 +36,7 @@ void DropItem::Update()
 		if (Input.GetKeyButtonDown(KeyCode::Z))
 		{
 			DeleteGO(this);
-			IItem* item = new EquipmentItem;
-			item->Load();
+			IItem* item = new IItem;
 			if (!g_Inventory->SetItem(item))
 			{
 				SAFE_DELETE(item);

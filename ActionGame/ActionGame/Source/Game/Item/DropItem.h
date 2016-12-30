@@ -1,6 +1,6 @@
 #pragma once
 
-#include"EquipmentItem.h"
+#include"IItem.h"
 
 class DropItem : public IGameObject
 {

@@ -267,8 +267,8 @@ void Monster_01::Damage()
 			ChangeState(StateDead);
 			g_Player->AddExperience(10);
 
-			DropItem* DI = NewGO<DropItem>();
-			DI->SetTransform(transform);
+			//DropItem* DI = NewGO<DropItem>();
+			//DI->SetTransform(transform);
 		}
 		else 
 		{

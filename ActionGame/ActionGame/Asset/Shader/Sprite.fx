@@ -13,7 +13,9 @@ sampler_state
 	AddressV = Wrap;
 };
 
-float4x4 matWorld;
+float4x4 matWorld; //ワールド行列.
+float4 uvRect; //UV矩形.
+float4 color; //色.
 
 struct VS_IN
 {
@@ -31,18 +33,24 @@ VS_OUT vs_main(VS_IN In)
 {
 	VS_OUT Out;
 
+	//座標計算
 	Out.pos = mul(In.pos, matWorld);
-
-	Out.uv = In.uv;
+	//UV計算
+	Out.uv = uvRect.xy * (1.0f - In.uv) + uvRect.zw * (In.uv);
 
 	return Out;
 }
 
 float4 ps_main(VS_OUT In) : COLOR0
 {
-	float4 color = tex2D(g_diffuseTextureSampler, In.uv);
-
-	return color;
+	float4 col = tex2D(g_diffuseTextureSampler, In.uv);
+	//色計算
+	col.r *= color.r;
+	col.g *= color.g;
+	col.b *= color.b;
+	//不透明度計算
+	col.a *= color.a;
+	return col;
 }
 
 technique Tech

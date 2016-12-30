@@ -2,6 +2,17 @@
 
 namespace nkEngine
 {
+	//衝突判定に使用する情報
+	struct CollisionRect
+	{
+		//画面左上を0,0とする位置情報
+
+		int Top; //上
+		int Bottom; //下
+		int Left; //左
+		int Right; //右
+	};
+
 	//UI専用トランスフォーム
 	class RectTransform
 	{
@@ -22,8 +33,6 @@ namespace nkEngine
 			BottomRight,	//右下
 			AnchorPresetNum, //数
 		};
-
-
 
 	public:
 
@@ -49,6 +58,8 @@ namespace nkEngine
 		D3DXVECTOR2 Pivot; //中心
 		D3DXQUATERNION Rotation; //回転		
 		D3DXVECTOR2 Scale; //サイズ
+
+		CollisionRect ColRect; //衝突レクト
 
 	public:
 		RectTransform* Parent; //親

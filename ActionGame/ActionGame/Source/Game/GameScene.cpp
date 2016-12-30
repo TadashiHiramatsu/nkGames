@@ -7,7 +7,8 @@
 #include"Map\Ground.h"
 #include"Map\Skybox.h"
 #include"Monster\MonsterHabitat.h"
-#include"Window\InventoryWindow.h"
+#include"GUI\InventoryWindow.h"
+#include"GUI\LifeGage.h"
 
 CollisionWorld* g_CollisionWorld = nullptr;
 GameCamera* g_MainCamera = nullptr;
@@ -45,4 +46,7 @@ void GameScene::Start()
 	NewGO<MonsterHabitat>();
 
 	g_Inventory = NewGO<InventoryWindow>();
+
+	LifeGage* lifeGage = NewGO<LifeGage>();
+	lifeGage->SetPlayer(g_Player);
 }

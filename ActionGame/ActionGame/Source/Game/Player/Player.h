@@ -15,14 +15,15 @@ public:
 			Experience = 0;
 			NextLevelExperience = 10;
 			Attack = 1;
-			Hp = 10;
+			MaxHp = NowHp = 10;
 			HitTime = 1.0f;
 		}
 		int Level;					//レベル
 		int Experience;				//現在の経験値
 		int NextLevelExperience;	//次のレベルへの経験値
 		int	Attack;					//攻撃力
-		int Hp; //体力
+		int MaxHp; //体力
+		int NowHp; //体力
 		int HitTime; //無敵時間
 	};
 
@@ -62,6 +63,11 @@ public:
 	void AddExperience(int _Add)
 	{
 		PP.Experience += _Add;
+	}
+
+	PlayerParameter& GetPlayerParameter()
+	{
+		return PP;
 	}
 
 	D3DXVECTOR3& GetPos()

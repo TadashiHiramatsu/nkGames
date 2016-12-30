@@ -12,12 +12,12 @@ public:
 	void Render()override;
 
 private:
-	Image image;
-	RectTransform rectTransform;
-
 	Image imageP;
 	RectTransform rectTransformP;
 
-	Image imageC;
-	RectTransform rectTransformC;
+	TestFont Mouse_x;
+	TestFont Mouse_y;
+
+	TestFont Image_x;
+	TestFont Image_y;
 };

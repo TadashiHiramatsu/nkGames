@@ -1,68 +1,25 @@
 #pragma once
 
+//アイテムの基底クラス
+//アイテムをリソースクラスで扱うため
+//IDで識別する
 class IItem
 {
 public:
 
-	//アイテムの種類
-	enum ItemType
+	//レアリティ。ただそれだけ
+	enum RarityCode
 	{
-		Non, //設定なし
-		UseItem, //消費アイテム
-	};
-
-	//アイテムパラメータ
-	struct ItemParameter
-	{
-		ItemParameter()
-		{
-			ID = 0;
-			Name = "名無しのアイテム";
-			IconFilePath = "Icon/NonData.png";
-		}
-		int ID;
-		char* Name;
-		char* IconFilePath;
+		Common, //コモン。どこでも手に入る。
+		Magic, //マジック
+		Rare, //レア。
+		Unique, //ユニーク
 	};
 
 public:
 
-	//コンストラクタ
-	IItem();
-
-	//デストラクタ
-	virtual ~IItem();
-
-	//データのロード
-	virtual void Load();
-
-	//初期化
-	virtual void Init();
-
-	//更新
-	virtual void Update(){}
-
-	//描画
-	virtual void Render();
-
-	//解放
-	virtual void Release();
-
-	//クリックされた時の処理
-	virtual void Click() = 0;
-
-	ItemParameter GetParameter()
-	{
-		return IP;
-	}
-
-	void SetSTramsform(RectTransform* _rt)
-	{
-		Image.SetTransform(_rt);
-	}
-		
-protected:
-	Image Image;
-
-	ItemParameter IP;
+private:
+	int ID; //アイテムを識別するためのコード
+	char* Name; //アイテムの名称。ゲーム内で表示するもの
+	RarityCode Rarity; //レアリティ。
 };

@@ -43,5 +43,9 @@ namespace nkEngine
 		shared_ptr<CTexture> Texture;
 
 		RectTransform* rectTransform;
+
+	public:
+		D3DXVECTOR4 uvRect; //UVç¿ïW x:ç∂.y:è„
+		D3DXVECTOR4 color; //êF
 	};
 }

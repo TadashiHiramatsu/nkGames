@@ -168,6 +168,12 @@
     <ClCompile Include="_Component\nkRectTransform.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="_Graphics\_UI\nkButton.cpp">
+      <Filter>Graphics\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="_Math\nkVector.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nkEngine.h">
@@ -316,6 +322,12 @@
     </ClInclude>
     <ClInclude Include="_Component\nkRectTransform.h">
       <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_UI\nkButton.h">
+      <Filter>Graphics\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="_Math\nkVector.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

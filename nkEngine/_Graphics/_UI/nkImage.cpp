@@ -3,7 +3,9 @@
 
 namespace nkEngine
 {
-	Image::Image():
+	Image::Image() :
+		uvRect(D3DXVECTOR4(0, 0, 1, 1)),
+		color(D3DXVECTOR4(1, 1, 1, 1)),
 		rectTransform(nullptr),
 		pEffect(nullptr)
 	{
@@ -15,7 +17,7 @@ namespace nkEngine
 
 	void Image::Load(const char * filepass)
 	{
-		pEffect = EffectManager().LoadEffect("2Dshader.fx");
+		pEffect = EffectManager().LoadEffect("Sprite.fx");
 
 		Texture.reset(new CTexture);
 		Texture->Load(filepass);
@@ -25,7 +27,7 @@ namespace nkEngine
 
 	void Image::Load(shared_ptr<CTexture>& _tex)
 	{
-		pEffect = EffectManager().LoadEffect("2Dshader.fx");
+		pEffect = EffectManager().LoadEffect("Sprite.fx");
 
 		Texture = _tex;
 
@@ -34,7 +36,7 @@ namespace nkEngine
 
 	void Image::Load()
 	{
-		pEffect = EffectManager().LoadEffect("2Dshader.fx");
+		pEffect = EffectManager().LoadEffect("Sprite.fx");
 
 		Init();
 	}
@@ -95,6 +97,10 @@ namespace nkEngine
 
 		pEffect->SetMatrix("matWorld", &rectTransform->WorldProjMatrix);
 		pEffect->SetTexture("g_diffuseTexture", Texture->GetTextureDX());
+
+		pEffect->SetValue("uvRect", &uvRect, sizeof(uvRect));
+		pEffect->SetValue("color", &color, sizeof(color));
+
 		pEffect->CommitChanges();
 
 		Device->SetStreamSource(0, Primitive.GetVertexBuffer()->GetBody(), 0, Primitive.GetVertexBuffer()->GetStride());

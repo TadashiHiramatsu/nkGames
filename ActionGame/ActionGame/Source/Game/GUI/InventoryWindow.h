@@ -21,7 +21,8 @@ public:
 	//•`‰æ
 	void Render()override;
 
-	bool SetItem(IItem* _item);
+	//ƒAƒCƒeƒ€‚ğæ“¾‚µ‚½
+	//bool SetItem(IItem* _item);
 
 private:
 	Image IWSkin;

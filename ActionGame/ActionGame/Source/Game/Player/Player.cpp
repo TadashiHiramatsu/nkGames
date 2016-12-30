@@ -302,8 +302,8 @@ void Player::Damage()
 	{
 		if (dmgCol != NULL && State != StateDamage) {
 			//ダメージを食らっている。
-			PP.Hp -= dmgCol->Damage;
-			if (PP.Hp <= 0) {
+			PP.NowHp -= dmgCol->Damage;
+			if (PP.NowHp <= 0) {
 				//死亡。
 				ChangeState(StateDead);
 			}
@@ -331,7 +331,11 @@ void Player::ParameterUpdate()
 
 		PP.NextLevelExperience = (a + b) / 2;
 
+		//意味ない
 		PP.Attack *= 1.1;
+
+		PP.MaxHp *= 1.1;
+
 		PP.Level++;
 	}
 }

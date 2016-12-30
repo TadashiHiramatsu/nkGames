@@ -21,7 +21,7 @@ namespace nkEngine
 	public:
 		TestFont();
 		~TestFont();
-		void Create(int _Height, int _Width, FontWeights _Weights);
+		void Create(int _Height, int _Width, FontWeights _Weights = FontWeights::NORMAL);
 		void Render(const char* _Text, int _Num, D3DXVECTOR2 _Pos = D3DXVECTOR2(0, 0));
 		void Render(const char* _Text, D3DXVECTOR2 _Pos = D3DXVECTOR2(0, 0));
 		void Render(int _Text, D3DXVECTOR2 _Pos = D3DXVECTOR2(0, 0));
