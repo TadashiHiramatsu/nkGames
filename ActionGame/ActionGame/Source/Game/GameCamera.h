@@ -1,25 +1,88 @@
+/**
+ * @file	Source\Game\GameCamera.h
+ *
+ * Declares the game camera class.
+ */
 #pragma once
 
 #include"Player\Player.h"
 
+/**
+ * A game camera.
+ *
+ * @author	HiramatsuTadashi
+ * @date	2016/12/31
+ */
 class GameCamera : public IGameObject
 {
 public:
+
+	/**
+	 * Default constructor.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2016/12/31
+	 */
 	GameCamera();
+
+	/**
+	 * Destructor.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2016/12/31
+	 */
 	~GameCamera();
+
+	/**
+	 * Starts this object.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2016/12/31
+	 */
 	void Start()override;
+
+	/**
+	 * Updates this object.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2016/12/31
+	 */
 	void Update()override;
 
+	/**
+	 * Gets the camera.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2016/12/31
+	 *
+	 * @return	Null if it fails, else the camera.
+	 */
 	CCamera* GetCamera()
 	{
 		return &Camera;
 	}
 
+	/**
+	 * Sets player pointer.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2016/12/31
+	 *
+	 * @param [in,out]	_pla	If non-null, the pla.
+	 */
 	void SetPlayerPointer(Player* _pla)
 	{
 		player = _pla;
 	}
 
+	/**
+	 * Gets direction forward.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2016/12/31
+	 *
+	 * @return	The direction forward.
+	 */
 	D3DXVECTOR3& GetDirectionForward()
 	{
 		D3DXVECTOR3 dirForward;
@@ -30,6 +93,14 @@ public:
 		return dirForward;
 	}
 
+	/**
+	 * Gets direction right.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2016/12/31
+	 *
+	 * @return	The direction right.
+	 */
 	D3DXVECTOR3& GetDirectionRight()
 	{
 		D3DXVECTOR3 dirRight;
@@ -42,12 +113,18 @@ public:
 
 private:
 
+	/** The camera. */
 	CCamera Camera;
+
+	/** The player. */
 	Player* player;
 
+	/** The view inverse. */
 	const D3DXMATRIX* mViewInv;
 
-	float distance; //‹——£
+	/** ‹——£. */
+	float distance;
 };
 
+/** The main camera. */
 extern GameCamera* g_MainCamera;

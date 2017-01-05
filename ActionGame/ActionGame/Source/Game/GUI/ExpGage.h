@@ -1,20 +1,19 @@
 /**
- * @file	Source\Game\GUI\LifeGage.h
+ * @file	Source\Game\GUI\ExpGage.h
  *
- * Declares the life gage class.
+ * Declares the exponent gage class.
  */
 #pragma once
 
 #include"..\Player\Player.h"
 
-
 /**
- * A life gage.
+ * An exponent gage.
  *
  * @author	HiramatsuTadashi
- * @date	2016/12/30
+ * @date	2016/12/31
  */
-class LifeGage : public IGameObject
+class ExpGage : public IGameObject
 {
 public:
 
@@ -22,23 +21,23 @@ public:
 	 * Default constructor.
 	 *
 	 * @author	HiramatsuTadashi
-	 * @date	2016/12/30
+	 * @date	2016/12/31
 	 */
-	LifeGage();
+	ExpGage();
 
 	/**
 	 * Destructor.
 	 *
 	 * @author	HiramatsuTadashi
-	 * @date	2016/12/30
+	 * @date	2016/12/31
 	 */
-	~LifeGage();
+	~ExpGage();
 
 	/**
 	 * Starts this object.
 	 *
 	 * @author	HiramatsuTadashi
-	 * @date	2016/12/30
+	 * @date	2016/12/31
 	 */
 	void Start()override;
 
@@ -46,7 +45,7 @@ public:
 	 * Updates this object.
 	 *
 	 * @author	HiramatsuTadashi
-	 * @date	2016/12/30
+	 * @date	2016/12/31
 	 */
 	void Update()override;
 
@@ -54,7 +53,7 @@ public:
 	 * Renders this object.
 	 *
 	 * @author	HiramatsuTadashi
-	 * @date	2016/12/30
+	 * @date	2016/12/31
 	 */
 	void Render()override;
 
@@ -62,26 +61,25 @@ public:
 	 * Sets a player.
 	 *
 	 * @author	HiramatsuTadashi
-	 * @date	2016/12/30
+	 * @date	2016/12/31
 	 *
-	 * @param [in]	_p	If non-null, the p.
+	 * @param [in,out]	_p	If non-null, the p.
 	 */
 	void SetPlayer(Player* _p)
 	{
 		player = _p;
 	}
-
 private:
+	RectTransform ExpFrameTransform; ///フレーム用
+	Image ExpFrameImage; ///フレームのImage
+	RectTransform ExpTransform; ///本体用
+	Image ExpImage; ///本体用Image
 
-	RectTransform LifeFrameTransform; ///フレーム用
-	Image LifeFrameImage; ///フレームのImage
-	RectTransform LifeTransform; ///本体用
-	Image LifeImage; ///LifeのImage
+	Player* player;
 
-	TestFont Life;
+	int* NextExp;
+	int* NowExp;
 
-	Player* player; ///プレイヤーのポインタ
-	
-	int* MaxLife;
-	int* NowLife;
+	TestFont Level;
+
 };

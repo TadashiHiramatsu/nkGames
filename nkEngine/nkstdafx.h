@@ -93,3 +93,6 @@ using namespace std;
 
 //シーンレンダー
 #include"_Graphics\nkScreenRender.h"
+
+//外部ファイル読み込み
+#include"_DataLoad\nkCSVData.h"

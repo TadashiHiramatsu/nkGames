@@ -9,6 +9,9 @@
 #include"Monster\MonsterHabitat.h"
 #include"GUI\InventoryWindow.h"
 #include"GUI\LifeGage.h"
+#include"GUI\ExpGage.h"
+
+#include"Item\ItemResource.h"
 
 CollisionWorld* g_CollisionWorld = nullptr;
 GameCamera* g_MainCamera = nullptr;
@@ -34,6 +37,8 @@ void GameScene::Start()
 	g_CollisionWorld = NewGO<CollisionWorld>();
 	g_MainCamera = NewGO<GameCamera>(1);
 
+	ItemResource().Load();
+
 	g_Player = NewGO<Player>();
 
 
@@ -49,4 +54,7 @@ void GameScene::Start()
 
 	LifeGage* lifeGage = NewGO<LifeGage>();
 	lifeGage->SetPlayer(g_Player);
+
+	ExpGage* expGage = NewGO<ExpGage>();
+	expGage->SetPlayer(g_Player);
 }

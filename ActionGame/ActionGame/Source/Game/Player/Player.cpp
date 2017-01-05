@@ -65,7 +65,8 @@ namespace
 	};
 }
 
-Player::Player()
+Player::Player():
+	itime(0)
 {
 }
 
@@ -120,7 +121,6 @@ void Player::Start()
 	collisionObject.reset(new btCollisionObject());
 	collisionObject->setCollisionShape(sphereShape->GetBody());
 
-	TF.Create(50,20,TestFont::FontWeights::NORMAL);
 }
 
 void Player::Update()
@@ -170,7 +170,7 @@ void Player::Update()
 		moveDir.y = 0.0f;	//Y軸はいらない。
 		moveDir.z = dirRight.z * move.x + dirForward.z * move.z;
 
-		static float MOVE_SPEED = 4.0f;
+		static float MOVE_SPEED = 2.0f;
 		moveSpeed.x = moveDir.x * MOVE_SPEED;
 		moveSpeed.z = moveDir.z * MOVE_SPEED;
 
@@ -187,7 +187,7 @@ void Player::Update()
 			ChangeState(StateCode::StateWaiting);
 		}
 
-		if (Input.GetKeyButton(KeyCode::Shift_L) && !CharacterController.IsJump())
+		if (Input.GetMoudeButtonDown(MouseButton::MouseLeft) && !CharacterController.IsJump())
 		{
 			ChangeState(StateCode::StateAttack);
 			//Particle.SetCreate(true);
@@ -236,6 +236,18 @@ void Player::Update()
 
 	animEvent.Update();
 
+	if (State != StateDead && State != StateDamage)
+	{
+		itime += Time().DeltaTime();
+	}
+	if (itime >= 3)
+	{
+		if (PP.MaxHp > PP.NowHp)
+		{
+			PP.NowHp++;
+		}
+	}
+
 	Damage();
 
 	transform.Update();
@@ -258,8 +270,6 @@ void Player::Render()
 	LWeaponModel.Render();
 	RWeaponModel.Render();
 	//Particle.Render();
-
-	TF.Render("Level",PP.Level);
 }
 
 void Player::Release()
@@ -303,6 +313,7 @@ void Player::Damage()
 		if (dmgCol != NULL && State != StateDamage) {
 			//ダメージを食らっている。
 			PP.NowHp -= dmgCol->Damage;
+			itime = 0;
 			if (PP.NowHp <= 0) {
 				//死亡。
 				ChangeState(StateDead);
@@ -334,7 +345,10 @@ void Player::ParameterUpdate()
 		//意味ない
 		PP.Attack *= 1.1;
 
-		PP.MaxHp *= 1.1;
+		//Hp上昇
+		float idx = PP.MaxHp * 1.1 - PP.MaxHp;
+		PP.MaxHp += idx;
+		PP.NowHp += idx;
 
 		PP.Level++;
 	}

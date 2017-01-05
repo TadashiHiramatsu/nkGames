@@ -15,7 +15,7 @@ public:
 			Experience = 0;
 			NextLevelExperience = 10;
 			Attack = 1;
-			MaxHp = NowHp = 10;
+			MaxHp = NowHp = 100;
 			HitTime = 1.0f;
 		}
 		int Level;					//レベル
@@ -106,9 +106,8 @@ private:
 	CLight RWeaponLight;
 	CModelRender RWeaponModel;
 
-	TestFont TF;
-
 	float LocalTime = 0; //無敵時間計測用
+	float itime; //ライフ回復時間用
 
 	std::unique_ptr<btCollisionObject>	collisionObject;		//コリジョンオブジェクト。
 	std::unique_ptr<CSphereCollider>	sphereShape;

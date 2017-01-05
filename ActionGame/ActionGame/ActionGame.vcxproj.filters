@@ -102,6 +102,12 @@
     <ClCompile Include="Source\Game\GUI\LifeGage.cpp">
       <Filter>Game\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\GUI\ExpGage.cpp">
+      <Filter>Game\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\ItemResource.cpp">
+      <Filter>Game\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -169,6 +175,12 @@
     </ClInclude>
     <ClInclude Include="Source\Game\GUI\LifeGage.h">
       <Filter>Game\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\GUI\ExpGage.h">
+      <Filter>Game\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\ItemResource.h">
+      <Filter>Game\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

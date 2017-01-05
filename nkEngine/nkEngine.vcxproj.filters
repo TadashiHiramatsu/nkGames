@@ -49,6 +49,9 @@
     <Filter Include="Graphics\PreRender">
       <UniqueIdentifier>{2af43d90-50b3-44e0-8d21-eaecdc06871a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DataLoad">
+      <UniqueIdentifier>{a7c38f2c-911d-488f-8146-1b2e0ef0eb24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nkEngine.cpp">
@@ -173,6 +176,9 @@
     </ClCompile>
     <ClCompile Include="_Math\nkVector.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="_DataLoad\nkCSVData.cpp">
+      <Filter>DataLoad</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="_Math\nkVector.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="_DataLoad\nkCSVData.h">
+      <Filter>DataLoad</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
