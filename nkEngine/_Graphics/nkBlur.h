@@ -1,48 +1,111 @@
-//ブラー
+/**
+ * @file _Graphics\nkBlur.h
+ *
+ * ブラークラスの定義.
+ */
 #pragma once
 
 namespace nkEngine
 {
 
-	class CBlur
+	/**
+	 * ブラークラス.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	class Blur
 	{
 	public:
-		//コンストラクタ
-		CBlur();
-		
-		//デストラクタ
-		~CBlur();
-		
-		//初期化
-		//param[in] 横幅
-		//param[in] 縦幅
-		//param[in] 元となるテクスチャ
-		void Init(int w,int h,const CTexture& srcTexture);
-		//描画
+
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		Blur();
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		~Blur();
+
+		/**
+		 * 初期化.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param w			 横幅.
+		 * @param h			 縦幅.
+		 * @param srcTexture 元となるテクスチャ.
+		 */
+		void Init(int w,int h,const Texture& srcTexture);
+
+		/**
+		 * 描画.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Render();
 
-		//テクスチャを取得
-		const CTexture* GetTexture()const
+		/**
+		 * テクスチャを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return Null if it fails, else the texture.
+		 */
+		const Texture* GetTexture()const
 		{
-			return m_rt[1].GetTexture();
+			return BlurRT_[1].GetTexture();
 		}
 
+		/**
+		 * テクスチャの横幅.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The size w.
+		 */
 		int GetSizeW()
 		{
-			return m_srcTexWH[0];
+			return SrcTexWH_[0];
 		}
 
+		/**
+		 * テクスチャの高さ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The size h.
+		 */
 		int GetSizeH()
 		{
-			return m_srcTexWH[1];
+			return SrcTexWH_[1];
 		}
 
 	private:
-		CRenderTarget m_rt[2]; //ガウシアンブラーの結果を描きこむレンダリングターゲット
-		const CTexture*	m_srcTexture; //ソースとなるテクスチャ
-		ID3DXEffect* m_Effect; //エフェクト
-		int m_srcTexWH[2]; //テクスチャの幅
 
-		CPrimitive Primitive;
+		/** ガウシアンブラーの結果を描きこむレンダリングターゲット. */
+		RenderTarget BlurRT_[2];
+		/** ソースとなるテクスチャ. */
+		const Texture*	SrcTexture_;
+		/** エフェクト. */
+		ID3DXEffect* Effect_;
+		/** テクスチャの幅. */
+		int SrcTexWH_[2];
+		/** プリミティブ. */
+		Primitive Primitive_;
+
 	};
-}
+
+}// namespace nkEngine

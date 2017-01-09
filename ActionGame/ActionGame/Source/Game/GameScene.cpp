@@ -1,3 +1,8 @@
+/**
+ * @file	Source\Game\GameScene.cpp
+ *
+ * Implements the game scene class.
+ */
 #include"stdafx.h"
 #include"GameScene.h"
 
@@ -50,6 +55,7 @@ void GameScene::Start()
 
 	NewGO<MonsterHabitat>();
 
+	//UI
 	g_Inventory = NewGO<InventoryWindow>();
 
 	LifeGage* lifeGage = NewGO<LifeGage>();

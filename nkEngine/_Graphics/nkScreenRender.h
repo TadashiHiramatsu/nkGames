@@ -1,3 +1,8 @@
+/**
+ * @file _Graphics\nkScreenRender.h
+ *
+ * シーンをレンダリングするクラスを定義.
+ */
 #pragma once
 
 #include"_PostEffect\nkAntiAliasing.h"
@@ -5,45 +10,104 @@
 
 namespace nkEngine
 {
+
+	/**
+	 * シーンレンダークラス.
+	 * シングルトンクラス
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	class CScreenRender
 	{
 	private:
 
-		//コンストラクタ
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		CScreenRender();
-		//デストラクタ
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		~CScreenRender();
 
 	public:
 
-		//インスタンス取得
+		/**
+		 * インスタンスの取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The instance.
+		 */
 		inline static CScreenRender& GetInstance()
 		{
 			static CScreenRender instance;
 			return instance;
 		}
 
-		//初期化
-		void Start(const SInitParam& initParam);
+		/**
+		 * 初期化.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param initParam The init parameter.
+		 */
+		void Start(const InitParamS& initParam);
 
+		/**
+		 * 更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Loop();
 
-		//メインレンダーターゲットを取得
+		/**
+		 * メインレンダーターゲットを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The main render target.
+		 */
 		CRenderTarget& GetMainRenderTarget()
 		{
-			return m_rtMain;
+			return MainRT_;
 		}
 
 	private:
-		CRenderTarget m_rtBackBuffer;
-		CRenderTarget m_rtMain;
 
-		CAntiAliasing m_AntiAliasing;
-		CBloom m_Bloom;
+		/** バックバッファのレンダーターゲット. */
+		CRenderTarget BackBufferRT_;
+		/** メインのレンダーターゲット. */
+		CRenderTarget MainRT_;
+		/** アンチエイリアシング. */
+		CAntiAliasing AntiAliasing_;
+		/** ブルーム. */
+		CBloom Bloom_;
 	};
 
+	/**
+	 * スクリーンレンダークラスの取得.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @return A reference to a CScreenRender.
+	 */
 	inline static CScreenRender& ScreenRender()
 	{
 		return CScreenRender::GetInstance();
 	}
-}
+	 
+}// namespace nkEngine

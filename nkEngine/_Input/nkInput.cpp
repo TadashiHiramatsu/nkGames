@@ -1,37 +1,64 @@
+/**
+ * @file	_Input\nkInput.cpp
+ *
+ * DirectInputクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkInput.h"
 
 namespace nkEngine
 {
-
+		
+	/**
+	 * 初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @param hWnd Handle of the window.
+	 *
+	 * @return A hResult.
+	 */
 	HRESULT CInput::Init(HWND hWnd)
 	{
 		HRESULT hr;
 
 		if (FAILED(hr = DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION,
-			IID_IDirectInput8, (VOID**)&m_DInput, NULL)))
+			IID_IDirectInput8, (VOID**)&DInput_, NULL)))
 		{
 			return hr;
 		}
 
+		//マウスの初期化
 		InitMouse(hWnd);
+
+		//キーボードの初期化
 		InitKeyboard(hWnd);
 
 		return S_OK;
 	}
+
+	/**
+	 * マウスの初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @param hWnd Handle of the window.
+	 */
 	void CInput::InitMouse(HWND hWnd)
 	{
 		DIOBJECTDATAFORMAT ObjectFormats[] =
 		{
-			{ &GUID_XAxis, FIELD_OFFSET(MouseState, PosX),    // X axis
+			{ &GUID_XAxis, FIELD_OFFSET(MouseStateS, PosX_),    // X axis
 			DIDFT_RELAXIS | DIDFT_ANYINSTANCE, 0 },
-			{ &GUID_YAxis, FIELD_OFFSET(MouseState, PosY),    // Y axis
+			{ &GUID_YAxis, FIELD_OFFSET(MouseStateS, PosY_),    // Y axis
 			DIDFT_RELAXIS | DIDFT_ANYINSTANCE, 0 },
-			{ &GUID_Button, FIELD_OFFSET(MouseState, Button[0]),        // Button 0
+			{ &GUID_Button, FIELD_OFFSET(MouseStateS, Button_[0]),        // Button 0
 			DIDFT_BUTTON | DIDFT_ANYINSTANCE, 0 },
-			{ &GUID_Button, FIELD_OFFSET(MouseState, Button[1]),        // Button 1 (optional)
+			{ &GUID_Button, FIELD_OFFSET(MouseStateS, Button_[1]),        // Button 1 (optional)
 			DIDFT_BUTTON | DIDFT_ANYINSTANCE | DIDFT_OPTIONAL, 0 },
-			{ &GUID_Button, FIELD_OFFSET(MouseState, Button[2]),        // Button 2 (optional)
+			{ &GUID_Button, FIELD_OFFSET(MouseStateS, Button_[2]),        // Button 2 (optional)
 			DIDFT_BUTTON | DIDFT_ANYINSTANCE | DIDFT_OPTIONAL, 0 }
 		};
 
@@ -40,74 +67,100 @@ namespace nkEngine
 			sizeof(DIDATAFORMAT),
 			sizeof(DIOBJECTDATAFORMAT),
 			DIDF_ABSAXIS,
-			sizeof(MouseState),
+			sizeof(MouseStateS),
 			sizeof(ObjectFormats) / sizeof(DIOBJECTDATAFORMAT),
 			ObjectFormats
 		};
 
-		m_DInput->CreateDevice(GUID_SysMouse, &m_DInputMouse, NULL);
+		DInput_->CreateDevice(GUID_SysMouse, &DInputMouse_, NULL);
 
-		m_DInputMouse->SetDataFormat(&dfMouse);
+		DInputMouse_->SetDataFormat(&dfMouse);
 
-		m_DInputMouse->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
+		DInputMouse_->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
 	
-		m_DInputMouse->Acquire();
+		DInputMouse_->Acquire();
 
 	}
 
+	/**
+	 * キーボードの初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @param hWnd Handle of the window.
+	 */
 	void CInput::InitKeyboard(HWND hWnd)
 	{
-		m_DInput->CreateDevice(GUID_SysKeyboard,&m_DInputKeyboard,NULL);
+		DInput_->CreateDevice(GUID_SysKeyboard,&DInputKeyboard_,NULL);
 
-		m_DInputKeyboard->SetDataFormat(&c_dfDIKeyboard);
+		DInputKeyboard_->SetDataFormat(&c_dfDIKeyboard);
 
-		m_DInputKeyboard->SetCooperativeLevel(hWnd,DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
+		DInputKeyboard_->SetCooperativeLevel(hWnd,DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
 	}
 
+	/**
+	 * 更新.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	void CInput::Update()
 	{
 		HRESULT hr;
 
-		if (m_isMouse)
+		if (isMouse_)
 		{
-			GetCursorPos(&MousePos);
-			ScreenToClient(Engine().GetHWND(), &MousePos);
+			//マウスのポジションを取得
+			GetCursorPos(&MousePos_);
+			//クライアントサイズに変更
+			ScreenToClient(Engine().GetHWND(), &MousePos_);
 
-			m_MouseState0 = m_MouseState;
-			hr = m_DInputMouse->GetDeviceState(sizeof(MouseState), &m_MouseState);
+			//1フレーム前の結果をコピー
+			MouseStateBef_ = MouseState_;
+			
+			hr = DInputMouse_->GetDeviceState(sizeof(MouseStateS), &MouseState_);
 			if (FAILED(hr))
 			{
-				m_DInputMouse->Acquire();
-				m_DInputMouse->GetDeviceState(sizeof(MouseState), &m_MouseState);
+				DInputMouse_->Acquire();
+				DInputMouse_->GetDeviceState(sizeof(MouseStateS), &MouseState_);
 			}
 		}
 
-		if (m_isKeyboard)
+		if (isKeyboard_)
 		{
-			memcpy(m_Keyboard0, m_Keyboard, 256);
-			hr = m_DInputKeyboard->GetDeviceState(sizeof(m_Keyboard), &m_Keyboard);
+			//1フレーム前の結果をコピー
+			memcpy(KeyboardBef_, Keyboard_, 256);
+
+			hr = DInputKeyboard_->GetDeviceState(sizeof(Keyboard_), &Keyboard_);
 			if (FAILED(hr))
 			{
-				m_DInputKeyboard->Acquire();
-				m_DInputKeyboard->GetDeviceState(sizeof(m_Keyboard), &m_Keyboard);
+				DInputKeyboard_->Acquire();
+				DInputKeyboard_->GetDeviceState(sizeof(Keyboard_), &Keyboard_);
 			}
 		}
 	}
 
+	/**
+	 * 解放.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	void CInput::Release()
 	{
-		if (m_DInputMouse)
+		if (DInputMouse_)
 		{
-			m_DInputMouse->Unacquire();
+			DInputMouse_->Unacquire();
 		}
-		if (m_DInputKeyboard)
+		if (DInputKeyboard_)
 		{
-			m_DInputKeyboard->Unacquire();
+			DInputKeyboard_->Unacquire();
 		}
 
-		SAFE_RELEASE(m_DInputMouse);
-		SAFE_RELEASE(m_DInputKeyboard);
-		SAFE_RELEASE(m_DInput);
+		SAFE_RELEASE(DInputMouse_);
+		SAFE_RELEASE(DInputKeyboard_);
+		SAFE_RELEASE(DInput_);
 	}
 
-}
+}// namespace nkEngine

@@ -1,26 +1,50 @@
+/**
+ * @file _Graphics\_UI\nkButton.cpp
+ *
+ * ボタンクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkButton.h"
 
 namespace nkEngine
 {
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	Button::Button():
-		isBefPushed(false),
-		isPushed(false),
-		rectTransform(nullptr)
+		isPushedBef_(false),
+		isPushed_(false),
+		RectTransform_(nullptr)
 	{
 	}
 
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	Button::~Button()
 	{
 	}
-	
+
+	/**
+	 * 更新.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	void Button::Update()
 	{
 		//1フレーム前の結果をコピー
-		isBefPushed = isPushed;
+		isPushedBef_ = isPushed_;
 
-		CollisionRect col = rectTransform->ColRect;
+		CollisionRect col = RectTransform_->ColRect;
 
 	}
 
-}
+}// namespace nkEngine

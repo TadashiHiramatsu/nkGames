@@ -1,33 +1,72 @@
+/**
+ * @file _Graphics\nkEffectManager.cpp
+ *
+ * エフェクトマネージャクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkEffectManager.h"
 
 namespace nkEngine
 {
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	CEffectManager::CEffectManager()
 	{
 	}
+
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	CEffectManager::~CEffectManager()
 	{
 		Release();
 	}
+
+	/**
+	* エフェクトのロード.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/09
+	*
+	* @param filePath ファイルパス.
+	*
+	* @return ロードしたエフェクト.
+	*/
 	ID3DXEffect * CEffectManager::LoadEffect(const char * filePath)
 	{
+		//エフェクトの作成
 		ID3DXEffect* pEffect = nullptr;
-		int hash = CHash::MakeHash(filePath);
 
-		auto it = m_effectDictinary.find(hash);
+		//ハッシュ値の作成
+		int hash = Hash::MakeHash(filePath);
 
-		if (it == m_effectDictinary.end())
+		//ハッシュ値から探す
+		auto it = EffectDictinary_.find(hash);
+
+		if (it == EffectDictinary_.end())
 		{
 			//新規
+			
+			//ファイルパスを作成
 			char* baseDir = "Asset/Shader/";
-			char fileP[64];
-			strcpy(fileP, baseDir);
-			strcat(fileP, filePath);
+			char fp[64];
+			strcpy(fp, baseDir);
+			strcat(fp, filePath);
+
 			LPD3DXBUFFER  compileErrorBuffer = nullptr;
+
+			//ファイルをロード
 			HRESULT hr = D3DXCreateEffectFromFile(
 				Engine().GetDevice(),
-				fileP,
+				fp,
 				NULL,
 				NULL,
 #ifdef _DEBUG
@@ -39,13 +78,15 @@ namespace nkEngine
 				&pEffect,
 				&compileErrorBuffer
 			);
+
+			//エラー
 			if (FAILED(hr)) {
 				MessageBox(nullptr, r_cast<char*>(compileErrorBuffer->GetBufferPointer()), "error", MB_OK);
 				NK_ASSERT(SUCCEEDED(hr), "error");
 			}
 
-			pair<int, ID3DXEffect*> node(hash, pEffect);
-			m_effectDictinary.insert(node);
+			//保存
+			EffectDictinary_.insert(make_pair(hash, pEffect));
 		}
 		else
 		{
@@ -55,11 +96,19 @@ namespace nkEngine
 
 		return pEffect;
 	}
+
+	/**
+	 * Releases this object.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	void CEffectManager::Release()
 	{
-		for (auto p : m_effectDictinary) {
+		for (auto p : EffectDictinary_) {
 			//SAFE_RELEASE(p.second);
 		}
-		m_effectDictinary.clear();
+		EffectDictinary_.clear();
 	}
-}
+
+}// namespace nkEngine

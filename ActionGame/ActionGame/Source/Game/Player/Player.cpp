@@ -244,7 +244,12 @@ void Player::Update()
 	{
 		if (PP.MaxHp > PP.NowHp)
 		{
-			PP.NowHp++;
+			static bool flg = true;
+			if (flg)
+			{
+				PP.NowHp++;
+			}
+			flg = !flg;
 		}
 	}
 

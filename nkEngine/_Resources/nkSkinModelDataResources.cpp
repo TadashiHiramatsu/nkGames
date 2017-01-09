@@ -1,26 +1,56 @@
+/**
+ * @file	_Resources\nkSkinModelDataResources.cpp
+ *
+ * スキンモデルのリソースクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkSkinModelDataResources.h"
 #include"nkSkinModelDataHandle.h"
 
 namespace nkEngine
 {
+
+	/**
+	 * Default constructor.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
 	CSkinModelDataResources::CSkinModelDataResources()
 	{
 
 	}
 
+	/**
+	 * Destructor.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
 	CSkinModelDataResources::~CSkinModelDataResources()
 	{
 	
 	}
-	
-	void CSkinModelDataResources::Load(CSkinModelDataHandle& _SkinModelDataHandle, const char* _FilePath, CAnimation* _Anim, bool _isInstancing, int _NumInstancing)
+
+	/**
+	 * 読み取り.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 *
+	 * @param [in,out]	skinModelDataHandle	スキンモデルデータハンドル.
+	 * @param 		  	filePath		   	ファイルパス.
+	 * @param [in,out]	anim			   	アニメーション.
+	 * @param 		  	isInstancing	   	インスタンシングフラグ.
+	 * @param 		  	numInstancing	   	インスタンス数.
+	 */
+	void CSkinModelDataResources::Load(SkinModelDataHandle& skinModelDataHandle, const char* filePath, CAnimation* anim, bool isInstancing, int numInstancing)
 	{
-		if (_isInstancing)
+		if (isInstancing)
 		{
 			//インスタンシングモデルはモデルデータの使いまわし不可
-			CSkinModelDataPtr SkinModelData(new CSkinModelData);
-			SkinModelData->LoadModelData(_FilePath, _Anim);
+			SkinModelDataPtrT SkinModelData(new CSkinModelData);
+			SkinModelData->LoadModelData(filePath, anim);
 		
 			//インスタンシング描画用のデータを作成
 			D3DVERTEXELEMENT9 VertexElement[] = {
@@ -32,47 +62,32 @@ namespace nkEngine
 			};
 
 			//インスタンシング描画用データを設定
-			SkinModelData->CreateInstancingRenderData(_NumInstancing, VertexElement);
+			SkinModelData->CreateInstancingRenderData(numInstancing, VertexElement);
 
 			//リストに登録
-			InstancingList.push_back(SkinModelData);
-			_SkinModelDataHandle.Init(SkinModelData, _Anim, false);
+			InstancingList_.push_back(SkinModelData);
+			skinModelDataHandle.Init(SkinModelData, anim, false);
 		}
 		else
 		{
 			//通常モデル
-			int hash = CHash::MakeHash(_FilePath);
-			auto& it = SkinModelDataMap.find(hash);
+			int hash = CHash::MakeHash(filePath);
+			auto& it = SkinModelDataMap_.find(hash);
 			
-			if (it == SkinModelDataMap.end())
+			if (it == SkinModelDataMap_.end())
 			{
 				//未登録
-				CSkinModelDataPtr SkinModelData(new CSkinModelData);
-				SkinModelData->LoadModelData(_FilePath, _Anim);
-				SkinModelDataMap.insert(pair<int, CSkinModelDataPtr>(hash, SkinModelData));
-				_SkinModelDataHandle.Init(SkinModelData, _Anim, false);
+				SkinModelDataPtrT SkinModelData(new CSkinModelData);
+				SkinModelData->LoadModelData(filePath, anim);
+				SkinModelDataMap_.insert(make_pair(hash, SkinModelData));
+				skinModelDataHandle.Init(SkinModelData, anim, false);
 			}
 			else
 			{
 				//既存
-				_SkinModelDataHandle.Init(it->second, _Anim, true);
+				skinModelDataHandle.Init(it->second, anim, true);
 			}
 		}
 	}
 
-	void CSkinModelDataResources::Load(const char * _FilePath)
-	{
-		//通常モデル
-		int hash = CHash::MakeHash(_FilePath);
-		auto& it = SkinModelDataMap.find(hash);
-
-		if (it == SkinModelDataMap.end())
-		{
-			//未登録
-			CSkinModelDataPtr SkinModelData(new CSkinModelData);
-			SkinModelData->LoadModelData(_FilePath, nullptr);
-			SkinModelDataMap.insert(pair<int, CSkinModelDataPtr>(hash, SkinModelData));
-		}
-	}
-	
-}
+}// namespace nkEngine

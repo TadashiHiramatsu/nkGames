@@ -1,41 +1,73 @@
+/**
+ * @file _Graphics\nkBlur.cpp
+ *
+ * ブラークラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkBlur.h"
 
 namespace nkEngine
 {
-	CBlur::CBlur() :
-		m_srcTexture(nullptr)
-	{
 
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	Blur::Blur() :
+		SrcTexture_(nullptr)
+	{
 	}
 
-	CBlur::~CBlur()
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	Blur::~Blur()
 	{
-
 	}
 
-	void CBlur::Init(int w, int h, const CTexture & srcTexture)
+	/**
+	 * 初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @param w			 The width.
+	 * @param h			 The height.
+	 * @param srcTexture Source texture.
+	 */
+	void Blur::Init(int w, int h, const Texture & srcTexture)
 	{
-		m_srcTexture = &srcTexture;
+		
+		//ソーステクスチャをコピー
+		SrcTexture_ = &srcTexture;
 
 		D3DSURFACE_DESC desc;
-		m_srcTexture->GetTextureDX()->GetLevelDesc(0, &desc);
+		SrcTexture_->GetTexture()->GetLevelDesc(0, &desc);
 
-		m_srcTexWH[0] = w;
-		m_srcTexWH[1] = h;
+		//サイズをコピー
+		SrcTexWH_[0] = w;
+		SrcTexWH_[1] = h;
 
+		//ブラーサイズを作成
 		int  size[2][2]
 		{
-			{ w >> 1,h },
-			{w >> 1,h >> 1},
+			{ w >> 1, h     },
+			{ w >> 1, h >> 1},
 		};
 
+		//レンダリングターゲットの作成
 		for (int i = 0; i < 2; i++)
 		{
-			m_rt[i].Create(size[i][0], size[i][1], 1, desc.Format, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);
+			BlurRT_[i].Create(size[i][0], size[i][1], 1, desc.Format, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);
 		}
 
-		static SShapeVertex_PT vertex[]{
+		static SShapeVertex_PT vertex[] = 
+		{
 			{
 				-1.0f, 1.0f, 0.0f, 1.0f,
 				0.0f, 0.0f
@@ -53,35 +85,43 @@ namespace nkEngine
 				1.0f, 1.0f
 			},
 		};
-		static unsigned short index[] = {
+		static unsigned short index[] =
+		{
 			0,1,2,3
 		};
-		static const D3DVERTEXELEMENT9 scShapeVertex_PT_Element[] = {
-			{ 0, 0 ,   D3DDECLTYPE_FLOAT4		, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION	, 0 },
-			{ 0, 16 ,  D3DDECLTYPE_FLOAT2		, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD	, 0 },
-			D3DDECL_END()
-		};
-		Primitive.Create(
-			CPrimitive::eTriangleStrip,
+		
+		//プリミティブ作成
+		Primitive_.Create(
+			Primitive::TriangleStrip,
 			4,
 			sizeof(SShapeVertex_PT),
 			scShapeVertex_PT_Element,
 			vertex,
 			4,
-			eIndexFormat16,
+			IndexFormat16,
 			index
 		);
 
-		m_Effect = EffectManager().LoadEffect("Blur.fx");
+		//エフェクトのロード
+		Effect_ = EffectManager().LoadEffect("Blur.fx");
+
 	}
 
-	void CBlur::Render()
+	/**
+	 * 描画.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	void Blur::Render()
 	{
-		if (m_srcTexture != nullptr)
+		if (SrcTexture_ != nullptr)
 		{
 
+			//デバイスの取得
 			IDirect3DDevice9* Device = Engine().GetDevice();
 
+			//バックバッファの取得
 			LPDIRECT3DSURFACE9 BackBuffer;
 			LPDIRECT3DSURFACE9 BackDepthBuffer;
 
@@ -90,56 +130,75 @@ namespace nkEngine
 
 			//Xブラー。
 			{
-				Device->SetRenderTarget(0, m_rt[0].GetSurface());
-				Device->SetDepthStencilSurface(m_rt[0].GetDepthSurface());
+				
+				//レンダリングターゲットをブラーに設定
+				Device->SetRenderTarget(0, BlurRT_[0].GetSurface());
+				Device->SetDepthStencilSurface(BlurRT_[0].GetDepthSurface());
 
 				float size[2] = {
-					s_cast<float>(m_srcTexWH[0]),
-					s_cast<float>(m_srcTexWH[1])
+					s_cast<float>(SrcTexWH_[0]),
+					s_cast<float>(SrcTexWH_[1])
 				};
-				m_Effect->SetTechnique("XBlur");
-				m_Effect->Begin(0, D3DXFX_DONOTSAVESTATE);
-				m_Effect->BeginPass(0);
-				m_Effect->SetTexture("g_blur", m_srcTexture->GetTextureDX());
-				m_Effect->SetValue("g_texSize", size, sizeof(size));
-				m_Effect->CommitChanges();
 
-				Device->SetStreamSource(0, Primitive.GetVertexBuffer()->GetBody(), 0, Primitive.GetVertexBuffer()->GetStride());
-				Device->SetIndices(Primitive.GetIndexBuffer()->GetBody());
-				Device->SetVertexDeclaration(Primitive.GetVertexDecl());
-				Device->DrawIndexedPrimitive(Primitive.GetD3DPrimitiveType(), 0, 0, Primitive.GetNumVertex(), 0, Primitive.GetNumPolygon());
 
-				m_Effect->EndPass();
-				m_Effect->End();
+				Effect_->SetTechnique("XBlur");
+
+				Effect_->Begin(0, D3DXFX_DONOTSAVESTATE);
+				Effect_->BeginPass(0);
+				
+				Effect_->SetTexture("g_blur", SrcTexture_->GetTexture());
+				Effect_->SetValue("g_texSize", size, sizeof(size));
+				
+				Effect_->CommitChanges();
+
+				//プリミティブの描画
+				Device->SetStreamSource(0, Primitive_.GetVertexBuffer()->GetBody(), 0, Primitive_.GetVertexBuffer()->GetStride());
+				Device->SetIndices(Primitive_.GetIndexBuffer()->GetBody());
+				Device->SetVertexDeclaration(Primitive_.GetVertexDecl());
+				Device->DrawIndexedPrimitive(Primitive_.GetD3DPrimitiveType(), 0, 0, Primitive_.GetNumVertex(), 0, Primitive_.GetNumPolygon());
+
+				Effect_->EndPass();
+				Effect_->End();
+
 			}
 			//Yブラー。
 			{
-				Device->SetRenderTarget(0, m_rt[1].GetSurface());
-				Device->SetDepthStencilSurface(m_rt[1].GetDepthSurface());
+
+				Device->SetRenderTarget(0, BlurRT_[1].GetSurface());
+				Device->SetDepthStencilSurface(BlurRT_[1].GetDepthSurface());
 
 
-				float size[2] = {
-					s_cast<float>(m_rt[0].GetSizeW()),
-					s_cast<float>(m_rt[0].GetSizeH())
+				float size[2] = 
+				{
+					s_cast<float>(BlurRT_[0].GetSizeW()),
+					s_cast<float>(BlurRT_[0].GetSizeH())
 				};
-				m_Effect->SetTechnique("YBlur");
-				m_Effect->Begin(0, D3DXFX_DONOTSAVESTATE);
-				m_Effect->BeginPass(0);
-				m_Effect->SetTexture("g_tex", m_rt[0].GetTexture()->GetTextureDX());
-				m_Effect->SetValue("g_texSize", size, sizeof(size));
-				m_Effect->CommitChanges();
 
-				Device->SetStreamSource(0, Primitive.GetVertexBuffer()->GetBody(), 0, Primitive.GetVertexBuffer()->GetStride());
-				Device->SetIndices(Primitive.GetIndexBuffer()->GetBody());
-				Device->SetVertexDeclaration(Primitive.GetVertexDecl());
-				Device->DrawIndexedPrimitive(Primitive.GetD3DPrimitiveType(), 0, 0, Primitive.GetNumVertex(), 0, Primitive.GetNumPolygon());
+				Effect_->SetTechnique("YBlur");
 
-				m_Effect->EndPass();
-				m_Effect->End();
+				Effect_->Begin(0, D3DXFX_DONOTSAVESTATE);
+				Effect_->BeginPass(0);
+				
+				Effect_->SetTexture("g_tex", BlurRT_[0].GetTextureDX());
+				Effect_->SetValue("g_texSize", size, sizeof(size));
+				
+				Effect_->CommitChanges();
+
+				Device->SetStreamSource(0, Primitive_.GetVertexBuffer()->GetBody(), 0, Primitive_.GetVertexBuffer()->GetStride());
+				Device->SetIndices(Primitive_.GetIndexBuffer()->GetBody());
+				Device->SetVertexDeclaration(Primitive_.GetVertexDecl());
+				Device->DrawIndexedPrimitive(Primitive_.GetD3DPrimitiveType(), 0, 0, Primitive_.GetNumVertex(), 0, Primitive_.GetNumPolygon());
+
+				Effect_->EndPass();
+				Effect_->End();
+
 			}
 
+			//バックバッファに戻す
 			Device->SetRenderTarget(0, BackBuffer);
 			Device->SetDepthStencilSurface(BackDepthBuffer);
+		
 		}
 	}
-}
+
+}// namespace nkEngine

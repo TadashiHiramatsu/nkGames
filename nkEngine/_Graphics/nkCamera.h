@@ -1,211 +1,405 @@
-//カメラクラス
+/**
+ * @file _Graphics\nkCamera.h
+ *
+ * カメラクラスの定義.
+ */
 #pragma once
 
 namespace nkEngine
 {
-	class CCamera
+
+	/**
+	 * カメラクラス.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	class Camera
 	{
 	public:
-		//コンストラクタ
-		CCamera();
 
-		//デストラクタ
-		~CCamera();
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		Camera();
 
-		//更新
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		~Camera();
+
+		/**
+		 * 更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Update();
 
-		//横回転
-		//param[in] 回転量
+		/**
+		 * 横回転.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param rot 回転量。ラジアン.
+		 */
 		void SpinHorizontally(float rot);
 
-		//縦回転
-		//param[in] 回転量
+		/**
+		 * 縦回転.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param rot 回転量。ラジアン.
+		 */
 		void SpinVertically(float rot);
-		
-		//ビュー行列の取得
-		//return ビュー行列
+
+		/**
+		 * ビュー行列の取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The view matrix.
+		 */
 		const D3DXMATRIX& GetViewMatrix()
 		{
-			return m_mView;
+			return ViewMatrix_;
 		}
 
-
-		//ビュー行列の逆行列の取得
-		//return ビュー行列の逆行列
+		/**
+		 * ビュー行列の逆行列の取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The view inverse matrix.
+		 */
 		const D3DXMATRIX& GetViewInvMatrix()
 		{
-			return m_mViewInv;
+			return ViewInvMatrix_;
 		}
 
-		//プロジェクション行列の取得
-		//return プロジェクション行列
+		/**
+		 * プロジェクション行列の取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The projection matrix.
+		 */
 		const D3DXMATRIX& GetProjectionMatrix()
 		{
-			return m_mProj;
+			return ProjMatrix_;
 		}
 
-		//回転行列の取得
-		//return 回転行列
+		/**
+		 * 回転行列の取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The rotation matrix.
+		 */
 		const D3DXMATRIX& GetRotationMatrix()
 		{
-			return m_mRotation;
+			return RotationMatrix_;
 		}
 
-		//回転行列の逆行列取得
-		//return 回転行列の逆行列
+		/**
+		 * 回転行列の逆行列取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The rotation inverse matrix.
+		 */
 		const D3DXMATRIX& GetRotationInvMatrix()
 		{
-			return m_mRotationInv;
+			return RotationInvMatrix_;
 		}
 
-		//カメラの視点の取得
-		//return カメラの視点
+		/**
+		 * カメラの視点の取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The position.
+		 */
 		const D3DXVECTOR3& GetPosition()
 		{
-			return m_vPosition;
+			return Position_;
 		}
 
-		//カメラの視点の設定
-		//param[in] 視点ベクトル
+		/**
+		 * カメラの視点の設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param pos 視点ベクトル.
+		 */
 		void SetPosition(const D3DXVECTOR3& pos)
 		{
-			m_vPosition = pos;
+			Position_ = pos;
 		}
 
-		//カメラの視点の取得
-		//return カメラの視点
+		/**
+		 * カメラの視点方向ベクトルの取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The position direction.
+		 */
 		const D3DXVECTOR3& GetPosDirection()
 		{
-			return m_vPosDirection;
+			return PosDirection_;
 		}
 
-		//カメラの視点の設定
-		//param[in] 視点ベクトル
+		/**
+		 * カメラの視点方向ベクトルの設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param _dir 視点ベクトル.
+		 */
 		void SetPosDirection(const D3DXVECTOR3& _dir)
 		{
-			m_vPosDirection = _dir;
+			PosDirection_ = _dir;
 		}
-	
 
-		//カメラの注視点の取得
-		//return カメラの注視点
+		/**
+		 * カメラの注視点の取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The target.
+		 */
 		const D3DXVECTOR3& GetTarget()
 		{
-			return m_vTarget;
+			return Target_;
 		}
 
-		//カメラの注視点の設定
-		//param[in] 注視点ベクトル
+		/**
+		 * カメラの注視点の設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param target 注視点ベクトル.
+		 */
 		void SetTarget(const D3DXVECTOR3& target)
 		{
-			m_vTarget = target;
+			Target_ = target;
 		}
 
-		//カメラの上方向の取得
-		//return カメラの上方向
+		/**
+		 * カメラの上方向の取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The up.
+		 */
 		const D3DXVECTOR3& GetUp()
 		{
-			return m_vUp;
+			return Up_;
 		}
 
-		//カメラの上方向の設定
-		//param[in] 上方向ベクトル
+		/**
+		 * カメラの上方向の設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param up 上方向ベクトル.
+		 */
 		void SetUp(const D3DXVECTOR3& up)
 		{
-			m_vUp = up;
+			Up_ = up;
 		}
 
-		//カメラの距離を取得
-		//return カメラの距離
+		/**
+		 * カメラの視点、注視点間の距離を取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The distance.
+		 */
 		const float GetDistance()
 		{
-			return m_Distance;
+			return Distance_;
 		}
 
-		//カメラの距離を設定
-		//param[in] 距離
-		void SetDistance(const float _distance)
+		/**
+		 * カメラの視点、注視点間の距離を設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param distance 距離.
+		 */
+		void SetDistance(const float distance)
 		{
-			m_Distance = _distance;
+			Distance_ = distance;
 		}
 
-		//カメラの画角を取得
-		//return カメラの画角
+		/**
+		 * カメラの画角を取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The fovy.
+		 */
 		const float GetFovy()
 		{
-			return m_Fovy;
+			return Fovy_;
 		}
 
-		//カメラの画角を設定
-		//param[in] 画角
+		/**
+		 * カメラの画角を設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param fovy 画角.
+		 */
 		void SetFovy(const float fovy)
 		{
-			m_Fovy = fovy;
+			Fovy_ = fovy;
 		}
 
-		//カメラのアスペクト比を取得
-		//return カメラのアスペクト比
+		/**
+		 * カメラのアスペクト比を取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The aspect.
+		 */
 		const float GetAspect()
 		{
-			return m_Aspect;
+			return Aspect_;
 		}
 
-		//カメラのアスペクト比を設定
-		//param[in] アスペクト比
+		/**
+		 * カメラのアスペクト比を設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param aspect アスペクト比.
+		 */
 		void SetAspect(const float aspect)
 		{
-			m_Aspect = aspect;
+			Aspect_ = aspect;
 		}
 
-		//カメラのニアを取得
-		//return カメラのニア
+		/**
+		 * カメラのニアを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The near.
+		 */
 		const float GetNear()
 		{
-			return m_Near;
+			return Near_;
 		}
 
-		//カメラのニアを設定
-		//param[in] ニア
+		/**
+		 * カメラのニアを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param fnear ニア.
+		 */
 		void SetNear(const float fnear)
 		{
-			m_Near = fnear;
+			Near_ = fnear;
 		}
 
-		//カメラのファーを取得
-		//return カメラのファー
+		/**
+		 * カメラのファーを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The far.
+		 */
 		const float GetFar()
 		{
-			return m_Far;
+			return Far_;
 		}
 
-		//カメラのファーを設定
-		//param[in] ファー
+		/**
+		 * カメラのファーを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param ffar ファー.
+		 */
 		void SetFar(const float ffar)
 		{
-			m_Far = ffar;
+			Far_ = ffar;
 		}
 
 	private:
-		D3DXMATRIX m_mView; //ビュー行列
-		D3DXMATRIX m_mViewInv; //ビュー行列の逆行列
-		D3DXMATRIX m_mProj; //プロジェクション行列
-		D3DXMATRIX m_mRotation; //回転行列
-		D3DXMATRIX m_mRotationInv; //回転行列の逆行列
 
-		D3DXVECTOR3 m_vPosition; //カメラの視点
-		D3DXVECTOR3 m_vTarget; //カメラの注視点
-		D3DXVECTOR3 m_vUp; //カメラの上方向
+		/** ビュー行列. */
+		D3DXMATRIX ViewMatrix_;
+		/** ビュー行列の逆行列. */
+		D3DXMATRIX ViewInvMatrix_;
+		/** プロジェクション行列. */
+		D3DXMATRIX ProjMatrix_;
+		/** 回転行列. */
+		D3DXMATRIX RotationMatrix_;
+		/** 回転行列の逆行列. */
+		D3DXMATRIX RotationInvMatrix_;
 
-		D3DXVECTOR3 m_vPosDirection; //ポジションの方向ベクトル
-		float m_Distance; //距離
+		/** カメラの視点. */
+		D3DXVECTOR3 Position_;
+		/** カメラの注視点. */
+		D3DXVECTOR3 Target_;
+		/** カメラの上方向. */
+		D3DXVECTOR3 Up_;
 
-		float m_Fovy;		//画角
-		float m_Aspect;	//アスペクト比
-		float m_Near;		//ニア
-		float m_Far;		//ファー
+		/** ポジションの方向ベクトル. */
+		D3DXVECTOR3 PosDirection_;
+		/** 距離. */
+		float Distance_;
 
-		float m_LowerLimit; //下限
-		float m_UpperLimit; //上限
+		/** 画角. */
+		float Fovy_;
+		/** アスペクト比. */
+		float Aspect_;
+		/** ニア. */
+		float Near_;
+		/** ファー. */
+		float Far_;
+
+		/** 下限. */
+		float LowerLimit_;
+		/** 上限. */
+		float UpperLimit_;
+
 	};
-}
+
+}// namespace nkEngine

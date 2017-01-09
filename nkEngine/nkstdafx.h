@@ -1,6 +1,11 @@
-//プリコンパイル済みヘッダー
+/**
+ * @file	nkstdafx.h
+ *
+ * プリコンパイル済みヘッダーの定義.
+ */
 #pragma once
 
+// 既存ヘッダのインクルード
 #include<SDKDDKVer.h>
 #include<Windows.h>
 #include<stdlib.h>
@@ -16,7 +21,7 @@
 
 using namespace std;
 
-//DirectX9関連のインクルード
+// DirectX9関連のインクルード
 #include<d3d9.h>
 #include<d3dx9.h>
 #include<dinput.h>
@@ -27,7 +32,8 @@ using namespace std;
 #pragma comment(lib, "dxerr.lib")
 #endif
 
-//先にインクルード
+// 先にインクルードしなければならない
+// 物理エンジンのヘッダインクルード
 #include"btBulletDynamicsCommon.h"
 #include"BulletCollision\CollisionDispatch\btGhostObject.h"
 #include"_Physics\nkCollisionAttr.h"
@@ -51,6 +57,7 @@ using namespace std;
 //カメラ
 #include"_Graphics\nkCamera.h"
 
+#include"_Graphics\_Sharp\nkSharpVertex.h"
 #include"_Graphics\nkPrimitive.h"
 #include"_Graphics\nkTexture.h"
 #include"_Graphics\nkRenderTarget.h"

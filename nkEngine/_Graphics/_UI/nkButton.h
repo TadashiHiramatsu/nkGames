@@ -1,44 +1,95 @@
+/**
+ * @file _Graphics\_UI\nkButton.h
+ *
+ * ボタンクラスの定義.
+ */
 #pragma once
 
 namespace nkEngine
 {
 
-	//UIボタンクラス
+	/**
+	 * ボタンクラス.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	class Button
 	{
 	public:
 
-		//コンストラクタ
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		Button();
-		//デストラクタ
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		~Button();
 
-		//更新
+		/**
+		 * 更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Update();
 
-		//押された
+		/**
+		 * 押された.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return True if it succeeds, false if it fails.
+		 */
 		bool PushDowm()
 		{
-			return (!isBefPushed && isPushed);
+			return (!isPushedBef_ && isPushed_);
 		}
 
-		//押されている
+		/**
+		 * 押されている.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return True if it succeeds, false if it fails.
+		 */
 		bool Push()
 		{
-			return isPushed;
+			return isPushed_;
 		}
 
-		//離された
+		/**
+		 * 離された.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return True if it succeeds, false if it fails.
+		 */
 		bool PushUp()
 		{
-			return (isBefPushed && !isPushed);
+			return (isPushedBef_ && !isPushed_);
 		}
 
 	private:
-		RectTransform* rectTransform; //トランスフォームのアドレス
 
-		bool isPushed; //押されている
-		bool isBefPushed; //1フレーム前押されている
+		/** トランスフォームのアドレス. */
+		RectTransform* RectTransform_;
+		/** 押されている. */
+		bool isPushed_;
+		/** 1フレーム前の結果. */
+		bool isPushedBef_;
+
 	};
 
-}
+}// namespace nkEngine

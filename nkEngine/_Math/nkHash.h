@@ -1,10 +1,33 @@
+/**
+ * @file	_Math\nkHash.h
+ *
+ * ハッシュクラス.
+ */
 #pragma once
 
 namespace nkEngine
 {
-	class CHash
+
+	/**
+	 * A hash.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/08
+	 */
+	class Hash
 	{
 	public:
+
+		/**
+		 * ハッシュ作成.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/08
+		 *
+		 * @param	string	The string.
+		 *
+		 * @return	An int.
+		 */
 		static int MakeHash(const char* string)
 		{
 			int hash = 0;
@@ -15,6 +38,7 @@ namespace nkEngine
 			}
 			return hash;
 		}
+
 	};
 
-}
+}// namespace nkEngine

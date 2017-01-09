@@ -1,66 +1,133 @@
+/**
+ * @file _Graphics\nkCamera.cpp
+ *
+ * カメラクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkCamera.h"
 
 namespace nkEngine
 {
-	CCamera::CCamera():
-		m_vTarget(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
-		m_vPosDirection(D3DXVECTOR3(0.0f, 0.0f, -1.0f)),
-		m_vUp(D3DXVECTOR3(0.0f,1.0f,0.0f)),
-		m_Distance(1),
-		m_Fovy(D3DXToRadian(45.0f)),
-		m_Aspect(0.0f),
-		m_Near(0.1f),
-		m_Far(1200.0f),
-		m_LowerLimit(-0.8f),
-		m_UpperLimit(0.8f)
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	Camera::Camera() :
+		Target_(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+		PosDirection_(D3DXVECTOR3(0.0f, 0.0f, -1.0f)),
+		Up_(D3DXVECTOR3(0.0f,1.0f,0.0f)),
+		Distance_(1),
+		Fovy_(D3DXToRadian(45.0f)),
+		Aspect_(0.0f),
+		Near_(0.1f),
+		Far_(1200.0f),
+		LowerLimit_(-0.8f),
+		UpperLimit_(0.8f)
 	{
-		D3DXMatrixIdentity(&m_mView);
-		D3DXMatrixIdentity(&m_mProj);
-		D3DXMatrixIdentity(&m_mRotation);
-		D3DXMatrixIdentity(&m_mRotationInv);
+
+		D3DXMatrixIdentity(&ViewMatrix_);
+		D3DXMatrixIdentity(&ProjMatrix_);
+		D3DXMatrixIdentity(&RotationMatrix_);
+		D3DXMatrixIdentity(&RotationInvMatrix_);
+
 	}
 
-	CCamera::~CCamera()
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	Camera::~Camera()
 	{
-
 	}
 
-	void CCamera::Update()
+	/**
+	 * 更新.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	void Camera::Update()
 	{
+			
+		//アスペクト比の計算
+		Aspect_ = (float)Engine().GetFrameW() / (float)Engine().GetFrameH();
+
 		//プロジェクション行列の計算
-		m_Aspect = (float)Engine().GetFrameW() / (float)Engine().GetFrameH();
-		D3DXMatrixPerspectiveFovLH(&m_mProj, m_Fovy, m_Aspect, m_Near, m_Far);
+		D3DXMatrixPerspectiveFovLH(&ProjMatrix_, Fovy_, Aspect_, Near_, Far_);
 
-		D3DXVec3Normalize(&m_vPosDirection, &m_vPosDirection);
-		m_vPosDirection.y = min(m_UpperLimit, m_vPosDirection.y);
-		m_vPosDirection.y = max(m_LowerLimit, m_vPosDirection.y);
+		//ポジション方向の計算
+		D3DXVec3Normalize(&PosDirection_, &PosDirection_);
 
-		m_vPosition = m_vPosDirection * m_Distance + m_vTarget;
+		//上限計算
+		PosDirection_.y = min(UpperLimit_, PosDirection_.y);
+		//下限計算
+		PosDirection_.y = max(LowerLimit_, PosDirection_.y);
 
-		D3DXMatrixLookAtLH(&m_mView, &m_vPosition, &m_vTarget, &m_vUp);
+		//ポジションの計算
+		Position_ = PosDirection_ * Distance_ + Target_;
 
-		D3DXMatrixInverse(&m_mViewInv, NULL, &m_mView);
-		m_mRotation = m_mViewInv;
-		m_mRotation.m[3][0] = 0.0f;
-		m_mRotation.m[3][1] = 0.0f;
-		m_mRotation.m[3][2] = 0.0f;
-		m_mRotation.m[3][3] = 1.0f;
-		D3DXMatrixTranspose(&m_mRotationInv, &m_mRotation);
+		//ビュー行列の計算
+		D3DXMatrixLookAtLH(&ViewMatrix_, &Position_, &Target_, &Up_);
+
+		//ビュー行列の逆行列を計算
+		D3DXMatrixInverse(&ViewInvMatrix_, NULL, &ViewMatrix_);
+
+		//回転行列を計算
+		RotationMatrix_ = ViewInvMatrix_;
+		RotationMatrix_.m[3][0] = 0.0f;
+		RotationMatrix_.m[3][1] = 0.0f;
+		RotationMatrix_.m[3][2] = 0.0f;
+		RotationMatrix_.m[3][3] = 1.0f;
+
+		//回転行列の逆行列を計算
+		D3DXMatrixTranspose(&RotationInvMatrix_, &RotationMatrix_);
+
 	}
-	void CCamera::SpinHorizontally(float rot)
+
+	/**
+	* 横回転.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/09
+	*
+	* @param rot 回転量。ラジアン.
+	*/
+	void Camera::SpinHorizontally(float rot)
 	{
+
 		D3DXMATRIX tmp;
+		
 		D3DXMatrixRotationY(&tmp, rot);
-		D3DXVec3TransformCoord(&m_vPosDirection, &m_vPosDirection, &tmp);
+
+		D3DXVec3TransformCoord(&PosDirection_, &PosDirection_, &tmp);
+
 	}
-	void CCamera::SpinVertically(float rot)
+
+	/**
+	* 縦回転.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/09
+	*
+	* @param rot 回転量。ラジアン.
+	*/
+	void Camera::SpinVertically(float rot)
 	{
+
 		D3DXQUATERNION qua;
 		D3DXMATRIX tmp;
-		//横方向
-		D3DXQuaternionRotationAxis(&qua, &D3DXVECTOR3(-m_vPosDirection.z, 0, m_vPosDirection.x), rot);
+
+		//横方向を計算
+		D3DXQuaternionRotationAxis(&qua, &D3DXVECTOR3(-PosDirection_.z, 0, PosDirection_.x), rot);
+
 		D3DXMatrixRotationQuaternion(&tmp, &qua);
-		D3DXVec3TransformCoord(&m_vPosDirection, &m_vPosDirection, &tmp);
+		D3DXVec3TransformCoord(&PosDirection_, &PosDirection_, &tmp);
+
 	}
-}
+
+}// namespace nkEngine

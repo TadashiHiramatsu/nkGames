@@ -1,24 +1,52 @@
+/**
+ * @file _Graphics\_PostEffect\nkAntiAliasing.cpp
+ *
+ * アンチエイリアシングクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkAntiAliasing.h"
 
 namespace nkEngine
 {
-	CAntiAliasing::CAntiAliasing():
-		m_effect(nullptr),
-		m_isEnable(false)
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	AntiAliasing::AntiAliasing() :
+		Effect_(nullptr),
+		isEnable_(false)
 	{
 	}
 
-	CAntiAliasing::~CAntiAliasing()
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	AntiAliasing::~AntiAliasing()
 	{
 	}
 
-	void CAntiAliasing::Init()
+	/**
+	 * 初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	void AntiAliasing::Init()
 	{
-		m_isEnable = true;
-		m_effect = EffectManager().LoadEffect("AntiAliasing.fx");
 
-		static SShapeVertex_PT vertex[]{
+		isEnable_ = true;
+		
+		//エフェクトのロード
+		Effect_ = EffectManager().LoadEffect("AntiAliasing.fx");
+
+		static SShapeVertex_PT vertex[] = 
+		{
 			{
 				-1.0f, 1.0f, 0.0f, 1.0f,
 				0.0f, 0.0f
@@ -36,54 +64,75 @@ namespace nkEngine
 				1.0f, 1.0f
 			},
 		};
-		static unsigned short index[] = {
+		static unsigned short index[] =
+		{
 			0,1,2,3
 		};
-		static const D3DVERTEXELEMENT9 scShapeVertex_PT_Element[] = {
-			{ 0, 0 ,   D3DDECLTYPE_FLOAT4		, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION	, 0 },
-			{ 0, 16 ,  D3DDECLTYPE_FLOAT2		, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD	, 0 },
-			D3DDECL_END()
-		};
-		Primitive.Create(
-			CPrimitive::eTriangleStrip,
+
+		Primitive_.Create(
+			Primitive::TriangleStrip,
 			4,
 			sizeof(SShapeVertex_PT),
 			scShapeVertex_PT_Element,
 			vertex,
 			4,
-			eIndexFormat16,
+			IndexFormat16,
 			index
 		);
 
-		texSize[0] = Engine().GetFrameW();
-		texSize[1] = Engine().GetFrameH();
 	}
 
-	void CAntiAliasing::Render()
+	/**
+	 * 描画.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	void AntiAliasing::Render()
 	{	
-		if (m_isEnable)
+		if (isEnable_)
 		{
 			//アンチ有効
 			
-			m_effect->SetTechnique("FXAA");
+			int w = Engine().GetFrameW();
+			int h = Engine().GetFrameH();
 
-			m_effect->Begin(0, D3DXFX_DONOTSAVESTATE);
-			m_effect->BeginPass(0);
-			m_effect->SetTexture("g_Texture", ScreenRender().GetMainRenderTarget().GetTexture()->GetTextureDX());
-			m_effect->SetValue("g_TexSize", texSize, sizeof(texSize));
-			m_effect->CommitChanges();
+			float texSize[2] =
+			{
+				w,
+				h,
+			};
+
+			Effect_->SetTechnique("FXAA");
+
+			Effect_->Begin(0, D3DXFX_DONOTSAVESTATE);
+			Effect_->BeginPass(0);
+
+			Effect_->SetTexture("g_Texture", ScreenRender().GetMainRenderTarget().GetTexture()->GetTextureDX());
+			Effect_->SetValue("g_TexSize", texSize, sizeof(texSize));
 			
-			Engine().GetDevice()->SetStreamSource(0, Primitive.GetVertexBuffer()->GetBody(), 0, Primitive.GetVertexBuffer()->GetStride());
-			Engine().GetDevice()->SetIndices(Primitive.GetIndexBuffer()->GetBody());
-			Engine().GetDevice()->SetVertexDeclaration(Primitive.GetVertexDecl());
-			Engine().GetDevice()->DrawIndexedPrimitive(Primitive.GetD3DPrimitiveType(), 0, 0, Primitive.GetNumVertex(), 0, Primitive.GetNumPolygon());
+			Effect_->CommitChanges();
+			
+			Engine().GetDevice()->SetStreamSource(0, Primitive_.GetVertexBuffer()->GetBody(), 0, Primitive_.GetVertexBuffer()->GetStride());
+			Engine().GetDevice()->SetIndices(Primitive_.GetIndexBuffer()->GetBody());
+			Engine().GetDevice()->SetVertexDeclaration(Primitive_.GetVertexDecl());
+			Engine().GetDevice()->DrawIndexedPrimitive(Primitive_.GetD3DPrimitiveType(), 0, 0, Primitive_.GetNumVertex(), 0, Primitive_.GetNumPolygon());
 
-			m_effect->EndPass();
-			m_effect->End();
+			Effect_->EndPass();
+			Effect_->End();
+
 		}
+
 	}
 
-	void CAntiAliasing::Release()
+	/**
+	 * 解放.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	void AntiAliasing::Release()
 	{
 	}
-}
+
+}// namespace nkEngine

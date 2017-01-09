@@ -1,35 +1,71 @@
-//アンチエイリアシング
+/**
+ * @file _Graphics\_PostEffect\nkAntiAliasing.h
+ *
+ * アンチエイリアシングクラスの定義.
+ */
 #pragma once
 
 namespace nkEngine
 {
 
-	//ポストエフェクトによるアンチエイリアス
-	class CAntiAliasing
+	/**
+	 * アンチエイリアシングクラス.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	class AntiAliasing
 	{
 	public:
 
-		//コンストラクタ
-		CAntiAliasing();
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		AntiAliasing();
 
-		//デストラクタ
-		~CAntiAliasing();
-		
-		//初期化
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		~AntiAliasing();
+
+		/**
+		 * 初期化.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Init();
 
-		//描画 
+		/**
+		 * 描画.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Render();
 
-		//解放
+		/**
+		 * 解放.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Release();
 
 	private:
-		bool m_isEnable; //有効フラグ
-		ID3DXEffect* m_effect; //エフェクト
 
-		float texSize[2];
+		/** 有効フラグ. */
+		bool isEnable_;
+		/** エフェクト. */
+		ID3DXEffect* Effect_;
+		/** The primitive. */
+		Primitive Primitive_;
 
-		CPrimitive Primitive;
 	};
 }

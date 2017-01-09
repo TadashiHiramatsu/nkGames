@@ -1,3 +1,8 @@
+/**
+ * @file	_Graphics\nkPrimitive.h
+ *
+ * プリミティブクラスの定義
+ */
 #pragma once
 
 #include"nkVertexBuffer.h"
@@ -5,95 +10,173 @@
 
 namespace nkEngine
 {
-	struct SShapeVertex_PT {
-		float		pos[4];
-		float		uv[2];
-	};
 
-	//プリミティブ
-	class CPrimitive {
+	/**
+	 * プリミティブクラス.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
+	class Primitive
+	{
 	public:
-		//	プリミティブタイプ。
-		//プリミティブタイプ
-		enum EType {
-			eTriangleList,		//トライアングルリスト。
-			eTriangleStrip,		//トライアングルストリップ。
-			eTypeNum,
+
+		/** プリミティブタイプ. */
+		enum TypeE {
+			TriangleList,	//!< トライアングルリスト。
+			TriangleStrip,  //!< トライアングルストリップ。
+		    TypeNum,		//!< タイプの数
 		};
 
 	public:
-		//コンストラクタ
-		CPrimitive();
-		//デストラクタ
-		~CPrimitive();
-		
-		// プリミティブの作成。
-		// param[in] プリミティブタイプ。
-		// param[in] 頂点数
-		// param[in] 頂点ストライド
-		// param[in] 頂点レイアウト。
-		// param[in] ソース頂点バッファ。
-		// param[in] インデックスの数
-		// param[in] インデックスバッファのフォーマット。
-		// param[in] ソースインデックスバッファ。
+
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 */
+		Primitive();
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 */
+		~Primitive();
+
+		/**
+		 * 作成.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/07
+		 *
+		 * @param 		   primitiveType   プリミティブタイプ.
+		 * @param 		   numVertex	   頂点数.
+		 * @param 		   vertexStride    頂点ストライド.
+		 * @param 		   vertexLayout    頂点レイアウト.
+		 * @param [in,out] srcVertexBuffer ソース頂点バッファ.
+		 * @param 		   numIndex		   インデックスの数.
+		 * @param 		   indexFormat	   インデックスバッファのフォーマット.
+		 * @param [in,out] srcIndexbuffer  ソースインデックスバッファ.
+		 */
 		void Create(
-			EType 					_PrimitiveType,
-			int 					_NumVertex,
-			int 					_VertexStride,
-			const D3DVERTEXELEMENT9*	_VertexLayout,
-			void*					_pSrcVertexBuffer,
-			int 					_NumIndex,
-			EIndexFormat			_IndexFormat,
-			void*					_pSrcIndexbuffer);
+			TypeE 						primitiveType,
+			int 						numVertex,
+			int 						vertexStride,
+			const D3DVERTEXELEMENT9*	vertexLayout,
+			void*						srcVertexBuffer,
+			int 						numIndex,
+			IndexFormatE				indexFormat,
+			void*						srcIndexbuffer
+		);
 		
-		//解放
+		/**
+		 * 解放.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 */
 		void Release();
 		
-		//頂点バッファを取得
-		CVertexBuffer* GetVertexBuffer()
+		/**
+		 * 頂点バッファを取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	Null if it fails, else the vertex buffer.
+		 */
+		VertexBuffer* GetVertexBuffer()
 		{
-			return &m_vertexBuffer;
+			return &VertexBuffer_;
 		}
 		
-		//インデックスバッファを取得
-		CIndexBuffer*  GetIndexBuffer()
+		/**
+		 * インデックスバッファを取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	Null if it fails, else the index buffer.
+		 */
+		IndexBuffer*  GetIndexBuffer()
 		{
-			return &m_indexBuffer;
+			return &IndexBuffer_;
 		}
 		
-		//プリミティブタイプを取得
+		/**
+		 * プリミティブタイプを取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	The d 3D primitive type.
+		 */
 		D3DPRIMITIVETYPE GetD3DPrimitiveType() const
 		{
-			return m_d3dPrimitiveType;
+			return D3DPrimitiveType_;
 		}
 		
-		//頂点数を取得
+		/**
+		 * 頂点数を取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	The number vertex.
+		 */
 		int GetNumVertex() const
 		{
-			return m_numVertex;
+			return numVertex_;
 		}
 		
-		//ポリゴン数を取得
+		/**
+		 * ポリゴン数を取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	The number polygon.
+		 */
 		int GetNumPolygon() const
 		{
-			return m_numPolygon;
+			return numPolygon_;
 		}
 		
-		//頂点定義を取得
+		/**
+		 * 頂点定義を取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	Null if it fails, else the vertex declaration.
+		 */
 		IDirect3DVertexDeclaration9* GetVertexDecl()
 		{
-			return m_vertexBuffer.GetVertexDecl();
+			return VertexBuffer_.GetVertexDecl();
 		}
 
 	private:
-		int					m_numVertex;		//!<頂点数。
-		int					m_vertexStride;		//!<頂点ストライド。
-		int					m_numIndex;			//!<インデックス数。
-		int					m_numPolygon;		//!<ポリゴンの数。
-		CVertexBuffer		m_vertexBuffer;		//!<頂点バッファ。
-		CIndexBuffer		m_indexBuffer;		//!<インデックスバッファ。
-		//プリミティブタイプ
-		EType				m_type;			
-		D3DPRIMITIVETYPE	m_d3dPrimitiveType;	
+		
+		/** 頂点数. */
+		int	numVertex_;
+		/** 頂点ストライド. */
+		int	VertexStride_;
+		/** インデックス数. */
+		int	numIndex_;
+		/** ポリゴンの数. */
+		int	numPolygon_;
+		/** 頂点バッファ. */
+		VertexBuffer VertexBuffer_;
+		/** インデックスバッファ. */
+		IndexBuffer IndexBuffer_;
+		/** プリミティブタイプ. */
+		TypeE Type_;			
+		/** Type of the 3D primitive. */
+		D3DPRIMITIVETYPE D3DPrimitiveType_;	
+
 	};
-}
+
+}// namespace nkEngine

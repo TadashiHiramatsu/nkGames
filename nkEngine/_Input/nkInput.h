@@ -1,40 +1,71 @@
+/**
+ * @file	_Input\nkInput.h
+ *
+ * DirectInputクラスの定義.
+ */
 #pragma once
 
 namespace nkEngine
 {
-	struct MouseState
+	/**
+	 * マウスステート.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/09
+	 */
+	struct MouseStateS
 	{
-		LONG PosX;
-		LONG PosY;
-		BYTE Button[3];
-		BYTE Padding;
-		MouseState()
+	public:
+
+		/**
+		* Default constructor.
+		*
+		* @author	HiramatsuTadashi
+		* @date	2017/01/09
+		*/
+		MouseStateS()
 		{
-			memset(this, 0, sizeof(MouseState));
+			memset(this, 0, sizeof(MouseStateS));
 		}
+
+	public:
+
+		/** マウスのポジション:X座標. */
+		LONG PosX_;
+		/** マウスのポジション:Y座標. */
+		LONG PosY_;
+		/**   
+		 * ボタン. 
+		 * MouseButtonEに準ずる.
+		 */
+		BYTE Button_[3];
+		/** The padding. */
+		BYTE Padding_;
+		
 	};
 
-	enum MouseButton
+	/** マウスボタンの列挙値. */
+	enum MouseButtonE
 	{
-		MouseLeft,
-		MouseRight,
-		MouseWheel,
+		MouseLeft = 0,	//!< 左.
+		MouseRight,		//!< 右.
+		MouseWheel,		//!< ホイール.
 	};
 
 	enum KeyCode
 	{
 		Escape = DIK_ESCAPE,
-		Alpha1 = DIK_1,			// キーボードの1
-		Alpha2 = DIK_2,			// キーボードの2
-		Alpha3 = DIK_3,			// キーボードの3
-		Alpha4 = DIK_4,			// キーボードの4
-		Alpha5 = DIK_5,			// キーボードの5
-		Alpha6 = DIK_6,			// キーボードの6
-		Alpha7 = DIK_7,			// キーボードの7
-		Alpha8 = DIK_8,			// キーボードの8
-		Alpha9 = DIK_9,			// キーボードの9
-		Alpha0 = DIK_0,			// キーボードの0
-		Minus = DIK_MINUS,		// -
+		Alpha1 = DIK_1,			//!< キーボードの1.
+		Alpha2 = DIK_2,			//!< キーボードの2.
+		Alpha3 = DIK_3,			//!< キーボードの3.
+		Alpha4 = DIK_4,			//!< キーボードの4.
+		Alpha5 = DIK_5,			//!< キーボードの5.
+		Alpha6 = DIK_6,			//!< キーボードの6.
+		Alpha7 = DIK_7,			//!< キーボードの7.
+		Alpha8 = DIK_8,			//!< キーボードの8.
+		Alpha9 = DIK_9,			//!< キーボードの9.
+		Alpha0 = DIK_0,			//!< キーボードの0.
+		Minus = DIK_MINUS,		//!< -.
 //#define DIK_EQUALS          
 		Backspace = DIK_BACK,
 		Tab = DIK_TAB,
@@ -48,8 +79,8 @@ namespace nkEngine
 		I = DIK_I,
 		O = DIK_O,
 		P = DIK_P,
-		Bracket_L = DIK_LBRACKET, // [
-		Bracket_R = DIK_RBRACKET, // ]
+		Bracket_L = DIK_LBRACKET, //!< [.
+		Bracket_R = DIK_RBRACKET, //!< ].
 		Enter = DIK_RETURN,
 		Control_L = DIK_LCONTROL,
 		A = DIK_A,
@@ -61,11 +92,11 @@ namespace nkEngine
 		J = DIK_J,
 		K = DIK_K,
 		L = DIK_L,
-		Semicolon = DIK_SEMICOLON, // ;
-		Apostrophe = DIK_APOSTROPHE, //@
+		Semicolon = DIK_SEMICOLON, //!< ;.
+		Apostrophe = DIK_APOSTROPHE, //!< @.
 //#define DIK_GRAVE               /* accent grave */
 		Shift_L = DIK_LSHIFT,
-		BackSlash = DIK_BACKSLASH,	// 
+		BackSlash = DIK_BACKSLASH,	//!< .
 		Z = DIK_Z,               
 		X = DIK_X,
 		C = DIK_C,
@@ -73,9 +104,9 @@ namespace nkEngine
 		B = DIK_B,
 		N = DIK_N,
 		M = DIK_M,
-		Comma = DIK_COMMA, // ,           
-		Period = DIK_PERIOD,  // .           
-		Slash = DIK_SLASH,   // /   
+		Comma = DIK_COMMA, //!< ,.        
+		Period = DIK_PERIOD,  //!< ..           
+		Slash = DIK_SLASH,   //!< /.  
 		Shift_R = DIK_RSHIFT,
 //#define DIK_MULTIPLY            /* * on numeric keypad */
 		LeftAlt = DIK_LMENU,
@@ -92,7 +123,7 @@ namespace nkEngine
 		F9 = DIK_F9,
 		F10 = DIK_F10,
 		NumLock = DIK_NUMLOCK,
-//#define DIK_SCROLL              /* Scroll Lock */
+//!<#define DIK_SCROLL              /* Scroll Lock */
 		Keypad7 = DIK_NUMPAD7,
 		Keypad8 = DIK_NUMPAD8,
 		Keypad9 = DIK_NUMPAD9,
@@ -105,7 +136,7 @@ namespace nkEngine
 		Keypad2 = DIK_NUMPAD2,
 		Keypad3 = DIK_NUMPAD3,
 		Keypad0 = DIK_NUMPAD0,
-		KeypadPeriod = DIK_DECIMAL, //DEL
+		KeypadPeriod = DIK_DECIMAL, //!< DEL.
 //#define DIK_OEM_102             /* <> or \| on RT 102-key keyboard (Non-U.S.) */
 		F11 = DIK_F11,
 		F12 = DIK_F12,
@@ -169,85 +200,260 @@ namespace nkEngine
 //#define DIK_MEDIASELECT         /* Media Select */
 	};
 
+	/**
+	 * DirectInputクラス.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/09
+	 */
 	class CInput
 	{
-	public:
-		//初期化
-		HRESULT Init(HWND hWnd);
+	private:
 
-		//更新
+		/**
+		* Default constructor.
+		*
+		* @author	HiramatsuTadashi
+		* @date	2017/01/09
+		*/
+		CInput() :
+			isKeyboard_(true),
+			isMouse_(true)
+		{
+		}
+
+		/**
+		* Destructor.
+		*
+		* @author	HiramatsuTadashi
+		* @date	2017/01/09
+		*/
+		~CInput()
+		{
+		}
+
+	public:
+
+		/**
+		 * 初期化.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @param	hWnd	Handle of the window.
+		 *
+		 * @return	A hResult.
+		 */
+		HRESULT Init(HWND hWnd);
+		
+		/**
+		 * 更新.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 */
 		void Update();
-			
-		//開放
+		
+		/**
+		 * 開放.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 */
 		void Release();
 
-		//X軸の移動量を返す
+		/**
+		 * X軸の移動量を返す.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @return	The mouse x coordinate.
+		 */
 		LONG GetMouseX()
 		{
-			return m_MouseState0.PosX - m_MouseState.PosX;
+			return MouseStateBef_.PosX_ - MouseState_.PosX_;
 		}
 
-		//Y軸の移動量を返す
+		/**
+		 * Y軸の移動量を返す.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @return	The mouse y coordinate.
+		 */
 		LONG GetMouseY()
 		{
-			return m_MouseState0.PosY - m_MouseState.PosY;
+			return MouseStateBef_.PosY_ - MouseState_.PosY_;
 		}
 
-		//X軸の座標を返す
+		/**
+		 * X軸の座標を返す.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @return	The mouse position x coordinate.
+		 */
 		LONG GetMousePosX()
 		{
-			return MousePos.x;
+			return MousePos_.x;
 		}
 
-		//Y軸の座標を返す
+		/**
+		 * Y軸の座標を返す.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @return	The mouse position y coordinate.
+		 */
 		LONG GetMousePosY()
 		{
-			return MousePos.y;
+			return MousePos_.y;
 		}
 
-		//マウスのボタンが押されているか
+		/**
+		 * マウスのボタンが押されているか.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @param	idx	The index.
+		 *
+		 * @return	True if it succeeds, false if it fails.
+		 */
 		bool GetMoudeButton(int idx)
 		{
-			return (m_MouseState.Button[idx] & 0x80);
+			return (MouseState_.Button_[idx] & 0x80);
 		}
-		bool GetMoudeButton(MouseButton idx)
+		/**
+		 * マウスのボタンが押されているか.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @param	idx	The index.
+		 *
+		 * @return	True if it succeeds, false if it fails.
+		 */
+		bool GetMoudeButton(MouseButtonE idx)
 		{
-			return (m_MouseState.Button[idx] & 0x80);
+			return (MouseState_.Button_[idx] & 0x80);
 		}
 
-		//マウスのボタンが押された
+		/**
+		 * マウスのボタンが押された.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @param	idx	The index.
+		 *
+		 * @return	True if it succeeds, false if it fails.
+		 */
 		bool GetMoudeButtonDown(int idx)
 		{
-			return(!(m_MouseState0.Button[idx] & 0x80) && m_MouseState.Button[idx] & 0x80) ;
+			return(!(MouseStateBef_.Button_[idx] & 0x80) && MouseState_.Button_[idx] & 0x80) ;
 		}
-		bool GetMoudeButtonDown(MouseButton idx)
+		/**
+		 * マウスのボタンが押された.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @param	idx	The index.
+		 *
+		 * @return	True if it succeeds, false if it fails.
+		 */
+		bool GetMoudeButtonDown(MouseButtonE idx)
 		{
-			return(!(m_MouseState0.Button[idx] & 0x80) && m_MouseState.Button[idx] & 0x80) ;
+			return(!(MouseStateBef_.Button_[idx] & 0x80) && MouseState_.Button_[idx] & 0x80) ;
 		}
 
-		//マウスのボタンがはなされた
+		/**
+		 * マウスのボタンがはなされた.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @param	idx	The index.
+		 *
+		 * @return	True if it succeeds, false if it fails.
+		 */
 		bool GetMoudeButtonUp(int idx)
 		{
-			return (m_MouseState0.Button[idx] & 0x80 && !(m_MouseState.Button[idx] & 0x80)) ;
+			return (MouseStateBef_.Button_[idx] & 0x80 && !(MouseState_.Button_[idx] & 0x80)) ;
 		}
-		bool GetMoudeButtonUp(MouseButton idx)
+		/**
+		 * マウスのボタンがはなされた.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @param	idx	The index.
+		 *
+		 * @return	True if it succeeds, false if it fails.
+		 */
+		bool GetMoudeButtonUp(MouseButtonE idx)
 		{
-			return(m_MouseState0.Button[idx] & 0x80 && !(m_MouseState.Button[idx] & 0x80)) ;
+			return(MouseStateBef_.Button_[idx] & 0x80 && !(MouseState_.Button_[idx] & 0x80)) ;
 		}
 
+		/**
+		 * Gets key button.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @param	key	The key.
+		 *
+		 * @return	True if it succeeds, false if it fails.
+		 */
 		bool GetKeyButton(KeyCode key)
 		{
-			return (bool)(m_Keyboard[key] & 0x80);
-		}
-		bool GetKeyButtonDown(KeyCode key)
-		{
-			return (bool)(!(m_Keyboard0[key] & 0x80) && m_Keyboard[key] & 0x80);
-		}
-		bool GetKeyButtonUp(KeyCode key)
-		{
-			return (bool)(m_Keyboard0[key] & 0x80 && !(m_Keyboard[key] & 0x80));
+			return (bool)(Keyboard_[key] & 0x80);
 		}
 
+		/**
+		 * Gets key button down.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @param	key	The key.
+		 *
+		 * @return	True if it succeeds, false if it fails.
+		 */
+		bool GetKeyButtonDown(KeyCode key)
+		{
+			return (bool)(!(KeyboardBef_[key] & 0x80) && Keyboard_[key] & 0x80);
+		}
+
+		/**
+		 * Gets key button up.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @param	key	The key.
+		 *
+		 * @return	True if it succeeds, false if it fails.
+		 */
+		bool GetKeyButtonUp(KeyCode key)
+		{
+			return (bool)(KeyboardBef_[key] & 0x80 && !(Keyboard_[key] & 0x80));
+		}
+
+		/**
+		 * インスタンスの取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/09
+		 *
+		 * @return	The instance.
+		 */
 		inline static CInput& GetInstance()
 		{
 			static CInput instance;
@@ -255,42 +461,64 @@ namespace nkEngine
 		}
 
 	private:
-		CInput():
-			m_isKeyboard(true),
-			m_isMouse(true)
-		{
-		}
-		~CInput()
-		{
 
-		}
-
-		//マウス初期化
+		/**
+		 * マウス初期化.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param hWnd Handle of the window.
+		 */
 		void InitMouse(HWND hWnd);
 
-		//キーボード初期化
+		/**
+		 * キーボード初期化.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param hWnd Handle of the window.
+		 */
 		void InitKeyboard(HWND hWnd);
 
 	private:
-		MouseState m_MouseState; //現在のマウスステータス
-		MouseState m_MouseState0; //一回前のマウスステータス
-		POINT MousePos;
-		BYTE m_Keyboard[256]; //現在のキーボードステータス
-		BYTE m_Keyboard0[256]; //一回前のキーボードステータス
-		
-		IDirectInputDevice8* m_DInputMouse = nullptr; //マウスデバイス
-		IDirectInputDevice8* m_DInputKeyboard = nullptr; //キーボードデバイス
-		IDirectInput8* m_DInput = nullptr; //なぁにこれぇ
-
-		bool m_isKeyboard; //キーボードを使用する
-		bool m_isMouse; //マウスを使用する
+		/** 現在のマウスステータス. */
+		MouseStateS MouseState_;
+		/** 1フレーム前のマウスステータス. */
+		MouseStateS MouseStateBef_;
+		/**   
+	     * マウスのポジション.  
+		 * クライアントの左下が 0,0 になる.
+		 */
+		POINT MousePos_;
+		/** 現在のキーボードステータス. */
+		BYTE Keyboard_[256];
+		/** 一回前のキーボードステータス. */
+		BYTE KeyboardBef_[256];
+		/** マウスデバイス. */
+		IDirectInputDevice8* DInputMouse_ = nullptr;
+		/** キーボードデバイス. */
+		IDirectInputDevice8* DInputKeyboard_ = nullptr;
+		/** なぁにこれぇ. */
+		IDirectInput8* DInput_ = nullptr;
+		/** キーボードを使用する. */
+		bool isKeyboard_;
+		/** マウスを使用する. */
+		bool isMouse_;
 	};
 
-	inline static CInput& GetInput()
+	/**
+	 * インプットクラス取得.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @return A reference to a CInput.
+	 */
+	inline static CInput& Input()
 	{
 		return CInput::GetInstance();
 	}
 
-#define Input GetInput()
-}
-
+}// namespace nkEgnie

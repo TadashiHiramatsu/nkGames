@@ -1,15 +1,34 @@
+/**
+ * @file	_Physics\nkCapsuleCollider.cpp
+ *
+ * カプセルコライダークラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkCapsuleCollider.h"
 
 namespace nkEngine
 {
-	CCapsuleCollider::CCapsuleCollider():
-		m_Shape(nullptr)
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
+	CapsuleCollider::CapsuleCollider():
+		Shape_(nullptr)
 	{
 	}
-	CCapsuleCollider::~CCapsuleCollider()
+
+	/**
+	 * デストラクタ.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
+	CapsuleCollider::~CapsuleCollider()
 	{
-		delete m_Shape;
+		delete Shape_;
 	}
 	
-}
+}// namespace nkEngine

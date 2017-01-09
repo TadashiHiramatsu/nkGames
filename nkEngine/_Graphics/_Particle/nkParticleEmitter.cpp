@@ -1,64 +1,142 @@
+/**
+ * @file _Graphics\_Particle\nkParticleEmitter.cpp
+ *
+ * パーティクルエミッタクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkParticleEmitter.h"
 
 namespace nkEngine
 {
-	CParticleEmitter::CParticleEmitter():
-		isCreate(false)
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	ParticleEmitter::ParticleEmitter() :
+		isCreate_(false)
 	{
 	}
-	CParticleEmitter::~CParticleEmitter()
+
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	ParticleEmitter::~ParticleEmitter()
 	{
 	}
 
-	void CParticleEmitter::Init(CCamera* _Camera, const SParicleEmitParameter& _Param, D3DXVECTOR3* _EmitPosition)
+	/**
+	 * 初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @param [in,out] camera	    If non-null, the camera.
+	 * @param 		   param	    The parameter.
+	 * @param [in,out] emitPosition If non-null, the emit position.
+	 */
+	void ParticleEmitter::Init(Camera* camera, const ParicleParameterS& param, D3DXVECTOR3* emitPosition)
 	{
-		camera = _Camera;
-		param = _Param;
-		EmitPosition = _EmitPosition;
-		timer = 0.0f;
+		
+		Camera_ = camera;
+		Param_ = param;
+		EmitPosition_ = emitPosition;
 
-		m_pTextures.Load(_Param.texturePath);
+		Timer_ = 0.0f;
+
+		//テクスチャのロード
+		Texture_.Load(Param_.TexturePath_);
+
 	}
 
-	void CParticleEmitter::Update()
+	/**
+	 * 更新.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	void ParticleEmitter::Update()
 	{
-		if (timer >= param.intervalTime && isCreate) {
+
+		if (Timer_ >= Param_.IntervalTime_ && isCreate_) 
+		{
 			//パーティクルを生成。
-			CParticle* p = new CParticle();
-			p->Init(camera, param, EmitPosition);
-			timer = 0.0f;
-			particleList.push_back(p);
+			Particle* p = new Particle();
+
+			//パーティクルの初期化
+			p->Init(Camera_, Param_, EmitPosition_);
+			
+			Timer_ = 0.0f;
+			
+			//パーティクルの登録
+			ParticleList_.push_back(p);
+
 		}
-		timer += Time().DeltaTime();
-		std::list<CParticle*>::iterator p = particleList.begin();
-		while (p != particleList.end()) {
-			if ((*p)->GetDead()) {
+
+		//タイマー計算
+		Timer_ += Time().DeltaTime();
+
+		auto p = ParticleList_.begin();
+
+		//パーティクルが死んでいるならリストから削除
+		while (p != ParticleList_.end()) 
+		{
+			if ((*p)->GetDead()) 
+			{
 				delete (*p);
-				p = particleList.erase(p);
+				p = ParticleList_.erase(p);
 			}
-			else {
+			else
+			{
 				p++;
 			}
 		}
-		p = particleList.begin();
-		while (p != particleList.end()) {
+
+		p = ParticleList_.begin();
+		
+		while (p != ParticleList_.end()) 
+		{
 			(*p++)->Update();
 		}
+
 	}
 
-	void CParticleEmitter::AddForce(const D3DXVECTOR3& _AddForce)
+	/**
+	 * Adds a force.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @param addForce The add force.
+	 */
+	void ParticleEmitter::AddForce(const D3DXVECTOR3& addForce)
 	{
-		for (auto p : particleList) {
-			p->AddForce(_AddForce);
+		for (auto p : ParticleList_) 
+		{
+			p->AddForce(addForce);
 		}
 	}
 
-	void CParticleEmitter::Render()
+	/**
+	 * 描画.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	void ParticleEmitter::Render()
 	{
-		std::list<CParticle*>::iterator p = particleList.begin();
-		while (p != particleList.end()) {
-			(*p++)->Render(m_pTextures.GetTextureDX());
+		auto p = ParticleList_.begin();
+
+		while (p != ParticleList_.end()) 
+		{
+			(*p++)->Render(Texture_.GetTexture());
 		}
+
 	}
-}
+
+}// namespace nkEngine

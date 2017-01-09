@@ -1,48 +1,98 @@
+/**
+ * @file _Graphics\_UI\nkImage.cpp
+ *
+ * イメージクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkImage.h"
 
 namespace nkEngine
 {
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	Image::Image() :
-		uvRect(D3DXVECTOR4(0, 0, 1, 1)),
-		color(D3DXVECTOR4(1, 1, 1, 1)),
-		rectTransform(nullptr),
-		pEffect(nullptr)
+		RectUV_(D3DXVECTOR4(0, 0, 1, 1)),
+		Color_(D3DXVECTOR4(1, 1, 1, 1)),
+		RectTransform_(nullptr),
+		Effect_(nullptr)
 	{
 	}
 
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	Image::~Image()
 	{
 	}
 
+	/**
+	* ファイルのロードを行う.
+	* エフェクトとテクスチャ.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/09
+	*
+	* @param _filepass "Asset/Texture/"を省いたファイルパス.
+	*/
 	void Image::Load(const char * filepass)
 	{
-		pEffect = EffectManager().LoadEffect("Sprite.fx");
+		Effect_ = EffectManager().LoadEffect("Sprite.fx");
 
-		Texture.reset(new CTexture);
-		Texture->Load(filepass);
+		Texture_.reset(new Texture);
+		Texture_->Load(filepass);
 
 		Init();
 	}
 
-	void Image::Load(shared_ptr<CTexture>& _tex)
+	/**
+	* ファイルのロードを行う.
+	* エフェクトのみ.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/09
+	*
+	* @param [in,out] _tex The tex to load.
+	*/
+	void Image::Load(shared_ptr<Texture>& tex)
 	{
-		pEffect = EffectManager().LoadEffect("Sprite.fx");
+		Effect_ = EffectManager().LoadEffect("Sprite.fx");
 
-		Texture = _tex;
+		Texture_ = tex;
 
 		Init();
 	}
 
+	/**
+	* ファイルのロードを行う　
+	* エフェクトのみ.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/09
+	*/
 	void Image::Load()
 	{
-		pEffect = EffectManager().LoadEffect("Sprite.fx");
+		Effect_ = EffectManager().LoadEffect("Sprite.fx");
 
 		Init();
 	}
 
+	/**
+	* 初期化.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/09
+	*/
 	void Image::Init()
 	{
+
 		static SShapeVertex_PT vertex[] =
 		{
 			{
@@ -62,57 +112,66 @@ namespace nkEngine
 				1.0f, 1.0f
 			},
 		};
-		static unsigned short index[] = {
+		static unsigned short index[] =
+		{
 			0,1,2,3
 		};
-		static const D3DVERTEXELEMENT9 scShapeVertex_PT_Element[] = {
-			{ 0, 0 ,   D3DDECLTYPE_FLOAT4		, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION	, 0 },
-			{ 0, 16 ,  D3DDECLTYPE_FLOAT2		, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD	, 0 },
-			D3DDECL_END()
-		};
-		Primitive.Create(
-			CPrimitive::eTriangleStrip,
+
+		//プリミティブの作成
+		Primitive_.Create(
+			Primitive::TriangleStrip,
 			4,
 			sizeof(SShapeVertex_PT),
 			scShapeVertex_PT_Element,
 			vertex,
 			4,
-			eIndexFormat16,
+			IndexFormat16,
 			index
 		);
+
 	}
 
+	/**
+	 * 描画.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	void Image::Render()
 	{
+
+		//デバイスの取得
 		IDirect3DDevice9* Device = Engine().GetDevice();
 
 		//アルファブレンディングを行う
 		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+
 		//透過処理を行う
 		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
-		pEffect->SetTechnique("Tech");
-		pEffect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
-		pEffect->BeginPass(0);
+		Effect_->SetTechnique("Tech");
 
-		pEffect->SetMatrix("matWorld", &rectTransform->WorldProjMatrix);
-		pEffect->SetTexture("g_diffuseTexture", Texture->GetTextureDX());
+		Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
+		Effect_->BeginPass(0);
 
-		pEffect->SetValue("uvRect", &uvRect, sizeof(uvRect));
-		pEffect->SetValue("color", &color, sizeof(color));
+		Effect_->SetMatrix("matWorld", &RectTransform_->WorldProjMatrix);
+		Effect_->SetTexture("g_diffuseTexture", Texture_->GetTexture());
+		Effect_->SetValue("uvRect", &RectUV_, sizeof(RectUV_));
+		Effect_->SetValue("color", &Color_, sizeof(Color_));
 
-		pEffect->CommitChanges();
+		Effect_->CommitChanges();
 
-		Device->SetStreamSource(0, Primitive.GetVertexBuffer()->GetBody(), 0, Primitive.GetVertexBuffer()->GetStride());
-		Device->SetIndices(Primitive.GetIndexBuffer()->GetBody());
-		Device->SetVertexDeclaration(Primitive.GetVertexDecl());
-		Device->DrawIndexedPrimitive(Primitive.GetD3DPrimitiveType(), 0, 0, Primitive.GetNumVertex(), 0, Primitive.GetNumPolygon());
+		Device->SetStreamSource(0, Primitive_.GetVertexBuffer()->GetBody(), 0, Primitive_.GetVertexBuffer()->GetStride());
+		Device->SetIndices(Primitive_.GetIndexBuffer()->GetBody());
+		Device->SetVertexDeclaration(Primitive_.GetVertexDecl());
+		Device->DrawIndexedPrimitive(Primitive_.GetD3DPrimitiveType(), 0, 0, Primitive_.GetNumVertex(), 0, Primitive_.GetNumPolygon());
 
-		pEffect->EndPass();
-		pEffect->End();
+		Effect_->EndPass();
+		Effect_->End();
 
 		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
+
 	}
 
-}
+}// namespace nkEngine

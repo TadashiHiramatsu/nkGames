@@ -9,7 +9,6 @@ namespace nkEngine
 {
 	class CSkinModelData;
 	class CLight;
-	class CCamera;
 
 	enum EFogFunc
 	{

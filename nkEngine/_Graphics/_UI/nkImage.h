@@ -1,51 +1,131 @@
+/**
+ * @file _Graphics\_UI\nkImage.h
+ *
+ * イメージクラスの定義.
+ */
 #pragma once
 
 namespace nkEngine
 {
 
-	//イメージクラス
-	//2Dの画像をスクリーンに描画します
+	/**
+	 * イメージクラス.
+	 * 2Dの画像をスクリーンに描画します.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	class Image
 	{
 	public:
 
-		//コンストラクタ
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		Image();
-		//デストラクタ
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		~Image();
 
-		//ファイルのロードを行う
+		/**
+		 * ファイルのロードを行う.
+		 * エフェクトとテクスチャ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param _filepass "Asset/Texture/"を省いたファイルパス.
+		 */
 		void Load(const char* _filepass);
-		void Load(shared_ptr<CTexture>& _tex);
+
+		/**
+		 * ファイルのロードを行う.
+		 * エフェクトのみ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param [in,out] _tex The tex to load.
+		 */
+		void Load(shared_ptr<Texture>& _tex);
+
+		/**
+		 * ファイルのロードを行う　 
+		 * エフェクトのみ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Load();
 
-		//初期化のみを行う
+		/**
+		 * 初期化.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Init();
-		
-		//描画
+
+		/**
+		 * 描画.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Render();
-		
-		//テクスチャを設定する
-		void SetTexture(shared_ptr<CTexture>& _tex)
+
+		/**
+		 * テクスチャを設定する.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param [in,out] tex テクスチャ.
+		 */
+		void SetTexture(shared_ptr<Texture>& tex)
 		{
-			Texture = _tex;
+			Texture_ = tex;
 		}
 
-		//トランスフォームを設定する
-		void SetTransform(RectTransform* _rt)
+		/**
+		 * トランスフォームを設定する.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param [in,out] rt If non-null, the right.
+		 */
+		void SetTransform(RectTransform* rt)
 		{
-			rectTransform = _rt;
+			RectTransform_ = rt;
 		}
 
 	private:
-		ID3DXEffect* pEffect; //消さなくていい
-		CPrimitive Primitive;
-		shared_ptr<CTexture> Texture;
 
-		RectTransform* rectTransform;
+		/** エフェクト. */
+		ID3DXEffect* Effect_;
+		/** プリミティブ. */
+		Primitive Primitive_;
+		/** テクスチャ. */
+		shared_ptr<Texture> Texture_;
+		/** レクトトランスフォーム. */
+		RectTransform* RectTransform_;
 
 	public:
-		D3DXVECTOR4 uvRect; //UV座標 x:左.y:上
-		D3DXVECTOR4 color; //色
+
+		/** UV座標 x:左.y:上. */
+		D3DXVECTOR4 RectUV_;
+		/** 色. */
+		D3DXVECTOR4 Color_;
+
 	};
-}
+
+}// namespace nkEngine

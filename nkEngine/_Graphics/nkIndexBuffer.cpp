@@ -1,63 +1,114 @@
+/**
+ * @file _Graphics\nkIndexBuffer.cpp
+ *
+ * インデックスバッファクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkIndexBuffer.h"
 
 namespace nkEngine
 {
-	CIndexBuffer::CIndexBuffer():
-		pIndexBuffer(nullptr)
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	IndexBuffer::IndexBuffer() :
+		D3DIndexBuffer_(nullptr)
 	{
 	}
 
-	CIndexBuffer::~CIndexBuffer()
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	IndexBuffer::~IndexBuffer()
 	{
 		Release();
 	}
 
-	void CIndexBuffer::Create(int _IndexNum, EIndexFormat _Format, const void * _pSrcIndexBuffer)
+	/**
+	 * インデックスバッファの作成.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @param indexNum		 インデックスの数.
+	 * @param format		 インデックスバッファのフォーマット.
+	 * @param srcIndexBuffer ソースインデックスバッファ.
+	 */
+	void IndexBuffer::Create(int indexNum, IndexFormatE format, const void* srcIndexBuffer)
 	{
+		//解放
 		Release();
 
+		//サイズの作成
 		int size = 0;
+
+		//フォーマットの作成
 		D3DFORMAT d3dFormat;
-		if (_Format == eIndexFormat16)
+
+		switch (format)
 		{
+		case IndexFormat16:
 			d3dFormat = D3DFMT_INDEX16;
-			size = _IndexNum * 2;
-		}
-		else if (_Format == eIndexFormat32)
-		{
+			size = indexNum * 2;
+			break;
+		case IndexFormat32:
 			d3dFormat = D3DFMT_INDEX32;
-			size = _IndexNum * 4;
+			size = indexNum * 4;
+			break;
+		default:
+			break;
 		}
 
+		//デバイスの取得
 		LPDIRECT3DDEVICE9 Device = Engine().GetDevice();
 
+		//インデックスバッファの作成
 		HRESULT hr = Device->CreateIndexBuffer(
 			size,
 			0,
 			(D3DFORMAT)d3dFormat,
 			D3DPOOL_DEFAULT,
-			&pIndexBuffer,
+			&D3DIndexBuffer_,
 			nullptr
 		);
 
-		NK_ASSERT(SUCCEEDED(hr), "Failed CreateIndexBuffer!!");
+		NK_ASSERT(SUCCEEDED(hr), "インデックスバッファの作成失敗");
 
-		if (_pSrcIndexBuffer != nullptr)
+		if (srcIndexBuffer != nullptr)
 		{
 			//ソースが指定されている
 			//インデックスバッファをロックしてコピー
 			void* pDstIndexBuffer;
-			hr = pIndexBuffer->Lock(0, 0, &pDstIndexBuffer, D3DLOCK_DISCARD);
-			NK_ASSERT(SUCCEEDED(hr), "Failed IndexBuffer Lock!!");
+
+			//インデックスバッファをロック
+			hr = D3DIndexBuffer_->Lock(0, 0, &pDstIndexBuffer, D3DLOCK_DISCARD);
+
+			NK_ASSERT(SUCCEEDED(hr), "インデックスバッファのロックに失敗");
+
 			//コピー
-			memcpy(pDstIndexBuffer, _pSrcIndexBuffer, size);
-			pIndexBuffer->Unlock();
+			memcpy(pDstIndexBuffer, srcIndexBuffer, size);
+
+			//インデックスバッファをアンロック
+			D3DIndexBuffer_->Unlock();
 		}
 	}
 
-	void CIndexBuffer::Release()
+	/**
+	 * 解放.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	void IndexBuffer::Release()
 	{
-		SAFE_RELEASE(pIndexBuffer);
+		SAFE_RELEASE(D3DIndexBuffer_);
 	}
-}
+
+}// namespace nkEngine

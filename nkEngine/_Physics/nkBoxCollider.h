@@ -1,7 +1,7 @@
 /**
- * @file	_Physics\nkCapsuleCollider.h
+ * @file	_Physics\nkBoxCollider.h
  *
- * カプセルコライダークラスの定義.
+ * ボックスコライダークラスの定義.
  */
 #pragma once
 
@@ -11,12 +11,12 @@ namespace nkEngine
 {
 
 	/**
-	 * カプセルコライダー.
+	 * ボックスコライダークラス.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class CapsuleCollider : public ICollider
+	class BoxCollider : public ICollider
 	{
 	public:
 
@@ -26,7 +26,7 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		CapsuleCollider();
+		BoxCollider();
 
 		/**
 		 * デストラクタ.
@@ -34,21 +34,17 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~CapsuleCollider();
+		~BoxCollider();
 
 		/**
-		 * カプセルコライダー作成.
+		 * ボックスコライダー作成.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 *
-		 * @param	radius	The radius.
-		 * @param	height	The height.
+		 * @param	size	サイズ.
 		 */
-		void Create(float radius, float height)
-		{
-			Shape_ = new btCapsuleShape(radius, height);
-		}
+		void Create(const D3DXVECTOR3& size);
 
 		/**
 		 * ボディの取得.
@@ -65,8 +61,8 @@ namespace nkEngine
 
 	private:
 
-		/** カプセル形状. */
-		btCapsuleShape* Shape_;
+		/** ボックス形状. */
+		btBoxShape* Shape_;
 	
 	};
 

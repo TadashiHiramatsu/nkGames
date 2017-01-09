@@ -1,24 +1,54 @@
-﻿#include"nkEngine/nkstdafx.h"
+﻿/**
+ * @file _Graphics\_UI\nkTestFont.cpp
+ *
+ * テストフォントクラスの実装.
+ */
+#include"nkEngine/nkstdafx.h"
 #include"nkTestFont.h"
 
 namespace nkEngine
 {
-	TestFont::TestFont():
-		pFont(nullptr)
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	TestFont::TestFont() :
+		D3DFont_(nullptr)
 	{
 	}
 
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	TestFont::~TestFont()
 	{
 	}
 
-	void TestFont::Create(int _Height,int _Width, FontWeights _Weights)
+	/**
+	 * 作成.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @param _Height  The height.
+	 * @param _Width   The width.
+	 * @param _Weights The weights.
+	 */
+	void TestFont::Create(int height,int width, FontWeightE weights)
 	{
+
+		//フォントの作成
 		D3DXCreateFont(
 			Engine().GetDevice(),			// デバイス
-			_Height,						// 高さ
-			_Width,							// 幅
-			_Weights,						// フォントの太さ 普通
+			height,							// 高さ
+			width,							// 幅
+			weights,						// フォントの太さ 普通
 			NULL,							// 下線
 			FALSE,							// 斜体
 			SHIFTJIS_CHARSET,				// 文字セット
@@ -26,28 +56,41 @@ namespace nkEngine
 			PROOF_QUALITY,					// 文字品質を重視
 			FIXED_PITCH | FF_SCRIPT,		// ピッチとファミリ
 			TEXT("ＭＳ　Ｐゴシック"),		// フォント名
-			&pFont);						// ID3DXFontポインタ
+			&D3DFont_);						// ID3DXFontポインタ
+	
 	}
 
-	void TestFont::Render(const char * _Text, int _Num, D3DXVECTOR2 _Pos)
+	/**
+	* 描画.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/09
+	*
+	* @param text 文字.
+	* @param num  数値.
+	* @param pos  (Optional) The position.
+	*/
+	void TestFont::Render(const char * text, int num, D3DXVECTOR2 pos)
 	{
-		RECT rc = {
-			_Pos.x,		// 左上のx座標
-			_Pos.y,		// 左上のy座標
+		RECT rc =
+		{
+			pos.x,		// 左上のx座標
+			pos.y,		// 左上のy座標
 			Engine().GetScreenW(),	// 右下のx座標
 			Engine().GetScreenH()		// 右下のy座標
 		};
 
-		char num[10];
-		sprintf_s(num, "%d", _Num);
+		char numText[10];
+		sprintf_s(numText, "%d", num);
 
+		//フォントの作成
 		char str[30] = {0};
-		strcat_s(str, _Text);
+		strcat_s(str, text);
 		strcat_s(str, " : ");
-		strcat_s(str, num);
+		strcat_s(str, numText);
 
-		// 描画
-		pFont->DrawText(
+		//描画
+		D3DFont_->DrawText(
 			NULL,					// NULL
 			str,					// 描画テキスト
 			-1,						// 全て表示
@@ -55,42 +98,31 @@ namespace nkEngine
 			DT_LEFT,					// 左寄せ
 			D3DCOLOR_XRGB(0, 0, 0)
 		);
+
 	}
 
-	void TestFont::Render(const char* _Text, D3DXVECTOR2 _Pos)
+	/**
+	* 描画.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/09
+	*
+	* @param text 文字.
+	* @param pos  (Optional) The position.
+	*/
+	void TestFont::Render(const char* text, D3DXVECTOR2 pos)
 	{
-		RECT rc = {
-			_Pos.x,		// 左上のx座標
-			_Pos.y,		// 左上のy座標
+
+		RECT rc = 
+		{
+			pos.x,		// 左上のx座標
+		    pos.y,		// 左上のy座標
 			Engine().GetFrameW(),	// 右下のx座標
 			Engine().GetFrameH()		// 右下のy座標
 		};
 
 		// 描画
-		pFont->DrawText(
-			NULL,					// NULL
-			_Text,					// 描画テキスト
-			-1,						// 全て表示
-			&rc,						// 表示範囲
-			DT_LEFT,					// 左寄せ
-			D3DCOLOR_XRGB(0, 0, 0)
-		);
-	}
-
-	void TestFont::Render(int _Text, D3DXVECTOR2 _Pos)
-	{
-		RECT rc = {
-			_Pos.x,		// 左上のx座標
-			_Pos.y,		// 左上のy座標
-			Engine().GetFrameW(),	// 右下のx座標
-			Engine().GetFrameH()		// 右下のy座標
-		};
-
-		char text[10];
-		sprintf_s(text, "%d", _Text);
-
-		// 描画
-		pFont->DrawText(
+		D3DFont_->DrawText(
 			NULL,					// NULL
 			text,					// 描画テキスト
 			-1,						// 全て表示
@@ -98,12 +130,54 @@ namespace nkEngine
 			DT_LEFT,					// 左寄せ
 			D3DCOLOR_XRGB(0, 0, 0)
 		);
+
 	}
 
+	/**
+	* 描画.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/09
+	*
+	* @param text 数値.
+	* @param pos  (Optional) The position.
+	*/
+	void TestFont::Render(int text, D3DXVECTOR2 pos)
+	{
+		RECT rc =
+		{
+			pos.x,		// 左上のx座標
+			pos.y,		// 左上のy座標
+			Engine().GetFrameW(),	// 右下のx座標
+			Engine().GetFrameH()		// 右下のy座標
+		};
+
+		char numText[10];
+		sprintf_s(numText, "%d", text);
+
+		// 描画
+		D3DFont_->DrawText(
+			NULL,					// NULL
+			numText,					// 描画テキスト
+			-1,						// 全て表示
+			&rc,						// 表示範囲
+			DT_LEFT,					// 左寄せ
+			D3DCOLOR_XRGB(0, 0, 0)
+		);
+
+	}
+
+	/**
+	 * 解放.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	void TestFont::Release()
 	{
 		// フォント開放
-		pFont->Release();
-		pFont = NULL;
+		SAFE_RELEASE(D3DFont_);
+
 	}
-}
+
+}// namespace nkEngine

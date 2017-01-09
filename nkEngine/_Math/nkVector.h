@@ -1,14 +1,14 @@
 /**
  * @file	_Math\nkVector.h
  *
- * Declares the nk vector class.
+ * ベクタークラスの定義.
  */
 #pragma once
 
 namespace nkEngine
 {
 	/**
-	 * ベクトル2.
+	 * ベクトル2クラス.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/30
@@ -17,9 +17,8 @@ namespace nkEngine
 	{
 	public:
 
-
 		/**
-		 * デフォルトコンストラクタ.
+		 * コンストラクタ.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2016/12/30
@@ -28,24 +27,31 @@ namespace nkEngine
 		{
 		}
 
-
 		/**
 		 * コンストラクタ.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2016/12/30
 		 *
-		 * @param	_x	The x coordinate.
-		 * @param	_y	The y coordinate.
+		 * @param	x	The x coordinate.
+		 * @param	y	The y coordinate.
 		 */
-		Vector2(float _x, float _y)
+		Vector2(float x, float y)
 		{
-			x = _x;
-			y = _y;
+			x_ = x;
+			y_ = y;
 		}
 
 	public:
-		struct { float x, y; };
+
+		/**
+		 * X値とY値.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/08
+		 */
+		struct { float x_, y_; };
+	
 	};
 
 	/**
@@ -59,7 +65,7 @@ namespace nkEngine
 	public:
 
 		/**
-		 * デフォルトコンストラクタ.
+		 * コンストラクタ.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2016/12/30
@@ -74,15 +80,15 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2016/12/30
 		 *
-		 * @param	_x	The x coordinate.
-		 * @param	_y	The y coordinate.
-		 * @param	_z	The z coordinate.
+		 * @param	x	The x coordinate.
+		 * @param	y	The y coordinate.
+		 * @param	z	The z coordinate.
 		 */
-		Vector3(float _x, float _y, float _z)
+		Vector3(float x, float y, float z)
 		{
-			x = _x;
-			y = _y;
-			z = _z;
+			x_ = x;
+			y_ = y;
+			z_ = z;
 		}
 
 		/**
@@ -93,15 +99,15 @@ namespace nkEngine
 		 *
 		 * @details	this = v0 + (v1-v0) * t;
 		 *
-		 * @param	_t 	float.
-		 * @param	_v0	const Vector3&.
-		 * @param	_v1	const Vector3&.
+		 * @param	t 	float.
+		 * @param	v0	const Vector3&.
+		 * @param	v1	const Vector3&.
 		 */
-		void Lerp(float _t, const Vector3& _v0, const Vector3& _v1)
+		void Lerp(float t, const Vector3& v0, const Vector3& v1)
 		{
-			x = _v0.x + (_v1.x - _v0.x) * _t;
-			y = _v0.y + (_v1.y - _v0.y) * _t;
-			z = _v0.z + (_v1.z - _v0.z) * _t;
+			x_ = v0.x_ + (v1.x_ - v0.x_) * t;
+			y_ = v0.y_ + (v1.y_ - v0.y_) * t;
+			z_ = v0.z_ + (v1.z_ - v0.z_) * t;
 		}
 
 		/**
@@ -109,37 +115,37 @@ namespace nkEngine
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2016/12/30
-		 * 			
+		 *
 		 * @details	_dst = this;
 		 *
 		 * @tparam	TVector	vectorタイプ.
-		 * @param [in,out]	_dst	Destination for the.
+		 * @param [in,out]	dst	Destination for the.
 		 */
 		template<class TVector>
-		void CopyTo(TVector& _dst)const
+		void CopyTo(TVector& dst)const
 		{
-			_dst.x = x;
-			_dst.y = y;
-			_dst.z = z;
+			dst.x = x_;
+			dst.y = y_;
+			dst.z = z_;
 		}
 
 		/**
-		 * ベクトルの各要素を設定.
+		 * 要素を設定.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2016/12/30
-		 * 			
-		 * @details this = 
 		 *
-		 * @param	_x	The x coordinate.
-		 * @param	_y	The y coordinate.
-		 * @param	_z	The z coordinate.
+		 * @details	this =.
+		 *
+		 * @param	x	The x coordinate.
+		 * @param	y	The y coordinate.
+		 * @param	z	The z coordinate.
 		 */
-		void Set(float _x, float _y, float _z)
+		void Set(float x, float y, float z)
 		{
-			x = _x;
-			y = _y;
-			z = _z;
+			x_ = x;
+			y_ = y;
+			z_ = z;
 		}
 
 		/**
@@ -149,14 +155,14 @@ namespace nkEngine
 		 * @date	2016/12/30
 		 *
 		 * @tparam	TVector	Type of the vector.
-		 * @param [in,out]	_v	The v.
+		 * @param [in,out]	v	The v.
 		 */
 		template<class TVector>
-		void Set(TVector& _v)
+		void Set(TVector& v)
 		{
-			x = _v.x;
-			y = _v.y;
-			z = _v.z;
+			x_ = v.x;
+			y_ = v.y;
+			z_ = v.z;
 		}
 
 		/**
@@ -165,28 +171,48 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2016/12/30
 		 *
-		 * @param [in,out]	_v	The v to set.
+		 * @param [in,out]	v	The v to set.
 		 */
-		void Set(btVector3& _v)
+		void Set(btVector3& v)
 		{
-			this->x = _v.x();
-			this->y = _v.y();
-			this->z = _v.z();
+			x_ = v.x();
+			y_ = v.y();
+			z_ = v.z();
 		}
 
 	public:
-		struct { float x, y, z; };
 
+		/**
+		 * X値とY値とZ値.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/08
+		 */
+		struct { float x_, y_, z_; };
+
+		/** The zero. */
 		static const Vector3 Zero;
+		/** The right. */
 		static const Vector3 Right;
+		/** The left. */
 		static const Vector3 Left;
+		/** The up. */
 		static const Vector3 Up;
+		/** The down. */
 		static const Vector3 Down;
+		/** The front. */
 		static const Vector3 Front;
+		/** The back. */
 		static const Vector3 Back;
+		/** The axis x coordinate. */
 		static const Vector3 AxisX;
+		/** The axis y coordinate. */
 		static const Vector3 AxisY;
+		/** The axis z coordinate. */
 		static const Vector3 AxisZ;
+		/** The one. */
 		static const Vector3 One;
+
 	};
-}
+
+}// namespace nkEngine

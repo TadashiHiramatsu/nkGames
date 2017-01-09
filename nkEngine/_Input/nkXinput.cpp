@@ -1,208 +1,287 @@
+/**
+ * @file _Input\nkXinput.cpp
+ *
+ * XInputクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkXinput.h"
 
 namespace nkEngine
 {
-	/*!
-	*@brief	仮想ボタンとXBoxコントローラのボタンとの関連付けを表す構造体。
-	*/
-	struct VirtualPadToXPad {
-		EButton vButton;		//!<仮想ボタン。
-		DWORD	 xButton;		//!<XBoxコントローラのボタン。
-	};
-
-	const VirtualPadToXPad vPadToXPadTable[enButtonNum] = {
-		{ enButtonUp		, XINPUT_GAMEPAD_DPAD_UP },
-		{ enButtonDown		, XINPUT_GAMEPAD_DPAD_DOWN },
-		{ enButtonLeft		, XINPUT_GAMEPAD_DPAD_LEFT },
-		{ enButtonRight		, XINPUT_GAMEPAD_DPAD_RIGHT },
-		{ enButtonA			, XINPUT_GAMEPAD_A },
-		{ enButtonB			, XINPUT_GAMEPAD_B },
-		{ enButtonY			, XINPUT_GAMEPAD_Y },
-		{ enButtonX			, XINPUT_GAMEPAD_X },
-		{ enButtonSelect	, XINPUT_GAMEPAD_BACK },
-		{ enButtonStart		, XINPUT_GAMEPAD_START },
-		{ enButtonRB1		, XINPUT_GAMEPAD_RIGHT_SHOULDER },
-		{ enButtonRB2		, 0 },
-		{ enButtonRB3		, XINPUT_GAMEPAD_RIGHT_THUMB },
-		{ enButtonLB1		, XINPUT_GAMEPAD_LEFT_SHOULDER },
-		{ enButtonLB2		, 0 },
-		{ enButtonLB3		, XINPUT_GAMEPAD_LEFT_THUMB },
-	};
-	/*!
-	*@brief	仮想ボタンとキーボードとの関連付けを表す構造体。
-	*/
-	struct VirtualPadToKeyboard {
-		EButton vButton;		//!<仮想ボタン
-		DWORD keyCoord;			//!<キーボードのキーコード。
-	};
-	const VirtualPadToKeyboard vPadToKeyboardTable[enButtonNum] = {
-		{ enButtonUp		, '8' },
-		{ enButtonDown		, '2' },
-		{ enButtonLeft		, '4' },
-		{ enButtonRight		, '6' },
-		{ enButtonA			, 'J' },
-		{ enButtonB			, 'K' },
-		{ enButtonY			, 'I' },
-		{ enButtonX			, 'O' },
-		{ enButtonSelect	, VK_SPACE },
-		{ enButtonStart		, VK_RETURN },
-		{ enButtonRB1		, '7' },
-		{ enButtonRB2		, '8' },
-		{ enButtonRB3		, '9' },
-		{ enButtonLB1		, 'B' },
-		{ enButtonLB2		, 'N' },
-		{ enButtonLB3		, 'M' },
-	};
-
-	CXinput::CXinput():
-		m_padNo(0)
+	/**
+	 * 仮想ボタンとXBoxコントローラのボタンとの関連付けを表す構造体.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	struct VirtualPadToXPad 
 	{
-		memset(&m_Controllers, 0, sizeof(m_Controllers));
-		memset(m_trigger, 0, sizeof(m_trigger));
-		memset(m_press, 0, sizeof(m_press));
-		m_LeftStickX = 0.0f;
-		m_LeftStickY = 0.0f;
-		m_RightStickX = 0.0f;
-		m_RightStickY = 0.0f;
-		m_LeftTrigger = 0;
-		m_RightTrigger = 0;
+	public:
+
+		/** 仮想ボタン. */
+		ButtonE vButton_;
+		/** XBoxコントローラのボタン. */
+		DWORD xButton_;
+	
+	};
+
+	/** The pad to x coordinate pad table[ button num]. */
+	const VirtualPadToXPad vPadToXPadTable[ButtonNum] = 
+	{
+		{ ButtonUp		, XINPUT_GAMEPAD_DPAD_UP		},
+		{ ButtonDown	, XINPUT_GAMEPAD_DPAD_DOWN		},
+		{ ButtonLeft	, XINPUT_GAMEPAD_DPAD_LEFT		},
+		{ ButtonRight	, XINPUT_GAMEPAD_DPAD_RIGHT		},
+		{ ButtonA		, XINPUT_GAMEPAD_A				},
+		{ ButtonB		, XINPUT_GAMEPAD_B				},
+		{ ButtonY		, XINPUT_GAMEPAD_Y				},
+		{ ButtonX		, XINPUT_GAMEPAD_X				},
+		{ ButtonSelect	, XINPUT_GAMEPAD_BACK			},
+		{ ButtonStart	, XINPUT_GAMEPAD_START			},
+		{ ButtonRB1		, XINPUT_GAMEPAD_RIGHT_SHOULDER },
+		{ ButtonRB2		, 0								},
+		{ ButtonRB3		, XINPUT_GAMEPAD_RIGHT_THUMB	},
+		{ ButtonLB1		, XINPUT_GAMEPAD_LEFT_SHOULDER	},
+		{ ButtonLB2		, 0								},
+		{ ButtonLB3		, XINPUT_GAMEPAD_LEFT_THUMB		},
+	};
+
+	/**
+	 * 仮想ボタンとキーボードとの関連付けを表す構造体.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	struct VirtualPadToKeyboard 
+	{
+	public:
+
+		/** 仮想ボタン. */
+		ButtonE vButton_;
+		/** キーボードのキーコード. */
+		DWORD KeyCoord_;
+	};
+
+	/** The pad to keyboard table[ button num]. */
+	const VirtualPadToKeyboard vPadToKeyboardTable[ButtonNum] =
+	{
+		{ ButtonUp		, '8'		},
+		{ ButtonDown	, '2'		},
+		{ ButtonLeft	, '4'		},
+		{ ButtonRight	, '6'		},
+		{ ButtonA		, 'J'		},
+		{ ButtonB		, 'K'		},
+		{ ButtonY		, 'I'		},
+		{ ButtonX		, 'O'		},
+		{ ButtonSelect	, VK_SPACE	},
+		{ ButtonStart	, VK_RETURN },
+		{ ButtonRB1		, '7'		},
+		{ ButtonRB2		, '8'		},
+		{ ButtonRB3		, '9'		},
+		{ ButtonLB1		, 'B'		},
+		{ ButtonLB2		, 'N'		},
+		{ ButtonLB3		, 'M'		},
+	};
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	CXinput::CXinput() :
+		LeftStickX_(0.0f),
+		LeftStickY_(0.0f),
+		RightStickX_(0.0f),
+		RightStickY_(0.0f),
+		LeftTrigger_(0),
+		RightTrigger_(0)
+	{
+		memset(&GamePad_, 0, sizeof(GamePad_));
+		memset(Trigger_, 0, sizeof(Trigger_));
+		memset(Press_, 0, sizeof(Press_));
 	}
 
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	CXinput::~CXinput()
 	{
-		
 	}
 
+	/**
+	 * 更新.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	void CXinput::Update()
 	{
-		DWORD result = XInputGetState(m_padNo, &m_Controllers.state);
-		if (result == ERROR_SUCCESS) {
-			//接続されている。
-			m_Controllers.bConnected = true;
-			for (const VirtualPadToXPad& vPadToXPad : vPadToXPadTable) {
-				if (m_Controllers.state.Gamepad.wButtons & vPadToXPad.xButton) {
-					m_trigger[vPadToXPad.vButton] = 1 ^ m_press[vPadToXPad.vButton];
-					m_press[vPadToXPad.vButton] = 1;
+		//ゲームパッドのステートを取得
+		DWORD result = XInputGetState(0, &GamePad_.State_);
+
+		if (result == ERROR_SUCCESS) 
+		{
+			//接続されている
+			GamePad_.Connected_ = true;
+
+			for (const VirtualPadToXPad& vPadToXPad : vPadToXPadTable) 
+			{
+				if (GamePad_.State_.Gamepad.wButtons & vPadToXPad.xButton_) 
+				{
+					Trigger_[vPadToXPad.vButton_] = 1 ^ Press_[vPadToXPad.vButton_];
+					Press_[vPadToXPad.vButton_] = 1;
 				}
 				else {
-					m_trigger[vPadToXPad.vButton] = 0;
-					m_press[vPadToXPad.vButton] = 0;
+					Trigger_[vPadToXPad.vButton_] = 0;
+					Press_[vPadToXPad.vButton_] = 0;
 				}
 			}
-			if ((m_Controllers.state.Gamepad.sThumbLX < INPUT_DEADZONE &&
-				m_Controllers.state.Gamepad.sThumbLX > -INPUT_DEADZONE) &&
-				(m_Controllers.state.Gamepad.sThumbLY < INPUT_DEADZONE &&
-					m_Controllers.state.Gamepad.sThumbLY > -INPUT_DEADZONE))
+
+			if ((GamePad_.State_.Gamepad.sThumbLX < INPUT_DEADZONE &&
+				GamePad_.State_.Gamepad.sThumbLX > -INPUT_DEADZONE) &&
+				(GamePad_.State_.Gamepad.sThumbLY < INPUT_DEADZONE &&
+					GamePad_.State_.Gamepad.sThumbLY > -INPUT_DEADZONE))
 			{
-				m_Controllers.state.Gamepad.sThumbLX = 0;
-				m_Controllers.state.Gamepad.sThumbLY = 0;
-				m_LeftStickX = 0.0f;
-				m_LeftStickY = 0.0f;
+				GamePad_.State_.Gamepad.sThumbLX = 0;
+				GamePad_.State_.Gamepad.sThumbLY = 0;
+				LeftStickX_ = 0.0f;
+				LeftStickY_ = 0.0f;
 			}
-			else {
+			else 
+			{
 				//左スティックの入力量。正規化
-				if (m_Controllers.state.Gamepad.sThumbLX > 0) {
-					m_LeftStickX = s_cast<float>(m_Controllers.state.Gamepad.sThumbLX) / SHRT_MAX;
+				if (GamePad_.State_.Gamepad.sThumbLX > 0) 
+				{
+					LeftStickX_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbLX) / SHRT_MAX;
 				}
-				else {
-					m_LeftStickX = s_cast<float>(m_Controllers.state.Gamepad.sThumbLX) / -SHRT_MIN;
+				else 
+				{
+					LeftStickX_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbLX) / -SHRT_MIN;
 				}
-				if (m_Controllers.state.Gamepad.sThumbLY > 0) {
-					m_LeftStickY = s_cast<float>(m_Controllers.state.Gamepad.sThumbLY) / SHRT_MAX;
+
+				if (GamePad_.State_.Gamepad.sThumbLY > 0) 
+				{
+					LeftStickY_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbLY) / SHRT_MAX;
 				}
-				else {
-					m_LeftStickY = s_cast<float>(m_Controllers.state.Gamepad.sThumbLY) / -SHRT_MIN;
+				else 
+				{
+					LeftStickY_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbLY) / -SHRT_MIN;
 				}
 			}
 
-			if ((m_Controllers.state.Gamepad.sThumbRX < INPUT_DEADZONE &&
-				m_Controllers.state.Gamepad.sThumbRX > -INPUT_DEADZONE) &&
-				(m_Controllers.state.Gamepad.sThumbRY < INPUT_DEADZONE &&
-					m_Controllers.state.Gamepad.sThumbRY > -INPUT_DEADZONE))
+			if ((GamePad_.State_.Gamepad.sThumbRX < INPUT_DEADZONE &&
+				GamePad_.State_.Gamepad.sThumbRX > -INPUT_DEADZONE) &&
+				(GamePad_.State_.Gamepad.sThumbRY < INPUT_DEADZONE &&
+					GamePad_.State_.Gamepad.sThumbRY > -INPUT_DEADZONE))
 			{
-				m_Controllers.state.Gamepad.sThumbRX = 0;
-				m_Controllers.state.Gamepad.sThumbRY = 0;
-				m_RightStickX = 0.0f;
-				m_RightStickY = 0.0f;
+				GamePad_.State_.Gamepad.sThumbRX = 0;
+				GamePad_.State_.Gamepad.sThumbRY = 0;
+				RightStickX_ = 0.0f;
+				RightStickY_ = 0.0f;
 			}
-			else {
+			else
+			{
 				//右スティックの入力量。
-				if (m_Controllers.state.Gamepad.sThumbRX > 0) {
-					m_RightStickX = s_cast<float>(m_Controllers.state.Gamepad.sThumbRX) / SHRT_MAX;
+				if (GamePad_.State_.Gamepad.sThumbRX > 0) 
+				{
+					RightStickX_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbRX) / SHRT_MAX;
 				}
-				else {
-					m_RightStickX = s_cast<float>(m_Controllers.state.Gamepad.sThumbRX) / -SHRT_MIN;
+				else 
+				{
+					RightStickX_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbRX) / -SHRT_MIN;
 				}
-				if (m_Controllers.state.Gamepad.sThumbRY > 0) {
-					m_RightStickY = s_cast<float>(m_Controllers.state.Gamepad.sThumbRY) / SHRT_MAX;
+
+				if (GamePad_.State_.Gamepad.sThumbRY > 0)
+				{
+					RightStickY_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbRY) / SHRT_MAX;
 				}
-				else {
-					m_RightStickY = s_cast<float>(m_Controllers.state.Gamepad.sThumbRY) / -SHRT_MIN;
+				else 
+				{
+					RightStickY_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbRY) / -SHRT_MIN;
 				}
 			}
-			m_LeftTrigger = m_Controllers.state.Gamepad.bLeftTrigger;
-			m_RightTrigger = m_Controllers.state.Gamepad.bRightTrigger;
+			LeftTrigger_ = GamePad_.State_.Gamepad.bLeftTrigger;
+			RightTrigger_ = GamePad_.State_.Gamepad.bRightTrigger;
 		}
-		else {
+		else
+		{
 			//接続されていない場合はキーボードの入力でエミュレートする。
-			if (m_Controllers.bConnected) {
+			if (GamePad_.Connected_) 
+			{
 				//未接続になった。
-				memset(&m_Controllers, 0, sizeof(m_Controllers));
-				memset(m_trigger, 0, sizeof(m_trigger));
-				memset(m_press, 0, sizeof(m_press));
+				memset(&GamePad_, 0, sizeof(GamePad_));
+				memset(Trigger_, 0, sizeof(Trigger_));
+				memset(Press_, 0, sizeof(Press_));
 			}
 
-			m_LeftStickX = 0.0f;
-			m_LeftStickY = 0.0f;
-			m_RightStickX = 0.0f;
-			m_RightStickY = 0.0f;
-			m_LeftTrigger = 0;
-			m_RightTrigger = 0;
+			LeftStickX_ = 0.0f;
+			LeftStickY_ = 0.0f;
+			RightStickX_ = 0.0f;
+			RightStickY_ = 0.0f;
+			LeftTrigger_ = 0;
+			RightTrigger_ = 0;
 
-			if (GetAsyncKeyState(VK_LEFT)) {
-				m_RightStickX += -1.0f;
+			if (GetAsyncKeyState(VK_LEFT)) 
+			{
+				RightStickX_ += -1.0f;
 			}
-			if (GetAsyncKeyState(VK_RIGHT)) {
-				m_RightStickX += 1.0f;
+			if (GetAsyncKeyState(VK_RIGHT))
+			{
+				RightStickX_ += 1.0f;
 			}
-			if (GetAsyncKeyState(VK_UP)) {
-				m_RightStickY += 1.0f;
+			if (GetAsyncKeyState(VK_UP))
+			{
+				RightStickY_ += 1.0f;
 			}
-			if (GetAsyncKeyState(VK_DOWN)) {
-				m_RightStickY += -1.0f;
+			if (GetAsyncKeyState(VK_DOWN))
+			{
+				RightStickY_ += -1.0f;
 			}
 
-			if (GetAsyncKeyState('A')) {
-				m_LeftStickX += -1.0f;
+			if (GetAsyncKeyState('A')) 
+			{
+				LeftStickX_ += -1.0f;
 			}
-			if (GetAsyncKeyState('D')) {
-				m_LeftStickX += 1.0f;
+			if (GetAsyncKeyState('D'))
+			{
+				LeftStickX_ += 1.0f;
 			}
-			if (GetAsyncKeyState('W')) {
-				m_LeftStickY += 1.0f;
+			if (GetAsyncKeyState('W'))
+			{
+				LeftStickY_ += 1.0f;
 			}
-			if (GetAsyncKeyState('S')) {
-				m_LeftStickY += -1.0f;
+			if (GetAsyncKeyState('S')) 
+			{
+				LeftStickY_ += -1.0f;
 			}
 		
-			if (GetAsyncKeyState('1')) {
-				m_LeftTrigger = 255;
+			if (GetAsyncKeyState('1'))
+			{
+				LeftTrigger_ = 255;
 			}
-			if (GetAsyncKeyState('3')) {
-				m_RightTrigger = 255;
+			if (GetAsyncKeyState('3'))
+			{
+				RightTrigger_ = 255;
 			}
 
-			for (const VirtualPadToKeyboard& vPadToKeyboard : vPadToKeyboardTable) {
-				if (GetAsyncKeyState(vPadToKeyboard.keyCoord)) {
-					m_trigger[vPadToKeyboard.vButton] = 1 ^ m_press[vPadToKeyboard.vButton];
-					m_press[vPadToKeyboard.vButton] = 1;
+			for (const VirtualPadToKeyboard& vPadToKeyboard : vPadToKeyboardTable)
+			{
+				if (GetAsyncKeyState(vPadToKeyboard.KeyCoord_)) 
+				{
+					Trigger_[vPadToKeyboard.vButton_] = 1 ^ Press_[vPadToKeyboard.vButton_];
+					Press_[vPadToKeyboard.vButton_] = 1;
 				}
-				else {
-					m_trigger[vPadToKeyboard.vButton] = 0;
-					m_press[vPadToKeyboard.vButton] = 0;
+				else 
+				{
+					Trigger_[vPadToKeyboard.vButton_] = 0;
+					Press_[vPadToKeyboard.vButton_] = 0;
 				}
 			}
 		}
 	}
-}
+
+}// namespace nkEngine

@@ -1,16 +1,53 @@
+/**
+ * @file	_Resources\nkSkinModelDataHandle.cpp
+ *
+ * スキンモデルのハンドルクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkSkinModelDataHandle.h"
 
 namespace nkEngine
 {
-	void CSkinModelDataHandle::Init(const shared_ptr<CSkinModelData>& _Skin, CAnimation * _Anim, bool _isClone)
+
+	/**
+	 * Default constructor.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
+	SkinModelDataHandle::SkinModelDataHandle() :
+		SkinModelData_(nullptr)
 	{
-		OriginSkinModelData = _Skin;
-		if (_isClone)
+	}
+
+	/**
+	 * Destructor.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
+	SkinModelDataHandle::~SkinModelDataHandle()
+	{
+	}
+
+	/**
+	 * 初期化.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 *
+	 * @param 		  	skin   	スキン.
+	 * @param [in,out]	anim   	アニメーション.
+	 * @param 		  	isClone	クローンフラグ.
+	 */
+	void SkinModelDataHandle::Init(const SkinModelDataPtrT& skin, CAnimation * anim, bool isClone)
+	{
+		OriginSkinModelData_ = skin;
+		if (isClone)
 		{
 			//クローンを作成
-			SkinModelData.reset(new CSkinModelData);
-			SkinModelData->CloneModelData(*_Skin, _Anim);
+			SkinModelData_.reset(new CSkinModelData);
+			SkinModelData_->CloneModelData(*skin, anim);
 		}
 	}
 

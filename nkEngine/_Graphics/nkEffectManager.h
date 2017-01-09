@@ -1,36 +1,93 @@
+/**
+ * @file _Graphics\nkEffectManager.h
+ *
+ * エフェクトマネージャクラスの定義.
+ */
 #pragma once
 
 namespace nkEngine
 {
+
+	/**
+	 * エフェクトマネージャクラス.
+	 * シングルトンクラス.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	class CEffectManager
 	{
-	public:
+	private:
+
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		CEffectManager();
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		~CEffectManager();
 	
-		//エフェクトのロード
-		//param[in] ファイルパス
-		//return ロードしたエフェクト
+	public:
+
+		/**
+		 * エフェクトのロード.
+		 * "Asset/Shader/"フォルダからロードします.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param filePath ファイルパス。"Asset/Shader/"を省いたファイルパス.
+		 *
+		 * @return ロードしたエフェクト.
+		 */
 		ID3DXEffect* LoadEffect(const char* filePath);
 
-		//リリース
+		/**
+		 * 解放.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Release();
 
-		//インスタンス取得
+		/**
+		 * インスタンス取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return A reference to a CEffectManager.
+		 */
 		inline static CEffectManager& instance()
 		{
 			static CEffectManager instance;
 			return instance;
 		}
-	private:
-		//コンストラクタ
-		CEffectManager();
 
-		//デストラクタ
-		~CEffectManager();
 	private:
-		map<int, ID3DXEffect*> m_effectDictinary; //エフェクトのディクショナリ、ファイルパスのハッシュ値をキーにもつ
+		/** エフェクトのディクショナリ、ファイルパスのハッシュ値をキーにもつ. */
+		map<int, ID3DXEffect*> EffectDictinary_;
 	};
+
+	/**
+	 * エフェクトマネージャクラスの取得.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @return A reference to a CEffectManager.
+	 */
 	inline static CEffectManager& EffectManager()
 	{
 		return CEffectManager::instance();
 	}
-}
+
+}// namespace nkEngine

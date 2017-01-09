@@ -1,20 +1,47 @@
+/**
+ * @file	_Physics\nkSphereCollider.cpp
+ *
+ * 球体コライダークラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkSphereCollider.h"
 
 namespace nkEngine
 {
+
+	/**
+	 * Default constructor.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
 	CSphereCollider::CSphereCollider() :
-		m_Shape(nullptr)
+		Shape_(nullptr)
 	{
 	}
 
+	/**
+	 * Destructor.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
 	CSphereCollider::~CSphereCollider()
 	{
-		SAFE_DELETE(m_Shape);
+		SAFE_DELETE(Shape_);
 	}
 
-	void CSphereCollider::Create(const float _radius)
+	/**
+	 * 球体コライダーの作成.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 *
+	 * @param	radius	The 半径.
+	 */
+	void CSphereCollider::Create(const float radius)
 	{
-		m_Shape = new btSphereShape(_radius);
+		Shape_ = new btSphereShape(radius);
 	}
-}
+
+}// namespace nkEngine

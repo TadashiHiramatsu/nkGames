@@ -1,48 +1,107 @@
+/**
+ * @file	_Scene\nkSceneManager.h
+ *
+ * シーンマネージャクラスの定義.
+ */
 #pragma once
 
 #include"nkScene.h"
 
 namespace nkEngine
 {
+
+	/**
+	 * シーンマネージャクラス.
+	 * シングルトンクラス.
+	 * このクラスにISceneクラスを継承したクラスを登録する.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
 	class CSceneManager
 	{
 	private:
-		//コンストラクタ
+
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 */
 		CSceneManager();
-		//デストラクタ
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 */
 		~CSceneManager();
+
 	public:
 
-		//インスタンスの取得
+		/**
+		 * インスタンスの取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	The instance.
+		 */
 		static CSceneManager& GetInstance()
 		{
 			static CSceneManager instance;
 			return instance;
 		}
 
-		//初期化を呼び出してGameObjectManagerを初期化
-		template <class T>
+		/**
+		 * ISceneクラス継承クラスの初期化を呼び出して 
+		 * GameObjectManagerクラスを初期化.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @tparam	TScene	ISceneクラスを継承したクラス.
+		 */
+		template <class TScene>
 		void ChangeScene()
 		{
-			SAFE_DELETE(nowScene);
+			SAFE_DELETE(NowScene_);
 
+			//シーンクラスの作成
 			T* scene = new T;
-			nowScene = scene;
+
+			//ナウシーンに設定
+			NowScene_ = scene;
 
 			//登録されているゲームオブジェクトを全削除
 			GameObjectManager().AllDelete();
 
-			//シャドウ設定
-			Shadow().Create(nowScene->GetGraphicsConfig().ShadowConfig);
+			//シャドウクラスの初期化
+			Shadow().Create(NowScene_->GetGraphicsConfig().ShadowConfig);
 
-			nowScene->Start();
+			//シーンクラスの初期化
+			NowScene_->Start();
 		}
 
 	private:
-		IScene* nowScene;
+
+		/** The now scene. */
+		IScene* NowScene_;
+
 	};
+
+	/**
+	 * シーンマネージャーの取得.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 *
+	 * @return	A reference to a CSceneManager.
+	 */
 	inline CSceneManager& SceneManager()
 	{
 		return CSceneManager::GetInstance();
 	}
-}
+
+}// namespace nkEngine

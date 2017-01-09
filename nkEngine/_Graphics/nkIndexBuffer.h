@@ -1,38 +1,84 @@
+/**
+ * @file _Graphics\nkIndexBuffer.h
+ *
+ * インデックスバッファクラスの定義.
+ */
 #pragma once
 
 namespace nkEngine
 {
-	enum EIndexFormat
+
+	/** インデックスフォーマットの列挙型. */
+	enum IndexFormatE
 	{
-		eIndexFormat16 = D3DFMT_INDEX16, //16bitインデックス
-		eIndexFormat32 = D3DFMT_INDEX32, //32bitインデックス
+		IndexFormat16 = D3DFMT_INDEX16, //!< 16bitインデックス
+		IndexFormat32 = D3DFMT_INDEX32, //!< 32bitインデックス
 	};
-	class CIndexBuffer
+
+	/**
+	 * インデックスバッファクラス.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	class IndexBuffer
 	{
 	public:
-		//コンストラクタ
-		CIndexBuffer();
-		
-		//デストラクタ
-		~CIndexBuffer();
 
-		//インデックスバッファの作成
-		// param[in] インデックスの数
-		// param[in] インデックスバッファのフォーマット
-		// param[in] ソースインデックスバッファ
-		void Create(int _IndexNum, EIndexFormat _Format, const void* _pSrcIndexBuffer);
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		IndexBuffer();
 
-		//インデックスバッファの解放
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		~IndexBuffer();
+
+		/**
+		 * インデックスバッファの作成.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param indexNum		 インデックスの数.
+		 * @param format		 インデックスバッファのフォーマット.
+		 * @param srcIndexBuffer ソースインデックスバッファ.
+		 */
+		void Create(int indexNum, IndexFormatE format, const void* srcIndexBuffer);
+
+		/**
+		 * インデックスバッファの解放.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Release();
 
-		//インデックスバッファの取得
+		/**
+		 * インデックスバッファの取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return Null if it fails, else the body.
+		 */
 		IDirect3DIndexBuffer9* GetBody()
 		{
-			return pIndexBuffer;
+			return D3DIndexBuffer_;
 		}
 
 	private:
-		//インデックスバッファ
-		IDirect3DIndexBuffer9* pIndexBuffer;
+
+		/** インデックスバッファ. */
+		IDirect3DIndexBuffer9* D3DIndexBuffer_;
+
 	};
-}
+
+}// namespace nkEngine

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "nkEngine/_Physics/nkCapsuleCollider.h"
-#include "nkEngine/_Physics/CRigidBody.h"
+#include "nkEngine/_Physics/nkRigidBody.h"
 
 namespace nkEngine
 {

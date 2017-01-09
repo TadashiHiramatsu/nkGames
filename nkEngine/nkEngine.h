@@ -1,109 +1,312 @@
+/**
+ * @file	nkEngine.h
+ *
+ * エンジンクラスの定義.
+ */
 #pragma once
 
-#include"_Physics\CPhysics.h"
+#include"_Physics\nkPhysics.h"
 
 namespace nkEngine
 {
 
-
-	struct SInitParam
+	/**
+	 * 初期化パラメータの構造体.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
+	struct InitParamS
 	{
-		SInitParam()
+	public:
+
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 */
+		InitParamS()
 		{
-			memset(this, 0, sizeof(SInitParam));
-			isCenter = true;
+			memset(this, 0, sizeof(InitParamS));
+			isCenter_ = true;
 		}
-		HINSTANCE hInstance;
-		int screenW;
-		int screenH;
-		int frameBufferW;
-		int frameBufferH;
-		const char* GameName;
-		bool isCenter;
+
+	public:
+
+		/** インスタンスハンドル. */
+		HINSTANCE hInstance_;
+		/** スクリーンの横幅. */
+		int ScreenBufferW_;
+		/** スクリーンの高さ. */
+		int ScreenBufferH_;
+		/** 内部解像度の横幅. */
+		int FrameBufferW_;
+		/** 内部解像度の高さ. */
+		int FrameBufferH_;
+		/** ゲームの表示名. */
+		const char* GameName_;
+		/** デスクトップの中心に表示するか. */
+		bool isCenter_;
+
 	};
 
-	//シングルトンのエンジンクラス
+	/**
+	 * エンジンクラス.
+	 * シングルトンクラス.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
 	class CEngine
 	{
 	private:
+
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 */
 		CEngine():
-			m_hWnd(nullptr)
-		{}
+			Hwnd_(nullptr)
+		{
+		}
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 */
 		~CEngine()
-		{}
+		{
+		}
+
 	public:
-		//初期化
-		bool Init(const SInitParam& initparam);
-		//終了処理
+
+		/**
+		 * 初期化.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @param	initparam	初期化パラメータ.
+		 *
+		 * @return	True if it succeeds, false if it fails.
+		 */
+		bool Init(const InitParamS& initparam);
+
+		/**
+		 * 終了処理.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 */
 		void Final();
-		//ゲームループ
+
+		/**
+		 * ゲームループ.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 */
 		void RunGameLoop();
-		//インスタンス取得
+
+		/**
+		 * インスタンスの取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	A reference to a CEngine.
+		 */
 		inline static CEngine& instance()
 		{
 			static CEngine instance;
 			return instance;
 		}
-		//デバイスの取得
+
+		/**
+		 * デバイスの取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	Null if it fails, else the device.
+		 */
 		IDirect3DDevice9* GetDevice()
 		{
-			return m_pD3DDevice;
+			return D3DDevice_;
 		}
 
+
+		/**
+		 * ハンドルの取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	The hwnd.
+		 */
 		HWND GetHWND()
 		{
-			return m_hWnd;
+			return Hwnd_;
 		}
 
-		//物理ワールドの取得
+		/**
+		 * 物理ワールドの取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	The physics.
+		 */
 		CPhysics& GetPhysics()
 		{
-			return m_Physics;
+			return Physics_;
 		}
 
-		//フレームの幅：x
-		int GetFrameW() { return m_frameBufferW; }
-		//フレームの高さ：y
-		int GetFrameH() { return m_frameBufferH; }
-		
-		//スクリーンの幅：x
-		int GetScreenW() { return m_screenBufferW; }
-		//スクリーンの高さ：y
-		int GetScreenH() { return m_screenBufferH; }
+		/**
+		 * フレームの横幅を取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	The frame w.
+		 */
+		int GetFrameW() 
+		{
+			return FrameBufferW_;
+		}
+
+		/**
+		 * フレームの高さを取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	The frame h.
+		 */
+		int GetFrameH() 
+		{
+			return FrameBufferH_; 
+		}
+
+		/**
+		 * スクリーンの横幅を取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	The screen w.
+		 */
+		int GetScreenW()
+		{
+			return ScreenBufferW_; 
+		}
+
+		/**
+		 * スクリーンの高さを取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	The screen h.
+		 */
+		int GetScreenH()
+		{
+			return ScreenBufferH_; 
+		}
+
 	private:
-		//ウィンドウの初期化
-		bool InitWindow(const SInitParam& initParam);
-		//DirectXの初期化
-		bool InitDirectX(const SInitParam& initParam);
-		//ウィンドウプロシージャ
-		static LRESULT CALLBACK MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+		/**
+		 * ウィンドウの初期化.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @param	initparam	初期化パラメータ.
+		 *
+		 * @return	True if it succeeds, false if it fails.
+		 */
+		bool InitWindow(const InitParamS& initparam);
+
+		/**
+		 * DirectXの初期化.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @param	initparam	初期化パラメータ.
+		 *
+		 * @return	True if it succeeds, false if it fails.
+		 */
+		bool InitDirectX(const InitParamS& initparam);
+
+		/**
+		 * ウィンドウプロシージャ.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @param	hwnd  	Handle of the window.
+		 * @param	msg   	The message.
+		 * @param	wParam	The wParam field of the message.
+		 * @param	lParam	The lParam field of the message.
+		 *
+		 * @return	A LRESULT.
+		 */
+		static LRESULT CALLBACK MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 	private:
-		//ウィンドウハンドル
-		HWND m_hWnd;
-		//クライアントサイズ
-		RECT m_cRect;
-		//フレームバッファの幅。これが内部解像度。
-		int m_frameBufferW;
-		//フレームバッファの高さ。これが内部解像度。
-		int m_frameBufferH;
-		//スクリーンバッファの幅。
-		int m_screenBufferW;
-		//スクリーンバッファの高さ。
-		int m_screenBufferH;
-		//DirectXオブジェクト
-		IDirect3D9* m_pD3D;
-		//DirectXデバイス
-		IDirect3DDevice9* m_pD3DDevice;
-		//物理ワールド
-		CPhysics m_Physics;
+
+		/** ウィンドウハンドル. */
+		HWND Hwnd_;
+		/** クライアントサイズ. */
+		RECT ClientRect_;
+		/** フレームバッファの幅。内部解像度. */
+		int FrameBufferW_;
+		/** フレームバッファの高さ。内部解像度. */
+		int FrameBufferH_;
+		/** スクリーンバッファの幅. */
+		int ScreenBufferW_;
+		/** スクリーンバッファの高さ. */
+		int ScreenBufferH_;
+		/** DirectXオブジェクト. */
+		IDirect3D9* D3DObject_;
+		/** DirectXデバイス. */
+		IDirect3DDevice9* D3DDevice_;
+		/** 物理ワールド. */
+		CPhysics Physics_;
+
 	};
+
+	/**
+	 * エンジンの取得.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 *
+	 * @return	A reference to a CEngine.
+	 */
 	inline static CEngine& Engine()
 	{
 		return CEngine::instance();
 	}
+
+	/**
+	 * 物理ワールドの取得.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 *
+	 * @return	A reference to the CPhysics.
+	 */
 	inline static CPhysics& Physics()
 	{
 		return CEngine::instance().GetPhysics();
 	}
-}
 
+}// namesoace nkEngine

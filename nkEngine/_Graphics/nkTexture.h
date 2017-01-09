@@ -1,27 +1,82 @@
+/**
+ * @file _Graphics\nkTexture.h
+ *
+ * テクスチャクラスの定義.
+ */
 #pragma once
 
 namespace nkEngine
 {
-	class CTexture
+
+	/**
+	 * テクスチャクラス.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	class Texture
 	{
 	public:
-		CTexture():
-			m_tex(nullptr)
-		{}
-		~CTexture()
-		{
-			SAFE_RELEASE(m_tex);
-		}
+
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		Texture();
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		~Texture();
+
+		/**
+		 * テクスチャを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param [in,out] tex If non-null, the tex.
+		 */
 		void SetTextureDX(IDirect3DTexture9* tex)
 		{
-			m_tex = tex;
+			D3DTexture_ = tex;
 		}
-		IDirect3DTexture9* GetTextureDX() const
+
+		/**
+		 * テクスチャを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return Null if it fails, else the texture dx.
+		 */
+		IDirect3DTexture9* GetTexture() const
 		{
-			return m_tex;
+			return D3DTexture_;
 		}
-		void Load(const char* fileName);
+
+		/**
+		 * 読み込み.
+		 * "Asset/Texture/"内に保存されているテクスチャを読み込めます.
+		 * 
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param filePath "Asset/Texture/"を省いたファイルパス.
+		 */
+		void Load(const char* filePath);
+
 	private:
-		IDirect3DTexture9* m_tex;
+
+		/** テクスチャ. */
+		IDirect3DTexture9* D3DTexture_;
+
 	};
-}
+
+}// namespace nkEngine

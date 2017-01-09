@@ -1,19 +1,55 @@
-//レンダーターゲット
-#ifndef _NKRENDERTARGET_
-#define _NKRENDERTARGET_
+/**
+ * @file _Graphics\nkRenderTarget.h
+ *
+ * レンダーターゲットクラスの定義.
+ */
+#pragma once
 
 #include"nkTexture.h"
 
 namespace nkEngine
 {
-	class CRenderTarget
+
+	/**
+	 * レンダーターゲットクラス.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	class RenderTarget
 	{
 	public:
-		//コンストラクタ
-		CRenderTarget();
-		//デストラクタ
-		~CRenderTarget();
-		//レンダーターゲットの作成
+
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		RenderTarget();
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
+		~RenderTarget();
+
+		/**
+		 * レンダーターゲットの作成.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param sizeW				 The size w.
+		 * @param sizeH				 The size h.
+		 * @param mipLevel			 The mip level.
+		 * @param colorFormat		 The color format.
+		 * @param depthStencilFormat The depth stencil format.
+		 * @param multiSampleType    Type of the multi sample.
+		 * @param multiSampleQuality The multi sample quality.
+		 */
 		void Create(
 		int sizeW,
 			int sizeH,
@@ -23,57 +59,134 @@ namespace nkEngine
 			D3DMULTISAMPLE_TYPE multiSampleType,
 			int multiSampleQuality
 		);
-		//レンダリングターゲットの破棄
+
+		/**
+		 * 解放.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Release();
-		//テクスチャの取得
-		const CTexture* GetTexture() const
+
+		/**
+		 * テクスチャの取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return Null if it fails, else the texture.
+		 */
+		IDirect3DTexture9* GetTextureDX() const
 		{
-			return &m_texture;
+			return Texture_.GetTexture();
 		}
-		//レンダリングターゲットの幅を取得
+
+		/**
+		 * テクスチャクラスの取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return Null if it fails, else the texture dx.
+		 */
+		const Texture* GetTexture() const
+		{
+			return &Texture_;
+		}
+
+		/**
+		 * レンダリングターゲットの幅を取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The size w.
+		 */
 		int GetSizeW()
 		{
-			return m_sizeW;
+			return SizeW_;
 		}
-		//レンダリングターゲットの高さを取得
+
+		/**
+		 * レンダリングターゲットの高さを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return The size h.
+		 */
 		int GetSizeH()
 		{
-			return m_sizeH;
+			return SizeH_;
 		}
-		//深度バッファ用のサーフェイスを取得
+
+		/**
+		 * 深度バッファ用のサーフェイスを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return Null if it fails, else the depth surface.
+		 */
 		IDirect3DSurface9* GetDepthSurface()
 		{
-			return m_DepthSurface;
+			return D3DDepthSurface_;
 		}
-		//サーフェイスを取得
+
+		/**
+		 * サーフェイスを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @return Null if it fails, else the surface.
+		 */
 		IDirect3DSurface9* GetSurface()
 		{
-			return m_Surface;
+			return D3DSurface_;
 		}
-		//深度バッファ用のサーフェイスをセット
+
+		/**
+		 * 深度バッファ用のサーフェイスをセット.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param [in,out] depthsurface If non-null, the depthsurface.
+		 */
 		void SetDepthSurface(IDirect3DSurface9* depthsurface)
 		{
-			m_DepthSurface = depthsurface;
+			D3DDepthSurface_ = depthsurface;
 		}
-		//サーフェイスをセット
+
+		/**
+		 * サーフェイスをセット.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param [in,out] surface If non-null, the surface.
+		 */
 		void SetSurface(IDirect3DSurface9* surface)
 		{
-			m_Surface = surface;
+			D3DSurface_ = surface;
 		}
-	private:
-		//レンダリングターゲットの幅
-		int m_sizeW;
-		//レンダリングターゲットの高さ
-		int m_sizeH;
-		//深度バッファ用のサーフェイス
-		IDirect3DSurface9* m_DepthSurface;
-		//サーフェイス
-		IDirect3DSurface9* m_Surface;
-		//書き込みさきテクスチャ
-		IDirect3DTexture9* m_TextureDX;
-		//テクスチャ
-		CTexture m_texture;
-	};
-}
 
-#endif // !_NKRENDERTARGET_
+	private:
+
+		/** レンダリングターゲットの横幅. */
+		int SizeW_;
+		/** レンダリングターゲットの高さ. */
+		int SizeH_;
+		/** 深度バッファ用のサーフェイス. */
+		IDirect3DSurface9* D3DDepthSurface_;
+		/** サーフェイス. */
+		IDirect3DSurface9* D3DSurface_;
+		/** カラーバッファ. */
+		IDirect3DTexture9* D3DTextureDX_;
+		/** テクスチャ. */
+		Texture Texture_;
+
+	};
+
+}// namespace nkEngine

@@ -52,6 +52,15 @@
     <Filter Include="DataLoad">
       <UniqueIdentifier>{a7c38f2c-911d-488f-8146-1b2e0ef0eb24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\2DObject">
+      <UniqueIdentifier>{67199141-0cbf-4f84-9828-a8c5a95e0bed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Sharp">
+      <UniqueIdentifier>{d635dbe0-fe75-4a53-97db-efa2bda66d52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Buffer">
+      <UniqueIdentifier>{46e14734-dad9-4f9c-b4fc-e3746743d7cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nkEngine.cpp">
@@ -68,9 +77,6 @@
     </ClCompile>
     <ClCompile Include="_GameObject\nkGameObject.cpp">
       <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\nkVertexBuffer.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="_Graphics\nkCamera.cpp">
       <Filter>Graphics</Filter>
@@ -90,32 +96,11 @@
     <ClCompile Include="_Input\nkXinput.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="_Physics\CBoxCollider.cpp">
-      <Filter>Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="_Physics\CMeshCollider.cpp">
-      <Filter>Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="_Physics\CPhysics.cpp">
-      <Filter>Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="_Physics\CRigidBody.cpp">
-      <Filter>Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="_Physics\nkCapsuleCollider.cpp">
-      <Filter>Physics</Filter>
-    </ClCompile>
     <ClCompile Include="_Component\nkCharacterController.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="_Graphics\nkPrimitive.cpp">
       <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\nkIndexBuffer.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="_Physics\nkSphereCollider.cpp">
-      <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="_Resources\nkSkinModelDataHandle.cpp">
       <Filter>Resources</Filter>
@@ -180,6 +165,33 @@
     <ClCompile Include="_DataLoad\nkCSVData.cpp">
       <Filter>DataLoad</Filter>
     </ClCompile>
+    <ClCompile Include="_Graphics\_2DObject\nkSprite.cpp">
+      <Filter>Graphics\2DObject</Filter>
+    </ClCompile>
+    <ClCompile Include="_Physics\nkBoxCollider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Physics\nkCapsuleCollider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Physics\nkMeshCollider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Physics\nkPhysics.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Physics\nkRigidBody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Physics\nkSphereCollider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\nkIndexBuffer.cpp">
+      <Filter>Graphics\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\nkVertexBuffer.cpp">
+      <Filter>Graphics\Buffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nkEngine.h">
@@ -206,9 +218,6 @@
     <ClInclude Include="nkOriginalDefine.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="_Graphics\nkVertexBuffer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="_Graphics\nkCamera.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -233,27 +242,6 @@
     <ClInclude Include="_Graphics\nkGraphicsConfig.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="_Physics\CBoxCollider.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="_Physics\CCollider.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="_Physics\CMeshCollider.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="_Physics\CPhysics.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="_Physics\CRigidBody.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="_Physics\nkCapsuleCollider.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="_Physics\nkCollisionAttr.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
     <ClInclude Include="_Component\nkCharacterController.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -268,12 +256,6 @@
     </ClInclude>
     <ClInclude Include="_Graphics\nkPrimitive.h">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="_Graphics\nkIndexBuffer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="_Physics\nkSphereCollider.h">
-      <Filter>Physics</Filter>
     </ClInclude>
     <ClInclude Include="_Resources\nkSkinModelDataHandle.h">
       <Filter>Resources</Filter>
@@ -337,6 +319,42 @@
     </ClInclude>
     <ClInclude Include="_DataLoad\nkCSVData.h">
       <Filter>DataLoad</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_2DObject\nkSprite.h">
+      <Filter>Graphics\2DObject</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_Sharp\nkSharpVertex.h">
+      <Filter>Graphics\Sharp</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\nkBoxCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\nkCapsuleCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\nkCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\nkCollisionAttr.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\nkMeshCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\nkPhysics.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\nkRigidBody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Physics\nkSphereCollider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\nkIndexBuffer.h">
+      <Filter>Graphics\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\nkVertexBuffer.h">
+      <Filter>Graphics\Buffer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

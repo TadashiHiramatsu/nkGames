@@ -68,8 +68,7 @@ void CItemResource::LoadFile(char * _FilePath, IItem::ItemType _Type)
 				break;
 			}
 			//“o˜^
-			ItemList.insert(pair<int, IItem*>(id, item));
+			ItemList.insert(make_pair(id, item));
 		}
 	}
-	int I = 1;
 }

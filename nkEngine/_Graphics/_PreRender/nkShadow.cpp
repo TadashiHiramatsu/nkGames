@@ -1,12 +1,19 @@
+/**
+ * @file _Graphics\_PreRender\nkShadow.cpp
+ *
+ * シャドウマップクラス.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkShadow.h"
 
-
 namespace nkEngine
 {
+
 	//無名空間
 	//ここに書かれたものはこのファイルでしか扱えないグローバルになる
-	namespace {
+	namespace 
+	{
+		/** The shadow area table[ c shadow map maximum shadow map][ 2]. */
 		const float shadowAreaTable[CShadowMap::MAX_SHADOW_MAP][2] =
 		{
 			{ 20.0f, 20.0f },
@@ -14,68 +21,107 @@ namespace nkEngine
 			{ 120.0f, 120.0f },
 		};
 	}
-	CShadowMap::CShadowMap():
-		m_isEnable(false),
-		m_near(1.0f),
-		m_far(1000.0f),
-		m_Aspect(1.0f),
-		m_calcLightViewFunc(enCalcLightViewFunc_PositionTarget),
-		m_vLightTarget(D3DXVECTOR3(0.0f, 0.0f, 0.0f))
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
+	CShadowMap::CShadowMap() :
+		isEnable_(false),
+		Near_(1.0f),
+		Far_(1000.0f),
+		Aspect_(1.0f),
+		CalcLightViewFunc_(CalcLightViewFunc_PositionTarget),
+		LightTarget_(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+		LightPosition_(D3DXVECTOR3(0.0f, 3.0f, 0.0f)),
+		LightDirection_(D3DXVECTOR3(0.0f, -1.0f, 0.0f))
 	{
-		D3DXMatrixIdentity(&m_mLightView);
-		m_vLightPosition = D3DXVECTOR3(0.0f, 3.0f, 0.0f);
-		m_vLightDirection = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
 		
-		for (int i = 0; i < MAX_SHADOW_MAP; i++) {
-			m_shadowAreaW[i] = shadowAreaTable[i][0];
-			m_shadowAreaH[i] = shadowAreaTable[i][1];
+		D3DXMatrixIdentity(&LightViewMatrix_);
+		
+		for (int i = 0; i < MAX_SHADOW_MAP; i++) 
+		{
+			ShadowAreaW_[i] = shadowAreaTable[i][0];
+			ShadowAreaH_[i] = shadowAreaTable[i][1];
 		}
+
 	}
 
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	CShadowMap::~CShadowMap()
 	{
 		Release();
 	}
 
-	void CShadowMap::Create(const SShadowConfig& config)
+	/**
+	 * 作成.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @param config The configuration.
+	 */
+	void CShadowMap::Create(const ShadowConfigS& config)
 	{
+
+		//解放
 		Release();
 
-		m_near = config.Near;
-		m_far = config.Fur;
-		m_isEnable = config.isEnable;
-		int w = config.ShadowMapW;
-		int h = config.ShadowMapH;
+		Near_ = config.Near_;
+		Far_ = config.Fur_;
+		isEnable_ = config.isEnable_;
+		int w = config.ShadowMapW_;
+		int h = config.ShadowMapH_;
 
-		m_Aspect = (float)w / (float)h;
+		Aspect_ = (float)w / (float)h;
 
-		int wh[MAX_SHADOW_MAP][2] = {
-			{ w, h },
+		//サイズの作成
+		int wh[MAX_SHADOW_MAP][2] = 
+		{
+			{ w	    , h		 },
 			{ w >> 1, h >> 1 },
 			{ w >> 1, h >> 1 },
 		};
 
 		for (int i = 0; i < MAX_SHADOW_MAP; i++)
 		{
-			m_shadowMapRT[i].Create(wh[i][0], wh[i][1], 1, D3DFMT_G16R16F, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);
-			m_blur[i].Init(w, h, *m_shadowMapRT[i].GetTexture());
+			//レンダリングターゲットの作成
+			ShadowMapRT_[i].Create(wh[i][0], wh[i][1], 1, D3DFMT_G16R16F, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);
+			
+			//ブラークラスの初期化
+			Blur_[i].Init(w, h, *ShadowMapRT_[i].GetTexture());
+		
 		}
+
 	}
 
+	/**
+	 * 更新.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	void CShadowMap::Update()
 	{
-		if (m_isEnable)
+		if (isEnable_)
 		{
-			if (m_calcLightViewFunc == enCalcLightViewFunc_PositionTarget)
+			if (CalcLightViewFunc_ == CalcLightViewFunc_PositionTarget)
 			{
 				//ライトの視点と注視点で計算
-				m_vLightDirection = m_vLightTarget - m_vLightPosition;
-				D3DXVec3Normalize(&m_vLightDirection, &m_vLightDirection);
+				LightDirection_ = LightTarget_ - LightPosition_;
+				D3DXVec3Normalize(&LightDirection_, &LightDirection_);
 			}
 
-			//ライトビュープロジェクション行列を作成
 			D3DXVECTOR3 vLightUp;
-			float t = fabsf(D3DXVec3Dot(&m_vLightDirection, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)));
+			float t = fabsf(D3DXVec3Dot(&LightDirection_, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)));
+
 			if (fabsf((t - 1.0f)) < 0.00001f)
 			{
 				vLightUp = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
@@ -84,68 +130,113 @@ namespace nkEngine
 			{
 				vLightUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 			}
-
-			//ライトから見たビュー行列を作成
+			
+			//ターゲットの作成
 			D3DXVECTOR3 vLightTarget;
 
-			vLightTarget = m_vLightPosition + m_vLightDirection;
+			//違和感を感じる
+			vLightTarget = LightPosition_ + LightDirection_;
 
-			D3DXMatrixLookAtLH(&m_mLightView, &m_vLightPosition, &vLightTarget, &vLightUp);
+			//ライトから見たビュー行列を作成
+			D3DXMatrixLookAtLH(&LightViewMatrix_, &LightPosition_, &vLightTarget, &vLightUp);
 		
 			for (int i = 0; i < MAX_SHADOW_MAP; i++) 
 			{
-				D3DXMatrixOrthoLH(&m_mProjection, m_shadowAreaW[i] * m_Aspect,m_shadowAreaH[i],m_near,m_far);
-				D3DXMatrixMultiply(&m_shadowReceiverParam.mLightViewProjection[i], &m_mLightView, &m_mProjection);
+				//プロジェクション行列を作成。平行投影.
+				D3DXMatrixOrthoLH(&ProjMatrix_, ShadowAreaW_[i] * Aspect_,ShadowAreaH_[i],Near_,Far_);
+
+				//ビュープロジェクション行列の作成
+				D3DXMatrixMultiply(&ShadowReceiverParam_.LightViewProjMatrix_[i], &LightViewMatrix_, &ProjMatrix_);
+
 			}
 
-			m_shadowReceiverParam.vsmFlag = true;
-			m_shadowReceiverParam.numShadowMap = MAX_SHADOW_MAP;
+			//バリアンスシャドウマップ
+			ShadowReceiverParam_.isVSM_ = true;
+
+			//シャドウマップの数
+			ShadowReceiverParam_.numShadowMap_ = MAX_SHADOW_MAP;
 
 		}
+
 	}
 
+	/**
+	 * 描画.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	void CShadowMap::Render()
 	{
-		if (m_isEnable)
+		if (isEnable_)
 		{
+			
+			//デバイスの取得
 			IDirect3DDevice9* Device = Engine().GetDevice();
 
-			//バックアップ作成
+			//バックバッファの取得
 			LPDIRECT3DSURFACE9 BackBuffer;
 			LPDIRECT3DSURFACE9 BackDepthBuffer;
+			
 			Device->GetRenderTarget(0, &BackBuffer);
 			Device->GetDepthStencilSurface(&BackDepthBuffer);
 
 			for (int i = 0; i < MAX_SHADOW_MAP; i++)
 			{
-				Device->SetRenderTarget(0, m_shadowMapRT[i].GetSurface());
-				Device->SetDepthStencilSurface(m_shadowMapRT[i].GetDepthSurface());
+
+				Device->SetRenderTarget(0, ShadowMapRT_[i].GetSurface());
+				Device->SetDepthStencilSurface(ShadowMapRT_[i].GetDepthSurface());
+				
 				Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
 
-				m_mLightViewProjection = m_shadowReceiverParam.mLightViewProjection[i];
-				for (auto model : m_shadowModels) {
+				//ビュープロジェクション行列のコピー
+				LightViewProjMatrix_ = ShadowReceiverParam_.LightViewProjMatrix_[i];
+				
+				for (auto model : ShadowModels_) 
+				{
 					model->RenderToShadowMap();
 				}
-				m_blur[i].Render();
+
+				//ブラーの描画
+				Blur_[i].Render();
 			}
 
+			//バックバッファに戻す
 			Device->SetRenderTarget(0, BackBuffer);
 			Device->SetDepthStencilSurface(BackDepthBuffer);
 
-			m_shadowModels.clear();
+			//モデルの削除
+			ShadowModels_.clear();
+
 		}
+
 	}
 
+	/**
+	 * 解放
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	void CShadowMap::Release()
 	{
 		for (int i = 0; i < MAX_SHADOW_MAP; i++)
 		{
-			m_shadowMapRT[i].Release();
+			ShadowMapRT_[i].Release();
 		}
 	}
 
+	/**
+	 * モデルの設定.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 *
+	 * @param [in,out] model If non-null, the model.
+	 */
 	void CShadowMap::Entry(CModelRender* model)
 	{
-		m_shadowModels.push_back(model);
+		ShadowModels_.push_back(model);
 	}
-}
+
+}// namespace nkEngine

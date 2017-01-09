@@ -1,31 +1,69 @@
+/**
+ * @file	_Physics\nkSphereCollider.h
+ *
+ * 球体コライダークラスの定義.
+ */
 #pragma once
 
-#include"CCollider.h"
+#include"nkCollider.h"
 
 namespace nkEngine
 {
-	class CSphereCollider : public CCollider
+
+	/**
+	 * 球体コライダークラス.
+	 *
+	 * @author	HiramatsuTadashi
+	 * @date	2017/01/07
+	 */
+	class CSphereCollider : public ICollider
 	{
 	public:
 
-		//コンストラクタ
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 */
 		CSphereCollider();
 
-		//デストラクタ
+		/**
+		 * デストラクタ.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 */
 		~CSphereCollider();
 
-		//球体コライダー作成
-		//param[in] サイズ
-		void Create(const float _radius);
+		/**
+		 * 球体コライダー作成.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @param	radius	半径.
+		 */
+		void Create(const float radius);
 
-		//ボディの取得
+		/**
+		 * ボディの取得.
+		 *
+		 * @author	HiramatsuTadashi
+		 * @date	2017/01/07
+		 *
+		 * @return	Null if it fails, else the body.
+		 */
 		btCollisionShape* GetBody()override
 		{
-			return m_Shape;
+			return Shape_;
 		}
 
 	private:
-		btSphereShape* m_Shape; //球体形状
+
+		/** 球体形状. */
+		btSphereShape* Shape_;
+	
 	};
 
 }

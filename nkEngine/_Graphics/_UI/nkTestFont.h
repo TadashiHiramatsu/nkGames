@@ -1,32 +1,115 @@
+/**
+ * @file _Graphics\_UI\nkTestFont.h
+ *
+ * テストフォントクラスの定義.
+ */
 #pragma once
 
 namespace nkEngine
 {
+
+	/**
+	 * テストフォントクラス.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/09
+	 */
 	class TestFont
 	{
 	public:
-		enum FontWeights
+
+		/** Values that represent font weights. */
+		enum FontWeightE
 		{
-			DONTCARE = FW_DONTCARE,
-			THIN = FW_THIN,
-			EXTRALIGHT = FW_EXTRALIGHT,
-			LIGHT = FW_LIGHT,
-			NORMAL = FW_NORMAL,
-			MEDIUM = FW_MEDIUM,
-			SEMIBOLD = FW_SEMIBOLD,
-			BOLD = FW_BOLD,
-			EXTRABOLD = FW_EXTRABOLD,
-			HEAVY = FW_HEAVY
+			DONTCARE	= FW_DONTCARE,
+			THIN		= FW_THIN,
+			EXTRALIGHT	= FW_EXTRALIGHT,
+			LIGHT		= FW_LIGHT,
+			NORMAL		= FW_NORMAL,
+			MEDIUM		= FW_MEDIUM,
+			SEMIBOLD	= FW_SEMIBOLD,
+			BOLD		= FW_BOLD,
+			EXTRABOLD	= FW_EXTRABOLD,
+			HEAVY		= FW_HEAVY
 		};
+
 	public:
+
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		TestFont();
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		~TestFont();
-		void Create(int _Height, int _Width, FontWeights _Weights = FontWeights::NORMAL);
-		void Render(const char* _Text, int _Num, D3DXVECTOR2 _Pos = D3DXVECTOR2(0, 0));
-		void Render(const char* _Text, D3DXVECTOR2 _Pos = D3DXVECTOR2(0, 0));
-		void Render(int _Text, D3DXVECTOR2 _Pos = D3DXVECTOR2(0, 0));
+
+		/**
+		 * 作成.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param height  The height.
+		 * @param width   The width.
+		 * @param weights (Optional) The weights.
+		 */
+		void Create(int height, int width, FontWeightE weights = FontWeightE::NORMAL);
+
+		/**
+		 * 描画.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param text 文字.
+		 * @param num  数値.
+		 * @param pos  (Optional) The position.
+		 */
+		void Render(const char* text, int num, D3DXVECTOR2 pos = D3DXVECTOR2(0, 0));
+
+		/**
+		 * 描画.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param text 文字.
+		 * @param pos  (Optional) The position.
+		 */
+		void Render(const char* text, D3DXVECTOR2 pos = D3DXVECTOR2(0, 0));
+
+		/**
+		 * 描画.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 *
+		 * @param text 数値.
+		 * @param pos  (Optional) The position.
+		 */
+		void Render(int text, D3DXVECTOR2 pos = D3DXVECTOR2(0, 0));
+
+		/**
+		 * 解放.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/09
+		 */
 		void Release();
+
 	private:
-		LPD3DXFONT	pFont;
+
+		/** The font. */
+		ID3DXFont* D3DFont_;
+
 	};
-}
+
+}// namespace nkEngine
