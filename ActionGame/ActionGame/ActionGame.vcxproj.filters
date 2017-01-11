@@ -28,6 +28,12 @@
     <Filter Include="Game\Monster">
       <UniqueIdentifier>{f5275407-e648-4b3a-9fc4-a6be56e8eaaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Title">
+      <UniqueIdentifier>{498ed496-1c8b-4051-a989-cf4813dacdee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Title\HUD">
+      <UniqueIdentifier>{f8181792-bf8d-47a0-810e-7c3515231c6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -90,6 +96,12 @@
     <ClCompile Include="Source\Game\Item\ItemResource.cpp">
       <Filter>Game\Item</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Title\TitleScene.cpp">
+      <Filter>Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Title\HUD\TitleBack.cpp">
+      <Filter>Title\HUD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -151,6 +163,12 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Item\ItemResource.h">
       <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\TitleScene.h">
+      <Filter>Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\HUD\TitleBack.h">
+      <Filter>Title\HUD</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

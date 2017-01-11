@@ -76,12 +76,12 @@ namespace nkEngine
 
 			//登録されているゲームオブジェクトを全削除
 			GameObjectManager().AllDelete();
-
-			//シャドウクラスの初期化
-			Shadow().Create(NowScene_->GetGraphicsConfig().ShadowConfig_);
-
+			
 			//シーンクラスの初期化
 			NowScene_->Start();
+			
+			//シャドウクラスの初期化
+			Shadow().Create(NowScene_->GetGraphicsConfig().ShadowConfig_);
 		}
 
 	private:

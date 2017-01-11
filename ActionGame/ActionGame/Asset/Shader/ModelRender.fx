@@ -303,11 +303,13 @@ VS_OUTPUT_RENDER_SHADOW_MAP VSMainRenderShadowMap(VS_INPUT In, uniform bool hasS
 {
 	VS_OUTPUT_RENDER_SHADOW_MAP Out = (VS_OUTPUT_RENDER_SHADOW_MAP)0;
 	float3 Pos, Normal, Tangent;
-	if (hasSkin) {
+	if (hasSkin)
+	{
 		//スキンあり。
 		CalcWorldPosAndNormalFromSkinMatrix(In, Pos, Normal, Tangent, false);
 	}
-	else {
+	else
+	{
 		//スキンなし。
 		CalcWorldPosAndNormal(In, Pos, Normal, Tangent, false);
 	}
@@ -323,11 +325,13 @@ VS_OUTPUT_RENDER_SHADOW_MAP VSMainInstancingRenderShadowMap(VS_INPUT_INSTANCING 
 {
 	VS_OUTPUT_RENDER_SHADOW_MAP Out = (VS_OUTPUT_RENDER_SHADOW_MAP)0;
 	float3 Pos, Normal, Tangent;
-	if (hasSkin) {
+	if (hasSkin) 
+	{
 		//スキンあり。
 		CalcWorldPosAndNormalFromSkinMatrix(In.base, Pos, Normal, Tangent, false);
 	}
-	else {
+	else 
+	{
 		//スキンなし。
 		CalcWorldPosAndNormal(In.base, Pos, Normal, Tangent, false);
 	}

@@ -44,6 +44,10 @@ void ExpGage::Start()
 	//トランスフォームの設定
 	ExpImage_.SetTransform(&ExpTransform_);
 
+	//緑色に設定
+	ExpImage_.Color_.x = 0.0f;
+	ExpImage_.Color_.z = 0.0f;
+
 	//親子関係設定
 	ExpTransform_.Parent_ = &ExpFrameTransform_;
 
@@ -90,12 +94,12 @@ void ExpGage::Update()
 }
 
 /**
- * 描画.
+ * ポストエフェクトの後に呼ばれる描画.
  *
  * @author HiramatsuTadashi
  * @date 2017/01/10
  */
-void ExpGage::Render()
+void ExpGage::PostRender()
 {
 	//画像を描画
 	ExpFrameImage_.Render();

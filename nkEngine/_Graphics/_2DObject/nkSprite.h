@@ -55,14 +55,6 @@ namespace nkEngine
 		void Start();
 
 		/**
-		 * 更新.
-		 *
-		 * @author	HiramatsuTadashi
-		 * @date	2017/01/06
-		 */
-		void Update();
-
-		/**
 		 * 描画.
 		 *
 		 * @author	HiramatsuTadashi
@@ -71,17 +63,12 @@ namespace nkEngine
 		void Render();
 
 		/**
-		 * カメラ設定.
+		 * 解放.
 		 *
-		 * @author	HiramatsuTadashi
-		 * @date	2017/01/06
-		 *
-		 * @param [in,out]	camera	If non-null, the camera.
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/11
 		 */
-		void SetCamera(Camera* camera)
-		{
-			Camera_ = camera;
-		}
+		void Release();
 
 		/**
 		 * トランスフォームの設定.
@@ -102,14 +89,19 @@ namespace nkEngine
 		Primitive Primitive_;
 		/** エフェクト. */
 		ID3DXEffect* Effect_;
-		/** カメラ. */
-		Camera* Camera_;
 		/** トランスフォーム. */
-		Transform* Transform_;
+		Transform* Transform_ = nullptr;
 		/** テクスチャ. */
 		Texture Texture_;
-		/** ビルボードフラグ. */
-		bool isBillboard_ = false;
+		/** カメラのポインタ. */
+		Camera* Camera_;
+
+	public:
+
+		/** UV座標 x:左, y:上, z:右, w:下. */
+		D3DXVECTOR4 RectUV_;
+		/** 色. */
+		D3DXVECTOR4 Color_;
 
 	};
 

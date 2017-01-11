@@ -92,9 +92,7 @@ namespace nkEngine
 				IndexFormat16,
 				index
 			);
-		
 		}
-
 	}
 
 	/**

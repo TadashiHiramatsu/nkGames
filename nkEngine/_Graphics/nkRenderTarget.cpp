@@ -72,7 +72,6 @@ namespace nkEngine
 			&D3DDepthSurface_,
 			NULL
 		);
-
 		NK_ASSERT(SUCCEEDED(hr), "深度サーフェス作成失敗");
 
 		//カラーバッファを作成
@@ -84,12 +83,11 @@ namespace nkEngine
 			s_cast<D3DFORMAT>(colorFormat),
 			D3DPOOL_DEFAULT,
 			&D3DTextureDX_,
-			NULL);
-
+			NULL
+		);
 		NK_ASSERT(SUCCEEDED(hr), "カラーバッファ作成失敗");
 
 		hr = D3DTextureDX_->GetSurfaceLevel(0, &D3DSurface_);
-		
 		NK_ASSERT(SUCCEEDED(hr), "Failed GetSurfaceLevel");
 
 		Texture_.SetTextureDX(D3DTextureDX_);

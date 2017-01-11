@@ -28,26 +28,6 @@ GameCamera* g_MainCamera = nullptr;
 //InventoryWindow* g_Inventory = nullptr;
 
 /**
- * コンストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/10
- */
-GameScene::GameScene()
-{
-}
-
-/**
- * デストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/10
- */
-GameScene::~GameScene()
-{
-}
-
-/**
  * 初期化.
  *
  * @author HiramatsuTadashi

@@ -79,6 +79,9 @@ using namespace std;
 //パーティクル
 #include"_Graphics/_Particle/nkParticleEmitter.h"
 
+//2D Object
+#include"_Graphics\_2DObject\nkSprite.h"
+
 //シーン
 #include"_Scene\nkScene.h"
 #include"_Scene\nkSceneManager.h"

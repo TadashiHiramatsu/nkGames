@@ -47,13 +47,14 @@ namespace nkEngine
 	void Particle::Init(Camera* camera, const ParicleParameterS& param, D3DXVECTOR3* emitPosition)
 	{
 
+		//パーティクルの幅の中心値を計算
 		float halfW = param.W_ * 0.5f;
 		float halfH = param.H_ * 0.5f;
 
 		NK_ASSERT(param.UVTableSize_ <= ARRAYSIZE(param.UVTable_), "uvTable size over!!!");
 
+		//UV値を計算
 		D3DXVECTOR4 uv;
-
 		if (param.UVTableSize_ > 0) 
 		{
 			uv = param.UVTable_[Random().GetRandInt() % param.UVTableSize_];
@@ -88,7 +89,7 @@ namespace nkEngine
 			0,1,2,3
 		};
 		
-		//パーティクル作成
+		//プリミティブ作成
 		Primitive_.Create(
 			Primitive::TriangleStrip,
 			4,
@@ -209,7 +210,6 @@ namespace nkEngine
 			D3DXMatrixRotationQuaternion(&rota, &qRot);
 			D3DXMatrixMultiply(&rot, &rot, &rota);
 
-			
 			WorldMatrix_ *= ScaleMatrix_ * rot * mTrans;
 
 		}

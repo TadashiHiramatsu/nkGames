@@ -54,6 +54,7 @@ namespace nkEngine
 		Engine().GetDevice()->GetDepthStencilSurface(&depth);
 		BackBufferRT_.SetSurface(rt);
 		BackBufferRT_.SetDepthSurface(depth);
+
 	}
 
 	/**

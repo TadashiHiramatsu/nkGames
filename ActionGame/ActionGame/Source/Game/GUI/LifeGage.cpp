@@ -89,12 +89,12 @@ void LifeGage::Update()
 }
 
 /**
- * 描画.
+ * ポストエフェクトの後に呼ばれる描画.
  *
  * @author	HiramatsuTadashi
  * @date	2016/12/30
  */
-void LifeGage::Render()
+void LifeGage::PostRender()
 {
 	//画像の描画
 	LifeFrameImage_.Render();

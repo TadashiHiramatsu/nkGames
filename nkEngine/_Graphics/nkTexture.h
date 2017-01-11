@@ -72,6 +72,17 @@ namespace nkEngine
 		 */
 		void Load(const char* filePath);
 
+		/**
+		 * 解放.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/11
+		 */
+		void Release()
+		{
+			SAFE_RELEASE(D3DTexture_);
+		}
+
 	private:
 
 		/** テクスチャ. */

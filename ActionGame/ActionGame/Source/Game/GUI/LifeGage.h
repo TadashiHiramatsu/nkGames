@@ -50,12 +50,12 @@ public:
 	void Update()override;
 
 	/**
-	 * 描画.
+	 * ポストエフェクトの後に呼ばれる描画.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/30
 	 */
-	void Render()override;
+	void PostRender()override;
 
 	/**
 	 * プレイヤーのポインタを設定.

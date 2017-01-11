@@ -11,6 +11,7 @@ namespace nkEngine
 	/**
 	 * イメージクラス.
 	 * 2Dの画像をスクリーンに描画します.
+	 * 使用するためにはRectTransformクラスのポインタを設定する必要あり.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09

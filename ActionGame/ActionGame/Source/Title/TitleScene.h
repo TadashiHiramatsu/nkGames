@@ -1,17 +1,17 @@
 /**
- * @file Source\Game\GameScene.h
+ * @file Source\Title\TitleScene.h
  *
- * ゲームシーンクラスの定義.
+ * タイトルシーンクラスの定義.
  */
 #pragma once
 
 /**
- * ゲームシーンクラス.
+ * タイトルシーンクラス.
  *
  * @author HiramatsuTadashi
- * @date 2017/01/10
+ * @date 2017/01/11
  */
-class GameScene : public IScene
+class TitleScene : public IScene
 {
 public:
 
@@ -19,9 +19,9 @@ public:
 	 * コンストラクタ.
 	 *
 	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
+	 * @date 2017/01/11
 	 */
-	GameScene()
+	TitleScene()
 	{
 	}
 
@@ -29,9 +29,9 @@ public:
 	 * デストラクタ.
 	 *
 	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
+	 * @date 2017/01/11
 	 */
-	~GameScene()
+	~TitleScene()
 	{
 	}
 
@@ -39,7 +39,7 @@ public:
 	 * 初期化.
 	 *
 	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
+	 * @date 2017/01/11
 	 */
 	void Start()override;
 

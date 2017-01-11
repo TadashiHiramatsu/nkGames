@@ -6,6 +6,7 @@
 #include"stdafx.h"
 
 #include"Game/GameScene.h"
+#include"Title/TitleScene.h"
 
 /**
  * ƒGƒ“ƒWƒ“‚Ì‰Šú‰»ŠÖ”.
@@ -45,7 +46,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 	InitEngine(hInstance);
 
-	SceneManager().ChangeScene<GameScene>();
+	//SceneManager().ChangeScene<GameScene>();
+
+	SceneManager().ChangeScene<TitleScene>();
 
 	Engine().RunGameLoop();
 }

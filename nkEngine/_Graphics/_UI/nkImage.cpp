@@ -44,7 +44,7 @@ namespace nkEngine
 	*/
 	void Image::Load(const char * filepass)
 	{
-		Effect_ = EffectManager().LoadEffect("Sprite.fx");
+		Effect_ = EffectManager().LoadEffect("Image.fx");
 
 		Texture_.reset(new Texture);
 		Texture_->Load(filepass);
@@ -63,7 +63,7 @@ namespace nkEngine
 	*/
 	void Image::Load(shared_ptr<Texture>& tex)
 	{
-		Effect_ = EffectManager().LoadEffect("Sprite.fx");
+		Effect_ = EffectManager().LoadEffect("Image.fx");
 
 		Texture_ = tex;
 
@@ -79,7 +79,7 @@ namespace nkEngine
 	*/
 	void Image::Load()
 	{
-		Effect_ = EffectManager().LoadEffect("Sprite.fx");
+		Effect_ = EffectManager().LoadEffect("Image.fx");
 
 		Init();
 	}

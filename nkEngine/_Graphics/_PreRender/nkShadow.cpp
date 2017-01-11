@@ -131,10 +131,9 @@ namespace nkEngine
 				vLightUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 			}
 			
-			//ターゲットの作成
+			//ターゲット
 			D3DXVECTOR3 vLightTarget;
-
-			//違和感を感じる
+			//ターゲットの作成
 			vLightTarget = LightPosition_ + LightDirection_;
 
 			//ライトから見たビュー行列を作成
