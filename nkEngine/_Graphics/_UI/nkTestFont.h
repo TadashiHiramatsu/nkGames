@@ -10,6 +10,8 @@ namespace nkEngine
 
 	/**
 	 * テストフォントクラス.
+	 * クラス内で内部解像度のサイズに合わせているので
+	 * 使用時はスクリーンサイズで計算したらOK.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
@@ -107,8 +109,10 @@ namespace nkEngine
 
 	private:
 
-		/** The font. */
+		/** フォント. */
 		ID3DXFont* D3DFont_;
+		/** スクリーンと内部解像度の倍率. */
+		float Magnification = 1.0f;
 
 	};
 

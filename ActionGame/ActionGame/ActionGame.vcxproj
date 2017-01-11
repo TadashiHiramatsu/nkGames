@@ -156,8 +156,6 @@
     <ClCompile Include="Source\Game\GameCamera.cpp" />
     <ClCompile Include="Source\Game\GameScene.cpp" />
     <ClCompile Include="Source\Game\GUI\ExpGage.cpp" />
-    <ClCompile Include="Source\Game\GUI\InventoryWindow.cpp" />
-    <ClCompile Include="Source\Game\GUI\ItemSlot.cpp" />
     <ClCompile Include="Source\Game\GUI\LifeGage.cpp" />
     <ClCompile Include="Source\Game\Item\Armor.cpp" />
     <ClCompile Include="Source\Game\Item\IItem.cpp" />
@@ -182,8 +180,6 @@
     <ClInclude Include="Source\Game\GameCamera.h" />
     <ClInclude Include="Source\Game\GameScene.h" />
     <ClInclude Include="Source\Game\GUI\ExpGage.h" />
-    <ClInclude Include="Source\Game\GUI\InventoryWindow.h" />
-    <ClInclude Include="Source\Game\GUI\ItemSlot.h" />
     <ClInclude Include="Source\Game\GUI\LifeGage.h" />
     <ClInclude Include="Source\Game\Item\Armor.h" />
     <ClInclude Include="Source\Game\Item\IItem.h" />

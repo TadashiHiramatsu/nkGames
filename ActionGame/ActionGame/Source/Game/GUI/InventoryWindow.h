@@ -29,7 +29,7 @@ private:
 	RectTransform rectTransform;
 
 	int ISlotNum;
-	shared_ptr<CTexture> IFrameTex;
+	shared_ptr<Texture> IFrameTex;
 	vector<ItemSlot*> ISlotVec;
 
 	bool isRender;

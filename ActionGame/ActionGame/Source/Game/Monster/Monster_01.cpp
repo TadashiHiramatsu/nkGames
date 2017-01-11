@@ -1,11 +1,19 @@
+/**
+ * @file Source\Game\Monster\Monster_01.cpp
+ *
+ * 物理攻撃をするモンスタークラスの実装.
+ */
 #include"stdafx.h"
 #include"Monster_01.h"
 
 #include"..\GameScene.h"
 
+//無名空間
 namespace
 {
-	AnimationEventGroup AnimationEventTbl[Monster_01::AnimationNum]
+
+	/** The animation event tbl[ monster 01 animation num]. */
+	AnimationEventGroupS AnimationEventTbl[Monster_01::AnimationNum] = 
 	{
 		//AnimationWaiting
 		{
@@ -41,238 +49,403 @@ namespace
 			END_ANIMATION_EVENT(),
 		},
 	};
+
 }
 
+/**
+ * コンストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 Monster_01::Monster_01()
 {
-
 }
 
+/**
+ * デストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 Monster_01::~Monster_01()
 {
 }
 
+/**
+ * 初期化.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 void Monster_01::Start()
 {
-	SMDResources().Load(SkinModelData, "Monster_01.X", &Animation);
 
-	Model.Load(SkinModelData.GetBody());
+	//スキンモデルデータをロード
+	SMDResources().Load(SkinModelDataHandle_, "Monster_01.X", &Animation_);
+	//モデルレンダを初期化
+	ModelRender_.Load(SkinModelDataHandle_.GetBody());
 
+	//基底クラスの初期化
 	IMonster::Start();
-	Model.SetRimLight(true);
 
-	pPlayerPos = &g_Player->GetPos();
-	
-	ChangeState(StateCode::StateWaiting);
+	//リムライトを有効に設定
+	ModelRender_.SetRimLight(true);
+
+	//ステートを待機に設定
+	ChangeState(StateCodeE::StateWaiting);
+
+	//待機アニメーションを開始
 	PlayAnimation(AnimationWaiting,0.3f);
-	Animation.SetAnimationLoopFlags(AnimationAttack_01, false);
-	Animation.SetAnimationLoopFlags(AnimationHit, false);
-	Animation.SetAnimationLoopFlags(AnimationDeath, false);
 
-	m_CharacterController.Init(Radius, Height, transform.Position);
+	//アニメーションのロープフラグを設定
+	Animation_.SetAnimationLoopFlags(AnimationAttack_01, false);
+	Animation_.SetAnimationLoopFlags(AnimationHit, false);
+	Animation_.SetAnimationLoopFlags(AnimationDeath, false);
+
+	//キャラクターコントローラの初期化
+	CharacterController_.Init(Radius_, Height_, Transform_.Position_);
 	
-	animEvent.Init(&Model, &Animation, AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
+	AnimationEvent_.Init(&ModelRender_, &Animation_, AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
 
-	sphereShape.reset(new CSphereCollider);
-	sphereShape->Create(Radius);
-	collisionObject.reset(new btCollisionObject());
-	collisionObject->setCollisionShape(sphereShape->GetBody());
+	//コライダーの初期化
+	SphereShape_.reset(new SphereCollider);
+	SphereShape_->Create(Radius_);
+	//コリジョンオブジェクトの初期化
+	CollisionObject_.reset(new btCollisionObject());
+	CollisionObject_->setCollisionShape(SphereShape_->GetBody());
+
 }
 
+/**
+ * 更新.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 void Monster_01::Update()
 {
-	D3DXVECTOR3 MoveSpeed = m_CharacterController.GetMoveSpeed();
-	switch (State)
+	//ムーブスピードを取得
+	D3DXVECTOR3 MoveSpeed = CharacterController_.GetMoveSpeed();
+
+	switch (State_)
 	{
 	case StateWaiting:
 	{
-		if (GetToPlayerDis() <= toPlayerMaxDis)
+		if (GetToPlayerDis() <= toPlayerMaxDis_)
 		{
-			ChangeState(StateCode::StateChase);
+			//プレイヤーを発見したので追いかけ状態に変化
+			ChangeState(StateCodeE::StateChase);
 			break;
 		}
+
+		//スピードを緩める
 		MoveSpeed *= 0.8f;
-		if (LocalTime >= WaitingTime)
+
+		//立ち止まり
+		if (WaitingLT_ >= WaitingTime_)
 		{
-			ChangeState(StateCode::StateLoitering);
-			Destination = D3DXVECTOR2((Random().GetRandDouble() - 0.5f)*Distance, (Random().GetRandDouble() - 0.5f)*Distance) + D3DXVECTOR2(DefaultPosition.x, DefaultPosition.z);
-			LocalTime = 0;
+			//立ち止まりが終わったので徘徊開始
+			ChangeState(StateCodeE::StateLoitering);
+
+			//目的地を算出
+			Destination_ = D3DXVECTOR2((Random().GetRandDouble() - 0.5f)*Distance_, (Random().GetRandDouble() - 0.5f)*Distance_) + 
+				D3DXVECTOR2(DefaultPosition_.x, DefaultPosition_.z);
+
+			//立ち止まりローカルタイムを初期化
+			WaitingLT_ = 0;
 			break;
 		}
-		LocalTime += Time().DeltaTime();
+
+		//立ち止まりローカルタイムに加算
+		WaitingLT_ += Time().DeltaTime();
 	}
 	break;
 	case StateLoitering:
 	{
-		if (GetToPlayerDis() <= toPlayerMaxDis)
+		if (GetToPlayerDis() <= toPlayerMaxDis_)
 		{
-			ChangeState(StateCode::StateChase);
+			//プレイヤーを発見したので追いかけ状態に変化
+			ChangeState(StateCodeE::StateChase);
 			break;
 		}
+
 		if (GetToDestinationDis() <= 0.2)
 		{
-			ChangeState(StateCode::StateWaiting);
+			//目的地に到達したので待機状態に変化
+			ChangeState(StateCodeE::StateWaiting);
 			break;
 		}
+
+		//目的地までの方向ベクトルを取得
 		D3DXVECTOR2 toD = GetToDestination();
+
+		//ムーブスピードを設定
 		MoveSpeed = D3DXVECTOR3(toD.x, 0, toD.y);
-		D3DXQuaternionRotationAxis(&transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(MoveSpeed.x, MoveSpeed.z) + D3DXToRadian(180.0f));
+
+		//向いている方向に回転
+		D3DXQuaternionRotationAxis(&Transform_.Rotation_, &D3DXVECTOR3(0, 1, 0), atan2f(MoveSpeed.x, MoveSpeed.z) + D3DXToRadian(180.0f));
+	
 	}
 	break;
 	case StateChase:
 	{
-		if (GetToPlayerDis() >= toPlayerMaxDis)
+
+		if (GetToPlayerDis() >= toPlayerMaxDis_)
 		{
-			ChangeState(StateCode::StateWaiting);
+			//プレイヤーを見失ったので待機状態に変化
+			ChangeState(StateCodeE::StateWaiting);
 			break;
 		}
-		if (GetToPlayerDis() <= PlayerAttackDis)
+
+		if (GetToPlayerDis() <= PlayerAttackDis_)
 		{
-			ChangeState(StateCode::StateAttack);
+			//プレイヤーを攻撃する距離まで追い詰めたので攻撃状態に変化
+			ChangeState(StateCodeE::StateAttack);
 			break;
 		}
+
+		//プレイヤーへの方向ベクトルを取得
 		D3DXVECTOR2 toP = GetToPlayerDir();
+
+		//ムーブスピードを設定
 		MoveSpeed = D3DXVECTOR3(toP.x, 0, toP.y);
-		D3DXQuaternionRotationAxis(&transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(MoveSpeed.x, MoveSpeed.z) + D3DXToRadian(180.0f));
+
+		//向いている方向に回転
+		D3DXQuaternionRotationAxis(&Transform_.Rotation_, &D3DXVECTOR3(0, 1, 0), atan2f(MoveSpeed.x, MoveSpeed.z) + D3DXToRadian(180.0f));
+	
 	}
 	break;
 	case StateAttack:
 	{
-		if (!Animation.IsPlayAnim())
+		if (!Animation_.IsPlayAnim())
 		{
-			if (GetToPlayerDis() > PlayerAttackDis)
+			//攻撃のアニメーションが終わっていれば
+			if (GetToPlayerDis() > PlayerAttackDis_)
 			{
-				ChangeState(StateCode::StateChase);
+				//攻撃距離から離れたので追いかけ状態に変化
+				ChangeState(StateCodeE::StateChase);
 				break;
 			}
 			else
 			{
+				//同じモーションをもう一度
 				PlayAnimationAbs(AnimationAttack_01, 0.3f);
 			}
 		}
+
+		//移動情報を削除
 		MoveSpeed = D3DXVECTOR3(0, 0, 0);
+	
 	}
 	break;
 	case StateDamage:
 	{
-		if (!Animation.IsPlayAnim())
+		if (!Animation_.IsPlayAnim())
 		{
+			//アニメーションが終わっているので追いかけ状態に変化
 			ChangeState(StateChase);
 			break;
 		}
+		
+		//ダメージを受けているので動いていない
 		MoveSpeed = D3DXVECTOR3(0, 0, 0);
+
 	}
 	break;
 	case StateDead:
 	{
-		if (!Animation.IsPlayAnim())
+		if (!Animation_.IsPlayAnim())
 		{
-			isActive = false;
+			// アニメーションが終了したのでノンアクティブに設定
+			// することで削除される
+			isActive_ = false;
 			break;
 		}
+		//死んでいるので移動情報を削除
 		MoveSpeed = D3DXVECTOR3(0, 0, 0);
+
 	}
 	break;
+	
 	default:
 		break;
 	}
 
-	m_CharacterController.SetMoveSpeed(MoveSpeed);
-	m_CharacterController.Update();
-	transform.Position = m_CharacterController.GetPosition();
+	//キャラクターコントローラに移動情報を設定
+	CharacterController_.SetMoveSpeed(MoveSpeed);
+	//キャラクターコントローラの更新
+	CharacterController_.Update();
+	
+	//計算終了したポジションを取得
+	Transform_.Position_ = CharacterController_.GetPosition();
 
-	animEvent.Update();
+	//アニメーションイベントを更新
+	AnimationEvent_.Update();
 
+	//ダメージを更新
 	Damage();
 
+	//アニメーションを更新
 	AnimationControl();
+
+	//基底クラスを更新
 	IMonster::Update();
+
 }
 
+/**
+ * アニメーション管理.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 void Monster_01::AnimationControl()
 {
+	
+	//アニメーションタイム
 	float AnimationTime = 1.0f / 60.0f;
-	switch (State)
+	
+	//状態によってアニメーションを変化
+	switch (State_)
 	{
 	case StateWaiting:
+		//待機アニメーション
 		PlayAnimation(AnimationWaiting, 0.3f);
 		break;
+
 	case StateLoitering:
+		//歩きアニメーション
 		PlayAnimation(AnimationWalk, 0.3f);
 		break;
+
 	case StateChase:
+		//走りアニメーション
 		PlayAnimation(AnimationRun, 0.3f);
 		break;
+
 	case StateAttack:
+		//攻撃アニメーション
 		PlayAnimation(AnimationAttack_01, 0.3f);
 		break;
+
 	case StateDamage:
+		//ダメージアニメーション
 		PlayAnimation(AnimationHit, 0.3f);
 		break;
+
 	case StateDead:
+		//死亡アニメーション
 		PlayAnimation(AnimationDeath, 0.3f);
 		break;
+
 	default:
 		break;
 	}
-	Animation.Update(AnimationTime);
+
+	//アニメーションの更新
+	Animation_.Update(AnimationTime);
+
 }
 
+/**
+ * 描画.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 void Monster_01::Render()
 {
+	//基底クラスの描画
 	IMonster::Render();
 }
 
+/**
+ * 解放.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 void Monster_01::Release()
 {
+	//基底クラスの解放
 	IMonster::Release();
 }
 
+/**
+ * ダメージ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 void Monster_01::Damage()
 {
-	if (State == StateDead) {
+	if (State_ == StateDead)
+	{
 		//死んでる。
 		return;
 	}
 
-	float offset = Radius + Height * 0.5f;
+	//位置計算
+	float offset = Radius_ + Height_ * 0.5f;
 	D3DXVECTOR3 centerPos;
-	centerPos = transform.Position;
+	centerPos = Transform_.Position_;
 	centerPos.y += offset;
-
 	btTransform trans;
 	trans.setOrigin(btVector3(centerPos.x, centerPos.y, centerPos.z));
-	collisionObject->setWorldTransform(trans);
+
+	//位置情報を設定
+	CollisionObject_->setWorldTransform(trans);
 
 	//当たっているコリジョンを検出
 	const CollisionWorld::Collision* dmgCol = g_CollisionWorld->FindOverlappedDamageCollision(
-		CollisionWorld::enDamageToEnemy,
-		collisionObject.get()
+		CollisionWorld::DamageToEnemy,
+		CollisionObject_.get()
 	);
 
-	if (!dmgCol) {
+	if (!dmgCol)
+	{
+		//見つかっていない
+
 		centerPos.y += offset;
 		trans.setOrigin(btVector3(centerPos.x, centerPos.y, centerPos.z));
-		collisionObject->setWorldTransform(trans);
+		//位置情報を更新
+		CollisionObject_->setWorldTransform(trans);
+		
+		//もう一度当たっているコリジョンを検出
 		const CollisionWorld::Collision* dmgCol = g_CollisionWorld->FindOverlappedDamageCollision(
-			CollisionWorld::enDamageToEnemy,
-			collisionObject.get()
+			CollisionWorld::DamageToEnemy,
+			CollisionObject_.get()
 		);
 	}
-	if (dmgCol != NULL && State != StateDamage) {
-		//ダメージを食らっている。
-		Hp -= dmgCol->Damage;
-		if (Hp <= 0) {
-			//死亡。
-			ChangeState(StateDead);
-			g_Player->AddExperience(10);
 
+	if (dmgCol != NULL && State_ != StateDamage)
+	{
+		//ダメージコリジョンをみつけてダメージを受けている状態でない
+		
+		//ダメージを食らっている。
+		Hp_ -= dmgCol->Damage_;
+
+		if (Hp_ <= 0) 
+		{
+			//死亡。
+	
+			//死亡状態に変化
+			ChangeState(StateDead);
+
+			//プレイヤーに経験値を加算
+			Player_->AddExperience(10);
+
+			//アイテムをドロップ
 			//DropItem* DI = NewGO<DropItem>();
 			//DI->SetTransform(transform);
+		
 		}
 		else 
 		{
+			//ダメージ状態に変化
 			ChangeState(StateDamage);
 		}
 	}
+
 }

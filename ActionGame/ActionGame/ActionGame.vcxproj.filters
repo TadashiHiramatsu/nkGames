@@ -22,16 +22,10 @@
     <Filter Include="Game\Item">
       <UniqueIdentifier>{f3d5eb1f-998f-41a6-b243-0d1a20ce8497}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Test">
-      <UniqueIdentifier>{84780237-4215-4750-873c-3601a50aeb80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Test\UI">
-      <UniqueIdentifier>{9ff32e16-4ea3-40e7-8b28-8ede05cd1924}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GUI">
       <UniqueIdentifier>{84cc74a1-ae9d-443d-af64-6c0298353050}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player\Monster">
+    <Filter Include="Game\Monster">
       <UniqueIdentifier>{f5275407-e648-4b3a-9fc4-a6be56e8eaaf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -58,7 +52,7 @@
       <Filter>Game\Map</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Monster\Monster_01.cpp">
-      <Filter>Game\Player\Monster</Filter>
+      <Filter>Game\Monster</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\AnimationEvent\CollisionWorld.cpp">
       <Filter>Game\AnimationEvent</Filter>
@@ -67,10 +61,10 @@
       <Filter>Game\AnimationEvent</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Monster\IMonster.cpp">
-      <Filter>Game\Player\Monster</Filter>
+      <Filter>Game\Monster</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Monster\MonsterHabitat.cpp">
-      <Filter>Game\Player\Monster</Filter>
+      <Filter>Game\Monster</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Map\MapChip.cpp">
       <Filter>Game\Map</Filter>
@@ -86,12 +80,6 @@
     </ClCompile>
     <ClCompile Include="Source\Game\Item\Armor.cpp">
       <Filter>Game\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\GUI\InventoryWindow.cpp">
-      <Filter>Game\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\GUI\ItemSlot.cpp">
-      <Filter>Game\GUI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\GUI\LifeGage.cpp">
       <Filter>Game\GUI</Filter>
@@ -123,7 +111,7 @@
       <Filter>Game\Map</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Monster\Monster_01.h">
-      <Filter>Game\Player\Monster</Filter>
+      <Filter>Game\Monster</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\AnimationEvent\CollisionWorld.h">
       <Filter>Game\AnimationEvent</Filter>
@@ -135,10 +123,10 @@
       <Filter>Game\AnimationEvent</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Monster\IMonster.h">
-      <Filter>Game\Player\Monster</Filter>
+      <Filter>Game\Monster</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Monster\MonsterHabitat.h">
-      <Filter>Game\Player\Monster</Filter>
+      <Filter>Game\Monster</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Map\MapChip.h">
       <Filter>Game\Map</Filter>
@@ -154,12 +142,6 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Item\Weapon.h">
       <Filter>Game\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\GUI\InventoryWindow.h">
-      <Filter>Game\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\GUI\ItemSlot.h">
-      <Filter>Game\GUI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\GUI\LifeGage.h">
       <Filter>Game\GUI</Filter>

@@ -43,11 +43,14 @@ namespace nkEngine
 	void TestFont::Create(int height,int width, FontWeightE weights)
 	{
 
+		//倍率を計算
+		Magnification = Engine().GetFrameH() / Engine().GetScreenH();
+
 		//フォントの作成
 		D3DXCreateFont(
 			Engine().GetDevice(),			// デバイス
-			height,							// 高さ
-			width,							// 幅
+			height * Magnification,			// 高さ
+			width * Magnification,			// 幅
 			weights,						// フォントの太さ 普通
 			NULL,							// 下線
 			FALSE,							// 斜体
@@ -74,10 +77,10 @@ namespace nkEngine
 	{
 		RECT rc =
 		{
-			pos.x,		// 左上のx座標
-			pos.y,		// 左上のy座標
-			Engine().GetScreenW(),	// 右下のx座標
-			Engine().GetScreenH()		// 右下のy座標
+			pos.x * Magnification,		// 左上のx座標
+			pos.y * Magnification,		// 左上のy座標
+			Engine().GetFrameW(),		// 右下のx座標
+			Engine().GetFrameH()		// 右下のy座標
 		};
 
 		char numText[10];
@@ -113,11 +116,11 @@ namespace nkEngine
 	void TestFont::Render(const char* text, D3DXVECTOR2 pos)
 	{
 
-		RECT rc = 
+		RECT rc =
 		{
-			pos.x,		// 左上のx座標
-		    pos.y,		// 左上のy座標
-			Engine().GetFrameW(),	// 右下のx座標
+			pos.x * Magnification,		// 左上のx座標
+			pos.y * Magnification,		// 左上のy座標
+			Engine().GetFrameW(),		// 右下のx座標
 			Engine().GetFrameH()		// 右下のy座標
 		};
 
@@ -146,9 +149,9 @@ namespace nkEngine
 	{
 		RECT rc =
 		{
-			pos.x,		// 左上のx座標
-			pos.y,		// 左上のy座標
-			Engine().GetFrameW(),	// 右下のx座標
+			pos.x * Magnification,		// 左上のx座標
+			pos.y * Magnification,		// 左上のy座標
+			Engine().GetFrameW(),		// 右下のx座標
 			Engine().GetFrameH()		// 右下のy座標
 		};
 

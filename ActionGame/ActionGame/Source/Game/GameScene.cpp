@@ -12,7 +12,7 @@
 #include"Map\Ground.h"
 #include"Map\Skybox.h"
 #include"Monster\MonsterHabitat.h"
-#include"GUI\InventoryWindow.h"
+//#include"GUI\InventoryWindow.h"
 #include"GUI\LifeGage.h"
 #include"GUI\ExpGage.h"
 
@@ -25,7 +25,7 @@ CollisionWorld* g_CollisionWorld = nullptr;
 GameCamera* g_MainCamera = nullptr;
 
 /** インベントリウィンドウ. */
-InventoryWindow* g_Inventory = nullptr;
+//InventoryWindow* g_Inventory = nullptr;
 
 /**
  * コンストラクタ.
@@ -84,10 +84,11 @@ void GameScene::Start()
 	skybox->SetPlayer(player);
 
 	//モンスターの住処
-	NewGO<MonsterHabitat>();
+	MonsterHabitat* mh = NewGO<MonsterHabitat>();
+	mh->SetPlayer(player);
 
 	//UI
-	g_Inventory = NewGO<InventoryWindow>();
+	//g_Inventory = NewGO<InventoryWindow>();
 	
 	//ライフゲージ
 	LifeGage* lifeGage = NewGO<LifeGage>();

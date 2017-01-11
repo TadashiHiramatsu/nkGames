@@ -1,47 +1,139 @@
+/**
+ * @file Source\Game\Monster\Monster_01.h
+ *
+ * 物理攻撃をするモンスタークラスの定義.
+ */
 #pragma once
 
 #include"IMonster.h"
 
+/**
+ * モンスタークラス.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 class Monster_01 : public IMonster
 {
 public:
+
+	/** アニメーションコード. */
 	enum AnimationCode
 	{
-		AnimationInvalid = -1,
-		AnimationWaiting = 0,
-		AnimationWalk,
-		AnimationRun,
-		AnimationAttack_01,
-		AnimationAttack_02,
-		AnimationHit,
-		AnimationDeath,
-		AnimationNum,
+		AnimationInvalid = -1,	//!< 無効
+		AnimationWaiting = 0,	//!< 待機
+		AnimationWalk,			//!< 歩き
+		AnimationRun,			//!< 走り
+		AnimationAttack_01,		//!< 攻撃１
+		AnimationAttack_02,		//!< 攻撃２
+		AnimationHit,			//!< ダメージ
+		AnimationDeath,			//!< 死
+		AnimationNum,			//!< アニメーションの数
 	};
+
 public:
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	Monster_01();
+
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	~Monster_01();
+
+	/**
+	 * 初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	void Start()override;
+
+	/**
+	 * 更新.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	void Update()override;
+
+	/**
+	 * 描画.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	void Render()override;
+
+	/**
+	 * 解放.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	void Release()override;
+
+	/**
+	 * ダメージ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	void Damage()override;
 
-	//アニメーションを変更する
-	void PlayAnimation(AnimationCode _AnimCode, float interpolateTime)
+	/**
+	 * アニメーションを変更する.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 *
+	 * @param animCode		  The animation code.
+	 * @param interpolateTime The interpolate time.
+	 */
+	void PlayAnimation(AnimationCode animCode, float interpolateTime)
 	{
-		if (Animation.GetNowAnimationNo() != _AnimCode)
+		//現在のアニメーションではない
+		if (Animation_.GetNowAnimationNo() != animCode)
 		{
-			Animation.PlayAnimation(_AnimCode, interpolateTime);
+			Animation_.PlayAnimation(animCode, interpolateTime);
 		}
+
 	}
-	//現在のアニメーションに関係なく設定する
-	void PlayAnimationAbs(AnimationCode _AnimCode, float interpolateTime)
+	/**
+	 * 現在のアニメーションに関係なく設定する.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 *
+	 * @param animCode		  The animation code.
+	 * @param interpolateTime The interpolate time.
+	 */
+	void PlayAnimationAbs(AnimationCode animCode, float interpolateTime)
 	{
-		Animation.PlayAnimation(_AnimCode, interpolateTime);
+		Animation_.PlayAnimation(animCode, interpolateTime);
 	}
 
+	/**
+	 * アニメーション管理.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	void AnimationControl()override;
+
 private:
-	std::unique_ptr<btCollisionObject>	collisionObject;		//コリジョンオブジェクト。
-	std::unique_ptr<CSphereCollider>	sphereShape;			//球体
+
+	/** コリジョンオブジェクト. */
+	unique_ptr<btCollisionObject> CollisionObject_;
+	/** 球体形状. */
+	unique_ptr<SphereCollider> SphereShape_;
+
 };

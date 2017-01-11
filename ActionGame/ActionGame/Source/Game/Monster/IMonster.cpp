@@ -1,46 +1,98 @@
+/**
+ * @file Source\Game\Monster\IMonster.cpp
+ *
+ * モンスターの基底クラスの実装.
+ */
 #include"stdafx.h"
 #include"IMonster.h"
 
 #include"..\GameCamera.h"
 
+/**
+ * コンストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 IMonster::IMonster():
-	Radius(0.4f),
-	Height(0.3f),
-	Hp(10),
-	Distance(10),
-	toPlayerMaxDis(20),
-	PlayerAttackDis(0.3f),
-	WaitingTime(4),
-	LocalTime(0),
-	Destination(D3DXVECTOR3(0, 0, 0))
+	Radius_(0.4f),
+	Height_(0.3f),
+	Hp_(10),
+	Distance_(10),
+	toPlayerMaxDis_(20),
+	PlayerAttackDis_(0.3f),
+	WaitingTime_(4),
+	WaitingLT_(0),
+	Destination_(D3DXVECTOR3(0, 0, 0))
 {
 }
 
+/**
+ * デストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 IMonster::~IMonster()
 {
 	Release();
 }
 
+/**
+ * 初期化.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 void IMonster::Start()
 {
-	Model.SetTransform(&transform);
-	Model.SetLight(&Light);
-	Model.SetCamera(g_MainCamera->GetCamera());
+	//トランスフォームの設定
+	ModelRender_.SetTransform(&Transform_);
+	//ライトの設定
+	ModelRender_.SetLight(&Light_);
+	//カメラ
+	ModelRender_.SetCamera(g_MainCamera->GetCamera());
+
 }
 
+/**
+ * 更新.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 void IMonster::Update()
 {
-	transform.Update();
+	//トランスフォームの更新
+	Transform_.Update();
 
-	Model.Update();
+	//モデルの更新
+	ModelRender_.Update();
+
 }
 
+/**
+ * 描画.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 void IMonster::Render()
 {
-	Model.Render();
+	//モデルの表示
+	ModelRender_.Render();
+
 }
 
+/**
+ * 解放.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 void IMonster::Release()
 {
-	m_CharacterController.RemoveRigidBody();
+	//キャラクターコントローラの剛体を削除
+	CharacterController_.RemoveRigidBody();
+
 }

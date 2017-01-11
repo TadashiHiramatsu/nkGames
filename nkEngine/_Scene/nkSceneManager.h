@@ -69,7 +69,7 @@ namespace nkEngine
 			SAFE_DELETE(NowScene_);
 
 			//シーンクラスの作成
-			T* scene = new T;
+			TScene* scene = new TScene;
 
 			//ナウシーンに設定
 			NowScene_ = scene;
@@ -78,7 +78,7 @@ namespace nkEngine
 			GameObjectManager().AllDelete();
 
 			//シャドウクラスの初期化
-			Shadow().Create(NowScene_->GetGraphicsConfig().ShadowConfig);
+			Shadow().Create(NowScene_->GetGraphicsConfig().ShadowConfig_);
 
 			//シーンクラスの初期化
 			NowScene_->Start();

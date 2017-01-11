@@ -10,114 +10,247 @@
 
 #include"nkEngine/_Component/nkCharacterController.h"
 #include"..\Player\Player.h"
-#include"..\Item\DropItem.h"
 
-//
+/**
+ * モンスターの基底クラス.
+ * すべてのモンスターはこのクラスを継承する
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 class IMonster : public IGameObject
 {
 protected:
-	enum StateCode
+
+	/** ステートコード. */
+	enum StateCodeE
 	{
-		StateSpawn, //出現
-		StateWaiting, //立ち止まり
-		StateLoitering, //徘徊
-		StateChase, //追いかけ
-		StateAttack, //攻撃
-		StateDamage, //ダメージ
-		StateDead, //そして死
+		StateSpawn,		//!< 出現
+		StateWaiting,	//!< 立ち止まり
+		StateLoitering, //!< 徘徊
+		StateChase,		//!< 追いかけ
+		StateAttack,	//!< 攻撃
+		StateDamage,	//!< ダメージ
+		StateDead,		//!< そして死
 	};
 
 public:
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	IMonster();
+
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	virtual ~IMonster();
+
+	/**
+	 * 初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	virtual void Start()override;
+
+	/**
+	 * 更新.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	virtual void Update()override;
+
+	/**
+	 * 描画.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	virtual void Render()override;
+
+	/**
+	 * 解放.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	virtual void Release()override;
 
+	/**
+	 * ダメージを受けた.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	virtual void Damage(){}
 
-	void SetPosition(D3DXVECTOR3& _pos)
+	/**
+	 * ポジションを設定.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 *
+	 * @param [in,out] pos The position.
+	 */
+	void SetPosition(D3DXVECTOR3& pos)
 	{
-		transform.Position = _pos;
+		Transform_.Position_ = pos;
+	}
+
+	/**
+	* プレイヤーのポインタを設定.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/11
+	*
+	* @param [in,out] p If non-null, the Player to process.
+	*/
+	void SetPlayer(Player* p)
+	{
+		Player_ = p;
 	}
 
 protected:
 
-	//Stateを変更する
-	//param[in] 変更後のStateCode
-	void ChangeState(StateCode _NextState)
+	/**
+	 * Stateを変更する.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 *
+	 * @param nextState 変更後のStateCode.
+	 */
+	void ChangeState(StateCodeE nextState)
 	{
-		State = _NextState;
+		State_ = nextState;
 	}
 
-	//アニメーション管理
-	virtual void AnimationControl() {}
+	/**
+	 * アニメーション管理.
+	 * 継承先のクラスで実装する
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
+	virtual void AnimationControl() 
+	{
+	}
 
-	//プレイヤーへの方向ベクトルを計算
+	/**
+	 * プレイヤーへの方向ベクトルを計算.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 *
+	 * @return to player dir.
+	 */
 	D3DXVECTOR2& GetToPlayerDir()
 	{
-		D3DXVECTOR2 toP = D3DXVECTOR2(pPlayerPos->x,pPlayerPos->z) - D3DXVECTOR2(transform.Position.x, transform.Position.z);
+		D3DXVECTOR2 toP = D3DXVECTOR2(Player_->Transform_.Position_.x, Player_->Transform_.Position_.z) - D3DXVECTOR2(Transform_.Position_.x, Transform_.Position_.z);
 		D3DXVec2Normalize(&toP, &toP);
 		return toP;
 	}
 
-	//プレイヤーとの距離を計算
-	//高さを考慮しない距離を返します
+	/**
+	 * プレイヤーとの距離を計算. 
+	 * 高さを考慮しない距離を返します.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 *
+	 * @return to player dis.
+	 */
 	float GetToPlayerDis()
 	{
-		D3DXVECTOR3 toP = *pPlayerPos - transform.Position;
+		D3DXVECTOR3 toP = Player_->Transform_.Position_ - Transform_.Position_;
 		return D3DXVec2Length(&D3DXVECTOR2(toP.x, toP.z));
 	}
 
-
-	//目的地までの方向ベクトルを取得
+	/**
+	 * 目的地までの方向ベクトルを取得.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 *
+	 * @return to destination.
+	 */
 	D3DXVECTOR2& GetToDestination()
 	{
-		D3DXVECTOR2 toD = Destination - D3DXVECTOR2(transform.Position.x, transform.Position.z);
+		D3DXVECTOR2 toD = Destination_ - D3DXVECTOR2(Transform_.Position_.x, Transform_.Position_.z);
 		D3DXVec2Normalize(&toD, &toD);
 		return toD;
 	}
 
-	//目的地までの距離を計算
-	//高さを考慮しない距離を返します
+	/**
+	 * 目的地までの距離を計算. 
+	 * 高さを考慮しない距離を返します.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 *
+	 * @return to destination dis.
+	 */
 	float GetToDestinationDis()
 	{
-		D3DXVECTOR2 toD = Destination - D3DXVECTOR2(transform.Position.x, transform.Position.z);
+		D3DXVECTOR2 toD = Destination_ - D3DXVECTOR2(Transform_.Position_.x, Transform_.Position_.z);
 		return D3DXVec2Length(&toD);
 	}
 
-
-
 protected:
-	CSkinModelDataHandle SkinModelData;
-	CModelRender Model;
-	CLight Light;
-	CAnimation Animation;
 
-	float Radius;
-	float Height;
+	/** スキンモデルデータハンドル. */
+	SkinModelDataHandle SkinModelDataHandle_;
+	/** モデルレンダ. */
+	ModelRender ModelRender_;
+	/** ライト. */
+	Light Light_;
+	/** アニメーション. */
+	Animation Animation_;
 
-	int Hp;
+	/** The radius. */
+	float Radius_;
+	/** The height. */
+	float Height_;
+	/** キャラクターコントローラ. */
+	CharacterController CharacterController_;
 
-	//スポーン位置
-	//ここからの距離移動できる
-	D3DXVECTOR3 DefaultPosition;
-	float Distance; //距離
-	D3DXVECTOR2 Destination; //目的地
+	/** ヒットポイント. */
+	int Hp_;
 
-	//プレイヤーを追いかける最大距離
-	//見つける距離も兼用
-	float toPlayerMaxDis; 
+	/** スポーン位置 ここからの距離移動できる. */
+	D3DXVECTOR3 DefaultPosition_;
+	/** 距離. */
+	float Distance_;
+	/** 目的地. */
+	D3DXVECTOR2 Destination_;
 
-	D3DXVECTOR3* pPlayerPos;//プレイヤーのポジションのアドレス
-	float PlayerAttackDis;
+	/** プレイヤーのポインタ. */
+	Player* Player_;
+	/**   
+	 * プレイヤーを追いかける最大距離   
+	 * 見つける距離も兼用. 
+	 */
+	float toPlayerMaxDis_; 
+	/** プレイヤーを攻撃し始める距離. */
+	float PlayerAttackDis_;
 
-	float WaitingTime; //立ち止まる時間
-	float LocalTime; //ローカルタイム
+	/** 立ち止まる時間. */
+	float WaitingTime_;
+	/** 立ち止まる時間計測のためのローカルタイム. */
+	float WaitingLT_;
 
-	StateCode State;
-	CharacterController m_CharacterController;
+	/** ステート. */
+	StateCodeE State_;
 
-	AnimationEventController animEvent;
+	/** アニメーションイベント. */
+	AnimationEventController AnimationEvent_;
+
 };
