@@ -1,7 +1,7 @@
 /**
  * @file	Source\Game\GameScene.cpp
  *
- * Implements the game scene class.
+ * ゲームシーンクラスの実装.
  */
 #include"stdafx.h"
 #include"GameScene.h"
@@ -18,49 +18,82 @@
 
 #include"Item\ItemResource.h"
 
+/** コリジョンワールド. */
 CollisionWorld* g_CollisionWorld = nullptr;
+
+/** メインカメラ. */
 GameCamera* g_MainCamera = nullptr;
-Player* g_Player = nullptr;
+
+/** インベントリウィンドウ. */
 InventoryWindow* g_Inventory = nullptr;
 
+/**
+ * コンストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 GameScene::GameScene()
 {
 }
 
+/**
+ * デストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 GameScene::~GameScene()
 {
 }
 
+/**
+ * 初期化.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void GameScene::Start()
 {
-	m_GraphicsConfig.ShadowConfig.isEnable = true;
-	m_GraphicsConfig.ShadowConfig.isSoftShadowMap = true;
-	m_GraphicsConfig.ShadowConfig.ShadowMapW = 2048;
-	m_GraphicsConfig.ShadowConfig.ShadowMapH = 2048;
-	m_GraphicsConfig.ShadowConfig.Fur = 100.0f;
+	//グラフィックコンフィグの設定
+	GraphicsConfig_.ShadowConfig_.isEnable_ = true;
+	GraphicsConfig_.ShadowConfig_.isSoftShadowMap_ = true;
+	GraphicsConfig_.ShadowConfig_.ShadowMapW_ = 2048;
+	GraphicsConfig_.ShadowConfig_.ShadowMapH_ = 2048;
+	GraphicsConfig_.ShadowConfig_.Fur_ = 100.0f;
 
+	//コリジョンワールドの作成
 	g_CollisionWorld = NewGO<CollisionWorld>();
+	//メインカメラの作成
 	g_MainCamera = NewGO<GameCamera>(1);
 
+	//アイテムデータのロード
 	ItemResource().Load();
 
-	g_Player = NewGO<Player>();
+	//プレイヤーの作成
+	Player* player = NewGO<Player>();
 
-
-	g_MainCamera->SetPlayerPointer(g_Player);
+	//ゲームカメラにプレイヤーを設定
+	g_MainCamera->SetPlayer(player);
 	
+	//地面
 	NewGO<Ground>();
-	Skybox* skybox = NewGO<Skybox>();
-	skybox->SetPlayerPointer(g_Player);
 
+	//スカイボックス
+	Skybox* skybox = NewGO<Skybox>();
+	skybox->SetPlayer(player);
+
+	//モンスターの住処
 	NewGO<MonsterHabitat>();
 
 	//UI
 	g_Inventory = NewGO<InventoryWindow>();
-
+	
+	//ライフゲージ
 	LifeGage* lifeGage = NewGO<LifeGage>();
-	lifeGage->SetPlayer(g_Player);
-
+	lifeGage->SetPlayer(player);
+	//経験値バー
 	ExpGage* expGage = NewGO<ExpGage>();
-	expGage->SetPlayer(g_Player);
+	expGage->SetPlayer(player);
+
 }

@@ -15,7 +15,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	CSphereCollider::CSphereCollider() :
+	SphereCollider::SphereCollider() :
 		Shape_(nullptr)
 	{
 	}
@@ -26,7 +26,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	CSphereCollider::~CSphereCollider()
+	SphereCollider::~SphereCollider()
 	{
 		SAFE_DELETE(Shape_);
 	}
@@ -39,7 +39,7 @@ namespace nkEngine
 	 *
 	 * @param	radius	The ”¼Œa.
 	 */
-	void CSphereCollider::Create(const float radius)
+	void SphereCollider::Create(const float radius)
 	{
 		Shape_ = new btSphereShape(radius);
 	}

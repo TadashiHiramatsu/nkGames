@@ -16,7 +16,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class CSphereCollider : public ICollider
+	class SphereCollider : public ICollider
 	{
 	public:
 
@@ -26,7 +26,7 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		CSphereCollider();
+		SphereCollider();
 
 		/**
 		 * デストラクタ.
@@ -34,7 +34,7 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~CSphereCollider();
+		~SphereCollider();
 
 		/**
 		 * 球体コライダー作成.

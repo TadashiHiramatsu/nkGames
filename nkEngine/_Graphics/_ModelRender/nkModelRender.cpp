@@ -1,128 +1,220 @@
+/**
+ * @file _Graphics\_ModelRender\nkModelRender.cpp
+ *
+ * モデルレンダクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkModelRender.h"
 
 namespace nkEngine
 {
 
-	D3DXMATRIX viewMatrixRotInv;
-
-	CModelRender::CModelRender() :
-		m_ModelData(nullptr),
-		m_Light(nullptr),
-		m_NormalMap(nullptr),
-		m_SpecMap(nullptr),
-		m_isShadowCaster(false),
-		m_isShadowReceiver(false),
-		m_isRimLight(false),
-		m_fogFunc(enFogFuncNone)
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	ModelRender::ModelRender() :
+		ModelData_(nullptr),
+		Light_(nullptr),
+		NormalMap_(nullptr),
+		SpecMap_(nullptr),
+		isShadowCaster_(false),
+		isShadowReceiver_(false),
+		isRimLight_(false),
+		FogFunc_(FogFuncNone)
 	{
-		m_fogParam[0] = 0.0f;
-		m_fogParam[1] = 0.0f;
+		FogParam_[0] = 0.0f;
+		FogParam_[1] = 0.0f;
 	}
 
-	CModelRender::~CModelRender()
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	ModelRender::~ModelRender()
 	{
 	}
 
-	void CModelRender::Load(LPCSTR FileName, CAnimation* anim)
+	/**
+	 * Loads the given file.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param 		   filePath Filename of the file.
+	 * @param [in,out] anim	    If non-null, the animation.
+	 */
+	void ModelRender::Load(LPCSTR filePath, Animation* anim)
 	{
-		m_Effect = EffectManager().LoadEffect("ModelRender.fx");
-		m_ModelData = new CSkinModelData;
-		m_ModelData->LoadModelData(FileName, anim);
+		//エフェクトのロード
+		Effect_ = EffectManager().LoadEffect("ModelRender.fx");
+
+		//モデルデータのロード
+		ModelData_ = new SkinModelData;
+		ModelData_->LoadModelData(filePath, anim);
+	
+	}
+	/**
+	 * Loads the given m modeldata.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param [in,out] modeldata If non-null, the modeldata to load.
+	 */
+	void ModelRender::Load(SkinModelData* modeldata)
+	{
+		//エフェクトのロード
+		Effect_ = EffectManager().LoadEffect("ModelRender.fx");
+
+		//モデルのコピー
+		ModelData_ = modeldata;
+	
 	}
 
-	void CModelRender::Load(CSkinModelData* m_modeldata)
+	/**
+	 * Updates this object.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	void ModelRender::Update()
 	{
-		m_Effect = EffectManager().LoadEffect("ModelRender.fx");
-		m_ModelData = m_modeldata;
-	}
-
-	void CModelRender::Update()
-	{
-		if (m_isShadowCaster && Shadow().isEnable()) {
-			//シャドウキャスター。
+		if (isShadowCaster_ && Shadow().isEnable()) 
+		{
+			// シャドウキャスター.
+			// シャドウマップにモデルを設定
 			Shadow().Entry(this);
 		}
 		
-		if (m_ModelData)
+		if (ModelData_)
 		{
-			m_ModelData->UpdateBoneMatrix(m_Transform->WorldMatrix);
+			//ボーン行列の計算
+			ModelData_->UpdateBoneMatrix(Transform_->WorldMatrix_);
 		}
+
 	}
 
-	void CModelRender::Render()
+	/**
+	 * Renders this object.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	void ModelRender::Render()
 	{
-		if (m_ModelData) {
-			RenderFrame(m_ModelData->GetFrameRoot(),false);
+		if (ModelData_)
+		{
+			//描画
+			RenderFrame(ModelData_->GetFrameRoot(),false);
 		}
+
 	}
 
-	void CModelRender::RenderToShadowMap()
+	/**
+	 * Renders to shadow map.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	void ModelRender::RenderToShadowMap()
 	{
-		if (m_ModelData) {
-			RenderFrame(m_ModelData->GetFrameRoot(), true);
+		if (ModelData_) 
+		{
+			//描画
+			RenderFrame(ModelData_->GetFrameRoot(), true);
 		}
+	
 	}
 
-	void CModelRender::RenderFrame(LPD3DXFRAME pFrame, bool isRenderToShadowMap)
+	/**
+	 * Renders the frame.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param pFrame			  The frame.
+	 * @param isRenderToShadowMap True if this object is render to shadow map.
+	 */
+	void ModelRender::RenderFrame(LPD3DXFRAME pFrame, bool isRenderToShadowMap)
 	{
+		//メッシュコントローラの取得
 		LPD3DXMESHCONTAINER MeshContainer = pFrame->pMeshContainer;
 
 		while (MeshContainer != NULL)
 		{
+			//描画
 			RenderMeshContainer(
 				MeshContainer,
-				pFrame, isRenderToShadowMap);
+				pFrame, isRenderToShadowMap
+			);
 
 			MeshContainer = MeshContainer->pNextMeshContainer;
+	
 		}
 
 		if (pFrame->pFrameSibling != NULL)
 		{
-			RenderFrame(
-				pFrame->pFrameSibling, isRenderToShadowMap);
+			//兄弟
+			RenderFrame(pFrame->pFrameSibling, isRenderToShadowMap);
 		}
 
 		if (pFrame->pFrameFirstChild != NULL)
 		{
-			RenderFrame(
-				pFrame->pFrameFirstChild, isRenderToShadowMap);
+			//子供
+			RenderFrame(pFrame->pFrameFirstChild, isRenderToShadowMap);
 		}
+
 	}
 
-	void CModelRender::RenderMeshContainer(
+	/**
+	 * Renders the mesh container.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param pMeshContainerBase  The mesh container base.
+	 * @param pFrameBase		  The frame base.
+	 * @param isRenderToShadowMap True if this object is render to shadow map.
+	 */
+	void ModelRender::RenderMeshContainer(
 		LPD3DXMESHCONTAINER pMeshContainerBase,
 		LPD3DXFRAME pFrameBase,
 		bool isRenderToShadowMap)
 	{
+		//メッシュコントローラの取得
 		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
+
+		//フレームベースの取得
 		D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
-		UINT iAttrib;
 		LPD3DXBONECOMBINATION pBoneComb;
 
-		D3DXMATRIXA16 matTemp;
+		//D3DXMATRIXA16 matTemp;
+
 		D3DCAPS9 d3dCaps;
 		Engine().GetDevice()->GetDeviceCaps(&d3dCaps);
 	
 		//テクニックを設定
 		{
-			
 			//インスタンシング描画
-			if (m_ModelData->GetNumInstance() != 0)
+			if (ModelData_->GetNumInstance() != 0)
 			{
-
 				//アニメーション
 				if (pMeshContainer->pSkinInfo != NULL)
 				{
 					if (isRenderToShadowMap)
 					{
 						//影
-						m_Effect->SetTechnique("SkinModelInstancingRenderToShadowMap");
+						Effect_->SetTechnique("SkinModelInstancingRenderToShadowMap");
 					}
 					else
 					{
 						//通常
-						m_Effect->SetTechnique("SkinModelInstancing");
+						Effect_->SetTechnique("SkinModelInstancing");
 					}
 				}
 				//ノンアニメーション
@@ -131,12 +223,12 @@ namespace nkEngine
 					if (isRenderToShadowMap)
 					{
 						//影
-						m_Effect->SetTechnique("NoSkinModelInstancingRenderToShadowMap");
+						Effect_->SetTechnique("NoSkinModelInstancingRenderToShadowMap");
 					}
 					else
 					{
 						//通常
-						m_Effect->SetTechnique("NoSkinModelInstancing");
+						Effect_->SetTechnique("NoSkinModelInstancing");
 					}
 				}
 			}
@@ -149,12 +241,12 @@ namespace nkEngine
 					if (isRenderToShadowMap)
 					{
 						//影
-						m_Effect->SetTechnique("SkinModelRenderShadowMap");
+						Effect_->SetTechnique("SkinModelRenderShadowMap");
 					}
 					else
 					{
 						//通常
-						m_Effect->SetTechnique("SkinModel");
+						Effect_->SetTechnique("SkinModel");
 					}
 				}
 				//ノンアニメーション
@@ -163,152 +255,171 @@ namespace nkEngine
 					if (isRenderToShadowMap)
 					{
 						//影
-						m_Effect->SetTechnique("NoSkinModelRenderShadowMap");
+						Effect_->SetTechnique("NoSkinModelRenderShadowMap");
 					}
 					else
 					{
 						//通常
-						m_Effect->SetTechnique("NoSkinModel");
+						Effect_->SetTechnique("NoSkinModel");
 					}
 				}
 			}
 		}
+
+		//開始
+		Effect_->Begin(0, D3DXFX_DONOTSAVESTATE);
+		Effect_->BeginPass(0);
 
 		//共通の定数レジスタを設定
 		{
 			//ビュープロジェクション行列
 			if (isRenderToShadowMap)
 			{
-				m_Effect->SetMatrix("g_mViewProj", &Shadow().GetLightViewProjectionMatrix());
+				//シャドウの描画
+				Effect_->SetMatrix("g_mViewProj", &Shadow().GetLightViewProjectionMatrix());
 			}
 			else
 			{
+				//通常の描画
 				D3DXMATRIX viewProj;
-				D3DXMatrixMultiply(&viewProj, &m_camera->GetViewMatrix(),&m_camera->GetProjectionMatrix());
-				m_Effect->SetMatrix("g_mViewProj", &viewProj);
+				D3DXMatrixMultiply(&viewProj, &Camera_->GetViewMatrix(),&Camera_->GetProjectionMatrix());
+				Effect_->SetMatrix("g_mViewProj", &viewProj);
 			}
 
-			//ライト
-			m_Effect->SetValue("g_light", m_Light, sizeof(CLight));
+			//ライトを設定
+			Effect_->SetValue("g_light", Light_, sizeof(Light));
 
 			//true or false 最終的にGPUに送る
 			int flag[4] = { 0 };
 			
 			//法線マップ
-			if (m_NormalMap != nullptr)
+			if (NormalMap_ != nullptr)
 			{
 				flag[0] = true;
-				m_Effect->SetTexture("g_normalMap", m_NormalMap->GetTextureDX());
+				Effect_->SetTexture("g_normalMap", NormalMap_->GetTexture());
 			}
 
 			//シャドウレシーバー
-			if (!isRenderToShadowMap && m_isShadowReceiver)
+			if (!isRenderToShadowMap && isShadowReceiver_)
 			{
 				flag[1] = true;
-				m_Effect->SetTexture("g_ShadowMap_0", Shadow().GetTexture(0)->GetTextureDX());
-				m_Effect->SetTexture("g_ShadowMap_1", Shadow().GetTexture(1)->GetTextureDX());
-				m_Effect->SetTexture("g_ShadowMap_2", Shadow().GetTexture(2)->GetTextureDX());
-				const CShadowMap::SShadowReceiverParam& param = Shadow().GetShadowReceiverParam();
-				m_Effect->SetValue("g_ShadowReceiverParam", &param, sizeof(param));
+				Effect_->SetTexture("g_ShadowMap_0", Shadow().GetTexture(0)->GetTexture());
+				Effect_->SetTexture("g_ShadowMap_1", Shadow().GetTexture(1)->GetTexture());
+				Effect_->SetTexture("g_ShadowMap_2", Shadow().GetTexture(2)->GetTexture());
+
+				const CShadowMap::ShadowReceiverParamS& param = Shadow().GetShadowReceiverParam();
+				Effect_->SetValue("g_ShadowReceiverParam", &param, sizeof(param));
 			}
 
 			//リムライト
-			if (m_isRimLight)
+			if (isRimLight_)
 			{
 				flag[2] = true;
 			}
 
 			//輝度
-			if (m_isLuminance)
+			if (isLuminance_)
 			{
 				flag[3] = true;
 			}
-			m_Effect->SetValue("g_flags", flag, sizeof(flag));
+
+			Effect_->SetValue("g_flags", flag, sizeof(flag));
 
 			//スペキュラとフォグで使用
+			//カメラのポジションを計算
 			D3DXVECTOR3 cameraPos;
-			cameraPos.x = m_camera->GetViewInvMatrix().m[3][0];
-			cameraPos.y = m_camera->GetViewInvMatrix().m[3][1];
-			cameraPos.z = m_camera->GetViewInvMatrix().m[3][2];
-			m_Effect->SetVector("g_cameraPos", (D3DXVECTOR4*)&cameraPos);
+			cameraPos.x = Camera_->GetViewInvMatrix().m[3][0];
+			cameraPos.y = Camera_->GetViewInvMatrix().m[3][1];
+			cameraPos.z = Camera_->GetViewInvMatrix().m[3][2];
+			Effect_->SetVector("g_cameraPos", (D3DXVECTOR4*)&cameraPos);
 
 			//スペキュラマップ
-			if (m_SpecMap != nullptr)
+			if (SpecMap_ != nullptr)
 			{
-				m_Effect->SetTexture("g_speculerMap", m_SpecMap->GetTextureDX());
-				m_Effect->SetBool("g_isSpec", true);
+				Effect_->SetTexture("g_speculerMap", SpecMap_->GetTexture());
+				Effect_->SetBool("g_isSpec", true);
 			}
 			else
 			{
-				m_Effect->SetBool("g_isSpec", false);
+				Effect_->SetBool("g_isSpec", false);
 			}
 
 			D3DXVECTOR4 fogParam;
-			if (m_fogFunc == enFogFuncDist) {
+			if (FogFunc_ == FogFuncDist) 
+			{
 				//距離フォグ
-				fogParam.x = m_fogParam[0];
-				fogParam.y = m_fogParam[1];
+				fogParam.x = FogParam_[0];
+				fogParam.y = FogParam_[1];
 				fogParam.z = 1.0f;
 			}
-			else if (m_fogFunc == enFogFuncHeight) {
+			else if (FogFunc_ == FogFuncHeight) 
+			{
 				//高さフォグ
-				fogParam.x = m_fogParam[0];
-				fogParam.y = m_fogParam[1];
+				fogParam.x = FogParam_[0];
+				fogParam.y = FogParam_[1];
 				fogParam.z = 2.0f;
 			}
-			else {
+			else
+			{
 				fogParam.z = 0.0f;
 			}
+			Effect_->SetVector("g_fogParam", &fogParam);
 
-			m_Effect->SetVector("g_fogParam", &fogParam);
 		}
 
 		//アニメーション
 		if (pMeshContainer->pSkinInfo != NULL)
 		{
-			pBoneComb = reinterpret_cast<D3DXBONECOMBINATION*>(pMeshContainer->pBoneCombinationBuf->GetBufferPointer());
-			for (iAttrib = 0; iAttrib < pMeshContainer->NumAttributeGroups; iAttrib++)
+			pBoneComb = reinterpret_cast<D3DXBONECOMBINATION*>(pMeshContainer->BoneCombinationBuf_->GetBufferPointer());
+
+			//属性グループをループ
+			for (UINT iAttrib = 0; iAttrib < pMeshContainer->NumAttributeGroup_; iAttrib++)
 			{
+				//ボーン行列計算？
 				for (DWORD iPaletteEntry = 0; iPaletteEntry < pMeshContainer->NumPaletteEntries; ++iPaletteEntry)
 				{
 					DWORD iMatrixIndex = pBoneComb[iAttrib].BoneId[iPaletteEntry];
+
 					if (iMatrixIndex != UINT_MAX)
 					{
 						NK_ASSERT(iPaletteEntry < MAX_MATRIX_PALLET, "ボーン行列パレットの最大数を超えた");
-						NK_ASSERT(pMeshContainer->ppBoneMatrixPtrs[iMatrixIndex] != NULL, "NULL");
+						NK_ASSERT(pMeshContainer->BoneMatrixPtrs_[iMatrixIndex] != NULL, "NULL");
+
 						D3DXMatrixMultiply(
-							&m_BoneMatrixPallet[iPaletteEntry],
-							&pMeshContainer->pBoneOffsetMatrices[iMatrixIndex],
-							pMeshContainer->ppBoneMatrixPtrs[iMatrixIndex]);
+							&BoneMatrixPallets_[iPaletteEntry],
+							&pMeshContainer->BoneOffsetMatrix_[iMatrixIndex],
+							pMeshContainer->BoneMatrixPtrs_[iMatrixIndex]
+						);
+
 					}
+
 				}
 
-				m_Effect->SetMatrixArray("g_mWorldMatrixArray", m_BoneMatrixPallet, pMeshContainer->NumPaletteEntries);
+				//ボーン行列の配列
+				Effect_->SetMatrixArray("g_mWorldMatrixArray", BoneMatrixPallets_, pMeshContainer->NumPaletteEntries);
+
 				//ボーンの数
-				m_Effect->SetInt("g_numBone", pMeshContainer->NumInfl);
+				Effect_->SetInt("g_numBone", pMeshContainer->NumInfl_);
 				
 				//ディフューズテクスチャ
-				m_Effect->SetTexture("g_diffuseTexture", pMeshContainer->ppTextures[pBoneComb[iAttrib].AttribId]);
+				Effect_->SetTexture("g_diffuseTexture", pMeshContainer->Texture_[pBoneComb[iAttrib].AttribId]);
 
 				//カメラの回転行列の逆行列
-				m_Effect->SetMatrix("g_mViewMatrixRotInv",&m_camera->GetRotationInvMatrix());
+				Effect_->SetMatrix("g_mViewMatrixRotInv",&Camera_->GetRotationInvMatrix());
 
-				m_Effect->Begin(0, D3DXFX_DONOTSAVESTATE);
-				m_Effect->BeginPass(0);
-				m_Effect->CommitChanges();
+				Effect_->CommitChanges();
 
-				//インスタンシング
-				if (m_ModelData->GetNumInstance() != 0)
+				if (ModelData_->GetNumInstance() != 0)
 				{
+					//インスタンシング
 					RenderMeshContainer_InstancingRenderCommon(pMeshContainer, iAttrib);
 				}
-				//通常
 				else
 				{
+					//通常
 					pMeshContainer->MeshData.pMesh->DrawSubset(iAttrib);
 				}
-				m_Effect->EndPass();
-				m_Effect->End();
+
 			}
 		}
 		//アニメーションなし
@@ -318,83 +429,102 @@ namespace nkEngine
 
 			if (pFrame != NULL)
 			{
-				mWorld = pFrame->CombinedTransformationMatrix;
+				mWorld = pFrame->CombinedTransformationMatrix_;
 			}
 			else
 			{
-				mWorld = m_Transform->WorldMatrix;
+				mWorld = Transform_->WorldMatrix_;
 			}
 
-			m_Effect->SetMatrix("g_mWorldMatrix", &mWorld);
-			m_Effect->SetMatrix("g_mRotation", &m_Transform->RotationMatrix);
+			//ワールド行列
+			Effect_->SetMatrix("g_mWorldMatrix", &mWorld);
 
-			m_Effect->Begin(0, D3DXFX_DONOTSAVESTATE);
-			m_Effect->BeginPass(0);
+			//回転行列
+			Effect_->SetMatrix("g_mRotation", &Transform_->RotationMatrix_);
 
 			for (DWORD i = 0; i < pMeshContainer->NumMaterials; i++)
 			{
 				//ディフューズテクスチャ
-				m_Effect->SetTexture("g_diffuseTexture", pMeshContainer->ppTextures[i]);
-				m_Effect->CommitChanges();
+				Effect_->SetTexture("g_diffuseTexture", pMeshContainer->Texture_[i]);
 
-				//インスタンシング
-				if (m_ModelData->GetNumInstance() != 0)
+				Effect_->CommitChanges();
+
+				if (ModelData_->GetNumInstance() != 0)
 				{
+					//インスタンシング
 					RenderMeshContainer_InstancingRenderCommon(pMeshContainer, 0);
 					//RenderMeshContainer_InstancingRenderCommon(pMeshContainer, i);//ここiじゃね？
 				}
-				//通常
 				else
 				{
+					//通常
 					pMeshContainer->MeshData.pMesh->DrawSubset(i);
 				}
 			}
-
-			m_Effect->EndPass();
-			m_Effect->End();
 		}
+
+		//終了
+		Effect_->EndPass();
+		Effect_->End();
+		
 	}
 
-	void CModelRender::RenderMeshContainer_InstancingRenderCommon(D3DXMESHCONTAINER_DERIVED * meshContainer, int materialID)
+	/**
+	 * Renders the mesh container instancing render common.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param [in,out] meshContainer If non-null, the mesh container.
+	 * @param 		   materialID    Identifier for the material.
+	 */
+	void ModelRender::RenderMeshContainer_InstancingRenderCommon(D3DXMESHCONTAINER_DERIVED * meshContainer, int materialID)
 	{
+
+		//頂点バッファの作成
 		IDirect3DVertexBuffer9* vb;
+		//インデックスバッファの作成
 		IDirect3DIndexBuffer9* ib;
 
 		ID3DXMesh* mesh = meshContainer->MeshData.pMesh;
 		mesh->GetVertexBuffer(&vb);
 		mesh->GetIndexBuffer(&ib);
-		//DWORD sttributeTableSize = 256;
 
-		DWORD stride = m_ModelData->GetVertexBufferStride();
+		//頂点ストライドを取得
+		DWORD stride = ModelData_->GetVertexBufferStride();
 
-		IDirect3DDevice9* d3dDevice = Engine().GetDevice();
+		//デバイスの取得
+		IDirect3DDevice9* Device = Engine().GetDevice();
 
-		d3dDevice->SetStreamSourceFreq(0, D3DSTREAMSOURCE_INDEXEDDATA | m_ModelData->GetNumInstance());
-		d3dDevice->SetStreamSourceFreq(1, D3DSTREAMSOURCE_INSTANCEDATA | 1);
+		Device->SetStreamSourceFreq(0, D3DSTREAMSOURCE_INDEXEDDATA | ModelData_->GetNumInstance());
+		Device->SetStreamSourceFreq(1, D3DSTREAMSOURCE_INSTANCEDATA | 1);
 
-		d3dDevice->SetVertexDeclaration(m_ModelData->GetVertexDeclForInstancingRender());
+		Device->SetVertexDeclaration(ModelData_->GetVertexDeclForInstancingRender());
 
 		//頂点バッファをストリーム０番目に設定
-		d3dDevice->SetStreamSource(0, vb, 0, stride);
+		Device->SetStreamSource(0, vb, 0, stride);
 
-		d3dDevice->SetStreamSource(
+		//ストリームを設定
+		Device->SetStreamSource(
 			1,
-			m_ModelData->GetInstancingVertexBuffer().GetBody(),
+			ModelData_->GetInstancingVertexBuffer().GetBody(),
 			0,
-			m_ModelData->GetInstancingVertexBuffer().GetStride());
+			ModelData_->GetInstancingVertexBuffer().GetStride()
+		);
 
-		d3dDevice->SetIndices(ib);
-		d3dDevice->DrawIndexedPrimitive(
+		Device->SetIndices(ib);
+		Device->DrawIndexedPrimitive(
 			D3DPT_TRIANGLELIST,
 			0,
 			0,
 			mesh->GetNumVertices(),
-			meshContainer->pAttributeTable[materialID].FaceStart * 3,
-			meshContainer->pAttributeTable[materialID].FaceCount);
+			meshContainer->AttributeTable_[materialID].FaceStart * 3,
+			meshContainer->AttributeTable_[materialID].FaceCount
+		);
 
 		//後始末
-		d3dDevice->SetStreamSourceFreq(0, 1);
-		d3dDevice->SetStreamSourceFreq(1, 1);
+		Device->SetStreamSourceFreq(0, 1);
+		Device->SetStreamSourceFreq(1, 1);
 	}
 
-}
+}// namespace nkEngine

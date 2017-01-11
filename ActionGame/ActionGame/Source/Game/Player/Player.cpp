@@ -1,10 +1,18 @@
+/**
+ * @file Source\Game\Player\Player.cpp
+ *
+ * プレイヤークラスの実装.
+ */
 #include"stdafx.h"
 #include"Player.h"
 #include"../GameCamera.h"
 
+//無名空間
 namespace
 {
-	AnimationEventGroup AnimationEventTbl[Player::AnimationNum]
+
+	/** プレイヤーのアニメーションイベントテーブル. */
+	AnimationEventGroupS AnimationEventTbl[Player::AnimationNum] = 
 	{
 		//AnimationWaiting
 		{
@@ -35,101 +43,145 @@ namespace
 		{
 			END_ANIMATION_EVENT(),
 		}
+
 	};
 
-	SParicleEmitParameter AttackParticle
-	{
-		"fire_02.png",						//!<テクスチャのファイルパス。
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!<初速度。
-		0.1f,								//!<寿命。単位は秒。
-		0.001f,								//!<発生時間。単位は秒。
-		0.5f,								//!<パーティクルの幅。
-		0.5f,								//!<パーティクルの高さ。
-		D3DXVECTOR3(0.05f, 0.05f, 0.05f),		//!<初期位置のランダム幅。
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!<初速度のランダム幅。
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!<速度の積分のときのランダム幅。
-		{									//!<UVテーブル。最大4まで保持できる。xが左上のu、yが左上のv、zが右下のu、wが右下のvになる。		
-			D3DXVECTOR4(0.0f,  0.0f, 1.0f, 1.0f),
-			D3DXVECTOR4(0.25f, 0.0f, 0.5f,  0.5f),
-			D3DXVECTOR4(0.5f,  0.0f, 0.75f, 0.5f),
-			D3DXVECTOR4(0.75f, 0.0f, 1.0f,  0.5f),
-		},
-		0,									//!<UVテーブルのサイズ。
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!<重力。	
-		true,								//!<死ぬときにフェードアウトする？
-		0.5f,								//!<フェードする時間。
-		1.0f,								//!<初期アルファ値。	
-		true,								//!<ビルボード？
-		1.0f,								//!<輝度。ブルームが有効になっているとこれを強くすると光が溢れます。
-		1,									//!<0半透明合成、1加算合成。
-	};
+	//遺産
+	///** The attack particle. */
+	//ParicleParameterS AttackParticle = 
+	//{
+	//	"fire_02.png",						//!< テクスチャのファイルパス。
+	//	D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!< 初速度。
+	//	0.1f,								//!< 寿命。単位は秒。
+	//	0.001f,								//!< 発生時間。単位は秒。
+	//	0.5f,								//!< パーティクルの幅。
+	//	0.5f,								//!< パーティクルの高さ。
+	//	D3DXVECTOR3(0.05f, 0.05f, 0.05f),	//!< 初期位置のランダム幅。
+	//	D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!< 初速度のランダム幅。
+	//	D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!< 速度の積分のときのランダム幅。
+	//	{									//!< UVテーブル。最大4まで保持できる。xが左上のu、yが左上のv、zが右下のu、wが右下のvになる。		
+	//		D3DXVECTOR4(0.0f,  0.0f, 1.0f, 1.0f),
+	//		D3DXVECTOR4(0.25f, 0.0f, 0.5f,  0.5f),
+	//		D3DXVECTOR4(0.5f,  0.0f, 0.75f, 0.5f),
+	//		D3DXVECTOR4(0.75f, 0.0f, 1.0f,  0.5f),
+	//	},
+	//	0,									//!< UVテーブルのサイズ。
+	//	D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!< 重力。	
+	//	true,								//!< 死ぬときにフェードアウトする？
+	//	0.5f,								//!< フェードする時間。
+	//	1.0f,								//!< 初期アルファ値。	
+	//	true,								//!< ビルボード？
+	//	1.0f,								//!< 輝度。ブルームが有効になっているとこれを強くすると光が溢れます。
+	//	1,									//!< 0半透明合成、1加算合成。
+	//};
+
 }
 
-Player::Player():
-	itime(0)
+/**
+ * コンストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
+Player::Player()
 {
 }
 
+/**
+ * デストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 Player::~Player()
 {
 }
 
+/**
+ * 初期化.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void Player::Start()
 {
-	Model.Load("StealthChar.X",&Animation);
-	Model.SetTransform(&transform);
-	Model.SetLight(&Light);
-	Model.SetCamera(g_MainCamera->GetCamera());
-	Model.SetShadowCasterFlag(true);
-	Model.SetShadowReceiverFlag(true);
+	//モデルファイルをロード
+	ModelRender_.Load("StealthChar.X",&Animation_);
+	//トランスフォームを設定
+	ModelRender_.SetTransform(&Transform_);
+	//ライトを設定
+	ModelRender_.SetLight(&Light_);
+	//カメラを設定
+	ModelRender_.SetCamera(g_MainCamera->GetCamera());
+	//シャドウキャスターtrue
+	ModelRender_.SetShadowCasterFlag(true);
+	//シャドウレシーバーtrue
+	ModelRender_.SetShadowReceiverFlag(true);
 
-	transform.Position = D3DXVECTOR3(0, 1, 0);
+	//ポジションをちょっと上に
+	Transform_.Position_ = D3DXVECTOR3(0, 1, 0);
 
-	Radius = 0.4f;
-	Height = 0.3f;
-	CharacterController.Init(Radius, Height, transform.Position);
-	ChangeState(StateCode::StateWaiting);
-	Animation.SetAnimationLoopFlags(AnimationCode::AnimationAttack, false);
-	Animation.SetAnimationLoopFlags(AnimationCode::AnimationDead, false);
-	Animation.SetAnimationLoopFlags(AnimationCode::AnimationHit, false);
+	//キャラクターコントローラーの初期化
+	Radius_ = 0.4f;
+	Height_ = 0.3f;
+	CharacterController_.Init(Radius_, Height_, Transform_.Position_);
 
-	animEvent.Init(&Model,&Animation,AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
+	//ステートを待機に
+	ChangeState(StateCodeE::StateWaiting);
 
-	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + transform.Position);
-	Shadow().SetLightTarget(transform.Position);
+	//アニメーションループをfalseに設定
+	Animation_.SetAnimationLoopFlags(AnimationCodeE::AnimationAttack, false);
+	Animation_.SetAnimationLoopFlags(AnimationCodeE::AnimationDead, false);
+	Animation_.SetAnimationLoopFlags(AnimationCodeE::AnimationHit, false);
+
+	//アニメーションイベントを初期化
+	AnimationEvent_.Init(&ModelRender_, &Animation_, AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
+
+	//シャドウを計算
+	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + Transform_.Position_);
+	Shadow().SetLightTarget(Transform_.Position_);
 
 	//mParticle = Model.FindBoneWorldMatrix("Bip01_R_Finger0");
 	//ParticlePos = D3DXVECTOR3(mParticle->m[3][0], mParticle->m[3][1], mParticle->m[3][2]);
-
 	//Particle.Init(MainCamera.GetCamera(), AttackParticle, &ParticlePos);
 
 	//左手武器
-	LWeaponModel.Load("Weapon_Scythe.X",nullptr);
-	LWeaponModel.SetTransform(&LWeaponTransform);
-	LWeaponModel.SetLight(&LWeaponLight);
-	LWeaponModel.SetCamera(g_MainCamera->GetCamera());
-	LWeaponTransform.ParentMatrix = Model.FindBoneWorldMatrix("LeftWeapon");
+	WeaponModelRenderL_.Load("Weapon_Scythe.X", nullptr);
+	WeaponModelRenderL_.SetTransform(&WeaponTransformL_);
+	WeaponModelRenderL_.SetLight(&WeaponLightL_);
+	WeaponModelRenderL_.SetCamera(g_MainCamera->GetCamera());
+	WeaponTransformL_.ParentMatrix_ = ModelRender_.FindBoneWorldMatrix("LeftWeapon");
+	
 	//右手武器
-	RWeaponModel.Load("Weapon_Scythe.X", nullptr);
-	RWeaponModel.SetTransform(&RWeaponTransform);
-	RWeaponModel.SetLight(&RWeaponLight);
-	RWeaponModel.SetCamera(g_MainCamera->GetCamera());
-	RWeaponTransform.ParentMatrix = Model.FindBoneWorldMatrix("RightWeapon");
+	WeaponModelRenderR_.Load("Weapon_Scythe.X", nullptr);
+	WeaponModelRenderR_.SetTransform(&WeaponTransformR_);
+	WeaponModelRenderR_.SetLight(&WeaponLightR_);
+	WeaponModelRenderR_.SetCamera(g_MainCamera->GetCamera());
+	WeaponTransformR_.ParentMatrix_ = ModelRender_.FindBoneWorldMatrix("RightWeapon");
 
-	sphereShape.reset(new CSphereCollider);
-	sphereShape->Create(Radius);
-	collisionObject.reset(new btCollisionObject());
-	collisionObject->setCollisionShape(sphereShape->GetBody());
+	//コリジョン初期化
+	SphereShape_.reset(new SphereCollider);
+	SphereShape_->Create(Radius_);
+	CollisionObject_.reset(new btCollisionObject());
+	CollisionObject_->setCollisionShape(SphereShape_->GetBody());
 
 }
 
+/**
+ * 更新.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void Player::Update()
 {
+	//プレイヤーパラメータの更新
 	ParameterUpdate();
 
-	D3DXVECTOR3 moveSpeed = CharacterController.GetMoveSpeed();
+	//キャラクターコントローラからムーブスピードを取得
+	D3DXVECTOR3 moveSpeed = CharacterController_.GetMoveSpeed();
 
-	switch (State)
+	switch (State_)
 	{
 	case Player::StateWaiting:
 	case Player::AnimationWalk:
@@ -137,28 +189,32 @@ void Player::Update()
 	{
 
 		//ジャンプ処理
-		if (Input.GetKeyButton(KeyCode::Space) && !CharacterController.IsJump())
+		if (Input().GetKeyButton(KeyCode::Space) && !CharacterController_.IsJump())
 		{
 			moveSpeed.y = 5.0f;
-			CharacterController.Jump();
+			CharacterController_.Jump();
 		}
 
-
+		//平行移動
 		D3DXVECTOR3 move = D3DXVECTOR3(0, 0, 0);
-		if (Input.GetKeyButton(KeyCode::W))
+		if (Input().GetKeyButton(KeyCode::W))
 		{
+			//正面
 			move += D3DXVECTOR3(0, 0, 1);
 		}
-		if (Input.GetKeyButton(KeyCode::S))
+		if (Input().GetKeyButton(KeyCode::S))
 		{
+			//後ろ
 			move += D3DXVECTOR3(0, 0, -1);
 		}
-		if (Input.GetKeyButton(KeyCode::A))
+		if (Input().GetKeyButton(KeyCode::A))
 		{
+			//左
 			move += D3DXVECTOR3(-1, 0, 0);
 		}
-		if (Input.GetKeyButton(KeyCode::D))
+		if (Input().GetKeyButton(KeyCode::D))
 		{
+			//右
 			move += D3DXVECTOR3(1, 0, 0);
 		}
 
@@ -170,6 +226,7 @@ void Player::Update()
 		moveDir.y = 0.0f;	//Y軸はいらない。
 		moveDir.z = dirRight.z * move.x + dirForward.z * move.z;
 
+		//ムーブスピードを計算
 		static float MOVE_SPEED = 2.0f;
 		moveSpeed.x = moveDir.x * MOVE_SPEED;
 		moveSpeed.z = moveDir.z * MOVE_SPEED;
@@ -179,147 +236,209 @@ void Player::Update()
 		float len = D3DXVec3Length(&moveDir);
 		if (len > 0.0f)
 		{
-			ChangeState(StateCode::StateRun);
-			D3DXQuaternionRotationAxis(&transform.Rotation, &D3DXVECTOR3(0, 1, 0), atan2f(moveDir.x, moveDir.z) + D3DXToRadian(180.0f));
+			ChangeState(StateCodeE::StateRun);
+			//正面方向に回転させている
+			D3DXQuaternionRotationAxis(&Transform_.Rotation_, &D3DXVECTOR3(0, 1, 0), atan2f(moveDir.x, moveDir.z) + D3DXToRadian(180.0f));
 		}
 		else
 		{
-			ChangeState(StateCode::StateWaiting);
+			ChangeState(StateCodeE::StateWaiting);
 		}
 
-		if (Input.GetMoudeButtonDown(MouseButton::MouseLeft) && !CharacterController.IsJump())
+		//攻撃
+		if (Input().GetMoudeButtonDown(MouseButtonE::MouseLeft) && !CharacterController_.IsJump())
 		{
-			ChangeState(StateCode::StateAttack);
+			ChangeState(StateCodeE::StateAttack);
+
 			//Particle.SetCreate(true);
 		}
 	}
 	break;
 	case Player::StateAttack:
 	{
+		//移動を緩める
 		moveSpeed.x *= 0.8f;
 		moveSpeed.z *= 0.8f;
 		
-		if (!Animation.IsPlayAnim())
+		if (!Animation_.IsPlayAnim())
 		{
-			ChangeState(StateCode::StateWaiting);
+			//アニメーションが終了したので待機ステートに変更
+			ChangeState(StateCodeE::StateWaiting);
 			//Particle.SetCreate(false);
 		}
 	}
 	break;
 	case Player::StateDamage:
 	{
-		if (!Animation.IsPlayAnim())
+		if (!Animation_.IsPlayAnim())
 		{
-			ChangeState(StateWaiting);
+			//アニメーションが終了したので待機ステートに変更
+			ChangeState(StateCodeE::StateWaiting);
 			break;
 		}
 
+		//移動を緩める
 		moveSpeed.x *= 0.8f;
 		moveSpeed.z *= 0.8f;
 	}
 	break;
 	case Player::StateDead:
 	{
+		//死亡。移動を止める.
 		moveSpeed = D3DXVECTOR3(0, 0, 0);
 	}
 	break;
+
 	default:
 		break;
 	}
 
-	CharacterController.SetMoveSpeed(moveSpeed);
-	CharacterController.Update();
+	//ムーブスピードを設定して更新
+	CharacterController_.SetMoveSpeed(moveSpeed);
+	CharacterController_.Update();
 
-	transform.Position = CharacterController.GetPosition();
+	//計算終了後のポジションを受け取る
+	Transform_.Position_ = CharacterController_.GetPosition();
 
+	//アニメーションの更新
 	AnimationControl();
 
-	animEvent.Update();
+	//アニメーションイベントの更新
+	AnimationEvent_.Update();
 
-	if (State != StateDead && State != StateDamage)
+	//死んでいる又はダメージを受けている状態でなければ
+	//体力回復時間を更新する
+	if (State_ != StateDead && State_ != StateDamage)
 	{
-		itime += Time().DeltaTime();
+		RecoveryLT_ += Time().DeltaTime();
 	}
-	if (itime >= 3)
+	//攻撃を回避してから3秒経過で回復し始め
+	if (RecoveryLT_ >= 3)
 	{
-		if (PP.MaxHp > PP.NowHp)
+		//体力が減っていれば
+		if (Parameter_.MaxHp_ > Parameter_.NowHp_)
 		{
+			//改造の余地あり
+			//2フレームに一回回復
 			static bool flg = true;
 			if (flg)
 			{
-				PP.NowHp++;
+				Parameter_.NowHp_++;
 			}
+
 			flg = !flg;
 		}
 	}
 
+	//ダメージ処理の更新
 	Damage();
 
-	transform.Update();
-	Model.Update();
-	LWeaponTransform.Update();
-	LWeaponModel.Update();
-	RWeaponTransform.Update();
-	RWeaponModel.Update();
+	//トランスフォームの更新
+	Transform_.Update();
+	//モデルレンダーの更新
+	ModelRender_.Update();
+
+	//左手武器の更新
+	WeaponTransformL_.Update();
+	WeaponModelRenderL_.Update();
+
+	//右手武器の更新
+	WeaponTransformR_.Update();
+	WeaponModelRenderR_.Update();
 	
 	//ParticlePos = D3DXVECTOR3(mParticle->m[3][0], mParticle->m[3][1], mParticle->m[3][2]);
 	//Particle.Update();
 
-	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + transform.Position);
-	Shadow().SetLightTarget(transform.Position);
+	//シャドウマップの更新
+	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + Transform_.Position_);
+	Shadow().SetLightTarget(Transform_.Position_);
+
 }
 
+/**
+ * 描画.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void Player::Render()
 {
-	Model.Render();
-	LWeaponModel.Render();
-	RWeaponModel.Render();
+	//プレイヤーの描画
+	ModelRender_.Render();
+
+	//武器の描画
+	WeaponModelRenderL_.Render();
+	WeaponModelRenderR_.Render();
+
 	//Particle.Render();
+
 }
 
+/**
+ * 解放.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void Player::Release()
 {
-	Model.Release();
+	ModelRender_.Release();
 }
 
+/**
+ * ダメージ処理.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void Player::Damage()
 {
-	if (State == StateDead)
+	if (State_ == StateDead)
 	{
 		//死んでる...
 		return;
 	}
-	float offset = Radius + Height * 0.5f;
+
+	float offset = Radius_ + Height_ * 0.5f;
 	D3DXVECTOR3 centerPos;
-	centerPos = transform.Position;
+	centerPos = Transform_.Position_;
 	centerPos.y += offset;
 
 	btTransform trans;
 	trans.setOrigin(btVector3(centerPos.x, centerPos.y, centerPos.z));
-	collisionObject->setWorldTransform(trans);
+	CollisionObject_->setWorldTransform(trans);
 
 	//当たっているコリジョンを検出
 	const CollisionWorld::Collision* dmgCol = g_CollisionWorld->FindOverlappedDamageCollision(
-		CollisionWorld::enDamageToPlayer,
-		collisionObject.get()
+		CollisionWorld::DamageToPlayer,
+		CollisionObject_.get()
 	);
 
-	if (!dmgCol) {
+	//当たっていない
+	if (!dmgCol) 
+	{
 		centerPos.y += offset;
 		trans.setOrigin(btVector3(centerPos.x, centerPos.y, centerPos.z));
-		collisionObject->setWorldTransform(trans);
+		CollisionObject_->setWorldTransform(trans);
 		const CollisionWorld::Collision* dmgCol = g_CollisionWorld->FindOverlappedDamageCollision(
-			CollisionWorld::enDamageToPlayer,
-			collisionObject.get()
+			CollisionWorld::DamageToPlayer,
+			CollisionObject_.get()
 		);
+
 	}
-	if (PP.HitTime <= LocalTime)
+
+	//無敵状態でなければ
+	if (Parameter_.InvincibleTime_ <= InvincibleLT_)
 	{
-		if (dmgCol != NULL && State != StateDamage) {
+		//コリジョンが反応していて。攻撃を受けていなければ。
+		if (dmgCol != NULL && State_ != StateDamage)
+		{
 			//ダメージを食らっている。
-			PP.NowHp -= dmgCol->Damage;
-			itime = 0;
-			if (PP.NowHp <= 0) {
+			Parameter_.NowHp_ -= dmgCol->Damage_;
+			RecoveryLT_ = 0;
+			
+			if (Parameter_.NowHp_ <= 0)
+			{
 				//死亡。
 				ChangeState(StateDead);
 			}
@@ -327,76 +446,117 @@ void Player::Damage()
 			{
 				ChangeState(StateDamage);
 			}
+
 		}
-		LocalTime = 0;
+
+		InvincibleLT_ = 0;
 	}
-	else if(State != StateDamage)
+	else if(State_ != StateDamage)
 	{
-		LocalTime += Time().DeltaTime();
+		//ダメージを受けていないので無敵時間を更新
+		InvincibleLT_ += Time().DeltaTime();
 	}
+
 }
 
+/**
+ * プレイヤーパラメータの更新.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void Player::ParameterUpdate()
 {
-	if (PP.Experience >= PP.NextLevelExperience)
+
+	//取得経験値が必要経験値を超えていたら
+	if (Parameter_.Experience_ >= Parameter_.NextLevelExperience_)
 	{
-		PP.Experience -= PP.NextLevelExperience;
+		//超えたので経験値をマイナス
+		Parameter_.Experience_ -= Parameter_.NextLevelExperience_;
 
-		int a = PP.NextLevelExperience * 1.1;
-		int b = PP.Level * 15;
-
-		PP.NextLevelExperience = (a + b) / 2;
+		//必要経験値量を更新
+		int a = Parameter_.NextLevelExperience_ * 1.1;
+		int b = Parameter_.Level_ * 15;
+		Parameter_.NextLevelExperience_ = (a + b) / 2;
 
 		//意味ない
-		PP.Attack *= 1.1;
+		Parameter_.Attack_ *= 1.1;
 
 		//Hp上昇
-		float idx = PP.MaxHp * 1.1 - PP.MaxHp;
-		PP.MaxHp += idx;
-		PP.NowHp += idx;
-
-		PP.Level++;
+		float idx = Parameter_.MaxHp_ * 1.1 - Parameter_.MaxHp_;
+		Parameter_.MaxHp_ += idx;
+		Parameter_.NowHp_ += idx;
+		
+		//レベルアップ
+		Parameter_.Level_++;
 	}
+
 }
 
-void Player::ChangeState(StateCode _NextState)
+/**
+ * ステートの変更.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ *
+ * @param nextState State of the next.
+ */
+void Player::ChangeState(StateCodeE nextState)
 {
-	State = _NextState;
+	State_ = nextState;
 }
 
+/**
+ * アニメーション更新.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void Player::AnimationControl()
 {
 	float time = 1.0f / 60.0f;
-	switch (State)
+	switch (State_)
 	{
 	case StateWaiting:
-		PlayAnimation(AnimationCode::AnimationWaiting, 0.1f);
+		PlayAnimation(AnimationCodeE::AnimationWaiting, 0.1f);
 		break;
 	case StateWalk:
-		PlayAnimation(AnimationCode::AnimationWalk, 0.1f);
+		PlayAnimation(AnimationCodeE::AnimationWalk, 0.1f);
 		break;
 	case StateRun:
-		PlayAnimation(AnimationCode::AnimationRun, 0.1f);
+		PlayAnimation(AnimationCodeE::AnimationRun, 0.1f);
 		time = 1.0f / 60;
 		break;
 	case StateAttack:
-		PlayAnimation(AnimationCode::AnimationAttack, 0.1f);
+		PlayAnimation(AnimationCodeE::AnimationAttack, 0.1f);
 		break;
 	case StateDamage:
-		PlayAnimation(AnimationCode::AnimationHit, 0.1f);
+		PlayAnimation(AnimationCodeE::AnimationHit, 0.1f);
 		break;
 	case StateDead:
-		PlayAnimation(AnimationCode::AnimationDead, 0.1f);
+		PlayAnimation(AnimationCodeE::AnimationDead, 0.1f);
 	default:
 		break;
 	}
-	Animation.Update(time);
+
+	//アニメーションクラスの更新
+	Animation_.Update(time);
+
 }
 
-void Player::PlayAnimation(AnimationCode _AnimCode, float interpolateTime)
+/**
+ * アニメーションを変更.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ *
+ * @param animCode		  The animation code.
+ * @param interpolateTime The interpolate time.
+ */
+void Player::PlayAnimation(AnimationCodeE animCode, float interpolateTime)
 {
-	if (Animation.GetNowAnimationNo() != _AnimCode)
+	if (Animation_.GetNowAnimationNo() != animCode)
 	{
-		Animation.PlayAnimation(_AnimCode, interpolateTime);
+		Animation_.PlayAnimation(animCode, interpolateTime);
 	}
 }

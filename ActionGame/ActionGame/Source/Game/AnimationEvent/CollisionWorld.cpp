@@ -1,116 +1,226 @@
+/**
+ * @file Source\Game\AnimationEvent\CollisionWorld.cpp
+ *
+ * コリジョンワールドクラスの実装.
+ */
 #include"stdafx.h"
 #include"CollisionWorld.h"
 
-
+//無名空間
 namespace 
 {
+
+	/**
+	 * コールバック構造体.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/11
+	 */
 	struct MyContactResultCallback : public btCollisionWorld::ContactResultCallback
 	{
 	public:
-		//コリジョンオブジェクト
-		btCollisionObject* queryCollisionObject = nullptr;
-		CollisionWorld::Collision* hitObject = nullptr; //衝突しているコリジョンデータ
-		float distSq = FLT_MAX; //?
-		CollisionWorld::EnAttr queryAttr = CollisionWorld::enDamageToEnemy; //調べるコリジョン属性
 
-	public:
-		virtual btScalar addSingleResult(btManifoldPoint& _cp, const btCollisionObjectWrapper* _colObj0Wrap, int _partId0, int _index0, const btCollisionObjectWrapper* _colObj1Wrap, int _partId1, int _index1)override
+		/**
+		 * Adds a single result.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/11
+		 *
+		 * @param [in,out] cp		   The cp.
+		 * @param 		   colObj0Wrap The col object 0 wrap.
+		 * @param 		   partId0	   The part identifier 0.
+		 * @param 		   index0	   The index 0.
+		 * @param 		   colObj1Wrap The col object 1 wrap.
+		 * @param 		   partId1	   The first part identifier.
+		 * @param 		   index1	   The first index.
+		 *
+		 * @return A btScalar.
+		 */
+		virtual btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1)override
 		{
+
 			//二つのコリジョンデータからポジションを求める
-			const D3DXVECTOR3* vCol0Pos = (D3DXVECTOR3*)(&_colObj0Wrap->getWorldTransform().getOrigin());
-			const D3DXVECTOR3* vCol1Pos = (D3DXVECTOR3*)(&_colObj1Wrap->getWorldTransform().getOrigin());
+			const D3DXVECTOR3* vCol0Pos = (D3DXVECTOR3*)(&colObj0Wrap->getWorldTransform().getOrigin());
+			const D3DXVECTOR3* vCol1Pos = (D3DXVECTOR3*)(&colObj1Wrap->getWorldTransform().getOrigin());
 		
 			//長さを求める
 			D3DXVECTOR3 vDist;
 			vDist = *vCol0Pos - *vCol1Pos;
 			float distTmpSq = D3DXVec3Length(&vDist);
 
+			//コリジョン作成
 			CollisionWorld::Collision* hitObjectTmp;
 
-			if (distTmpSq < distSq)
+			if (distTmpSq < DistSq_)
 			{
 				//こちらのほうが近い
-				if (queryCollisionObject == _colObj0Wrap->getCollisionObject())
+				if (QueryCollisionObject_ == colObj0Wrap->getCollisionObject())
 				{
-					hitObjectTmp = (CollisionWorld::Collision*)_colObj1Wrap->getCollisionObject()->getUserPointer();
+					hitObjectTmp = (CollisionWorld::Collision*)colObj1Wrap->getCollisionObject()->getUserPointer();
 				}
 				else
 				{
-					hitObjectTmp = (CollisionWorld::Collision*)_colObj0Wrap->getCollisionObject()->getUserPointer();
+					hitObjectTmp = (CollisionWorld::Collision*)colObj0Wrap->getCollisionObject()->getUserPointer();
 				}
-				if (hitObjectTmp->Attr == queryAttr)
+
+				if (hitObjectTmp->Attr_ == QueryAttr_)
 				{
-					distSq = distTmpSq;
-					hitObject = hitObjectTmp;
+					DistSq_ = distTmpSq;
+					HitObject_ = hitObjectTmp;
 				}
+
 			}
+
 			return 0.0f;
 		}
-	};
-}
 
+	public:
+
+		/** コリジョンオブジェクト. */
+		btCollisionObject* QueryCollisionObject_ = nullptr;
+		/** 衝突しているコリジョンデータ. */
+		CollisionWorld::Collision* HitObject_ = nullptr;
+		/** ?。FLT_MAXは単精度の浮動小数点が取りうる最大の値 */
+		float DistSq_ = FLT_MAX;
+		/** 調べるコリジョン属性. */
+		CollisionWorld::AttributeE QueryAttr_ = CollisionWorld::DamageToEnemy;
+
+	};
+
+}// namespace
+
+/**
+ * コンストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 CollisionWorld::CollisionWorld()
 {
 }
 
+/**
+ * デストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 CollisionWorld::~CollisionWorld()
 {
 }
 
+/**
+ * 初期化.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 void CollisionWorld::Start()
 {
-	m_CollisionConfig.reset(new btDefaultCollisionConfiguration);
-	m_CollisionDispatcher.reset(new btCollisionDispatcher(m_CollisionConfig.get()));
-	m_BroadphaseInterface.reset(new btDbvtBroadphase());
-	m_CollisionWorld.reset(new btCollisionWorld(m_CollisionDispatcher.get(), m_BroadphaseInterface.get(), m_CollisionConfig.get()));
+	//コンフィグの初期化
+	CollisionConfig_.reset(new btDefaultCollisionConfiguration);
+	//衝突解決処理の初期化
+	CollisionDispatcher_.reset(new btCollisionDispatcher(CollisionConfig_.get()));
+	//ブロードフェーズの初期化
+	BroadphaseInterface_.reset(new btDbvtBroadphase());
+
+	//コリジョンワールドの初期化
+	CollisionWorld_.reset(new btCollisionWorld(CollisionDispatcher_.get(), BroadphaseInterface_.get(), CollisionConfig_.get()));
+
 }
 
+/**
+ * 更新.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 void CollisionWorld::Update()
 {
-	list<CollisionPtr>::iterator it = m_Collisions.begin();
-	while (it != m_Collisions.end())
+	
+	//イテレータ作成
+	auto it = CollisionList_.begin();
+
+	while (it != CollisionList_.end())
 	{
-		(*it)->Time += Time().DeltaTime();
-		if ((*it)->Time > (*it)->Life)
+		//時間を加算
+		(*it)->Time_ += Time().DeltaTime();
+
+		//寿命が尽きていないか
+		if ((*it)->Time_ > (*it)->Life_)
 		{
 			//死亡
-			m_CollisionWorld->removeCollisionObject((*it)->CollisionObject.get());
-			it = m_Collisions.erase(it);
+			CollisionWorld_->removeCollisionObject((*it)->CollisionObject_.get());
+			it = CollisionList_.erase(it);
 		}
 		else
 		{
 			it++;
 		}
 	}
+
 	//有効なら更新
-	m_CollisionWorld->updateAabbs();
+	CollisionWorld_->updateAabbs();
+
 }
 
-const CollisionWorld::Collision* CollisionWorld::FindOverlappedDamageCollision(EnAttr _Attr, const D3DXVECTOR3 & _Pos, float _Radius) const
+/**
+* 重なっているダメージコリジョンを取得する.
+* 属性と位置と大きさから算出.
+*
+* @author HiramatsuTadashi
+* @date 2017/01/11
+*
+* @param attr   属性.
+* @param pos    位置.
+* @param radius 大きさ.
+*
+* @return Null if it fails, else the found overlapped damage collision.
+*/
+const CollisionWorld::Collision* CollisionWorld::FindOverlappedDamageCollision(AttributeE attr, const D3DXVECTOR3 & pos, float radius) const
 {
-	for (auto& col : m_Collisions)
+	for (auto& col : CollisionList_)
 	{
-		if (col->Attr == _Attr)
+		//属性が同じ
+		if (col->Attr_ == attr)
 		{
-			float t = col->Radius + _Radius;
+			float t = col->Radius_ + radius;
+
 			D3DXVECTOR3 diff;
-			diff = col->Position - _Pos;
+			diff = col->Position_ - pos;
+			
 			if (D3DXVec3LengthSq(&diff) < t * t)
 			{
 				//衝突
 				return col.get();
 			}
+
 		}
+
 	}
+
 	return nullptr;
 }
-
-const CollisionWorld::Collision* CollisionWorld::FindOverlappedDamageCollision(EnAttr _Attr, btCollisionObject * _ColObject) const
+/**
+* 重なっているダメージコリジョンを取得する.
+* 属性とコリジョンオブジェクトから算出.
+*
+* @author HiramatsuTadashi
+* @date 2017/01/11
+*
+* @param 		   attr		 属性.
+* @param [in,out] colObject コリジョンオブジェクト.
+*
+* @return Null if it fails, else the found overlapped damage collision.
+*/
+const CollisionWorld::Collision* CollisionWorld::FindOverlappedDamageCollision(AttributeE attr, btCollisionObject * colObject) const
 {
 	MyContactResultCallback callback;
-	callback.queryCollisionObject = _ColObject;
-	callback.queryAttr = _Attr;
-	m_CollisionWorld->contactTest(_ColObject, callback);
 
-	return callback.hitObject;
+	callback.QueryCollisionObject_ = colObject;
+	callback.QueryAttr_ = attr;
+	
+	CollisionWorld_->contactTest(colObject, callback);
+
+	return callback.HitObject_;
 }

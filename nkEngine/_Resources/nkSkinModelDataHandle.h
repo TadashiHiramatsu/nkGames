@@ -7,8 +7,8 @@
 
 namespace nkEngine
 {
-	/** shared_ptr<CSkinModelData>を書きやすく短縮. */
-	typedef shared_ptr<CSkinModelData> SkinModelDataPtrT;
+	/** shared_ptr<SkinModelData>を書きやすく短縮. */
+	typedef shared_ptr<SkinModelData> SkinModelDataPtrT;
 
 	/**
 	 * スキンモデルのハンドルクラス.
@@ -44,7 +44,7 @@ namespace nkEngine
 		 *
 		 * @return	Null if it fails, else the body.
 		 */
-		CSkinModelData* GetBody()
+		SkinModelData* GetBody()
 		{
 			//クローン作成していたら
 			if (SkinModelData_)
@@ -64,7 +64,7 @@ namespace nkEngine
 		 * @param [in,out]	anim   	アニメーション.
 		 * @param 		  	isClone	クローンフラグ.
 		 */
-		void Init(const SkinModelDataPtrT& skin, CAnimation* anim, bool isClone);
+		void Init(const SkinModelDataPtrT& skin, Animation* anim, bool isClone);
 	
 	private:
 
@@ -75,7 +75,7 @@ namespace nkEngine
 		 * アニメーションがある場合 
 		 * クローン作成しないと同じ動きをしてしまう.
 		 */
-		unique_ptr<CSkinModelData> SkinModelData_;
+		unique_ptr<SkinModelData> SkinModelData_;
 
 	};
 

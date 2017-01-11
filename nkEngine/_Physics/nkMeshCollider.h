@@ -6,6 +6,7 @@
 #pragma once
 
 #include"nkCollider.h"
+#include"../_Graphics/_ModelRender/nkModelRender.h"
 
 namespace nkEngine
 {
@@ -16,7 +17,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class CMeshCollider : public ICollider
+	class MeshCollider : public ICollider
 	{
 	public:
 
@@ -26,7 +27,7 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		CMeshCollider();
+		MeshCollider();
 
 		/**
 		 * デストラクタ.
@@ -34,10 +35,10 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~CMeshCollider();
+		~MeshCollider();
 
 		/**
-		 * CModelRenderからMeshコライダーを生成.
+		 * ModelRenderからMeshコライダーを生成.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
@@ -45,7 +46,7 @@ namespace nkEngine
 		 * @param [in,out]	model			スキンモデル.
 		 * @param 		  	offsetMatrix	オフセット行列.
 		 */
-		void Create(CModelRender* model, const D3DXMATRIX* offsetMatrix);
+		void Create(ModelRender* model, const D3DXMATRIX* offsetMatrix);
 
 		/**
 		 * ボディを取得.

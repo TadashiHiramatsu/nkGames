@@ -1,155 +1,357 @@
-//スキンモデルデータ
+/**
+ * @file _Graphics\_ModelRender\nkSkinModelData.h
+ *
+ * スキンモデルデータクラスの定義.
+ */
 #pragma once
 
 #include"..\nkVertexBuffer.h"
 
 namespace nkEngine
 {
-	struct D3DXFRAME_DERIVED : public D3DXFRAME {
-		D3DXMATRIXA16	CombinedTransformationMatrix;	//合成済み行列
-	};
 
-	struct D3DXMESHCONTAINER_DERIVED : public D3DXMESHCONTAINER {
-		LPDIRECT3DTEXTURE9* ppTextures; //テクスチャ
-		LPD3DXMESH pOrigMesh; //オリジナルメッシュ
-		LPD3DXATTRIBUTERANGE pAttributeTable;
-		DWORD NumAttributeGroups;
-		DWORD NumInfl;
-		LPD3DXBUFFER pBoneCombinationBuf;
-		D3DXMATRIX** ppBoneMatrixPtrs;
-		D3DXMATRIX* pBoneOffsetMatrices;
-		DWORD NumPaletteEntries;
-		bool UseSoftwareVP;
-		DWORD iAttributeSW;
-	};
-
-	//アニメーションクラス
-	class CAnimation;
-
-	//スキンモデルデータ
-	class CSkinModelData
+	/**
+	 * A 3D xframe derived.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	struct D3DXFRAME_DERIVED : public D3DXFRAME 
 	{
 	public:
-		//コンストラクタ
-		CSkinModelData();
 
-		//デストラクタ
-		~CSkinModelData();
+		/** 合成済み行列. */
+		D3DXMATRIXA16 CombinedTransformationMatrix_;
 
-		//モデルデータをロード
-		//param[in] ファイルパス
-		//param[out] アニメーション付きモデルデータの場合、アニメーションクラスも構築されます。
-		void LoadModelData(const char* filepath, CAnimation* anim);
+	};
 
-		//インスタンシング描画を行うためのデータを作成する
-		//param[in] インスタンスの数
-		//param[in] インスタンシング描画用の頂点ストリーム１に流し込む頂点バッファの頂点レイアウト
+	/**
+	 * A 3D xmeshcontainer derived.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	struct D3DXMESHCONTAINER_DERIVED : public D3DXMESHCONTAINER
+	{
+	public:
+
+		/** テクスチャ. */
+		LPDIRECT3DTEXTURE9* Texture_;
+		/** オリジナルメッシュ. */
+		LPD3DXMESH OrigMesh_;
+		/** 属性テーブル. */
+		LPD3DXATTRIBUTERANGE AttributeTable_;
+		/** 属性テーブルグループ. */
+		DWORD NumAttributeGroup_;
+		/** インフレーション？. */
+		DWORD NumInfl_;
+		/** 前回のボーンコンビネーション. */
+		LPD3DXBUFFER BoneCombinationBuf_;
+		/** ボーン行列ポインタ. */
+		D3DXMATRIX** BoneMatrixPtrs_;
+		/** ボーンオフセット行列. */
+		D3DXMATRIX* BoneOffsetMatrix_;
+		/** Number of palette entries. */
+		DWORD NumPaletteEntries;
+		/** True to use software vp. */
+		bool UseSoftwareVP;
+		/** Zero-based index of the attribute software. */
+		DWORD iAttributeSW;
+
+	};
+
+	class Animation;
+
+	/**
+	 * スキンモデルデータ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	class SkinModelData
+	{
+	public:
+
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		SkinModelData();
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		~SkinModelData();
+
+		/**
+		 * モデルデータをロード.
+		 * アニメーション付きモデルの場合アニメーションクラスも構築.
+		 * アニメーションなしの場合nullでOK.
+		 * "Asset/Model/" ファイル内のXファイルモデルをロード
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param 		   filepath ファイルパス、"Asset/Model/"を省いたファイルパス.
+		 * @param [in,out] anim	    アニメーションクラスポインタ、null.
+		 */
+		void LoadModelData(const char* filepath, Animation* anim);
+
+		/**
+		 * インスタンシング描画を行うためのデータを作成する.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param 		   numInstance   インスタンスの数.
+		 * @param [in,out] vertexElement インスタンシング描画用の頂点ストリーム１に流し込む頂点バッファの頂点レイアウト.
+		 */
 		void CreateInstancingRenderData(int numInstance, D3DVERTEXELEMENT9* vertexElement);
 
-		//モデルデータのクローンを作成
-		//param[in] モデルデータ
-		//param[in] アニメーション付きモデルデータの場合、アニメーションクラスも構築されます。
-		void CloneModelData(const CSkinModelData& ModelData, CAnimation* anim);
+		/**
+		 * モデルデータのクローンを作成.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param 		   modelData モデルデータ.
+		 * @param [in,out] anim		 アニメーション付きモデルデータの場合、アニメーションクラスも構築されます.
+		 */
+		void CloneModelData(const SkinModelData& modelData, Animation* anim);
 
-		//リリース
+		/**
+		 * 解放.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		void Release();
 
-		//スケルトン削除
+		/**
+		 * スケルトン削除.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param frame The frame.
+		 */
 		void DeleteSkeleton(LPD3DXFRAME frame);
 
-		//フレームレートの取得
-		//return フレームレート
+		/**
+		 * フレームレートの取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return Null if it fails, else the frame root.
+		 */
 		D3DXFRAME* GetFrameRoot()
 		{
-			return m_FrameRoot;
+			return FrameRoot_;
 		}
 
-		//オリジナルメッシュを取得
+		/**
+		 * オリジナルメッシュを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param frame The frame.
+		 *
+		 * @return The organisation mesh.
+		 */
 		LPD3DXMESH GetOrgMesh(LPD3DXFRAME frame) const;
 
-		//先頭のメッシュを取得
+		/**
+		 * 先頭のメッシュを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return The organisation mesh first.
+		 */
 		LPD3DXMESH GetOrgMeshFirst() const;
 
-
-		//テスト 意味不
-		//param[in] フレーム
-		//param[in] アニメーションコントローラ
+		/**
+		 * テスト 意味不.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param [in,out] frame  フレーム.
+		 * @param [in,out] aniCon アニメーションコントローラ.
+		 */
 		void SetupOutputAnimationRegist(D3DXFRAME* frame, ID3DXAnimationController* aniCon);
 
-		//ボーン行列を更新
-		//param[in] ワールド行列
+		/**
+		 * ボーン行列を更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param matWorld ワールド行列.
+		 */
 		void UpdateBoneMatrix(const D3DXMATRIX& matWorld);
 
-		void UpdateFrameMatrices(LPD3DXFRAME pFrameBase, const D3DXMATRIX* pParentMatrix);
+		/**
+		 * 各フレームの行列を更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param frameBase    The frame base.
+		 * @param parentMatrix The parent matrix.
+		 */
+		void UpdateFrameMatrices(LPD3DXFRAME frameBase, const D3DXMATRIX* parentMatrix);
 
-		//インスタンシング描画用のデータを更新
-		//param[in] 頂点バッファにコピーするデータ
+		/**
+		 * インスタンシング描画用のデータを更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param data 頂点バッファにコピーするデータ.
+		 */
 		void UpdateInstancingRenderData(const void* data)
 		{
-			m_instanceVertexBuffer.Update(data);
+			InstanceVertexBuffer_.Update(data);
 		}
 
-		//インスタンシング描画用のときに使用する頂点定義を取得
-		//return 頂点定義
-		IDirect3DVertexDeclaration9* GetVertexDeclForInstancingRender()const
+		/**
+		 * インスタンシング描画用のときに使用する頂点定義を取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return Null if it fails, else the vertex declaration for instancing render.
+		 */
+		IDirect3DVertexDeclaration9* GetVertexDeclForInstancingRender() const
 		{
-			return m_vertexDeclForInstancingRender;
+			return VertexDeclForInstancingRender_;
 		}
 
-		//インスタンシング描画用の頂点バッファを取得
-		//return ストリーム１に流す頂点バッファ
-		const CVertexBuffer& GetInstancingVertexBuffer() const
+		/**
+		 * インスタンシング描画用の頂点バッファを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return ストリーム１に流す頂点バッファ.
+		 */
+		const VertexBuffer& GetInstancingVertexBuffer() const
 		{
-			return(const_cast<CSkinModelData&>(*this)).GetInstancingVertexBuffer();
-		}
-		//インスタンシング描画用の頂点バッファを取得
-		//return 頂点バッファ
-		CVertexBuffer& GetInstancingVertexBuffer()
-		{
-			return m_instanceVertexBuffer;
+			return(const_cast<SkinModelData&>(*this)).GetInstancingVertexBuffer();
 		}
 
-		//インスタンスの数を取得
-		//return インスタンス数
+		/**
+		 * インスタンシング描画用の頂点バッファを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return 頂点バッファ.
+		 */
+		VertexBuffer& GetInstancingVertexBuffer()
+		{
+			return InstanceVertexBuffer_;
+		}
+
+		/**
+		 * インスタンスの数を取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return The number instance.
+		 */
 		int GetNumInstance()
 		{
-			return m_numInstance;
+			return numInstance_;
 		}
 
-		//頂点バッファのストライドを取得
+		/**
+		 * 頂点バッファのストライドを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return The vertex buffer stride.
+		 */
 		int GetVertexBufferStride() const
 		{
-			return m_vertexBufferStride;
+			return VertexBufferStride_;
 		}
 
 	private:
 
-		//スケルトンのクローンを作成
-		//param[out] クローン先のスケルトンの格納先
-		//param[in] クローン元のスケルトン
+		/**
+		 * スケルトンのクローンを作成.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param [in,out] dstFrame クローン先のスケルトンの格納先.
+		 * @param [in,out] srcFrame クローン元のスケルトン.
+		 */
 		void CloneSkeleton(LPD3DXFRAME& dstFrame, D3DXFRAME* srcFrame);
 
-		//スケルトンのクローンを削除
-		//param[in]　削除するスケルトン
+		/**
+		 * スケルトンのクローンを削除.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param [in,out] frame 削除するスケルトン.
+		 */
 		void DeleteCloneSkeleton(D3DXFRAME* frame);
 
-		//インスタンシング描画用のデータを作成
-		//param[in] フレーム
-		//param[in] インスタンスの数
-		//param[in] インスタンシング描画用の頂点ストリーム1に流し込む頂点バッファの頂点レイアウト
-		//return trueが帰ってきたら再帰処理終了
+		/**
+		 * インスタンシング描画用のデータを作成.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param [in,out] frame		 フレーム.
+		 * @param 		   numInstance   インスタンスの数.
+		 * @param [in,out] vertexElement インスタンシング描画用の頂点ストリーム1に流し込む頂点バッファの頂点レイアウト.
+		 *
+		 * @return trueが帰ってきたら再帰処理終了.
+		 */
 		bool CreateInstancingRenderData(D3DXFRAME* frame, int numInstance, D3DVERTEXELEMENT9* vertexElement);
 
-		//謎
-		HRESULT SetupBoneMatrixPointers(D3DXFRAME* pFrame, D3DXFRAME* pRootFrame);
+		/**
+		 * 謎.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param [in,out] frame	  If non-null, the frame.
+		 * @param [in,out] rootFrame If non-null, the root frame.
+		 *
+		 * @return A hResult.
+		 */
+		HRESULT SetupBoneMatrixPointers(D3DXFRAME* frame, D3DXFRAME* rootFrame);
 
 	private:
-		D3DXFRAME* m_FrameRoot; //フレームルート
-		ID3DXAnimationController* m_AnimController; //アニメーションコントローラー
-		bool m_isClone; //クローン
-		CVertexBuffer m_instanceVertexBuffer; //インスタンシング描画用の頂点バッファのリスト
-		IDirect3DVertexDeclaration9* m_vertexDeclForInstancingRender; //インスタンシング描画用の頂点定義
-		int m_numInstance; //インスタンスの数
-		int m_vertexBufferStride; //頂点ストライド
+
+		/** フレームルート. */
+		D3DXFRAME* FrameRoot_;
+		/** アニメーションコントローラ. */
+		ID3DXAnimationController* D3DAnimController_;
+		/** クローンフラグ. */
+		bool isClone_;
+		/** インスタンシング描画用の頂点バッファのリスト. */
+		VertexBuffer InstanceVertexBuffer_;
+		/** インスタンシング描画用の頂点定義. */
+		IDirect3DVertexDeclaration9* VertexDeclForInstancingRender_;
+		/** インスタンスの数. */
+		int numInstance_;
+		/** 頂点ストライド. */
+		int VertexBufferStride_;
 	};
 }

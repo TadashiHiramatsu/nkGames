@@ -1,15 +1,14 @@
 /**
  * @file	Source\Game\GUI\LifeGage.h
  *
- * Declares the life gage class.
+ * プレイヤーのライフを描画するクラスの定義.
  */
 #pragma once
 
 #include"..\Player\Player.h"
 
-
 /**
- * A life gage.
+ * ライフゲージクラス.
  *
  * @author	HiramatsuTadashi
  * @date	2016/12/30
@@ -19,7 +18,7 @@ class LifeGage : public IGameObject
 public:
 
 	/**
-	 * Default constructor.
+	 * コンストラクタ.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/30
@@ -27,7 +26,7 @@ public:
 	LifeGage();
 
 	/**
-	 * Destructor.
+	 * デストラクタ.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/30
@@ -35,7 +34,7 @@ public:
 	~LifeGage();
 
 	/**
-	 * Starts this object.
+	 * 初期化.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/30
@@ -43,7 +42,7 @@ public:
 	void Start()override;
 
 	/**
-	 * Updates this object.
+	 * 更新.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/30
@@ -51,7 +50,7 @@ public:
 	void Update()override;
 
 	/**
-	 * Renders this object.
+	 * 描画.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/30
@@ -59,29 +58,37 @@ public:
 	void Render()override;
 
 	/**
-	 * Sets a player.
+	 * プレイヤーのポインタを設定.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/30
 	 *
-	 * @param [in]	_p	If non-null, the p.
+	 * @param [in]	p	If non-null, the p.
 	 */
-	void SetPlayer(Player* _p)
+	void SetPlayer(Player* p)
 	{
-		player = _p;
+		Player_ = p;
 	}
 
 private:
 
-	RectTransform LifeFrameTransform; ///フレーム用
-	Image LifeFrameImage; ///フレームのImage
-	RectTransform LifeTransform; ///本体用
-	Image LifeImage; ///LifeのImage
+	/** フレーム用. */
+	RectTransform LifeFrameTransform_;
+	/** フレームのImage. */
+	Image LifeFrameImage_;
+	/** 本体用. */
+	RectTransform LifeTransform_;
+	/** LifeのImage. */
+	Image LifeImage_;
 
-	TestFont Life;
+	/** ライフの数値を表示するフォント. */
+	TestFont Life_;
 
-	Player* player; ///プレイヤーのポインタ
-	
-	int* MaxLife;
-	int* NowLife;
+	/** プレイヤーのポインタ. */
+	Player* Player_;
+	/** 現在の体力の最大値. */
+	int* MaxLife_;
+	/** 現在の体力の値. */
+	int* NowLife_;
+
 };

@@ -1,7 +1,7 @@
 /**
  * @file	_DataLoad\CSVData.h
  *
- * Declares the CSV data class.
+ * CSVファイルロードクラスの定義.
  */
 #pragma once
 
@@ -15,7 +15,7 @@ namespace nkEngine
 {
 
 	/**
-	 * A CSV data.
+	 * CSVファイル読み込みクラス.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/04
@@ -25,31 +25,56 @@ namespace nkEngine
 	public:
 
 		/**
-		 * Default constructor.
+		 * 読み込み.
+		 * "Asset/Data/"フォルダ内のCSVファイルを読み込む.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/04
+		 *
+		 * @param [in]	  	filePath	"Asset/Data/"を省いたファイルパス.
+		 * @param [in,out]	table   	この引数にデータが返ってくる.
 		 */
-		CSVData();
+		static void Load(const char* filePath, vector<vector<string>>& table)
+		{
+			//ファイルパスの作成
+			char* baseDir = "Asset/Data/";
+			char fileP[64];
+			strcpy(fileP, baseDir);
+			strcat(fileP, filePath);
 
-		/**
-		 * Destructor.
-		 *
-		 * @author	HiramatsuTadashi
-		 * @date	2017/01/04
-		 */
-		~CSVData();
+			//ファイルを開く
+			fstream file(fileP);
 
-		/**
-		 * Loads.
-		 *
-		 * @author	HiramatsuTadashi
-		 * @date	2017/01/04
-		 *
-		 * @param [in]	  	_FilePath	Full pathname of the file.
-		 * @param [in,out]	_Table   	The table.
-		 */
-		void Load(const char* _FilePath, vector<vector<string>>& _Table);
-	private:
+			if (!file.is_open())
+			{
+				//ファイルが開けない
+				NK_ASSERT(false, "ファイルが開けていません");
+			}
+
+			//ファイルを読み込む
+			while (!file.eof())
+			{
+				//一行読み込む
+				string buffer;
+				file >> buffer;
+
+				//ファイルから読み込んだ一行の文字列を","で分けてリストに追加する
+				vector<string> record; //一行分のリスト
+				istringstream streambuffer(buffer); //文字ストリーム
+				string token; //１セル分の文字列
+
+				while (getline(streambuffer, token, ','))
+				{
+					//1セル分の文字列をリストに追加する
+					record.push_back(token);
+				}
+
+				//1行分の文字列を出力引数のリストに追加する
+				table.push_back(record);
+			}
+
+		}
+
 	};
-}
+
+}// namespace nkEngine

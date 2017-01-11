@@ -1,67 +1,116 @@
 /**
  * @file	Source\Game\GUI\ExpGage.cpp
  *
- * Implements the exponent gage class.
+ * 経験値ゲージクラスの実装.
  */
 #include"stdafx.h"
 #include"ExpGage.h"
 
+/**
+ * コンストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 ExpGage::ExpGage()
 {
 }
 
+/**
+ * デストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 ExpGage::~ExpGage()
 {
 }
 
+/**
+ * 初期化.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void ExpGage::Start()
 {
-	ExpFrameImage.Load("Image/ExpFrame.png");
-	ExpFrameImage.SetTransform(&ExpFrameTransform);
-
-	ExpImage.Load("Image/Exp.png");
-	ExpImage.SetTransform(&ExpTransform);
+	//フレームの画像読み込み
+	ExpFrameImage_.Load("Image/ExpFrame.png");
+	//トランスフォームの設定
+	ExpFrameImage_.SetTransform(&ExpFrameTransform_);
+	
+	//本体の画像読み込み
+	ExpImage_.Load("Image/Exp.png");
+	//トランスフォームの設定
+	ExpImage_.SetTransform(&ExpTransform_);
 
 	//親子関係設定
-	ExpTransform.Parent = &ExpFrameTransform;
+	ExpTransform_.Parent_ = &ExpFrameTransform_;
 
-	ExpFrameTransform.Width = 800;
-	ExpFrameTransform.Height = 20;
-	ExpTransform.Width = 750;
-	ExpTransform.Height = 10;
+	//ゲージの大きさを設定
+	ExpFrameTransform_.Width_ = 800;
+	ExpFrameTransform_.Height_ = 20;
+	ExpTransform_.Width_ = 750;
+	ExpTransform_.Height_ = 10;
 
-	ExpFrameTransform.Anchor = RectTransform::AnchorPreset::BottomCenter;
-	ExpFrameTransform.Pivot = D3DXVECTOR2(0.5f, 0);
+	//フレームのアンカーを下中央
+	ExpFrameTransform_.Anchor_ = RectTransform::AnchorPresetE::BottomCenter;
+	ExpFrameTransform_.Pivot_ = D3DXVECTOR2(0.5f, 0);
 
-	ExpTransform.Anchor = RectTransform::AnchorPreset::MiddleLeft;
-	ExpTransform.Pivot = D3DXVECTOR2(0, 0.5f);
-	ExpTransform.Position.x = 25;
+	//本体のアンカーをフレームの左中央
+	ExpTransform_.Anchor_ = RectTransform::AnchorPresetE::MiddleLeft;
+	ExpTransform_.Pivot_ = D3DXVECTOR2(0, 0.5f);
+	//少しずらす
+	ExpTransform_.Position_.x = 25;
 
-	NextExp = &player->GetPlayerParameter().NextLevelExperience;
-	NowExp = &player->GetPlayerParameter().Experience;
+	//経験値のポインタを取得
+	NextExp_ = &Player_->GetParameter().NextLevelExperience_;
+	NowExp_ = &Player_->GetParameter().Experience_;
 
-	Level.Create(20, 20);
+	//レベル表示フォントの作成
+	Level_.Create(20, 20);
+
 }
 
+/**
+ * 更新.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void ExpGage::Update()
 {
-	ExpTransform.Width = min((float)*NowExp / (float)*NextExp,1.0f) * 750;
+	//本体の大きさを計算
+	ExpTransform_.Width_ = min((float)*NowExp_ / (float)*NextExp_,1.0f) * 750;
 
-	ExpFrameTransform.Update();
-	ExpTransform.Update();
+	//トランスフォームの更新
+	ExpFrameTransform_.Update();
+	ExpTransform_.Update();
+
 }
 
+/**
+ * 描画.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void ExpGage::Render()
 {
-	ExpFrameImage.Render();
-	ExpImage.Render();
+	//画像を描画
+	ExpFrameImage_.Render();
+	ExpImage_.Render();
 
+	//レベルのフォントを作成
 	char level[10];
-	sprintf_s(level, "%d", player->GetPlayerParameter().Level);
+	sprintf_s(level, "%d", Player_->GetParameter().Level_);
 
+	//中心地を取得
 	int y = Engine().GetScreenH();
 	int x = Engine().GetScreenW();
 	x /= 2;
 
-	Level.Render(level, D3DXVECTOR2(x - 10,y - 20));
+	//レベルを描画
+	Level_.Render(level, D3DXVECTOR2(x - 10,y - 20));
+
 }

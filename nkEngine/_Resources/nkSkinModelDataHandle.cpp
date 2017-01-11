@@ -40,13 +40,13 @@ namespace nkEngine
 	 * @param [in,out]	anim   	アニメーション.
 	 * @param 		  	isClone	クローンフラグ.
 	 */
-	void SkinModelDataHandle::Init(const SkinModelDataPtrT& skin, CAnimation * anim, bool isClone)
+	void SkinModelDataHandle::Init(const SkinModelDataPtrT& skin, Animation* anim, bool isClone)
 	{
 		OriginSkinModelData_ = skin;
 		if (isClone)
 		{
 			//クローンを作成
-			SkinModelData_.reset(new CSkinModelData);
+			SkinModelData_.reset(new SkinModelData);
 			SkinModelData_->CloneModelData(*skin, anim);
 		}
 	}

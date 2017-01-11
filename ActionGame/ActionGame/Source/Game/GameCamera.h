@@ -1,14 +1,14 @@
 /**
  * @file	Source\Game\GameCamera.h
  *
- * Declares the game camera class.
+ * ゲームカメラクラスの定義.
  */
 #pragma once
 
 #include"Player\Player.h"
 
 /**
- * A game camera.
+ * ゲームカメラクラス.
  *
  * @author	HiramatsuTadashi
  * @date	2016/12/31
@@ -18,7 +18,7 @@ class GameCamera : public IGameObject
 public:
 
 	/**
-	 * Default constructor.
+	 * コンストラクタ.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
@@ -26,7 +26,7 @@ public:
 	GameCamera();
 
 	/**
-	 * Destructor.
+	 * デストラクタ.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
@@ -34,7 +34,7 @@ public:
 	~GameCamera();
 
 	/**
-	 * Starts this object.
+	 * 初期化.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
@@ -42,7 +42,7 @@ public:
 	void Start()override;
 
 	/**
-	 * Updates this object.
+	 * 更新.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
@@ -50,16 +50,16 @@ public:
 	void Update()override;
 
 	/**
-	 * Gets the camera.
+	 * カメラを取得.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
 	 *
 	 * @return	Null if it fails, else the camera.
 	 */
-	CCamera* GetCamera()
+	Camera* GetCamera()
 	{
-		return &Camera;
+		return &Camera_;
 	}
 
 	/**
@@ -68,15 +68,15 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
 	 *
-	 * @param [in,out]	_pla	If non-null, the pla.
+	 * @param [in,out]	pla	If non-null, the pla.
 	 */
-	void SetPlayerPointer(Player* _pla)
+	void SetPlayer(Player* pla)
 	{
-		player = _pla;
+		Player_ = pla;
 	}
 
 	/**
-	 * Gets direction forward.
+	 * カメラの前方向を取得.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
@@ -86,15 +86,15 @@ public:
 	D3DXVECTOR3& GetDirectionForward()
 	{
 		D3DXVECTOR3 dirForward;
-		dirForward.x = mViewInv->m[2][0];
+		dirForward.x = ViewInvMatrix_->m[2][0];
 		dirForward.y = 0.0f;		//Y軸いらない。
-		dirForward.z = mViewInv->m[2][2];
+		dirForward.z = ViewInvMatrix_->m[2][2];
 		D3DXVec3Normalize(&dirForward, &dirForward);//Y軸を打ち消しているので正規化する。
 		return dirForward;
 	}
 
 	/**
-	 * Gets direction right.
+	 * カメラの右方向を取得.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
@@ -104,27 +104,24 @@ public:
 	D3DXVECTOR3& GetDirectionRight()
 	{
 		D3DXVECTOR3 dirRight;
-		dirRight.x = mViewInv->m[0][0];
+		dirRight.x = ViewInvMatrix_->m[0][0];
 		dirRight.y = 0.0f;		//Y軸はいらない。
-		dirRight.z = mViewInv->m[0][2];
+		dirRight.z = ViewInvMatrix_->m[0][2];
 		D3DXVec3Normalize(&dirRight, &dirRight);//Y軸を打ち消しているので正規化する。
 		return dirRight;
 	}
 
 private:
 
-	/** The camera. */
-	CCamera Camera;
-
-	/** The player. */
-	Player* player;
-
-	/** The view inverse. */
-	const D3DXMATRIX* mViewInv;
-
+	/** カメラ. */
+	Camera Camera_;
+	/** プレイヤー. */
+	Player* Player_;
 	/** 距離. */
-	float distance;
+	float Distance_;
+	/** The view inverse matrix. */
+	const D3DXMATRIX* ViewInvMatrix_;
 };
 
-/** The main camera. */
+/** グローバル. */
 extern GameCamera* g_MainCamera;

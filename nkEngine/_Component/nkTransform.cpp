@@ -1,41 +1,72 @@
+/**
+ * @file _Component\nkTransform.cpp
+ *
+ * トランスフォームクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkTransform.h"
 
 namespace nkEngine
 {
 
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	Transform::Transform() :
-		Parent(nullptr),
-		ParentMatrix(nullptr),
-		Position(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
-		Scale(D3DXVECTOR3(1.0f, 1.0f, 1.0f)),
-		Rotation(D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f))
+		Parent_(nullptr),
+		ParentMatrix_(nullptr),
+		Position_(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
+		Scale_(D3DXVECTOR3(1.0f, 1.0f, 1.0f)),
+		Rotation_(D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f))
 	{
 	}
 
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	Transform::~Transform()
 	{
 	}
 
+	/**
+	 * Updates this object.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	void Transform::Update()
 	{
 		D3DXMATRIX mTrans, mScale;
 
-		D3DXMatrixTranslation(&mTrans, Position.x, Position.y, Position.z);
-		D3DXMatrixRotationQuaternion(&RotationMatrix, &Rotation);
-		D3DXMatrixScaling(&mScale, Scale.x, Scale.y, Scale.z);
+		//移動行列の計算
+		D3DXMatrixTranslation(&mTrans, Position_.x, Position_.y, Position_.z);
+		//回転行列の計算
+		D3DXMatrixRotationQuaternion(&RotationMatrix_, &Rotation_);
+		//拡大行列の計算
+		D3DXMatrixScaling(&mScale, Scale_.x, Scale_.y, Scale_.z);
 
-		LocalMatrix = mScale * RotationMatrix * mTrans;
+		//ローカル行列を計算
+		LocalMatrix_ = mScale * RotationMatrix_ * mTrans;
 
-		if (ParentMatrix)
+		//親子関係を計算
+		if (ParentMatrix_)
 		{
-			D3DXMatrixMultiply(&WorldMatrix, &LocalMatrix, ParentMatrix);
+			D3DXMatrixMultiply(&WorldMatrix_, &LocalMatrix_, ParentMatrix_);
 		}
 		else
 		{
-			WorldMatrix = LocalMatrix;
+			WorldMatrix_ = LocalMatrix_;
 		}
 
-		D3DXMatrixInverse(&WorldMatrixInv, NULL, &WorldMatrix);
+		//ワールド行列の逆行列を計算
+		D3DXMatrixInverse(&WorldInvMatrix_, NULL, &WorldMatrix_);
+	
 	}
-}
+
+}// namespace nkEngine

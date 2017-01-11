@@ -1,3 +1,8 @@
+/**
+ * @file Source\Game\Monster\IMonster.h
+ *
+ * モンスターの基底クラスの定義.
+ */
 #pragma once
 
 #include"..\AnimationEvent\AnimationEventController.h"
@@ -7,7 +12,7 @@
 #include"..\Player\Player.h"
 #include"..\Item\DropItem.h"
 
-
+//
 class IMonster : public IGameObject
 {
 protected:

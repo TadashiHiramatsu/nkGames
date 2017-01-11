@@ -242,19 +242,21 @@ namespace nkEngine
 			break;
 
 		case StateFadeOut:
+		{
 			//フェード時間計算
 			float t = Timer_ / FadeTime_;
 			Timer_ += deltaTime;
 
 			//アルファ計算
 			Alpha_ = InitAlpha_ + (-InitAlpha_) * t;
-			
-			if (Alpha_ <= 0.0f) 
+
+			if (Alpha_ <= 0.0f)
 			{
 				Alpha_ = 0.0f;
 				State_ = StateDead;	//死亡
 			}
-			break;
+		}
+		break;
 
 		case StateDead:
 			isDead_ = true;

@@ -20,22 +20,6 @@ namespace nkEngine
 	{
 	public:
 
-		/**
-		 * コンストラクタ.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
-		 */
-		ParicleParameterS()
-		{
-			memset(this, 0, sizeof(ParicleParameterS));
-			InitAlpha_ = 1.0f;
-			Brightness_ = 1.0f;
-			isBillboard_ = true;
-		}
-
-	public:
-
 		/** テクスチャのファイルパス. */
 		const char* TexturePath_;
 		/** 初速度. */

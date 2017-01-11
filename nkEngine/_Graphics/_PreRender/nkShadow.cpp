@@ -234,7 +234,7 @@ namespace nkEngine
 	 *
 	 * @param [in,out] model If non-null, the model.
 	 */
-	void CShadowMap::Entry(CModelRender* model)
+	void CShadowMap::Entry(ModelRender* model)
 	{
 		ShadowModels_.push_back(model);
 	}

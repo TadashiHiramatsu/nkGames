@@ -15,9 +15,12 @@
 #include<tchar.h>
 #include<stdio.h>
 #include<stdarg.h>
+
+//STL
 #include<map>
 #include<vector>
 #include<list>
+#include <deque>
 
 using namespace std;
 
@@ -54,6 +57,14 @@ using namespace std;
 #include"_Component\nkRectTransform.h"
 #include"_Component\nkCharacterController.h"
 
+//物理エンジン
+#include"_Physics\nkPhysics.h"
+#include"_Physics\nkRigidBody.h"
+#include"_Physics\nkMeshCollider.h"
+#include"_Physics\nkBoxCollider.h"
+#include"_Physics\nkCapsuleCollider.h"
+#include"_Physics\nkSphereCollider.h"
+
 //カメラ
 #include"_Graphics\nkCamera.h"
 
@@ -62,6 +73,7 @@ using namespace std;
 #include"_Graphics\nkTexture.h"
 #include"_Graphics\nkRenderTarget.h"
 #include"_Graphics\nkVertexBuffer.h"
+#include"_Graphics\nkIndexBuffer.h"
 #include"_Graphics\nkEffectManager.h"
 
 //パーティクル
@@ -82,8 +94,8 @@ using namespace std;
 #include"_Graphics\_UI\nkTestFont.h"
 
 //スキンモデルレンダー
-#include"_Graphics\_ModelRender\nkModelRender.h"
 #include"_Graphics\_ModelRender\nkAnimation.h"
+#include"_Graphics\_ModelRender\nkModelRender.h"
 #include"_Resources\nkSkinModelDataHandle.h"
 #include"_Resources\nkSkinModelDataResources.h"
 

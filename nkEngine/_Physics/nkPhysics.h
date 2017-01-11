@@ -81,7 +81,7 @@ namespace nkEngine
 		 *
 		 * @param [in,out]	rb	„‘Ì.
 		 */
-		void AddRigidBody(CRigidBody* rb);
+		void AddRigidBody(RigidBody* rb);
 
 		/**
 		 * „‘Ì‚Ìíœ.
@@ -91,7 +91,7 @@ namespace nkEngine
 		 *
 		 * @param [in,out]	rb	„‘Ì.
 		 */
-		void RemoveRigidBody(CRigidBody* rb);
+		void RemoveRigidBody(RigidBody* rb);
 
 		/**
 		 * “Ê–Êˆê‘|H.

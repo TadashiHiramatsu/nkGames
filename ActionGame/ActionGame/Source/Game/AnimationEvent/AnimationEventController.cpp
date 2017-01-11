@@ -1,121 +1,210 @@
+/**
+ * @file Source\Game\AnimationEvent\AnimationEventController.cpp
+ *
+ * アニメーションイベントコントローラクラスの定義.
+ */
 #include"stdafx.h"
 #include"AnimationEventController.h"
 #include"CollisionWorld.h"
 
+/**
+ * コンストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 AnimationEventController::AnimationEventController()
 {
 }
 
+/**
+ * デストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
 AnimationEventController::~AnimationEventController()
 {
 }
 
-void AnimationEventController::Init(CModelRender * _skinModel, CAnimation * _anim, AnimationEventGroup * _eventGroupTbl, int _tblSize)
+/**
+* 初期化.
+*
+* @author HiramatsuTadashi
+* @date 2017/01/11
+*
+* @param [in,out] model		 モデルレンダクラス.
+* @param [in,out] anim			 アニメーションクラス.
+* @param [in,out] eventGroupTbl イベントグループ.
+* @param 		   tblSize		 Size of the table.
+*/
+void AnimationEventController::Init(ModelRender* model, Animation* anim, AnimationEventGroupS* eventGroupTbl, int tblSize)
 {
-	if (_eventGroupTbl == NULL)
+	//イベントグループがないよ
+	if (eventGroupTbl == NULL)
 	{
 		return;
 	}
-	this->skinModel = _skinModel;
-	this->animation = _anim;
-	eventGroupTbl.resize(_tblSize);
-	for (int i = 0; i < _tblSize; i++)
+
+	ModelRender_ = model;
+	Animation_ = anim;
+
+	//イベントグループの初期化
+	EventGroupTableList_.resize(tblSize);
+	for (int i = 0; i < tblSize; i++)
 	{
-		eventGroupTbl[i].eventGroup = _eventGroupTbl[i];
-		memset(eventGroupTbl[i].invokeFlags, 0, sizeof(eventGroupTbl[i].invokeFlags));
+		EventGroupTableList_[i].EventGroup_ = eventGroupTbl[i];
+		memset(EventGroupTableList_[i].isInvokes_, 0, sizeof(EventGroupTableList_[i].isInvokes_));
 	}
-	isInited = true;
+
+	//初期化できた
+	isInited_ = true;
+
 }
 
 void AnimationEventController::Update()
 {
-	if (!isInited)
+
+	if (!isInited_)
 	{
 		//初期化できてない
 		return;
 	}
 
-	int currentAnimNo = animation->GetNowAnimationNo();
-	float animTime = animation->GetLocalAnimationTime();
+	//現在再生中のアニメーション番号を取得
+	int currentAnimNo = Animation_->GetNowAnimationNo();
 
-	if (animNoLastFrame != -1 && animNoLastFrame != currentAnimNo)
+	//ローカルアニメーションタイムを取得
+	float animTime = Animation_->GetLocalAnimationTime();
+
+	//1フレームのアニメーションタイムが-1又は現在じゃない
+	if (AnimNoLastFrame_ != -1 && AnimNoLastFrame_ != currentAnimNo)
 	{
 		//アニメーションが切り替わった
 		//前のアニメーションのイベント発生フラグを初期化する
-		memset(eventGroupTbl[animNoLastFrame].invokeFlags, 0, sizeof(eventGroupTbl[animNoLastFrame].invokeFlags));
+		memset(EventGroupTableList_[AnimNoLastFrame_].isInvokes_, 0, sizeof(EventGroupTableList_[AnimNoLastFrame_].isInvokes_));
 	}
-	else if (animTime < lastFrameAnimTime)
+	else if (animTime < LastFrameAnimTime_)
 	{
 		//前のフレームよりもアニメーション時間が小さくなった(ループした)
 		//残ってるイベントを全部発生させてから初期化
-		AnimationEventGroupEx& eventGroupEx = eventGroupTbl[currentAnimNo];
-		for (int i = 0; 
-			eventGroupEx.eventGroup.event[i].eventType != eAnimationEventType_Invalid;
-			i++)
+		
+		//現在再生中のアニメーションのアニメーションイベントを取得
+		AnimationEventGroupTableS& eventGroupTable = EventGroupTableList_[currentAnimNo];
+
+		//イベントタイプが無効になるまで
+		for (int i = 0; eventGroupTable.EventGroup_.Event_[i].EventType_ != Invalid;i++)
 		{
-			if (eventGroupEx.invokeFlags[i] == false)
+			//発生したことがなければ
+			if (eventGroupTable.isInvokes_[i] == false)
 			{
-				InvokeAnimationEvent(eventGroupEx.eventGroup.event[i]);
-				//発生済み
-				eventGroupEx.invokeFlags[i] = true;
+				InvokeAnimationEvent(eventGroupTable.EventGroup_.Event_[i]);
+				//発生済みに変更
+				eventGroupTable.isInvokes_[i] = true;
 			}
 		}
-		memset(eventGroupTbl[animNoLastFrame].invokeFlags, 0, sizeof(eventGroupTbl[animNoLastFrame].invokeFlags));
+
+		//フラグをすべて初期化
+		memset(EventGroupTableList_[AnimNoLastFrame_].isInvokes_, 0, sizeof(EventGroupTableList_[AnimNoLastFrame_].isInvokes_));
 	}
-	lastFrameAnimTime = animTime;
 
-	AnimationEventGroupEx& eventGroupEx = eventGroupTbl[currentAnimNo];
+	//1フレーム前のアニメーションタイムをコピー
+	LastFrameAnimTime_ = animTime;
 
-	for (int i = 0;
-		eventGroupEx.eventGroup.event[i].eventType != eAnimationEventType_Invalid;
-		i++)
+	//現在再生中のアニメーションのアニメーションイベントを取得
+	AnimationEventGroupTableS& eventGroupTable = EventGroupTableList_[currentAnimNo];
+
+	//イベントタイプが無効になるまで更新
+	for (int i = 0;eventGroupTable.EventGroup_.Event_[i].EventType_ != Invalid;i++)
 	{
-		if (eventGroupEx.invokeFlags[i] == false)
+		//発生させたことがなければ
+		if (eventGroupTable.isInvokes_[i] == false)
 		{
 			//まだイベントが発生していない
-			if (eventGroupEx.eventGroup.event[i].time <= animTime)
+			if (eventGroupTable.EventGroup_.Event_[i].Time_ <= animTime)
 			{
 				//イベント発生する時間が経過した
-				InvokeAnimationEvent(eventGroupEx.eventGroup.event[i]);
-				//発生済み
-				eventGroupEx.invokeFlags[i] = true;
+				InvokeAnimationEvent(eventGroupTable.EventGroup_.Event_[i]);
+				//発生済みに変更
+				eventGroupTable.isInvokes_[i] = true;
+
 			}
+			else
+			{
+				//時間経過ごとに登録している場合は
+				//次の所からを見ても発生することがないためBreakしてもいいのでは？
+				break;
+			}
+
 		}
+
 	}
-	animNoLastFrame = currentAnimNo;
+
+	//アニメーショントラック番号の更新
+	AnimNoLastFrame_ = currentAnimNo;
+
 }
 
-void AnimationEventController::InvokeAnimationEvent(const AnimationEvent & _event)
+/**
+* アニメーションイベントの発生.
+*
+* @author HiramatsuTadashi
+* @date 2017/01/11
+*
+* @param event The event.
+*/
+void AnimationEventController::InvokeAnimationEvent(const AnimationEventS& event)
 {
-	switch (_event.eventType)
+	//タイプ事に違う処理を
+	switch (event.EventType_)
 	{
-	case eAnimationEventType_EmitDamageToEnemyCollision:
+	case EmitDamageToEnemyCollision:
 		//敵にダメージを与えるコリジョン発生
 	{
-		D3DXMATRIX* bone = skinModel->FindBoneWorldMatrix(_event.strArg[0]);
-		D3DXVECTOR3 pos = _event.vArg[0];
+		//ボーンを取得 この動作重くね？
+		D3DXMATRIX* bone = ModelRender_->FindBoneWorldMatrix(event.strArg_[0]);
+
+		//ポジションの移動を取得
+		D3DXVECTOR3 pos = event.vArg_[0];
+
+		//ボーンが存在していれば
 		if (bone != NULL)
 		{
-			//登録
+
+			//ポジションの移動分を計算
 			D3DXVec3TransformCoord(&pos, &pos, bone);
-			g_CollisionWorld->Add(_event.fArg[1], pos, _event.fArg[0], _event.iArg[0], CollisionWorld::enDamageToEnemy, _event.iArg[1]);
+
+			//コリジョンワールドに登録
+			g_CollisionWorld->Add(event.fArg_[1], pos, event.fArg_[0], event.iArg_[0], CollisionWorld::DamageToEnemy, event.iArg_[1]);
+		
 		}
 	}
 	break;
-	case eAnimationEventType_EmitDamageToPlayerCollision:
+
+	case EmitDamageToPlayerCollision:
 		//プレイヤーにダメージを与えるコリジョン発生.
 	{
-		D3DXMATRIX* bone = skinModel->FindBoneWorldMatrix(_event.strArg[0]);
-		D3DXVECTOR3 pos = _event.vArg[0];
+		//ボーンを取得 この動作重くね？
+		D3DXMATRIX* bone = ModelRender_->FindBoneWorldMatrix(event.strArg_[0]);
+		
+		//ポジションの移動分を取得
+		D3DXVECTOR3 pos = event.vArg_[0];
+
+		//ボーンが存在していれば
 		if (bone != NULL)
 		{
-			//登録
+
+			//ポジションの移動分を計算
 			D3DXVec3TransformCoord(&pos, &pos, bone);
-			g_CollisionWorld->Add(_event.fArg[1], pos, _event.fArg[0], _event.iArg[0], CollisionWorld::enDamageToPlayer, _event.iArg[1]);
+
+			//コリジョンワールドに登録
+			g_CollisionWorld->Add(event.fArg_[1], pos, event.fArg_[0], event.iArg_[0], CollisionWorld::DamageToPlayer, event.iArg_[1]);
 		}
 	}
 	break;
+
 	default:
 		break;
 	}
+
 }

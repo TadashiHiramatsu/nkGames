@@ -1,204 +1,412 @@
-//スキンモデル
+/**
+ * @file _Graphics\_ModelRender\nkModelRender.h
+ *
+ * モデルレンダークラスの定義.
+ */
 #pragma once 
 
 #include"nkSkinModelData.h"
 #include"nkAnimation.h"
 #include"nkLight.h"
+#include"../nkCamera.h"
+#include"../nkTexture.h"
 
 namespace nkEngine
 {
-	class CSkinModelData;
-	class CLight;
 
-	enum EFogFunc
-	{
-		enFogFuncNone, //フォグなし
-		enFogFuncDist, //距離フォグ
-		enFogFuncHeight, //高さフォグ
-	};
-
-	//モデルレンダー
-	class CModelRender
+	/**
+	 * モデルレンダクラス.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	class ModelRender
 	{
 	public:
-		//コンストラクタ
-		CModelRender();
 
-		//デストラクタ
-		~CModelRender();
+		/** フォグのパラメータ. */
+		enum FogFuncE
+		{
+			FogFuncNone,	//!< フォグなし
+			FogFuncDist,	//!< 距離フォグ
+			FogFuncHeight,	//!< 高さフォグ
+		};
 
-		//読み取り
-		//param[in] Xファイルのファイルパス
-		void Load(LPCSTR Filepass, CAnimation* anim);
-		//読み取り
-		//param[in] Xファイルのファイルパス
-		void Load(CSkinModelData* m_modeldata);
+	public:
 
-		//更新
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		ModelRender();
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		~ModelRender();
+
+		/**
+		 * 読み取り.
+		 * "Asset/Model/"フォルダ内にあるXファイルのモデルをロード
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param 		   filePath Xファイルのファイルパス、"Asset/Model/"を省いたファイルパス.
+		 * @param [in,out] anim	    アニメーションクラス.
+		 */
+		void Load(LPCSTR filePath, Animation* anim);
+
+		/**
+		 * 読み取り.
+		 * モデルデータをコピーしてロード
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param [in,out] modeldata If non-null, the modeldata to load.
+		 */
+		void Load(SkinModelData* modeldata);
+
+		/**
+		 * 更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		virtual void Update();
 
-		//インスタンシング描画用の更新
-		//pram[in] 頂点バッファにコピーするデータ
+		/**
+		 * インスタンシング描画用の更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param data 頂点バッファにコピーするデータ.
+		 */
 		void UpdateInstancinfRenderData(const void* data)
 		{
-			m_ModelData->UpdateInstancingRenderData(data);
+			ModelData_->UpdateInstancingRenderData(data);
 		}
 
-		//描画
+		/**
+		 * 描画.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		void Render();
 
-		//シャドウマップに描画
-		//シャドウマップに呼び出される
+		/**
+		 * シャドウマップに描画. 
+		 * シャドウマップに呼び出される.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		void RenderToShadowMap();
 
-		//ライトを設定
-		//param[in] ライトのアドレス
-		void SetLight(CLight* light)
+		/**
+		 * ライトを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param [in,out] light ライトのアドレス.
+		 */
+		void SetLight(Light* light)
 		{
-			m_Light = light;
+			Light_ = light;
 		}
 
-		//法線マップを設定
-		//param[in] テクスチャ
-		void SetNormalMap(CTexture* normalmap)
+		/**
+		 * 法線マップを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param [in,out] normalmap テクスチャ.
+		 */
+		void SetNormalMap(Texture* normalmap)
 		{
-			m_NormalMap = normalmap;
+			NormalMap_ = normalmap;
 		}
 
-		//スペキュラマップを設定
-		//param[in] テクスチャ
-		void SetSpecMap(CTexture* spec)
+		/**
+		 * スペキュラマップを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param [in,out] spec テクスチャ.
+		 */
+		void SetSpecMap(Texture* spec)
 		{
-			m_SpecMap = spec;
+			SpecMap_ = spec;
 		}
 
-		//シャドウキャスターのフラグを設定
-		//param[in] シャドウキャスターのフラグ
+		/**
+		 * シャドウキャスターのフラグを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param flag シャドウキャスターのフラグ.
+		 */
 		void SetShadowCasterFlag(bool flag)
 		{
-			m_isShadowCaster = flag;
+			isShadowCaster_ = flag;
 		}
 
-		//シャドウレシーバーのフラグを設定
-		//param[in] シャドウレシーバーのフラグ
+		/**
+		 * シャドウレシーバーのフラグを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param flag シャドウレシーバーのフラグ.
+		 */
 		void SetShadowReceiverFlag(bool flag)
 		{
-			m_isShadowReceiver = flag;
+			isShadowReceiver_ = flag;
 		}
 
-		//リムライトフラグを設定
-		//param[in]	リムライトのフラグ
+		/**
+		 * リムライトフラグを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param flag リムライトのフラグ.
+		 */
 		void SetRimLight(bool flag)
 		{
-			m_isRimLight = flag;
+			isRimLight_ = flag;
 		}
 
-		//輝度を埋め込むフラグを設定
-		//param[in] 輝度を埋め込むフラグ
+		/**
+		 * 輝度を埋め込むフラグを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param flag 輝度を埋め込むフラグ.
+		 */
 		void SetLuminance(bool flag)
 		{
-			m_isLuminance = flag;
+			isLuminance_ = flag;
 		}
 
-		//カメラのアドレスを設定
-		//param[in] カメラ
-		void SetCamera(CCamera* camera)
+		/**
+		 * カメラのアドレスを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param [in,out] camera カメラ.
+		 */
+		void SetCamera(Camera* camera)
 		{
-			m_camera = camera;
+			Camera_ = camera;
 		}
 
-		//トランスフォームを設定
-		//param[in] トランスフォームのアドレス
+		/**
+		 * トランスフォームを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param [in,out] trans トランスフォームのアドレス.
+		 */
 		void SetTransform(Transform* trans)
 		{
-			m_Transform = trans;
+			Transform_ = trans;
 		}
 
-		//リリース関数
+		/**
+		 * 解放.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		void Release()
 		{
-			m_ModelData->Release();
-			m_Light = nullptr;
-			m_camera = nullptr;
-			m_Transform = nullptr;
+			ModelData_->Release();
+			Light_ = nullptr;
+			Camera_ = nullptr;
+			Transform_ = nullptr;
 		}
 
-		//フォグパラメータを設定
-		//param[in] フォグの種類
-		//param[in] フォグがかかり始める距離
-		//param[in] フォグがかかりきる距離
-		void SetFogParam(EFogFunc fogfunc, float idx0, float idx1)
+		/**
+		 * フォグパラメータを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param fogfunc The フォグの種類.
+		 * @param idx0    The フォグがかかり始める距離.
+		 * @param idx1    The フォグがかかりきる距離.
+		 */
+		void SetFogParam(FogFuncE fogfunc, float idx0, float idx1)
 		{
-			m_fogFunc = fogfunc;
-			m_fogParam[0] = idx0;
-			m_fogParam[1] = idx1;
+			FogFunc_ = fogfunc;
+			FogParam_[0] = idx0;
+			FogParam_[1] = idx1;
 		}
 
-		//メッシュを取得
+		/**
+		 * メッシュを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return The mesh.
+		 */
 		LPD3DXMESH GetMesh()
 		{
-			static D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(m_ModelData->GetFrameRoot()->pMeshContainer);
-			return pMeshContainer->pOrigMesh;
+			static D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(ModelData_->GetFrameRoot()->pMeshContainer);
+			return pMeshContainer->OrigMesh_;
 		}
 
-		//先頭のメッシュを取得
+		/**
+		 * 先頭のメッシュを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return The organisation mesh first.
+		 */
 		LPD3DXMESH GetOrgMeshFirst() const
 		{
-			return m_ModelData->GetOrgMeshFirst();
+			return ModelData_->GetOrgMeshFirst();
 		}
 
-		//フレームの検索
+		/**
+		 * フレームの検索.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return Null if it fails, else the frame.
+		 */
 		D3DXFRAME* GetFrame()
 		{
-			return m_ModelData->GetFrameRoot();
+			return ModelData_->GetFrameRoot();
 		}
+		/**
+		 * フレームの検索.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param name The name.
+		 *
+		 * @return Null if it fails, else the frame.
+		 */
 		D3DXFRAME* GetFrame(const char* name)
 		{
 			return D3DXFrameFind(GetFrame(), name);
 		}
 
-		//フレームのワールド行列の取得
+		/**
+		 * フレームのワールド行列の取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param name The name.
+		 *
+		 * @return Null if it fails, else the found bone world matrix.
+		 */
 		D3DXMATRIX* FindBoneWorldMatrix(const char* name)
 		{
 			D3DXFRAME_DERIVED* frame = (D3DXFRAME_DERIVED*)GetFrame(name);
-			return &frame->CombinedTransformationMatrix;
+			return &frame->CombinedTransformationMatrix_;
 		}
 
 	protected:
 
+		/**
+		 * Renders the frame.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param pFrame			  The frame.
+		 * @param isRenderToShadowMap True if this object is render to shadow map.
+		 */
 		void RenderFrame(
 			LPD3DXFRAME pFrame,
 			bool isRenderToShadowMap);
 
+		/**
+		 * Renders the mesh container.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param pMeshContainerBase  The mesh container base.
+		 * @param pFrameBase		  The frame base.
+		 * @param isRenderToShadowMap True if this object is render to shadow map.
+		 */
 		void RenderMeshContainer(
 			LPD3DXMESHCONTAINER pMeshContainerBase,
 			LPD3DXFRAME pFrameBase,
 			bool isRenderToShadowMap);
 
-		//RenderMeshContainerから呼ばれるインスタンシング描画の共通処理。
+		/**
+		 * RenderMeshContainerから呼ばれるインスタンシング描画の共通処理。.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param [in,out] meshContainer If non-null, the mesh container.
+		 * @param 		   materialID    Identifier for the material.
+		 */
 		void RenderMeshContainer_InstancingRenderCommon(D3DXMESHCONTAINER_DERIVED* meshContainer, int materialID);
 
 	protected:
 
-		CSkinModelData* m_ModelData; //スキンモデルのデータ
-		CLight* m_Light; //ライトクラス
-		ID3DXEffect* m_Effect; //エフェクト
+		/** スキンモデルのデータ. */
+		SkinModelData* ModelData_;
+		/** ライトクラス. */
+		Light* Light_;
+		/** エフェクト. */
+		ID3DXEffect* Effect_;
+		/** カメラのアドレス. */
+		Camera* Camera_;
+		/** トランスフォーム 委譲したクラスのトランスフォームのアドレス. */
+		Transform* Transform_;
 
-		CCamera* m_camera; //カメラのアドレス
+		/** マトリクスパレットの最大数. */
+		static const int MAX_MATRIX_PALLET = 128;
+		/** マトリクスパレット. */
+		D3DXMATRIX BoneMatrixPallets_[MAX_MATRIX_PALLET];
 
-		Transform* m_Transform; // トランスフォーム 委譲したクラスのトランスフォームのアドレス
+		/** 影を落とすかどうか. */
+		bool isShadowReceiver_;
+		/** 影が出るかどうか. */
+		bool isShadowCaster_;
+		/** リムライトをするかどうか. */
+		bool isRimLight_;
+		/** 輝度を埋め込むか. */
+		bool isLuminance_;
 
-		static const int MAX_MATRIX_PALLET = 128; //マトリクスパレットの最大数
-		D3DXMATRIX m_BoneMatrixPallet[MAX_MATRIX_PALLET]; //マトリクスパレット
+		/** 法線マップのTexture. */
+		Texture* NormalMap_;
+		/** 鏡面反射マップのTexture. */
+		Texture* SpecMap_;
 
-		bool m_isShadowReceiver; //影を落とすかどうか
-		bool m_isShadowCaster; //影が出るかどうか
-		bool m_isRimLight; //リムライトをするかどうか
-		bool m_isLuminance; //輝度を埋め込むか
-		CTexture* m_NormalMap; //法線マップのTexture
-		CTexture* m_SpecMap; //鏡面反射マップのTexture
+		/** フォグの種類. */
+		FogFuncE FogFunc_;
+		/** フォグのパラメータ. */
+		float FogParam_[2];
 
-		EFogFunc m_fogFunc;	//フォグの種類
-		float m_fogParam[2]; //フォグのパラメータ
 	};
-}
+
+}// namespace nkEngine

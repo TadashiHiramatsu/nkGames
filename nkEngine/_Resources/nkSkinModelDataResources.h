@@ -66,7 +66,7 @@ namespace nkEngine
 		void Load(
 			SkinModelDataHandle& skinModelDataHandle, 
 			const char* filePath, 
-			CAnimation* anim,
+			Animation* anim,
 			bool isInstancing = false,
 			int numInstancing = 0
 		);

@@ -1,32 +1,31 @@
 /**
  * @file	Source\Game\GameCamera.cpp
  *
- * Implements the game camera class.
+ * ゲームカメラクラスの実装.
  */
 #include"stdafx.h"
 #include"GameCamera.h"
 
 /**
- * Default constructor.
+ * コンストラクタ.
  *
- * @author	HiramatsuTadashi
- * @date	2016/12/31
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
  */
 GameCamera::GameCamera() :
-	player(nullptr),
-	mViewInv(nullptr)
+	Player_(nullptr),
+	ViewInvMatrix_(nullptr)
 {
 }
 
 /**
- * Destructor.
+ * デストラクタ.
  *
- * @author	HiramatsuTadashi
- * @date	2016/12/31
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
  */
 GameCamera::~GameCamera()
 {
-
 }
 
 /**
@@ -37,41 +36,41 @@ GameCamera::~GameCamera()
  */
 void GameCamera::Start()
 {
-	Camera.SetPosDirection(D3DXVECTOR3(0.0f, 1.0f, 1.0f));
-	Camera.SetTarget(player->transform.Position + D3DXVECTOR3(0, 0.4f, 0));
+	Camera_.SetPosDirection(D3DXVECTOR3(0.0f, 1.0f, 1.0f));
+	Camera_.SetTarget(Player_->Transform_.Position_ + D3DXVECTOR3(0, 0.4f, 0));
 
-	distance = 5.0f;
-	Camera.SetDistance(distance);
-	Camera.Update();
+	Distance_ = 5.0f;
+	Camera_.SetDistance(Distance_);
+	Camera_.Update();
 
-	mViewInv = &Camera.GetViewInvMatrix();
+	ViewInvMatrix_ = &Camera_.GetViewInvMatrix();
 }
 
 /**
- * Updates this object.
+ * 更新.
  *
  * @author	HiramatsuTadashi
  * @date	2016/12/31
  */
 void GameCamera::Update()
 {
-	if (Input.GetKeyButton(KeyCode::Up))
+	if (Input().GetKeyButton(KeyCode::Up))
 	{
-		Camera.SpinVertically(-0.03f);
+		Camera_.SpinVertically(-0.03f);
 	}
-	if (Input.GetKeyButton(KeyCode::Down))
+	if (Input().GetKeyButton(KeyCode::Down))
 	{
-		Camera.SpinVertically(0.03f);
+		Camera_.SpinVertically(0.03f);
 	}
-	if (Input.GetKeyButton(KeyCode::Left))
+	if (Input().GetKeyButton(KeyCode::Left))
 	{
-		Camera.SpinHorizontally(-0.03f);
+		Camera_.SpinHorizontally(-0.03f);
 	}
-	if (Input.GetKeyButton(KeyCode::Right))
+	if (Input().GetKeyButton(KeyCode::Right))
 	{
-		Camera.SpinHorizontally(0.03f);
+		Camera_.SpinHorizontally(0.03f);
 	}
 
-	Camera.SetTarget(player->transform.Position + D3DXVECTOR3(0, 0.6f, 0));
-	Camera.Update();
+	Camera_.SetTarget(Player_->Transform_.Position_ + D3DXVECTOR3(0, 0.6f, 0));
+	Camera_.Update();
 }

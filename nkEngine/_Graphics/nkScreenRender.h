@@ -80,7 +80,7 @@ namespace nkEngine
 		 *
 		 * @return The main render target.
 		 */
-		CRenderTarget& GetMainRenderTarget()
+		RenderTarget& GetMainRenderTarget()
 		{
 			return MainRT_;
 		}
@@ -88,13 +88,14 @@ namespace nkEngine
 	private:
 
 		/** バックバッファのレンダーターゲット. */
-		CRenderTarget BackBufferRT_;
+		RenderTarget BackBufferRT_;
 		/** メインのレンダーターゲット. */
-		CRenderTarget MainRT_;
+		RenderTarget MainRT_;
 		/** アンチエイリアシング. */
-		CAntiAliasing AntiAliasing_;
+		AntiAliasing AntiAliasing_;
 		/** ブルーム. */
-		CBloom Bloom_;
+		Bloom Bloom_;
+
 	};
 
 	/**

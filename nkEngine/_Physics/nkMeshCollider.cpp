@@ -15,7 +15,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	CMeshCollider::CMeshCollider() :
+	MeshCollider::MeshCollider() :
 		MeshShape_(nullptr),
 		StridingMeshInterface_(nullptr)
 	{
@@ -27,14 +27,17 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	CMeshCollider::~CMeshCollider()
+	MeshCollider::~MeshCollider()
 	{
 		//頂点バッファ配列の削除
-		for (auto& vb : VertexBufferArray_) {
+		for (auto& vb : VertexBufferArray_) 
+		{
 			delete vb;
 		}
+
 		//インデックスバッファの削除
-		for (auto& ib : IndexBufferArray_) {
+		for (auto& ib : IndexBufferArray_) 
+		{
 			delete ib;
 		}
 		delete StridingMeshInterface_;
@@ -49,7 +52,7 @@ namespace nkEngine
 	* @param [in,out]	model			スキンモデル.
 	* @param 		  	offsetMatrix	オフセット行列.
 	*/
-	void CMeshCollider::Create(CModelRender * model, const D3DXMATRIX * offsetMatrix)
+	void MeshCollider::Create(ModelRender* model, const D3DXMATRIX* offsetMatrix)
 	{
 		StridingMeshInterface_ = new btTriangleIndexVertexArray;
 

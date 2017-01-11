@@ -16,7 +16,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	CRigidBody::CRigidBody() :
+	RigidBody::RigidBody() :
 		RigidBody_(nullptr),
 		MotionState_(nullptr)
 	{
@@ -28,7 +28,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	CRigidBody::~CRigidBody()
+	RigidBody::~RigidBody()
 	{
 		Release();
 	}
@@ -41,7 +41,7 @@ namespace nkEngine
 	 *
 	 * @param [in,out]	rbInfo	Information describing the rb.
 	 */
-	void CRigidBody::Create(RigidBodyInfoS& rbInfo)
+	void RigidBody::Create(RigidBodyInfoS& rbInfo)
 	{
 		//‰ð•ú
 		Release();
@@ -64,7 +64,7 @@ namespace nkEngine
 	* @author	HiramatsuTadashi
 	* @date	2017/01/07
 	*/
-	void CRigidBody::Release()
+	void RigidBody::Release()
 	{
 		SAFE_DELETE(RigidBody_);
 		SAFE_DELETE(MotionState_);

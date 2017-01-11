@@ -162,9 +162,6 @@
     <ClCompile Include="_Math\nkVector.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="_DataLoad\nkCSVData.cpp">
-      <Filter>DataLoad</Filter>
-    </ClCompile>
     <ClCompile Include="_Graphics\_2DObject\nkSprite.cpp">
       <Filter>Graphics\2DObject</Filter>
     </ClCompile>
@@ -199,12 +196,6 @@
     </ClInclude>
     <ClInclude Include="nkstdafx.h">
       <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="debug\nkAssert.h">
-      <Filter>debug</Filter>
-    </ClInclude>
-    <ClInclude Include="debug\nkLog.h">
-      <Filter>debug</Filter>
     </ClInclude>
     <ClInclude Include="_Graphics\nkRenderTarget.h">
       <Filter>Graphics</Filter>
@@ -355,6 +346,12 @@
     </ClInclude>
     <ClInclude Include="_Graphics\nkVertexBuffer.h">
       <Filter>Graphics\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="_Debug\nkAssert.h">
+      <Filter>debug</Filter>
+    </ClInclude>
+    <ClInclude Include="_Debug\nkLog.h">
+      <Filter>debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

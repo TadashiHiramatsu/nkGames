@@ -1,14 +1,16 @@
 /**
  * @file	_Graphics\_2DObject\nkSprite.h
  *
- * Declares the nk sprite class.
+ * スプライトクラスの定義.
  */
 #pragma once
 
 namespace nkEngine
 {
+
 	/**
-	 * A sprite.
+	 * スプライトクラス.
+	 * 3D空間に板ポリを表示
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/06
@@ -18,7 +20,7 @@ namespace nkEngine
 	public:
 
 		/**
-		 * Default constructor.
+		 * コンストラクタ.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/06
@@ -26,7 +28,7 @@ namespace nkEngine
 		Sprite();
 
 		/**
-		 * Destructor.
+		 * デストラクタ.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/06
@@ -34,17 +36,18 @@ namespace nkEngine
 		~Sprite();
 
 		/**
-		 * Loads the given file path.
+		 * 読み込み.
+		 * 
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/06
 		 *
-		 * @param	_FilePath	The file path to load.
+		 * @param	filePath	The file path to load.
 		 */
-		void Load(const char* _FilePath);
+		void Load(const char* filePath);
 
 		/**
-		 * Starts this object.
+		 * 初期化.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/06
@@ -52,7 +55,7 @@ namespace nkEngine
 		void Start();
 
 		/**
-		 * Updates this object.
+		 * 更新.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/06
@@ -60,7 +63,7 @@ namespace nkEngine
 		void Update();
 
 		/**
-		 * Renders this object.
+		 * 描画.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/06
@@ -68,43 +71,46 @@ namespace nkEngine
 		void Render();
 
 		/**
-		 * Sets a camera.
+		 * カメラ設定.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/06
 		 *
-		 * @param [in,out]	_Camera	If non-null, the camera.
+		 * @param [in,out]	camera	If non-null, the camera.
 		 */
-		void SetCamera(CCamera* _Camera)
+		void SetCamera(Camera* camera)
 		{
-			camera = _Camera;
+			Camera_ = camera;
 		}
 
 		/**
-		 * Sets a transform.
+		 * トランスフォームの設定.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/06
 		 *
-		 * @param [in,out]	_Transform	If non-null, the transform.
+		 * @param [in,out]	transform	If non-null, the transform.
 		 */
-		void SetTransform(Transform* _Transform)
+		void SetTransform(Transform* transform)
 		{
-			transform = _Transform;
+			Transform_ = transform;
 		}
 
 	private:
-		/** The primitive. */
-		CPrimitive Primitive;
-		/** The effect. */
-		ID3DXEffect* Effect;
-		/** The camera. */
-		CCamera* camera;
-		/** The transform. */
-		Transform* transform;
-		/** The texture. */
-		CTexture Texture;
-		/** True if this object is billboard. */
-		bool isBillboard = false;
+
+		/** プリミティブ. */
+		Primitive Primitive_;
+		/** エフェクト. */
+		ID3DXEffect* Effect_;
+		/** カメラ. */
+		Camera* Camera_;
+		/** トランスフォーム. */
+		Transform* Transform_;
+		/** テクスチャ. */
+		Texture Texture_;
+		/** ビルボードフラグ. */
+		bool isBillboard_ = false;
+
 	};
-}
+
+}// namespace nkEngine

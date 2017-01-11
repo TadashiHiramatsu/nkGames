@@ -1,13 +1,42 @@
+/**
+ * @file Source\Game\GameScene.h
+ *
+ * ゲームシーンクラスの定義.
+ */
 #pragma once
 
-#include"Player\Player.h"
-
+/**
+ * ゲームシーンクラス.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 class GameScene : public IScene
 {
 public:
-	GameScene();
-	~GameScene();
-	void Start()override;
-};
 
-extern Player* g_Player;
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	GameScene();
+
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	~GameScene();
+
+	/**
+	 * 初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	void Start()override;
+
+};

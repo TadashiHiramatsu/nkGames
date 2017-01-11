@@ -43,7 +43,7 @@ namespace nkEngine
 		//1フレーム前の結果をコピー
 		isPushedBef_ = isPushed_;
 
-		CollisionRect col = RectTransform_->ColRect;
+		BoxCollisionS col = RectTransform_->BoxCol_;
 
 	}
 

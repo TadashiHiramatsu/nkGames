@@ -1,3 +1,8 @@
+/**
+ * @file Source\Game\GUI\ItemSlot.h
+ *
+ * アイテムスロットクラスの定義.
+ */
 #pragma once
 
 #include"../Item/IItem.h"

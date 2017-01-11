@@ -53,25 +53,25 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class CRigidBody
+	class RigidBody
 	{
 	public:
 
 		/**
-		 * Default constructor.
+		 * コンストラクタ.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		CRigidBody();
+		RigidBody();
 
 		/**
-		 * Destructor.
+		 * デストラクタ.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~CRigidBody();
+		~RigidBody();
 
 		/**
 		 * 作成.
@@ -105,10 +105,12 @@ namespace nkEngine
 		}
 
 	private:
+
 		/** 剛体. */
 		btRigidBody* RigidBody_;
 		/** モーションステート. */
 		btDefaultMotionState* MotionState_;
+	
 	};
 
 }// namespace nkEngine

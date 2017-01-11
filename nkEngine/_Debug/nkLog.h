@@ -1,9 +1,22 @@
-#ifndef _NKLOG_
-#define _NKLOG_
+/**
+ * @file _Debug\nkLog.h
+ *
+ * ログ出力関数の定義.
+ */
+#pragma once
 
 namespace nkEngine
 {
-	//ログ出力
+
+	/**
+	 * ログ出力.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param format Describes the format to use.
+	 * @param ...    Variable arguments providing additional information.
+	 */
 	static inline void Log(const char* format, ...)
 	{
 		char log[256];
@@ -13,12 +26,11 @@ namespace nkEngine
 		OutputDebugString(log);
 		va_end(va);
 	}
-}
+
+}// namespace nkEngine
 
 #if _DEBUG
 #define NK_LOG(format,...) nkEngine::Log(format,__VA_ARGS__)
 #else
 #define NK_LOG(format,...)
 #endif // !_DEBUG
-
-#endif // !_NKLOG_

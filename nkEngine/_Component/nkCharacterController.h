@@ -1,107 +1,219 @@
+/**
+ * @file _Component\nkCharacterController.h
+ *
+ * キャラクターコントローラクラスの定義.
+ */
 #pragma once
 
-#include "nkEngine/_Physics/nkCapsuleCollider.h"
-#include "nkEngine/_Physics/nkRigidBody.h"
+#include"../_Physics/nkCapsuleCollider.h"
 
 namespace nkEngine
 {
+
+	/**
+	 * キャラクターコントローラクラス.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	class CharacterController
 	{
 	public:
-		//コンストラクタ
+
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		CharacterController();
 
-		//デストラクタ
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		~CharacterController();
 
-		//初期化
-		void Init(float _radius,float _height,const D3DXVECTOR3& _pos);
+		/**
+		 * 初期化.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param radius The radius.
+		 * @param height The height.
+		 * @param pos    The position.
+		 */
+		void Init(float radius, float height, const D3DXVECTOR3& pos);
 
-		//更新
+		/**
+		 * 更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		void Update();
 
-		//座標を取得
+		/**
+		 * 座標を取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return The position.
+		 */
 		const D3DXVECTOR3& GetPosition() const 
 		{
-			return Position;
+			return Position_;
 		}
 
-		//座標を設定
-		void SetPosition(const D3DXVECTOR3& _pos)
+		/**
+		 * 座標を設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param pos The position.
+		 */
+		void SetPosition(const D3DXVECTOR3& pos)
 		{
-			Position = _pos;
+			Position_ = pos;
 		}
 
-		//移動速度を取得
-		const D3DXVECTOR3& GetMoveSpeed()const
+		/**
+		 * 移動速度を取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return The move speed.
+		 */
+		const D3DXVECTOR3& GetMoveSpeed() const
 		{
-			return MoveSpeed;
+			return MoveSpeed_;
 		}
 
-		//移動速度を設定
-		void SetMoveSpeed(const D3DXVECTOR3& _ms)
+		/**
+		 * 移動速度を設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param ms The milliseconds.
+		 */
+		void SetMoveSpeed(const D3DXVECTOR3& ms)
 		{
-			MoveSpeed = _ms;
+			MoveSpeed_ = ms;
 		}
 
-		//ジャンプさせる
+		/**
+		 * ジャンプさせる.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		void Jump()
 		{
-			isJump = true;
-			isOnGround = false;
+			isJump_ = true;
+			isOnGround_ = false;
 		}
 
-		//ジャンプフラグを取得
-		bool IsJump()const
+		/**
+		 * ジャンプフラグを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return True if jump, false if not.
+		 */
+		bool IsJump() const
 		{
-			return isJump;
+			return isJump_;
 		}
 
-		//地面の上にいるか判定
-		bool IsOnGround()const
+		/**
+		 * 地面の上にいるか判定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return True if on ground, false if not.
+		 */
+		bool IsOnGround() const
 		{
-			return isOnGround;
+			return isOnGround_;
 		}
 
-		//コライダーを取得
-		CCapsuleCollider* GetCollider()
+		/**
+		 * コライダーを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return Null if it fails, else the collider.
+		 */
+		CapsuleCollider* GetCollider()
 		{
-			return &Collider;
+			return &Collider_;
 		}
 
-		//重力を設定
+		/**
+		 * 重力を設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param _gravity The gravity.
+		 */
 		void SetGravity(float _gravity)
 		{
-			Gravity = _gravity;
+			Gravity_ = _gravity;
 		}
 
-		//剛体を取得
-		CRigidBody* GetRigidbody()
+		/**
+		 * 剛体を取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return Null if it fails, else the rigidbody.
+		 */
+		RigidBody* GetRigidbody()
 		{
-			return &RigidBody;
+			return &RigidBody_;
 		}
 
-		//剛体を物理エンジンから削除
+		/**
+		 * 剛体を物理エンジンから削除.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		void RemoveRigidBody();
 
 	private:
-		//座標
-		D3DXVECTOR3 Position; 
-		//移動速度
-		D3DXVECTOR3 MoveSpeed; 
-		//ジャンプフラグ
-		bool isJump;
-		//地面の上にいる
-		bool isOnGround;
-		//コライダー
-		CCapsuleCollider Collider;
-		//半径
-		float Radius;
-		//高さ
-		float Height;
-		//剛体
-		CRigidBody RigidBody;
-		//重力
-		float Gravity;
+
+		/** 座標. */
+		D3DXVECTOR3 Position_; 
+		/** 移動速度. */
+		D3DXVECTOR3 MoveSpeed_;
+		/** ジャンプフラグ. */
+		bool isJump_;
+		/** 地面の上にいる。true:地面上,false:空中. */
+		bool isOnGround_;
+		/** カプセル形状のコライダー. */
+		CapsuleCollider Collider_;
+		/** 半径. */
+		float Radius_;
+		/** 高さ. */
+		float Height_;
+		/** 剛体. */
+		RigidBody RigidBody_;
+		/** 重力. */
+		float Gravity_;
+
 	};
-}
+
+}// namespace nkEngine

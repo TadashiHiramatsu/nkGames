@@ -1,55 +1,123 @@
+/**
+ * @file Source\Game\Map\Ground.cpp
+ *
+ * グラウンドクラスの実装.
+ */
 #include"stdafx.h"
 #include"Ground.h"
 
 #include"..\GameCamera.h"
 
+/**
+ * コンストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 Ground::Ground()
 {
 }
 
+/**
+ * デストラクタ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 Ground::~Ground()
 {
 }
 
+/**
+ * 初期化.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void Ground::Start()
 {
-	Model.Load("Ground.X",nullptr);
-	Model.SetTransform(&transform);
-	Model.SetLight(&Light);
-	Model.SetCamera(g_MainCamera->GetCamera());
-	Model.SetShadowCasterFlag(true);
-	Model.SetShadowReceiverFlag(true);
+	//モデルのロード
+	ModelRender_.Load("Ground.X",nullptr);
+	//トランスフォームの設定
+	ModelRender_.SetTransform(&Transform_);
+	//ライトの設定
+	ModelRender_.SetLight(&Light_);
+	//カメラの設定
+	ModelRender_.SetCamera(g_MainCamera->GetCamera());
+	//シャドウキャスターの設定true.
+	ModelRender_.SetShadowCasterFlag(true);
+	//シャドウレシーバーの設定true.
+	ModelRender_.SetShadowReceiverFlag(true);
 
-	Normal.Load("ground4_Normal.tga");
-	Model.SetNormalMap(&Normal);
-	Specular.Load("ground4_Specular.tga");
-	Model.SetSpecMap(&Specular);
+	//法線マップの設定
+	Normal_.Load("ground4_Normal.tga");
+	ModelRender_.SetNormalMap(&Normal_);
 
+	//スペキュラマップの設定
+	Specular_.Load("ground4_Specular.tga");
+	ModelRender_.SetSpecMap(&Specular_);
+
+	//更新
 	Update();
 
-	mWorld = Model.FindBoneWorldMatrix("Plane001");
-	MeshCollider.Create(&Model, mWorld);
-	SRigidBodyInfo rbInfo;
-	rbInfo.Collider = &MeshCollider;
-	rbInfo.Mass = 0.0f;
-	RigidBody.Create(rbInfo);
-	RigidBody.GetBody()->setUserIndex(ECollisionAttr::CollisionAttr_Ground);
-	Physics().AddRigidBody(&RigidBody);
+	//ワールド行列の取得
+	WorldMatrix_ = ModelRender_.FindBoneWorldMatrix("Plane001");
+
+	//メッシュコライダーの作成
+	MeshCollider_.Create(&ModelRender_, WorldMatrix_);
+	
+	//剛体の作成
+	RigidBodyInfoS rbInfo;
+	rbInfo.Collider_ = &MeshCollider_;
+	rbInfo.Mass_ = 0.0f;
+	RigidBody_.Create(rbInfo);
+
+	//グラウンドタグを設定
+	RigidBody_.GetBody()->setUserIndex(ECollisionAttr::CollisionAttr_Ground);
+
+	//物理ワールドに追加
+	Physics().AddRigidBody(&RigidBody_);
+
 }
 
+/**
+ * 更新.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void Ground::Update()
 {
-	transform.Update();
+	//トランスフォームの更新
+	Transform_.Update();
 
-	Model.Update();
+	//モデルの更新
+	ModelRender_.Update();
+
 }
 
+/**
+ * 描画.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void Ground::Render()
 {
-	Model.Render();
+	//モデルの描画
+	ModelRender_.Render();
+
 }
 
+/**
+ * 解放.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 void Ground::Release()
 {
-	Model.Release();
+	//モデルの解放
+	ModelRender_.Release();
+
 }

@@ -18,7 +18,6 @@ namespace nkEngine
 	 */
 	CSkinModelDataResources::CSkinModelDataResources()
 	{
-
 	}
 
 	/**
@@ -29,7 +28,6 @@ namespace nkEngine
 	 */
 	CSkinModelDataResources::~CSkinModelDataResources()
 	{
-	
 	}
 
 	/**
@@ -44,12 +42,12 @@ namespace nkEngine
 	 * @param 		  	isInstancing	   	インスタンシングフラグ.
 	 * @param 		  	numInstancing	   	インスタンス数.
 	 */
-	void CSkinModelDataResources::Load(SkinModelDataHandle& skinModelDataHandle, const char* filePath, CAnimation* anim, bool isInstancing, int numInstancing)
+	void CSkinModelDataResources::Load(SkinModelDataHandle& skinModelDataHandle, const char* filePath, Animation* anim, bool isInstancing, int numInstancing)
 	{
 		if (isInstancing)
 		{
 			//インスタンシングモデルはモデルデータの使いまわし不可
-			SkinModelDataPtrT SkinModelData(new CSkinModelData);
+			SkinModelDataPtrT SkinModelData(new SkinModelData);
 			SkinModelData->LoadModelData(filePath, anim);
 		
 			//インスタンシング描画用のデータを作成
@@ -71,13 +69,13 @@ namespace nkEngine
 		else
 		{
 			//通常モデル
-			int hash = CHash::MakeHash(filePath);
+			int hash = Hash::MakeHash(filePath);
 			auto& it = SkinModelDataMap_.find(hash);
 			
 			if (it == SkinModelDataMap_.end())
 			{
 				//未登録
-				SkinModelDataPtrT SkinModelData(new CSkinModelData);
+				SkinModelDataPtrT SkinModelData(new SkinModelData);
 				SkinModelData->LoadModelData(filePath, anim);
 				SkinModelDataMap_.insert(make_pair(hash, SkinModelData));
 				skinModelDataHandle.Init(SkinModelData, anim, false);

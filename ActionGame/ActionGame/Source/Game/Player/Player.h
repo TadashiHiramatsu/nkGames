@@ -1,114 +1,281 @@
+/**
+ * @file Source\Game\Player\Player.h
+ *
+ * プレイヤークラスの定義.
+ */
 #pragma once
 
 #include"nkEngine/_Component/nkCharacterController.h"
 #include"..\AnimationEvent\AnimationEventController.h"
 #include"..\AnimationEvent\CollisionWorld.h"
 
+/**
+ * プレイヤークラス.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/10
+ */
 class Player : public IGameObject
 {
 public:
-	struct PlayerParameter
+
+	/**
+	 * プレイヤーパラメータの構造体.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	struct PlayerParameterS
 	{
-		PlayerParameter()
+	public:
+
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		PlayerParameterS()
 		{
-			Level = 1;
-			Experience = 0;
-			NextLevelExperience = 10;
-			Attack = 1;
-			MaxHp = NowHp = 100;
-			HitTime = 1.0f;
+			Level_ = 1;
+			Experience_ = 0;
+			NextLevelExperience_ = 10;
+			Attack_ = 1;
+			MaxHp_ = NowHp_ = 100;
+			InvincibleTime_ = 1.0f;
 		}
-		int Level;					//レベル
-		int Experience;				//現在の経験値
-		int NextLevelExperience;	//次のレベルへの経験値
-		int	Attack;					//攻撃力
-		int MaxHp; //体力
-		int NowHp; //体力
-		int HitTime; //無敵時間
+
+	public:
+
+		/** レベル. */
+		int Level_;
+		/** 現在の経験値. */
+		int Experience_;
+		/** 次のレベルへの経験値. */
+		int NextLevelExperience_;
+		/** 攻撃力. */
+		int	Attack_;
+		/** 体力. */
+		int MaxHp_;
+		/** 体力. */
+		int NowHp_;
+		/** 無敵時間. */
+		int InvincibleTime_;
+
 	};
 
-	enum AnimationCode
+	/** アニメーションコードの列挙. */
+	enum AnimationCodeE
 	{
-		AnimationInvalid = -1,
-		AnimationWaiting = 0,
-		AnimationWalk,
-		AnimationRun,
-		AnimationAttack,
-		AnimationHit,
-		AnimationDead,
-		AnimationNum,
+		AnimationInvalid = -1,	//!< 無し
+		AnimationWaiting = 0,	//!< 待機
+		AnimationWalk,			//!< 歩き
+		AnimationRun,			//!< 走り
+		AnimationAttack,		//!< 攻撃
+		AnimationHit,			//!< やられ
+		AnimationDead,			//!< 死亡
+		AnimationNum,			//!< アニメーションの数
 	};
-	enum StateCode
+
+
+	/** ステートコードの列挙. */
+	enum StateCodeE
 	{
-		StateWaiting = 0,
-		StateWalk,
-		StateRun,
-		StateAttack,
-		StateDamage,
-		StateDead,
+		StateWaiting = 0,	//!< 待機
+		StateWalk,			//!< 歩き
+		StateRun,			//!< 走り
+		StateAttack,		//!< 攻撃
+		StateDamage,		//!< やられ
+		StateDead,			//!< 死亡
 	};
+
 public:
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	Player();
+
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	~Player();
+
+	/**
+	 * 初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	void Start()override;
+
+	/**
+	 * 更新.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	void Update()override;
+
+	/**
+	 * 描画.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	void Render()override;
+
+	/**
+	 * 解放.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	void Release()override;
 
+	/**
+	 * 攻撃を受けた.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	void Damage();
 
+	/**
+	 * レベルアップ処理.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	void ParameterUpdate();
 
-	//経験値加算
-	void AddExperience(int _Add)
+	/**
+	 * 経験値加算.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param add The add.
+	 */
+	void AddExperience(int add)
 	{
-		PP.Experience += _Add;
+		Parameter_.Experience_ += add;
 	}
 
-	PlayerParameter& GetPlayerParameter()
+	/**
+	 * プレイヤーパラメータの取得.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @return The player parameter.
+	 */
+	PlayerParameterS& GetParameter()
 	{
-		return PP;
+		return Parameter_;
 	}
 
-	D3DXVECTOR3& GetPos()
+	/**
+	 * ポジションの取得.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @return The position.
+	 */
+	D3DXVECTOR3& GetPosition()
 	{
-		return transform.Position;
+		return Transform_.Position_;
 	}
 
 private:
-	void ChangeState(StateCode _NextState);
+
+	/**
+	 * ステート更新関数.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param nextState State of the next.
+	 */
+	void ChangeState(StateCodeE nextState);
+
+	/**
+	 * アニメーション管理関数.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	void AnimationControl();
-	void PlayAnimation(AnimationCode _AnimCode, float interpolateTime);
+
+	/**
+	 * アニメーション切り替え関数.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param animCode		  The animation code.
+	 * @param interpolateTime The interpolate time.
+	 */
+	void PlayAnimation(AnimationCodeE animCode, float interpolateTime);
+
 private:
-	CLight Light;
-	CModelRender Model;
-	CAnimation Animation;
 
-	//状態。
-	StateCode State;			
+	/** ライト. */
+	Light Light_;
+	/** モデルレンダー. */
+	ModelRender ModelRender_;
+	/** アニメーション. */
+	Animation Animation_;
 
+	/** 状態. */
+	StateCodeE State_;
 
-	float Radius;
-	float Height;
-	CharacterController CharacterController;
-	AnimationEventController animEvent;
+	/** The radius. */
+	float Radius_ = 0.0f;
+	/** The height. */
+	float Height_ = 0.0f;
+	/** キャラクターコントローラ. */
+	CharacterController CharacterController_;
 
-	PlayerParameter PP;
+	/** アニメーションイベント. */
+	AnimationEventController AnimationEvent_;
 
-	CParticleEmitter Particle;
-	D3DXMATRIX* mParticle;
-	D3DXVECTOR3 ParticlePos;
+	/** プレイヤーのパラメータ. */
+	PlayerParameterS Parameter_;
 
-	Transform LWeaponTransform;
-	CLight LWeaponLight;
-	CModelRender LWeaponModel;
-	Transform RWeaponTransform;
-	CLight RWeaponLight;
-	CModelRender RWeaponModel;
+	//ParticleEmitter Particle;
+	//D3DXMATRIX* mParticle;
+	//D3DXVECTOR3 ParticlePos;
 
-	float LocalTime = 0; //無敵時間計測用
-	float itime; //ライフ回復時間用
+	/** 左手武器のトランスフォーム. */
+	Transform WeaponTransformL_;
+	/** 左手武器のライト. */
+	Light WeaponLightL_;
+	/** 左手武器のモデルレンダー. */
+	ModelRender WeaponModelRenderL_;
 
-	std::unique_ptr<btCollisionObject>	collisionObject;		//コリジョンオブジェクト。
-	std::unique_ptr<CSphereCollider>	sphereShape;
+	/** 右手武器のトランスフォーム. */
+	Transform WeaponTransformR_;
+	/** 右手武器のライト. */
+	Light WeaponLightR_;
+	/** 右手武器のモデルレンダー. */
+	ModelRender WeaponModelRenderR_;
+
+	/** 無敵時間計測用ローカルタイム. */
+	float InvincibleLT_ = 0.0f;
+	/** ライフ回復時間用ローカルタイム. */
+	float RecoveryLT_ = 0.0f;
+
+	/** コリジョンオブジェクト. */
+	unique_ptr<btCollisionObject> CollisionObject_;
+	/** 球体形状コライダー. */
+	unique_ptr<SphereCollider>	SphereShape_;
+
 };

@@ -11,7 +11,7 @@
 namespace nkEngine
 {
 
-	class CModelRender;
+	class ModelRender;
 
 	/**
 	 * シャドウマップクラス.
@@ -128,7 +128,7 @@ namespace nkEngine
 		 *
 		 * @param [in,out] skinModel モデル.
 		 */
-		void Entry(CModelRender* skinModel);
+		void Entry(ModelRender* skinModel);
 
 		/**
 		 * テクスチャを取得.
@@ -296,7 +296,7 @@ namespace nkEngine
 		/** シャドウマップ用レンダーターゲット. */
 		RenderTarget ShadowMapRT_[MAX_SHADOW_MAP];
 		/** 影を書き込むモデル. */
-		vector<CModelRender*> ShadowModels_;
+		vector<ModelRender*> ShadowModels_;
 
 		/** ライトの視点. */
 		D3DXVECTOR3 LightPosition_;

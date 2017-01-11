@@ -154,7 +154,7 @@ namespace nkEngine
 		Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 		Effect_->BeginPass(0);
 
-		Effect_->SetMatrix("matWorld", &RectTransform_->WorldProjMatrix);
+		Effect_->SetMatrix("matWorld", &RectTransform_->WorldProjMatrix_);
 		Effect_->SetTexture("g_diffuseTexture", Texture_->GetTexture());
 		Effect_->SetValue("uvRect", &RectUV_, sizeof(RectUV_));
 		Effect_->SetValue("color", &Color_, sizeof(Color_));

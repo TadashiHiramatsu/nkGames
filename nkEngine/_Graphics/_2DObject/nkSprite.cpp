@@ -1,7 +1,7 @@
 /**
  * @file	_Graphics\_2DObject\nkSprite.cpp
  *
- * Implements the nk sprite class.
+ * スプライトクラスの実装.
  */
 #include"nkEngine/nkstdafx.h"
 #include"nkSprite.h"
@@ -10,17 +10,17 @@ namespace nkEngine
 {
 
 	/**
-	 * Default constructor.
+	 * コンストラクタ.
 	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/06
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
 	 */
 	Sprite::Sprite()
 	{
 	}
 
 	/**
-	 * Destructor.
+	 * デストラクタ.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/06
@@ -70,4 +70,5 @@ namespace nkEngine
 	void Sprite::Render()
 	{
 	}
-}
+
+}// namespace nkEngine

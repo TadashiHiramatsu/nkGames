@@ -5,7 +5,6 @@
  */
 #include"nkEngine/nkstdafx.h"
 #include"nkPhysics.h"
-#include"nkRigidBody.h"
 
 namespace nkEngine
 {
@@ -98,7 +97,7 @@ namespace nkEngine
 	 *
 	 * @param [in,out]	rb	„‘Ì.
 	 */
-	void CPhysics::AddRigidBody(CRigidBody * rb)
+	void CPhysics::AddRigidBody(RigidBody * rb)
 	{
 		DynamicWorld_->addRigidBody(rb->GetBody());
 	}
@@ -111,7 +110,7 @@ namespace nkEngine
 	 *
 	 * @param [in,out]	rb	„‘Ì.
 	 */
-	void CPhysics::RemoveRigidBody(CRigidBody * rb)
+	void CPhysics::RemoveRigidBody(RigidBody * rb)
 	{
 		DynamicWorld_->removeRigidBody(rb->GetBody());
 	}

@@ -1,110 +1,159 @@
+/**
+ * @file _Graphics\_ModelRender\nkSkinModelData.cpp
+ *
+ * スキンモデルデータクラスの実装.
+ */
 #include"nkEngine/nkstdafx.h"
 #include"nkSkinModelData.h"
 #include"nkAnimation.h"
 
-namespace {
+//無名空間
+namespace 
+{
 	using namespace nkEngine;
 
-	void InnerDestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase)
+	/**
+	 * Inner destroy mesh container.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param meshContainerBase The mesh container base.
+	 */
+	void InnerDestroyMeshContainer(LPD3DXMESHCONTAINER meshContainerBase)
 	{
-		UINT iMaterial;
-		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
+		//メッシュコントローラの取得
+		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)meshContainerBase;
 
-		SAFE_DELETE_ARRAY(pMeshContainer->pAttributeTable);
+		//削除
 		SAFE_DELETE_ARRAY(pMeshContainer->Name);
 		SAFE_DELETE_ARRAY(pMeshContainer->pAdjacency);
 		SAFE_DELETE_ARRAY(pMeshContainer->pMaterials);
-		SAFE_DELETE_ARRAY(pMeshContainer->pBoneOffsetMatrices);
+		//自作メンバの削除
+		SAFE_DELETE_ARRAY(pMeshContainer->AttributeTable_);
+		SAFE_DELETE_ARRAY(pMeshContainer->BoneOffsetMatrix_);
 
-		// release all the allocated textures
-		if (pMeshContainer->ppTextures != NULL)
+		//テクスチャが存在していれば
+		if (pMeshContainer->Texture_ != NULL)
 		{
-			for (iMaterial = 0; iMaterial < pMeshContainer->NumMaterials; iMaterial++)
+			//マテリアル削除
+			for (UINT iMaterial = 0; iMaterial < pMeshContainer->NumMaterials; iMaterial++)
 			{
-				SAFE_RELEASE(pMeshContainer->ppTextures[iMaterial]);
+				SAFE_RELEASE(pMeshContainer->Texture_[iMaterial]);
 			}
 		}
 
-		SAFE_DELETE_ARRAY(pMeshContainer->ppTextures);
-		SAFE_DELETE_ARRAY(pMeshContainer->ppBoneMatrixPtrs);
-		SAFE_RELEASE(pMeshContainer->pBoneCombinationBuf);
+		//解放
 		SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
 		SAFE_RELEASE(pMeshContainer->pSkinInfo);
-		SAFE_RELEASE(pMeshContainer->pOrigMesh);
+		//自作メンバのデリート
+		SAFE_DELETE_ARRAY(pMeshContainer->Texture_);
+		SAFE_DELETE_ARRAY(pMeshContainer->BoneMatrixPtrs_);
+		//自作メンバのリリース
+		SAFE_RELEASE(pMeshContainer->BoneCombinationBuf_);
+		SAFE_RELEASE(pMeshContainer->OrigMesh_);
+
+		//メッシュコントローラの削除
 		SAFE_DELETE(pMeshContainer);
+
 	}
 
+	/**
+	 * Generates a skinned mesh.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param [in,out] d3dDevice	  If non-null, the pd 3D device.
+	 * @param [in,out] meshContainer If non-null, the mesh container.
+	 *
+	 * @return The skinned mesh.
+	 */
 	HRESULT GenerateSkinnedMesh(
-		IDirect3DDevice9* pd3dDevice,
-		D3DXMESHCONTAINER_DERIVED* pMeshContainer
+		IDirect3DDevice9* d3dDevice,
+		D3DXMESHCONTAINER_DERIVED* meshContainer
 	)
 	{
 		HRESULT hr = S_OK;
 		D3DCAPS9 d3dCaps;
-		pd3dDevice->GetDeviceCaps(&d3dCaps);
+		d3dDevice->GetDeviceCaps(&d3dCaps);
 
-		if (pMeshContainer->pSkinInfo == NULL)
+		if (meshContainer->pSkinInfo == NULL)
+		{
 			return hr;
-		SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
-		SAFE_RELEASE(pMeshContainer->pBoneCombinationBuf);
+		}
+
+		SAFE_RELEASE(meshContainer->MeshData.pMesh);
+		SAFE_RELEASE(meshContainer->BoneCombinationBuf_);
 
 		{
 			// Get palette size
 			// First 9 constants are used for other data.  Each 4x3 matrix takes up 3 constants.
 			// (96 - 9) /3 i.e. Maximum constant count - used constants 
 			UINT MaxMatrices = 26;
-			pMeshContainer->NumPaletteEntries = min(MaxMatrices, pMeshContainer->pSkinInfo->GetNumBones());
+			meshContainer->NumPaletteEntries = min(MaxMatrices, meshContainer->pSkinInfo->GetNumBones());
 
 			DWORD Flags = D3DXMESHOPT_VERTEXCACHE;
 			if (d3dCaps.VertexShaderVersion >= D3DVS_VERSION(1, 1))
 			{
-				pMeshContainer->UseSoftwareVP = false;
+				meshContainer->UseSoftwareVP = false;
 				Flags |= D3DXMESH_MANAGED;
 			}
 			else
 			{
-				pMeshContainer->UseSoftwareVP = true;
+				meshContainer->UseSoftwareVP = true;
 				Flags |= D3DXMESH_SYSTEMMEM;
 			}
 
-			SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
-			hr = pMeshContainer->pSkinInfo->ConvertToIndexedBlendedMesh
-			(
-				pMeshContainer->pOrigMesh,
-				Flags,
-				pMeshContainer->NumPaletteEntries,
-				pMeshContainer->pAdjacency,
-				NULL, NULL, NULL,
-				&pMeshContainer->NumInfl,
-				&pMeshContainer->NumAttributeGroups,
-				&pMeshContainer->pBoneCombinationBuf,
-				&pMeshContainer->MeshData.pMesh);
-			if (FAILED(hr))
-				goto e_Exit;
+			//メッシュの解放
+			SAFE_RELEASE(meshContainer->MeshData.pMesh);
 
+
+			hr = meshContainer->pSkinInfo->ConvertToIndexedBlendedMesh
+			(
+				meshContainer->OrigMesh_,
+				Flags,
+				meshContainer->NumPaletteEntries,
+				meshContainer->pAdjacency,
+				NULL, NULL, NULL,
+				&meshContainer->NumInfl_,
+				&meshContainer->NumAttributeGroup_,
+				&meshContainer->BoneCombinationBuf_,
+				&meshContainer->MeshData.pMesh
+			);
+
+			if (FAILED(hr))
+			{
+				goto e_Exit;
+			}
 
 
 			// FVF has to match our declarator. Vertex shaders are not as forgiving as FF pipeline
-			DWORD NewFVF = (pMeshContainer->MeshData.pMesh->GetFVF() & D3DFVF_POSITION_MASK) | D3DFVF_NORMAL |
+			DWORD NewFVF = (meshContainer->MeshData.pMesh->GetFVF() & D3DFVF_POSITION_MASK) | D3DFVF_NORMAL |
 				D3DFVF_TEX1 | D3DFVF_LASTBETA_UBYTE4;
-			if (NewFVF != pMeshContainer->MeshData.pMesh->GetFVF())
+
+			if (NewFVF != meshContainer->MeshData.pMesh->GetFVF())
 			{
 				LPD3DXMESH pMesh;
-				hr = pMeshContainer->MeshData.pMesh->CloneMeshFVF(pMeshContainer->MeshData.pMesh->GetOptions(), NewFVF,
-					pd3dDevice, &pMesh);
+				hr = meshContainer->MeshData.pMesh->CloneMeshFVF(meshContainer->MeshData.pMesh->GetOptions(), NewFVF,
+					d3dDevice, &pMesh);
+
 				if (!FAILED(hr))
 				{
-					pMeshContainer->MeshData.pMesh->Release();
-					pMeshContainer->MeshData.pMesh = pMesh;
+					meshContainer->MeshData.pMesh->Release();
+					meshContainer->MeshData.pMesh = pMesh;
 					pMesh = NULL;
 				}
 			}
 
 			D3DVERTEXELEMENT9 pDecl[MAX_FVF_DECL_SIZE];
 			LPD3DVERTEXELEMENT9 pDeclCur;
-			hr = pMeshContainer->MeshData.pMesh->GetDeclaration(pDecl);
+			hr = meshContainer->MeshData.pMesh->GetDeclaration(pDecl);
+
 			if (FAILED(hr))
+			{
 				goto e_Exit;
+			}
 
 			// the vertex shader is expecting to interpret the UBYTE4 as a D3DCOLOR, so update the type 
 			//   NOTE: this cannot be done with CloneMesh, that would convert the UBYTE4 data to float and then to D3DCOLOR
@@ -113,75 +162,140 @@ namespace {
 			while (pDeclCur->Stream != 0xff)
 			{
 				if ((pDeclCur->Usage == D3DDECLUSAGE_BLENDINDICES) && (pDeclCur->UsageIndex == 0))
+				{
 					pDeclCur->Type = D3DDECLTYPE_D3DCOLOR;
+				}
+
 				pDeclCur++;
 			}
 
-			hr = pMeshContainer->MeshData.pMesh->UpdateSemantics(pDecl);
+			hr = meshContainer->MeshData.pMesh->UpdateSemantics(pDecl);
+
 			if (FAILED(hr))
+			{
 				goto e_Exit;
+			}
 
 		}
+
 	e_Exit:
 		return hr;
+
 	}
-	HRESULT AllocateName(LPCSTR Name, LPSTR* pNewName)
+
+	/**
+	 * Allocate name.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param 		   name	    The name.
+	 * @param [in,out] newName If non-null, name of the new.
+	 *
+	 * @return A hResult.
+	 */
+	HRESULT AllocateName(LPCSTR name, LPSTR* newName)
 	{
 		UINT cbLength;
 
-		if (Name != NULL)
+		//名前がない
+		if (name != NULL)
 		{
-			cbLength = (UINT)strlen(Name) + 1;
-			*pNewName = new CHAR[cbLength];
-			if (*pNewName == NULL)
+			cbLength = (UINT)strlen(name) + 1;
+			
+			*newName = new CHAR[cbLength];
+			if (*newName == NULL)
+			{
 				return E_OUTOFMEMORY;
-			memcpy(*pNewName, Name, cbLength * sizeof(CHAR));
+			}
+
+			memcpy(*newName, name, cbLength * sizeof(CHAR));
+		
 		}
 		else
 		{
-			*pNewName = NULL;
+			*newName = NULL;
 		}
 
 		return S_OK;
 	}
-	//--------------------------------------------------------------------------------------
-	// Called to setup the pointers for a given bone to its transformation matrix
-	//--------------------------------------------------------------------------------------
-	HRESULT SetupBoneMatrixPointersOnMesh(LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRAME rootFrame)
+
+	/**
+	 * --------------------------------------------------------------------------------------
+	 *  Called to setup the pointers for a given bone to its transformation matrix
+	 * --------------------------------------------------------------------------------------.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param meshContainerBase The mesh container base.
+	 * @param rootFrame			 The root frame.
+	 *
+	 * @return A hResult.
+	 */
+	HRESULT SetupBoneMatrixPointersOnMesh(LPD3DXMESHCONTAINER meshContainerBase, LPD3DXFRAME rootFrame)
 	{
 		UINT iBone, cBones;
 		D3DXFRAME_DERIVED* pFrame;
 
-		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
+		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)meshContainerBase;
 
 		// if there is a skinmesh, then setup the bone matrices
 		if (pMeshContainer->pSkinInfo != NULL)
 		{
 			cBones = pMeshContainer->pSkinInfo->GetNumBones();
 
-			pMeshContainer->ppBoneMatrixPtrs = new D3DXMATRIX*[cBones];
-			if (pMeshContainer->ppBoneMatrixPtrs == NULL)
+			//ボーンマトリクスのポインタを作成
+			pMeshContainer->BoneMatrixPtrs_ = new D3DXMATRIX*[cBones];
+			if (pMeshContainer->BoneMatrixPtrs_ == NULL)
+			{
 				return E_OUTOFMEMORY;
+			}
 
 			for (iBone = 0; iBone < cBones; iBone++)
 			{
-				pMeshContainer->ppBoneMatrixPtrs[iBone] = NULL;
+				pMeshContainer->BoneMatrixPtrs_[iBone] = NULL;
 				LPCSTR boneName = pMeshContainer->pSkinInfo->GetBoneName(iBone);
-				pFrame = (D3DXFRAME_DERIVED*)D3DXFrameFind(rootFrame,
-					boneName);
-				if (pFrame == NULL)
-					return E_FAIL;
 
-				pMeshContainer->ppBoneMatrixPtrs[iBone] = &pFrame->CombinedTransformationMatrix;
+				//フレーム呼び出し
+				pFrame = (D3DXFRAME_DERIVED*)D3DXFrameFind(rootFrame,boneName);
+
+				if (pFrame == NULL)
+				{
+					//ない
+					return E_FAIL;
+				}
+
+				//登録
+				pMeshContainer->BoneMatrixPtrs_[iBone] = &pFrame->CombinedTransformationMatrix_;
+
 			}
+
 		}
+
 		return S_OK;
 	}
 
-
-	class CAllocateHierarchy : public ID3DXAllocateHierarchy
+	/**
+	 * An allocate hierarchy.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	class AllocateHierarchy : public ID3DXAllocateHierarchy
 	{
 	public:
+
+		/**
+		* コンストラクタ.
+		*
+		* @author HiramatsuTadashi
+		* @date 2017/01/10
+		*/
+		AllocateHierarchy()
+		{
+		}
+
 		STDMETHOD(CreateFrame)(THIS_ LPCSTR Name, LPD3DXFRAME *ppNewFrame);
 		STDMETHOD(CreateMeshContainer)(THIS_
 			LPCSTR Name,
@@ -194,16 +308,24 @@ namespace {
 			LPD3DXMESHCONTAINER *ppNewMeshContainer);
 		STDMETHOD(DestroyFrame)(THIS_ LPD3DXFRAME pFrameToFree);
 		STDMETHOD(DestroyMeshContainer)(THIS_ LPD3DXMESHCONTAINER pMeshContainerBase);
-
-		CAllocateHierarchy()
-		{
-		}
+		
 	};
-	//--------------------------------------------------------------------------------------
-	// Name: CAllocateHierarchy::CreateFrame()
-	// Desc: 
-	//--------------------------------------------------------------------------------------
-	HRESULT CAllocateHierarchy::CreateFrame(LPCSTR Name, LPD3DXFRAME* ppNewFrame)
+
+	/**
+	 * --------------------------------------------------------------------------------------
+	 *  Name: AllocateHierarchy::CreateFrame()
+	 *  Desc:
+	 * --------------------------------------------------------------------------------------.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param 		   Name		  The name.
+	 * @param [in,out] ppNewFrame If non-null, the new frame.
+	 *
+	 * @return The new frame.
+	 */
+	HRESULT AllocateHierarchy::CreateFrame(LPCSTR Name, LPD3DXFRAME* ppNewFrame)
 	{
 		HRESULT hr = S_OK;
 		D3DXFRAME_DERIVED* pFrame;
@@ -223,7 +345,7 @@ namespace {
 
 		// initialize other data members of the frame
 		D3DXMatrixIdentity(&pFrame->TransformationMatrix);
-		D3DXMatrixIdentity(&pFrame->CombinedTransformationMatrix);
+		D3DXMatrixIdentity(&pFrame->CombinedTransformationMatrix_);
 
 		pFrame->pMeshContainer = NULL;
 		pFrame->pFrameSibling = NULL;
@@ -236,11 +358,28 @@ namespace {
 		delete pFrame;
 		return hr;
 	}
-	//--------------------------------------------------------------------------------------
-	// Name: CAllocateHierarchy::CreateMeshContainer()
-	// Desc: 
-	//--------------------------------------------------------------------------------------
-	HRESULT CAllocateHierarchy::CreateMeshContainer(
+
+	/**
+	 * --------------------------------------------------------------------------------------
+	 *  Name: AllocateHierarchy::CreateMeshContainer()
+	 *  Desc:
+	 * --------------------------------------------------------------------------------------.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param 		   Name				  The name.
+	 * @param 		   pMeshData		  Information describing the mesh.
+	 * @param 		   pMaterials		  The materials.
+	 * @param 		   pEffectInstances   The effect instances.
+	 * @param 		   NumMaterials		  Number of materials.
+	 * @param 		   pAdjacency		  The adjacency.
+	 * @param 		   pSkinInfo		  Information describing the skin.
+	 * @param [in,out] ppNewMeshContainer If non-null, the new mesh container.
+	 *
+	 * @return The new mesh container.
+	 */
+	HRESULT AllocateHierarchy::CreateMeshContainer(
 		LPCSTR Name,
 		CONST D3DXMESHDATA *pMeshData,
 		CONST D3DXMATERIAL *pMaterials,
@@ -315,7 +454,7 @@ namespace {
 		//   the D3D9 materials and texture names instead of the EffectInstance style materials
 		pMeshContainer->NumMaterials = max(1, NumMaterials);
 		pMeshContainer->pMaterials = new D3DXMATERIAL[pMeshContainer->NumMaterials];
-		pMeshContainer->ppTextures = new LPDIRECT3DTEXTURE9[pMeshContainer->NumMaterials];
+		pMeshContainer->Texture_ = new LPDIRECT3DTEXTURE9[pMeshContainer->NumMaterials];
 		pMeshContainer->pAdjacency = new DWORD[NumFaces * 3];
 		if ((pMeshContainer->pAdjacency == NULL) || (pMeshContainer->pMaterials == NULL))
 		{
@@ -324,7 +463,7 @@ namespace {
 		}
 
 		memcpy(pMeshContainer->pAdjacency, pAdjacency, sizeof(DWORD) * NumFaces * 3);
-		memset(pMeshContainer->ppTextures, 0, sizeof(LPDIRECT3DTEXTURE9) * pMeshContainer->NumMaterials);
+		memset(pMeshContainer->Texture_, 0, sizeof(LPDIRECT3DTEXTURE9) * pMeshContainer->NumMaterials);
 
 		// if materials provided, copy them
 		if (NumMaterials > 0)
@@ -342,9 +481,9 @@ namespace {
 					if (FAILED(D3DXCreateTextureFromFile(
 						pd3dDevice,
 						filePath,
-						&pMeshContainer->ppTextures[iMaterial]))
+						&pMeshContainer->Texture_[iMaterial]))
 						) {
-						pMeshContainer->ppTextures[iMaterial] = NULL;
+						pMeshContainer->Texture_[iMaterial] = NULL;
 					}
 
 					// don't remember a pointer into the dynamic memory, just forget the name after loading
@@ -369,13 +508,14 @@ namespace {
 			pMeshContainer->pSkinInfo = pSkinInfo;
 			pSkinInfo->AddRef();
 
-			pMeshContainer->pOrigMesh = pMesh;
+			pMeshContainer->OrigMesh_ = pMesh;
 			pMesh->AddRef();
 
 			// Will need an array of offset matrices to move the vertices from the figure space to the bone's space
 			cBones = pSkinInfo->GetNumBones();
-			pMeshContainer->pBoneOffsetMatrices = new D3DXMATRIX[cBones];
-			if (pMeshContainer->pBoneOffsetMatrices == NULL)
+			pMeshContainer->BoneOffsetMatrix_ = new D3DXMATRIX[cBones];
+
+			if (pMeshContainer->BoneOffsetMatrix_ == NULL)
 			{
 				hr = E_OUTOFMEMORY;
 				goto e_Exit;
@@ -384,7 +524,7 @@ namespace {
 			// get each of the bone offset matrices so that we don't need to get them later
 			for (iBone = 0; iBone < cBones; iBone++)
 			{
-				pMeshContainer->pBoneOffsetMatrices[iBone] = *(pMeshContainer->pSkinInfo->GetBoneOffsetMatrix(iBone));
+				pMeshContainer->BoneOffsetMatrix_[iBone] = *(pMeshContainer->pSkinInfo->GetBoneOffsetMatrix(iBone));
 			}
 
 			// GenerateSkinnedMesh will take the general skinning information and transform it to a HW friendly version
@@ -407,8 +547,9 @@ namespace {
 			//D3DXComputeTangentFrameExを実行すると属性テーブルの情報が失われる・・・。
 			DWORD numAttributeTable;
 			pMeshContainer->MeshData.pMesh->GetAttributeTable(NULL, &numAttributeTable);
-			pMeshContainer->pAttributeTable = new D3DXATTRIBUTERANGE[numAttributeTable];
-			pMeshContainer->MeshData.pMesh->GetAttributeTable(pMeshContainer->pAttributeTable, NULL);
+			pMeshContainer->AttributeTable_ = new D3DXATTRIBUTERANGE[numAttributeTable];
+			pMeshContainer->MeshData.pMesh->GetAttributeTable(pMeshContainer->AttributeTable_, NULL);
+
 			hr = D3DXComputeTangentFrameEx(
 				pTmpMesh,
 				D3DDECLUSAGE_TEXCOORD,
@@ -427,17 +568,22 @@ namespace {
 				&pOutMesh,
 				NULL
 			);
+
 			//一時メッシュを破棄。
 			SAFE_RELEASE(pTmpMesh);
 			SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
 			pMeshContainer->MeshData.pMesh = pOutMesh;
 
 			if (FAILED(hr))
+			{
 				goto e_Exit;
-		}
-		else {
+			}
 
-			pMeshContainer->pOrigMesh = pMesh;
+		}
+		else 
+		{
+
+			pMeshContainer->OrigMesh_ = pMesh;
 			pMesh->AddRef();
 
 			LPD3DXMESH pOutMesh, pTmpMesh;
@@ -448,8 +594,8 @@ namespace {
 				pd3dDevice, &pOutMesh);
 			DWORD numAttributeTable;
 			pMeshContainer->MeshData.pMesh->GetAttributeTable(NULL, &numAttributeTable);
-			pMeshContainer->pAttributeTable = new D3DXATTRIBUTERANGE[numAttributeTable];
-			pMeshContainer->MeshData.pMesh->GetAttributeTable(pMeshContainer->pAttributeTable, NULL);
+			pMeshContainer->AttributeTable_ = new D3DXATTRIBUTERANGE[numAttributeTable];
+			pMeshContainer->MeshData.pMesh->GetAttributeTable(pMeshContainer->AttributeTable_, NULL);
 			numVert = pMeshContainer->MeshData.pMesh->GetNumVertices();
 			
 			//一時メッシュに退避。
@@ -500,107 +646,175 @@ namespace {
 
 		return hr;
 	}
-	//--------------------------------------------------------------------------------------
-	// Name: CAllocateHierarchy::DestroyFrame()
-	// Desc: 
-	//--------------------------------------------------------------------------------------
-	HRESULT CAllocateHierarchy::DestroyFrame(LPD3DXFRAME pFrameToFree)
+
+	/**
+	 * --------------------------------------------------------------------------------------
+	 *  Name: AllocateHierarchy::DestroyFrame()
+	 *  Desc:
+	 * --------------------------------------------------------------------------------------.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param pFrameToFree The frame to free.
+	 *
+	 * @return A hResult.
+	 */
+	HRESULT AllocateHierarchy::DestroyFrame(LPD3DXFRAME pFrameToFree)
 	{
 		SAFE_DELETE_ARRAY(pFrameToFree->Name);
 		SAFE_DELETE(pFrameToFree);
 		return S_OK;
 	}
 
-
-
-
-	//--------------------------------------------------------------------------------------
-	// Name: CAllocateHierarchy::DestroyMeshContainer()
-	// Desc: 
-	//--------------------------------------------------------------------------------------
-	HRESULT CAllocateHierarchy::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase)
+	/**
+	 * --------------------------------------------------------------------------------------
+	 *  Name: AllocateHierarchy::DestroyMeshContainer()
+	 *  Desc:
+	 * --------------------------------------------------------------------------------------.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param pMeshContainerBase The mesh container base.
+	 *
+	 * @return A hResult.
+	 */
+	HRESULT AllocateHierarchy::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase)
 	{
 		InnerDestroyMeshContainer(pMeshContainerBase);
 		return S_OK;
 	}
 
-
 }
 
 namespace nkEngine
 {
-	
-	CSkinModelData::CSkinModelData() :
-		m_FrameRoot(nullptr),
-		m_isClone(false),
-		m_AnimController(nullptr),
-		m_vertexDeclForInstancingRender(nullptr),
-		m_numInstance(0),
-		m_vertexBufferStride(0)
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	SkinModelData::SkinModelData() :
+		FrameRoot_(nullptr),
+		isClone_(false),
+		D3DAnimController_(nullptr),
+		VertexDeclForInstancingRender_(nullptr),
+		numInstance_(0),
+		VertexBufferStride_(0)
 	{
 	}
 
-	CSkinModelData::~CSkinModelData()
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	SkinModelData::~SkinModelData()
 	{
 		Release();
 	}
 
-	void CSkinModelData::CloneModelData(const CSkinModelData & ModelData, CAnimation * anim)
+	/**
+	 * Clone model data.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param 		   modelData Information describing the model.
+	 * @param [in,out] anim		 If non-null, the animation.
+	 */
+	void SkinModelData::CloneModelData(const SkinModelData & modelData, Animation * anim)
 	{
 		//スケルトンの複製を作成
-		m_isClone = true;
-		m_FrameRoot = new D3DXFRAME_DERIVED;
-		m_FrameRoot->pFrameFirstChild = nullptr;
-		m_FrameRoot->pFrameSibling = nullptr;
-		m_FrameRoot->pMeshContainer = nullptr;
+		isClone_ = true;
 
-		CloneSkeleton(m_FrameRoot, ModelData.m_FrameRoot);
+		FrameRoot_ = new D3DXFRAME_DERIVED;
+		FrameRoot_->pFrameFirstChild = nullptr;
+		FrameRoot_->pFrameSibling = nullptr;
+		FrameRoot_->pMeshContainer = nullptr;
+
+		//クローン作製
+		CloneSkeleton(FrameRoot_, modelData.FrameRoot_);
 
 		//アニメーションコントローラを作成して、スケルトンと関連付けを行う。
-		if (ModelData.m_AnimController)
+		if (modelData.D3DAnimController_)
 		{
-			ModelData.m_AnimController->CloneAnimationController(
-				ModelData.m_AnimController->GetMaxNumAnimationOutputs(),
-				ModelData.m_AnimController->GetMaxNumAnimationSets(),
-				ModelData.m_AnimController->GetMaxNumTracks(),
-				ModelData.m_AnimController->GetMaxNumEvents(),
-				&m_AnimController);
+			//アニメーションコントローラをクローン
+			modelData.D3DAnimController_->CloneAnimationController(
+				modelData.D3DAnimController_->GetMaxNumAnimationOutputs(),
+				modelData.D3DAnimController_->GetMaxNumAnimationSets(),
+				modelData.D3DAnimController_->GetMaxNumTracks(),
+				modelData.D3DAnimController_->GetMaxNumEvents(),
+				&D3DAnimController_
+			);
 
-			SetupOutputAnimationRegist(m_FrameRoot, m_AnimController);
+			//意味不
+			SetupOutputAnimationRegist(FrameRoot_, D3DAnimController_);
 
-			if (anim && m_AnimController)
+			//アニメーションコントローラがあれば
+			if (anim && D3DAnimController_)
 			{
-				anim->Init(m_AnimController);
+				//アニメーションクラスの初期化
+				anim->Init(D3DAnimController_);
 			}
-		}
-		SetupBoneMatrixPointers(m_FrameRoot, m_FrameRoot);
-	}
-	
-	void CSkinModelData::Release()
-	{
-		SAFE_RELEASE(m_vertexDeclForInstancingRender);
 
-		if (m_isClone && m_FrameRoot) {
+		}
+
+		//謎
+		SetupBoneMatrixPointers(FrameRoot_, FrameRoot_);
+	
+	}
+
+	/**
+	 * 解放.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
+	void SkinModelData::Release()
+	{
+
+		SAFE_RELEASE(VertexDeclForInstancingRender_);
+
+		if (isClone_ && FrameRoot_)
+		{
 			//クローン
-			DeleteCloneSkeleton(m_FrameRoot);
-			m_FrameRoot = nullptr;
+			DeleteCloneSkeleton(FrameRoot_);
+			FrameRoot_ = nullptr;
 		}
 		else
 		{
-			DeleteSkeleton(m_FrameRoot);
+			DeleteSkeleton(FrameRoot_);
 		}
-		//メモリリーク回避の残骸
-		//DestroyMeshContainer(m_FrameRoot->pMeshContainer);
 
-		m_instanceVertexBuffer.Release();
-		m_numInstance = 0;
+		//インスタンス用頂点バッファの解放
+		InstanceVertexBuffer_.Release();
+
+		numInstance_ = 0;
+
 	}
 
-	void CSkinModelData::DeleteSkeleton(LPD3DXFRAME frame)
+	/**
+	 * Deletes the skeleton described by frame.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param frame The frame.
+	 */
+	void SkinModelData::DeleteSkeleton(LPD3DXFRAME frame)
 	{
-		if (!frame) {
+
+		//フレームが無効
+		if (!frame) 
+		{
 			return;
 		}
+
 		if (frame->pMeshContainer != NULL)
 		{
 			//メッシュコンテナがある。
@@ -618,43 +832,89 @@ namespace nkEngine
 			//子供がいる。
 			DeleteSkeleton(frame->pFrameFirstChild);
 		}
+
 		SAFE_DELETE_ARRAY(frame->Name);
 		SAFE_DELETE(frame);
+
 	}
 
-	void CSkinModelData::LoadModelData(const char* filePath, CAnimation* anim)
+	/**
+	 * Loads model data.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param 		   filePath Full pathname of the file.
+	 * @param [in,out] anim	    If non-null, the animation.
+	 */
+	void SkinModelData::LoadModelData(const char* filePath, Animation* anim)
 	{
+
+		//ファイルパスの作成
 		char* baseDir = "Asset/Model/";
 		char Path[64];
 		strcpy(Path, baseDir);
 		strcat(Path, filePath);
-		CAllocateHierarchy alloc;
+		
+		AllocateHierarchy alloc;
+
+		//ロード
 		HRESULT hr = D3DXLoadMeshHierarchyFromX(
 			Path,
 			D3DXMESH_VB_MANAGED,
 			Engine().GetDevice(),
 			&alloc,
 			nullptr,
-			&m_FrameRoot,
-			&m_AnimController
+			&FrameRoot_,
+			&D3DAnimController_
 		);
+
 		NK_ASSERT(SUCCEEDED(hr), "D3DXLoadMeshHierarchyFromXに失敗しました");
-		SetupBoneMatrixPointers(m_FrameRoot, m_FrameRoot);
-		if (anim && m_AnimController) {
-			anim->Init(m_AnimController);
+
+		//謎
+		SetupBoneMatrixPointers(FrameRoot_, FrameRoot_);
+
+		if (anim && D3DAnimController_) 
+		{
+			//アニメーションクラスの初期化
+			anim->Init(D3DAnimController_);
 		}
-		else {
-			SAFE_RELEASE(m_AnimController);
+		else 
+		{
+			//アニメーションコントローラの解放
+			SAFE_RELEASE(D3DAnimController_);
 		}
 	}
 
-	void CSkinModelData::CreateInstancingRenderData(int numInstance, D3DVERTEXELEMENT9 * vertexElement)
+	/**
+	 * Creates instancing render data.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param 		   numInstance   Number of instances.
+	 * @param [in,out] vertexElement If non-null, the vertex element.
+	 */
+	void SkinModelData::CreateInstancingRenderData(int numInstance, D3DVERTEXELEMENT9 * vertexElement)
 	{
-		m_numInstance = numInstance;
-		CreateInstancingRenderData(m_FrameRoot, numInstance, vertexElement);
+		numInstance_ = numInstance;
+
+		CreateInstancingRenderData(FrameRoot_, numInstance_, vertexElement);
 	}
 
-	bool CSkinModelData::CreateInstancingRenderData(D3DXFRAME * frame, int numInstance, D3DVERTEXELEMENT9 * vertexElement)
+	/**
+	 * Creates instancing render data.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param [in,out] frame		 If non-null, the frame.
+	 * @param 		   numInstance   Number of instances.
+	 * @param [in,out] vertexElement If non-null, the vertex element.
+	 *
+	 * @return True if it succeeds, false if it fails.
+	 */
+	bool SkinModelData::CreateInstancingRenderData(D3DXFRAME * frame, int numInstance, D3DVERTEXELEMENT9 * vertexElement)
 	{
 		if (frame->pMeshContainer)
 		{
@@ -677,39 +937,61 @@ namespace nkEngine
 						declElement[elementIndex] = vertexElement[i];
 						elementIndex++;
 					}
+
 					//終端を埋め込んで終わり
 					declElement[elementIndex] = D3DDECL_END();
+
 					break;
 				}
+
 				elementIndex++;
 			}
+
 			//頂点定義の作成
 			IDirect3DDevice9* d3dDevice;
 			frame->pMeshContainer->MeshData.pMesh->GetDevice(&d3dDevice);
-			d3dDevice->CreateVertexDeclaration(declElement, &m_vertexDeclForInstancingRender);
+			d3dDevice->CreateVertexDeclaration(declElement, &VertexDeclForInstancingRender_);
 
 			//頂点バッファの作成
 			DWORD vertexBufferStride = D3DXGetDeclVertexSize(vertexElement, 1);
-			m_instanceVertexBuffer.Create(numInstance, vertexBufferStride, vertexElement, nullptr);
+			InstanceVertexBuffer_.Create(numInstance, vertexBufferStride, vertexElement, nullptr);
 		
 			return true;
 		}
-		if (frame->pFrameSibling != nullptr) {
+
+		if (frame->pFrameSibling != nullptr)
+		{
 			//兄弟がいる
-			if (CreateInstancingRenderData(frame->pFrameSibling, numInstance, vertexElement)) {
+			if (CreateInstancingRenderData(frame->pFrameSibling, numInstance, vertexElement))
+			{
 				return true;
 			}
 		}
-		if (frame->pFrameFirstChild != nullptr) {
+
+		if (frame->pFrameFirstChild != nullptr)
+		{
 			//子供がいる。
-			if (CreateInstancingRenderData(frame->pFrameFirstChild, numInstance, vertexElement)) {
+			if (CreateInstancingRenderData(frame->pFrameFirstChild, numInstance, vertexElement)) 
+			{
 				return true;
 			}
 		}
+
 		return false;
 	}
 
-	HRESULT CSkinModelData::SetupBoneMatrixPointers(D3DXFRAME * pFrame, D3DXFRAME * pRootFrame)
+	/**
+	 * Sets up the bone matrix pointers.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param [in,out] pFrame	  If non-null, the frame.
+	 * @param [in,out] pRootFrame If non-null, the root frame.
+	 *
+	 * @return A hResult.
+	 */
+	HRESULT SkinModelData::SetupBoneMatrixPointers(D3DXFRAME * pFrame, D3DXFRAME * pRootFrame)
 	{
 		HRESULT hr;
 
@@ -718,48 +1000,76 @@ namespace nkEngine
 			//頂点ストライドもここで調べる。
 			D3DVERTEXELEMENT9 Declaration[MAX_FVF_DECL_SIZE];
 			pFrame->pMeshContainer->MeshData.pMesh->GetDeclaration(Declaration);
-			m_vertexBufferStride = D3DXGetDeclVertexSize(Declaration, 0);
+			VertexBufferStride_ = D3DXGetDeclVertexSize(Declaration, 0);
 			hr = SetupBoneMatrixPointersOnMesh(pFrame->pMeshContainer, pRootFrame);
+			
 			if (FAILED(hr))
+			{
 				return hr;
+			}
+
 		}
 
 		if (pFrame->pFrameSibling != NULL)
 		{
 			hr = SetupBoneMatrixPointers(pFrame->pFrameSibling, pRootFrame);
+
 			if (FAILED(hr))
+			{
 				return hr;
+			}
 		}
 
 		if (pFrame->pFrameFirstChild != NULL)
 		{
 			hr = SetupBoneMatrixPointers(pFrame->pFrameFirstChild, pRootFrame);
+		
 			if (FAILED(hr))
+			{
 				return hr;
+			}
 		}
 
 		return S_OK;
 	}
 
-	LPD3DXMESH CSkinModelData::GetOrgMesh(LPD3DXFRAME frame) const
+	/**
+	 * Gets organisation mesh.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param frame The frame.
+	 *
+	 * @return The organisation mesh.
+	 */
+	LPD3DXMESH SkinModelData::GetOrgMesh(LPD3DXFRAME frame) const
 	{
 		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(frame->pMeshContainer);
-		if (pMeshContainer != nullptr) {
-			return pMeshContainer->pOrigMesh;
+		
+		if (pMeshContainer != nullptr)
+		{
+			return pMeshContainer->OrigMesh_;
 		}
-		if (frame->pFrameSibling != nullptr) {
+		
+		if (frame->pFrameSibling != nullptr) 
+		{
 			//兄弟
 			LPD3DXMESH mesh = GetOrgMesh(frame->pFrameSibling);
 
-			if (mesh) {
+			if (mesh) 
+			{
 				return mesh;
 			}
 		}
+		
 		if (frame->pFrameFirstChild != nullptr)
 		{
 			//子供。
 			LPD3DXMESH mesh = GetOrgMesh(frame->pFrameFirstChild);
-			if (mesh) {
+			
+			if (mesh) 
+			{
 				return mesh;
 			}
 		}
@@ -767,56 +1077,111 @@ namespace nkEngine
 		return nullptr;
 	}
 
-	LPD3DXMESH CSkinModelData::GetOrgMeshFirst() const
+	/**
+	 * Gets organisation mesh first.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @return The organisation mesh first.
+	 */
+	LPD3DXMESH SkinModelData::GetOrgMeshFirst() const
 	{
-		return GetOrgMesh(m_FrameRoot);
+		return GetOrgMesh(FrameRoot_);
 	}
 
-	void CSkinModelData::SetupOutputAnimationRegist(D3DXFRAME * frame, ID3DXAnimationController * aniCon)
+	/**
+	 * Sets up the output animation regist.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param [in,out] frame  If non-null, the frame.
+	 * @param [in,out] aniCon If non-null, the animation con.
+	 */
+	void SkinModelData::SetupOutputAnimationRegist(D3DXFRAME * frame, ID3DXAnimationController * aniCon)
 	{
-		if (aniCon == nullptr) {
+		if (aniCon == nullptr) 
+		{
 			return;
 		}
-		HRESULT hr = aniCon->RegisterAnimationOutput(frame->Name, &frame->TransformationMatrix, nullptr, nullptr, nullptr);
-		if (frame->pFrameSibling != nullptr) {
+
+		//ここ危険な気がする
+		aniCon->RegisterAnimationOutput(frame->Name, &frame->TransformationMatrix, nullptr, nullptr, nullptr);
+
+		if (frame->pFrameSibling != nullptr) 
+		{
 			SetupOutputAnimationRegist(frame->pFrameSibling, aniCon);
 		}
+
 		if (frame->pFrameFirstChild != nullptr)
 		{
 			SetupOutputAnimationRegist(frame->pFrameFirstChild, aniCon);
 		}
+
 	}
 
-	void CSkinModelData::UpdateBoneMatrix(const D3DXMATRIX& matWorld)
+	/**
+	 * Updates the bone matrix described by matWorld.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param matWorld The matrix world.
+	 */
+	void SkinModelData::UpdateBoneMatrix(const D3DXMATRIX& matWorld)
 	{
-		UpdateFrameMatrices(m_FrameRoot, reinterpret_cast<const D3DXMATRIX*>(&matWorld));
+		UpdateFrameMatrices(FrameRoot_, reinterpret_cast<const D3DXMATRIX*>(&matWorld));
 	}
 
-	void CSkinModelData::UpdateFrameMatrices(LPD3DXFRAME pFrameBase, const D3DXMATRIX* pParentMatrix)
+	/**
+	 * Updates the frame matrices.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param pFrameBase    The frame base.
+	 * @param pParentMatrix The parent matrix.
+	 */
+	void SkinModelData::UpdateFrameMatrices(LPD3DXFRAME pFrameBase, const D3DXMATRIX* pParentMatrix)
 	{
 		D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
 
 		if (pParentMatrix != NULL)
 		{
-			D3DXMatrixMultiply(&pFrame->CombinedTransformationMatrix, &pFrame->TransformationMatrix, pParentMatrix);
+			//親がいたので行列計算
+			D3DXMatrixMultiply(&pFrame->CombinedTransformationMatrix_, &pFrame->TransformationMatrix, pParentMatrix);
 		}
 		else
 		{
-			pFrame->CombinedTransformationMatrix = pFrame->TransformationMatrix;
+			//親がいない
+			pFrame->CombinedTransformationMatrix_ = pFrame->TransformationMatrix;
 		}
 
 		if (pFrame->pFrameSibling != NULL)
 		{
+			//兄弟
 			UpdateFrameMatrices(pFrame->pFrameSibling, pParentMatrix);
 		}
 
 		if (pFrame->pFrameFirstChild != NULL)
 		{
-			UpdateFrameMatrices(pFrame->pFrameFirstChild, &pFrame->CombinedTransformationMatrix);
+			//子供
+			UpdateFrameMatrices(pFrame->pFrameFirstChild, &pFrame->CombinedTransformationMatrix_);
 		}
+
 	}
 
-	void CSkinModelData::CloneSkeleton(LPD3DXFRAME & dstFrame, D3DXFRAME * srcFrame)
+	/**
+	 * Clone skeleton.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param [in,out] dstFrame Destination frame.
+	 * @param [in,out] srcFrame If non-null, source frame.
+	 */
+	void SkinModelData::CloneSkeleton(LPD3DXFRAME & dstFrame, D3DXFRAME * srcFrame)
 	{
 		//名前と行列をコピー
 		dstFrame->TransformationMatrix = srcFrame->TransformationMatrix;
@@ -831,6 +1196,7 @@ namespace nkEngine
 		{
 			dstFrame->pMeshContainer = nullptr;
 		}
+
 		//名前をコピー
 		AllocateName(srcFrame->Name, &dstFrame->Name);
 
@@ -841,6 +1207,7 @@ namespace nkEngine
 			dstFrame->pFrameSibling->pFrameFirstChild = nullptr;
 			dstFrame->pFrameSibling->pFrameSibling = nullptr;
 			dstFrame->pFrameSibling->pMeshContainer = nullptr;
+			
 			CloneSkeleton(dstFrame->pFrameSibling, srcFrame->pFrameSibling);
 		}
 
@@ -853,29 +1220,43 @@ namespace nkEngine
 			dstFrame->pFrameFirstChild->pMeshContainer = nullptr;
 
 			CloneSkeleton(dstFrame->pFrameFirstChild, srcFrame->pFrameFirstChild);
-
 		}
+
 	}
 
-	void CSkinModelData::DeleteCloneSkeleton(D3DXFRAME * frame)
+	/**
+	 * Deletes the clone skeleton described by frame.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 *
+	 * @param [in,out] frame If non-null, the frame.
+	 */
+	void SkinModelData::DeleteCloneSkeleton(D3DXFRAME * frame)
 	{
 		if (frame->pFrameSibling != nullptr)
 		{
 			//兄弟
 			DeleteCloneSkeleton(frame->pFrameSibling);
 		}
+
 		if (frame->pFrameFirstChild != nullptr)
 		{
 			//子供
 			DeleteCloneSkeleton(frame->pFrameFirstChild);
 		}
+		
 		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(frame->pMeshContainer);
+		
 		if (pMeshContainer)
 		{
-			delete[] pMeshContainer->ppBoneMatrixPtrs;
+			delete[] pMeshContainer->BoneMatrixPtrs_;
 			delete pMeshContainer;
 		}
+
 		delete[] frame->Name;
 		delete frame;
+
 	}
-}
+
+}// namespace nkEngine

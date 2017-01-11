@@ -108,7 +108,7 @@ namespace nkEngine
 			Effect_->Begin(0, D3DXFX_DONOTSAVESTATE);
 			Effect_->BeginPass(0);
 
-			Effect_->SetTexture("g_Texture", ScreenRender().GetMainRenderTarget().GetTexture()->GetTextureDX());
+			Effect_->SetTexture("g_Texture", ScreenRender().GetMainRenderTarget().GetTextureDX());
 			Effect_->SetValue("g_TexSize", texSize, sizeof(texSize));
 			
 			Effect_->CommitChanges();

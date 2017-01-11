@@ -1,146 +1,310 @@
+/**
+ * @file _GameObject\nkGameObject.h
+ *
+ * ゲームオブジェクトクラスの定義.
+ */
 #pragma once
 
 namespace nkEngine
 {
-	typedef unsigned char GOPriority; //unsigned char
 
-	//ゲームオブジェクトマネージャに登録する基底クラス
+	/** unsigned char. */
+	typedef unsigned char GOPriorityT;
+
+	/**
+	 * ゲームオブジェクトマネージャに登録する基底クラス.
+	 * ゲーム開発では基本このクラスを継承させる.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/10
+	 */
 	class IGameObject
 	{
 	public:
 
-		//コンストラクタ
+		/**
+		 * コンストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		IGameObject();
-		//デストラクタ
+
+		/**
+		 * デストラクタ.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		virtual ~IGameObject();
 
 	public:
-		//メンバ関数
 
-		//コンストラクタの後に呼ばれる初期化
-		virtual void Awake() {}
-		//初期化
-		virtual void Start() {}
-		//Updateの前に呼ばれる更新
-		virtual void PreUpdate() {}
-		//更新
-		virtual void Update() {}
-		//Updateの後に呼ばれる更新
-		virtual void PostUpdate() {}
-		//Renderの前に呼ばれる描画
-		virtual void PreRender() {}
-		//描画
-		virtual void Render() {}
-		//ポストエフェクトの後に呼ばれる描画
-		virtual void PostRender() {}
-		//デストラクタの前に呼ばれる解放
-		virtual void Release() {}
+		/**
+		 * コンストラクタの後に呼ばれる初期化.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		virtual void Awake() 
+		{
+		}
+
+		/**
+		 * 初期化.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		virtual void Start() 
+		{
+		}
+
+		/**
+		 * Updateの前に呼ばれる更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		virtual void PreUpdate()
+		{
+		}
+
+		/**
+		 * 更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		virtual void Update() 
+		{
+		}
+
+		/**
+		 * Updateの後に呼ばれる更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		virtual void PostUpdate() 
+		{
+		}
+
+		/**
+		 * Renderの前に呼ばれる描画.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		virtual void PreRender() 
+		{
+		}
+
+		/**
+		 * 描画.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		virtual void Render() 
+		{
+		}
+
+		/**
+		 * ポストエフェクトの後に呼ばれる描画.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		virtual void PostRender() 
+		{
+		}
+
+		/**
+		 * デストラクタの前に呼ばれる解放.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
+		virtual void Release() 
+		{
+		}
 
 	public:
-		//ラッパー
-		//継承先のクラスでif分を削減できる
 
-		//コンストラクタの後に呼ばれる初期化
+		/**
+		 * コンストラクタの後に呼ばれる初期化.
+		 * ラッパー.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		virtual void AwakeWrapper()
 		{
-			if (isStart && isActive)
+			if (!isStart_ && isActive_)
 			{
 				Awake();
 			}
 		}
 
-		//初期化
+		/**
+		 * 初期化.
+		 * ラッパー.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		virtual void StartWrapper()
 		{
-			if (!isStart && isActive)
+			if (!isStart_ && isActive_)
 			{
 				Start();
-				isStart = true;
+				isStart_ = true;
 			}
 		}
 
-		//Updateの前に呼ばれる更新
+		/**
+		 * Updateの前に呼ばれる更新.
+		 * ラッパー.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		virtual void PreUpdateWrapper()
 		{
-			if (isStart && isActive)
+			if (isStart_ && isActive_)
 			{
 				PreUpdate();
 			}
 		}
 
-		//更新
+		/**
+		 * 更新.
+		 * ラッパー.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		virtual void UpdateWrapper()
 		{
-			if (isStart && isActive)
+			if (isStart_ && isActive_)
 			{
 				Update();
 			}
 		}
 
-		//Updateの後に呼ばれる更新
+		/**
+		 * Updateの後に呼ばれる更新.
+		 * ラッパー.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		virtual void PostUpdateWrapper()
 		{
-			if (isStart && isActive)
+			if (isStart_ && isActive_)
 			{
 				PostUpdate();
 			}
 		}
 
-		//Renderの前に呼ばれる描画
+		/**
+		 * Renderの前に呼ばれる描画.
+		 * ラッパー.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		virtual void PreRenderWrapper()
 		{
-			if (isStart && isActive)
+			if (isStart_ && isActive_)
 			{
 				PreRender();
 			}
 		}
 
-		//描画
+		/**
+		 * 描画.
+		 * ラッパー.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		virtual void RenderWrapper()
 		{
-			if (isStart && isActive)
+			if (isStart_ && isActive_)
 			{
 				Render();
 			}
 		}
 
-		//ポストエフェクトの後に呼ばれる描画
+		/**
+		 * ポストエフェクトの後に呼ばれる描画.
+		 * ラッパー.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 */
 		virtual void PostRenderWrapper()
 		{
-			if (isStart && isActive)
+			if (isStart_ && isActive_)
 			{
 				PostRender();
 			}
 		}
 
 	public:
-		//ゲッタ、セッタ
 
-		//ゲームオブジェクトのisActiveを取得
+		/**
+		 * ゲームオブジェクトのisActiveを取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return True if it succeeds, false if it fails.
+		 */
 		bool GetActive() const
 		{
-			return isActive;
-		}
-		//ゲームオブジェクトをアクティブ / 非アクティブにします
-		void SetActive(bool _value)
-		{
-			isActive = _value;
+			return isActive_;
 		}
 
-		//優先度を取得
-		GOPriority GetPriority() const
+		/**
+		 * ゲームオブジェクトをアクティブ / 非アクティブにします.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @param value True to value.
+		 */
+		void SetActive(bool value)
 		{
-			return priority;
+			isActive_ = value;
+		}
+
+		/**
+		 * 優先度を取得.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/10
+		 *
+		 * @return The priority.
+		 */
+		GOPriorityT GetPriority() const
+		{
+			return Priority_;
 		}
 
 	public:
-		//メンバ変数(外部から見える)
-		
-		//コンポーネント
-		Transform transform; //トランスフォーム
 
-		GOPriority priority; //優先度
-		bool isActive; //アクティブフラグ
-		bool isStart; //Startが呼ばれているかフラグ
+		/** トランスフォーム. */
+		Transform Transform_;
+		/** 優先度. */
+		GOPriorityT Priority_;
+		/** アクティブフラグ. */
+		bool isActive_;
+		/** Startが呼ばれているかフラグ. */
+		bool isStart_;
+
 	};
-}
+
+}// namespace nkEngine

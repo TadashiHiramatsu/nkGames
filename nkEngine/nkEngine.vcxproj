@@ -159,8 +159,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="debug\nkAssert.h" />
-    <ClInclude Include="debug\nkLog.h" />
     <ClInclude Include="nkEngine.h" />
     <ClInclude Include="nkOriginalDefine.h" />
     <ClInclude Include="nkstdafx.h" />
@@ -168,6 +166,8 @@
     <ClInclude Include="_Component\nkTransform.h" />
     <ClInclude Include="_Component\nkRectTransform.h" />
     <ClInclude Include="_DataLoad\nkCSVData.h" />
+    <ClInclude Include="_Debug\nkAssert.h" />
+    <ClInclude Include="_Debug\nkLog.h" />
     <ClInclude Include="_GameObject\nkGameObject.h" />
     <ClInclude Include="_GameObject\nkGameObjectManager.h" />
     <ClInclude Include="_Graphics\nkBlur.h" />
@@ -224,7 +224,6 @@
     <ClCompile Include="_Component\nkCharacterController.cpp" />
     <ClCompile Include="_Component\nkTransform.cpp" />
     <ClCompile Include="_Component\nkRectTransform.cpp" />
-    <ClCompile Include="_DataLoad\nkCSVData.cpp" />
     <ClCompile Include="_GameObject\nkGameObject.cpp" />
     <ClCompile Include="_GameObject\nkGameObjectManager.cpp" />
     <ClCompile Include="_Graphics\nkBlur.cpp" />

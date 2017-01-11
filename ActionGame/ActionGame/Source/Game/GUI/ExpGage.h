@@ -1,14 +1,14 @@
 /**
  * @file	Source\Game\GUI\ExpGage.h
  *
- * Declares the exponent gage class.
+ * 経験値ゲージクラスの定義.
  */
 #pragma once
 
 #include"..\Player\Player.h"
 
 /**
- * An exponent gage.
+ * 経験値ゲージクラス.
  *
  * @author	HiramatsuTadashi
  * @date	2016/12/31
@@ -18,7 +18,7 @@ class ExpGage : public IGameObject
 public:
 
 	/**
-	 * Default constructor.
+	 * コンストラクタ.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
@@ -26,7 +26,7 @@ public:
 	ExpGage();
 
 	/**
-	 * Destructor.
+	 * デストラクタ.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
@@ -34,7 +34,7 @@ public:
 	~ExpGage();
 
 	/**
-	 * Starts this object.
+	 * 初期化.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
@@ -42,7 +42,7 @@ public:
 	void Start()override;
 
 	/**
-	 * Updates this object.
+	 * 更新.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
@@ -50,7 +50,7 @@ public:
 	void Update()override;
 
 	/**
-	 * Renders this object.
+	 * 描画.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
@@ -58,28 +58,37 @@ public:
 	void Render()override;
 
 	/**
-	 * Sets a player.
+	 * プレイヤーのポインタを設定.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
 	 *
-	 * @param [in,out]	_p	If non-null, the p.
+	 * @param [in,out]	p	If non-null, the p.
 	 */
-	void SetPlayer(Player* _p)
+	void SetPlayer(Player* p)
 	{
-		player = _p;
+		Player_ = p;
 	}
+
 private:
-	RectTransform ExpFrameTransform; ///フレーム用
-	Image ExpFrameImage; ///フレームのImage
-	RectTransform ExpTransform; ///本体用
-	Image ExpImage; ///本体用Image
 
-	Player* player;
+	/** フレーム用. */
+	RectTransform ExpFrameTransform_;
+	/** フレームのImage. */
+	Image ExpFrameImage_;
+	/** 本体用. */
+	RectTransform ExpTransform_;
+	/** 本体のImage. */
+	Image ExpImage_;
 
-	int* NextExp;
-	int* NowExp;
+	/** プレイヤーのポインタ. */
+	Player* Player_;
+	/** 現在の必要経験値. */
+	int* NextExp_;
+	/** 現在の取得経験値. */
+	int* NowExp_;
 
-	TestFont Level;
+	/** 現在のレベルを表示する. */
+	TestFont Level_;
 
 };
