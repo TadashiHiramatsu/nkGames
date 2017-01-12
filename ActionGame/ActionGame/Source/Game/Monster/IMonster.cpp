@@ -53,6 +53,10 @@ void IMonster::Start()
 	//カメラ
 	ModelRender_.SetCamera(g_MainCamera->GetCamera());
 
+	//シャドウレシーバキャスタ
+	ModelRender_.SetShadowCasterFlag(true);
+	ModelRender_.SetShadowReceiverFlag(true);
+
 }
 
 /**
@@ -94,5 +98,4 @@ void IMonster::Release()
 {
 	//キャラクターコントローラの剛体を削除
 	CharacterController_.RemoveRigidBody();
-
 }

@@ -138,7 +138,7 @@ void Player::Start()
 	AnimationEvent_.Init(&ModelRender_, &Animation_, AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
 
 	//シャドウを計算
-	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + Transform_.Position_);
+	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 0.0f) + Transform_.Position_);
 	Shadow().SetLightTarget(Transform_.Position_);
 
 	//mParticle = Model.FindBoneWorldMatrix("Bip01_R_Finger0");
@@ -189,7 +189,7 @@ void Player::Update()
 	{
 
 		//ジャンプ処理
-		if (Input().GetKeyButton(KeyCode::Space) && !CharacterController_.IsJump())
+		if (Input().GetKeyButton(KeyCodeE::Space) && !CharacterController_.IsJump())
 		{
 			moveSpeed.y = 5.0f;
 			CharacterController_.Jump();
@@ -197,22 +197,22 @@ void Player::Update()
 
 		//平行移動
 		D3DXVECTOR3 move = D3DXVECTOR3(0, 0, 0);
-		if (Input().GetKeyButton(KeyCode::W))
+		if (Input().GetKeyButton(KeyCodeE::W))
 		{
 			//正面
 			move += D3DXVECTOR3(0, 0, 1);
 		}
-		if (Input().GetKeyButton(KeyCode::S))
+		if (Input().GetKeyButton(KeyCodeE::S))
 		{
 			//後ろ
 			move += D3DXVECTOR3(0, 0, -1);
 		}
-		if (Input().GetKeyButton(KeyCode::A))
+		if (Input().GetKeyButton(KeyCodeE::A))
 		{
 			//左
 			move += D3DXVECTOR3(-1, 0, 0);
 		}
-		if (Input().GetKeyButton(KeyCode::D))
+		if (Input().GetKeyButton(KeyCodeE::D))
 		{
 			//右
 			move += D3DXVECTOR3(1, 0, 0);
@@ -270,12 +270,13 @@ void Player::Update()
 	break;
 	case Player::StateDamage:
 	{
-		if (!Animation_.IsPlayAnim())
-		{
+		//どうしよう？
+		//if (!Animation_.IsPlayAnim())
+		//{
 			//アニメーションが終了したので待機ステートに変更
 			ChangeState(StateCodeE::StateWaiting);
-			break;
-		}
+		//	break;
+		//}
 
 		//移動を緩める
 		moveSpeed.x *= 0.8f;
@@ -350,7 +351,7 @@ void Player::Update()
 	//Particle.Update();
 
 	//シャドウマップの更新
-	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 6.0f) + Transform_.Position_);
+	Shadow().SetLightPosition(D3DXVECTOR3(-5.0f, 5.0f, -5.0f) + Transform_.Position_);
 	Shadow().SetLightTarget(Transform_.Position_);
 
 }
@@ -414,21 +415,24 @@ void Player::Damage()
 		CollisionObject_.get()
 	);
 
-	//当たっていない
 	if (!dmgCol) 
 	{
+		//当たっていないので位置をずらしてもう一度
 		centerPos.y += offset;
 		trans.setOrigin(btVector3(centerPos.x, centerPos.y, centerPos.z));
 		CollisionObject_->setWorldTransform(trans);
+
+		//当たっているコリジョンを検出
 		const CollisionWorld::Collision* dmgCol = g_CollisionWorld->FindOverlappedDamageCollision(
 			CollisionWorld::DamageToPlayer,
 			CollisionObject_.get()
 		);
-
 	}
 
+	static float InvincibleLT = 0.0f;
+
 	//無敵状態でなければ
-	if (Parameter_.InvincibleTime_ <= InvincibleLT_)
+	if (Parameter_.InvincibleTime_ <= InvincibleLT)
 	{
 		//コリジョンが反応していて。攻撃を受けていなければ。
 		if (dmgCol != NULL && State_ != StateDamage)
@@ -449,12 +453,13 @@ void Player::Damage()
 
 		}
 
-		InvincibleLT_ = 0;
+		//無敵時間を初期化
+		InvincibleLT = 0.0f;
 	}
 	else if(State_ != StateDamage)
 	{
 		//ダメージを受けていないので無敵時間を更新
-		InvincibleLT_ += Time().DeltaTime();
+		InvincibleLT += Time().DeltaTime();
 	}
 
 }

@@ -257,10 +257,21 @@ void Monster_01::Update()
 	{
 		if (!Animation_.IsPlayAnim())
 		{
-			// アニメーションが終了したのでノンアクティブに設定
-			// することで削除される
-			isActive_ = false;
-			break;
+			//消滅時間のローカルタイムを加算
+			DisappearanceLT_ += Time().DeltaTime();
+			//消滅時間が経過した
+			if (DisappearanceTime_ <= DisappearanceLT_)
+			{
+				//徐々に透明に
+				Alpha_ = fmax(0.0f, Alpha_ - 0.01f);
+				if (Alpha_ <= 0.0f)
+				{
+					// アニメーションが終了したのでノンアクティブに設定
+					// することで削除される
+					isActive_ = false;
+					break;
+				}
+			}
 		}
 		//死んでいるので移動情報を削除
 		MoveSpeed = D3DXVECTOR3(0, 0, 0);
@@ -288,6 +299,9 @@ void Monster_01::Update()
 
 	//アニメーションを更新
 	AnimationControl();
+
+	//モデルレンダにアルファを設定
+	ModelRender_.SetAlpha(Alpha_);
 
 	//基底クラスを更新
 	IMonster::Update();

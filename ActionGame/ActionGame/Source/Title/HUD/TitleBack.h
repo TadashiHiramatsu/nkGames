@@ -55,6 +55,19 @@ public:
 	 */
 	void PostRender()override;
 
+	/**
+	 * ImageƒNƒ‰ƒX‚Ìæ“¾.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/12
+	 *
+	 * @return The image.
+	 */
+	Image& GetImage()
+	{
+		return BackImage_;
+	}
+
 private:
 
 	/** ”wŒi‰æ‘œ. */

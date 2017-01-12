@@ -285,6 +285,7 @@ namespace nkEngine
 		//デバイスの取得
 		IDirect3DDevice9* Device = Engine().GetDevice();
 
+		//アルファブレンディング
 		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 
 		switch (AlphaBlendMode_) 

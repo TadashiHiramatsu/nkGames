@@ -268,8 +268,6 @@ private:
 	/** 右手武器のモデルレンダー. */
 	ModelRender WeaponModelRenderR_;
 
-	/** 無敵時間計測用ローカルタイム. */
-	float InvincibleLT_ = 0.0f;
 	/** ライフ回復時間用ローカルタイム. */
 	float RecoveryLT_ = 0.0f;
 

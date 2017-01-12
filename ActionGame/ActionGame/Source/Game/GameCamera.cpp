@@ -54,19 +54,20 @@ void GameCamera::Start()
  */
 void GameCamera::Update()
 {
-	if (Input().GetKeyButton(KeyCode::Up))
+	//ÉJÉÅÉâÇ‹ÇÌÇ∑ÇÊÅ[
+	if (Input().GetKeyButton(KeyCodeE::Up))
 	{
 		Camera_.SpinVertically(-0.03f);
 	}
-	if (Input().GetKeyButton(KeyCode::Down))
+	if (Input().GetKeyButton(KeyCodeE::Down))
 	{
 		Camera_.SpinVertically(0.03f);
 	}
-	if (Input().GetKeyButton(KeyCode::Left))
+	if (Input().GetKeyButton(KeyCodeE::Left))
 	{
 		Camera_.SpinHorizontally(-0.03f);
 	}
-	if (Input().GetKeyButton(KeyCode::Right))
+	if (Input().GetKeyButton(KeyCodeE::Right))
 	{
 		Camera_.SpinHorizontally(0.03f);
 	}

@@ -169,6 +169,7 @@
     <ClCompile Include="Source\Game\Monster\MonsterHabitat.cpp" />
     <ClCompile Include="Source\Game\Monster\Monster_01.cpp" />
     <ClCompile Include="Source\Game\Player\Player.cpp" />
+    <ClCompile Include="Source\Title\GUI\TitleSystem.cpp" />
     <ClCompile Include="Source\Title\HUD\TitleBack.cpp" />
     <ClCompile Include="Source\Title\TitleScene.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -195,6 +196,7 @@
     <ClInclude Include="Source\Game\Monster\MonsterHabitat.h" />
     <ClInclude Include="Source\Game\Monster\Monster_01.h" />
     <ClInclude Include="Source\Game\Player\Player.h" />
+    <ClInclude Include="Source\Title\GUI\TitleSystem.h" />
     <ClInclude Include="Source\Title\HUD\TitleBack.h" />
     <ClInclude Include="Source\Title\TitleScene.h" />
     <ClInclude Include="stdafx.h" />

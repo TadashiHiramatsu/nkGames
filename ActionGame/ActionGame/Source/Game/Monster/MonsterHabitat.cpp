@@ -69,8 +69,6 @@ void MonsterHabitat::Update()
 
 	while (it != MonsterList_.end())
 	{
-		//更新
-		(*it)->Update();
 
 		if (!(*it)->GetActive())
 		{
@@ -81,11 +79,11 @@ void MonsterHabitat::Update()
 			it = MonsterList_.erase(it);
 
 		}
-		else
-		{
-			//次へ
-			it++;
-		}
+
+		//更新
+		(*it)->Update();
+	
+		it++;
 	}
 
 }

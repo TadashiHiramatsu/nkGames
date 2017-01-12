@@ -136,4 +136,9 @@ private:
 	/** 球体形状. */
 	unique_ptr<SphereCollider> SphereShape_;
 
+	/** 消滅までの時間(秒). */
+	float DisappearanceTime_ = 5.0f;
+	/** 消滅時間のローカルタイム. */
+	float DisappearanceLT_ = 0.0f;
+
 };

@@ -22,6 +22,9 @@ bool g_isDepthField;
 //フォグパラメータ x:フォグがかかり始める距離 ,y:フォグがかかりきる距離 ,z:フォグの種類
 float4 g_fogParam;
 
+/** 外部設定カラー. */
+float4 g_Color;
+
 //ディフューズテクスチャ。
 texture g_diffuseTexture;
 sampler g_diffuseTextureSampler = 
@@ -272,12 +275,10 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 	lig.xyz += g_light.ambient.xyz;
 	color.xyz *= lig;
 
-
-
-	//アルファに輝度を埋め込む
-	if (g_flags.w){
-		color.a *= CalcLuminance(color.xyz);
-	}
+	////アルファに輝度を埋め込む
+	//if (g_flags.w){
+	//	color.a *= CalcLuminance(color.xyz);
+	//}
 
 	if (g_fogParam.z > 1.9f) {
 		//高さフォグ
@@ -293,7 +294,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		color.xyz = lerp(color.xyz, float3(0.25f, 0.05f, 0.05f), t);
 	}
 
-	return color;
+	return color * g_Color;
 }
 
 //シャドウマップ書き込み用頂点シェーダー

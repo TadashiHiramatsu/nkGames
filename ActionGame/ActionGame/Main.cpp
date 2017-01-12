@@ -35,20 +35,24 @@ void InitEngine(HINSTANCE hInstance)
  * @author HiramatsuTadashi
  * @date 2017/01/10
  *
- * @param hInstance	    The instance.
+ * @param hInstance	    インスタンスハンドル.
  * @param hPrevInstance The previous instance.
- * @param lpCmdLine	    The command line.
- * @param nCmdshow	    The cmdshow.
+ * @param lpCmdLine	    コマンドライン.
+ * @param nCmdshow	    コマンドショー.
  *
  * @return A WINAPI.
  */
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdshow)
 {
+	//エンジンの初期化
 	InitEngine(hInstance);
 
 	//SceneManager().ChangeScene<GameScene>();
 
+	//タイトルシーンの追加
 	SceneManager().ChangeScene<TitleScene>();
 
+	//エンジン起動!!
 	Engine().RunGameLoop();
+
 }

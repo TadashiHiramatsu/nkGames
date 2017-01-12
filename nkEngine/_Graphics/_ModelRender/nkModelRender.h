@@ -236,7 +236,9 @@ namespace nkEngine
 		 */
 		void Release()
 		{
-			ModelData_->Release();
+			//モデルデータの解放
+		    SAFE_RELEASE(ModelData_);
+
 			Light_ = nullptr;
 			Camera_ = nullptr;
 			Transform_ = nullptr;
@@ -329,6 +331,19 @@ namespace nkEngine
 			return &frame->CombinedTransformationMatrix_;
 		}
 
+		/**
+		 * アルファの設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/12
+		 *
+		 * @param alpha The alpha.
+		 */
+		void SetAlpha(float alpha)
+		{
+			Color_.w = alpha;
+		}
+
 	protected:
 
 		/**
@@ -406,6 +421,9 @@ namespace nkEngine
 		FogFuncE FogFunc_;
 		/** フォグのパラメータ. */
 		float FogParam_[2];
+
+		/** 色. */
+		D3DXVECTOR4 Color_ = D3DXVECTOR4(1, 1, 1, 1);
 
 	};
 

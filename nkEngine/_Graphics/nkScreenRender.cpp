@@ -97,7 +97,7 @@ namespace nkEngine
 		//レンダーターゲットをメインレンダーに設定
 		Device->SetRenderTarget(0, MainRT_.GetSurface());
 		Device->SetDepthStencilSurface(MainRT_.GetDepthSurface());
-		Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
+		Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
 		//プリレンダーの描画
 		Shadow().Render();
@@ -114,7 +114,7 @@ namespace nkEngine
 		//レンダーターゲットをバックバッファに戻す
 		Device->SetRenderTarget(0, BackBufferRT_.GetSurface());
 		Device->SetDepthStencilSurface(BackBufferRT_.GetDepthSurface());
-		Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
+		Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
 		//アンチエイリアシングの描画
 		AntiAliasing_.Render();

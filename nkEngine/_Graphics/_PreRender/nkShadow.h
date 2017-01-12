@@ -296,7 +296,7 @@ namespace nkEngine
 		/** シャドウマップ用レンダーターゲット. */
 		RenderTarget ShadowMapRT_[MAX_SHADOW_MAP];
 		/** 影を書き込むモデル. */
-		vector<ModelRender*> ShadowModels_;
+		vector<ModelRender*> ShadowModelList_;
 
 		/** ライトの視点. */
 		D3DXVECTOR3 LightPosition_;

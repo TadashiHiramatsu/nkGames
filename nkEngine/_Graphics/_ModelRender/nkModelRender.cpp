@@ -123,7 +123,7 @@ namespace nkEngine
 	 */
 	void ModelRender::RenderToShadowMap()
 	{
-		if (ModelData_) 
+		if (ModelData_ != nullptr) 
 		{
 			//描画
 			RenderFrame(ModelData_->GetFrameRoot(), true);
@@ -193,10 +193,18 @@ namespace nkEngine
 		D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
 		LPD3DXBONECOMBINATION pBoneComb;
 
-		//D3DXMATRIXA16 matTemp;
+		//デバイスを取得
+		IDirect3DDevice9* Device = Engine().GetDevice();
 
 		D3DCAPS9 d3dCaps;
-		Engine().GetDevice()->GetDeviceCaps(&d3dCaps);
+		Device->GetDeviceCaps(&d3dCaps);
+
+		//アルファブレンディングを行う
+		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+		// 透過処理を行う
+		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		// 半透明処理を行う
+		Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	
 		//テクニックを設定
 		{
@@ -288,6 +296,9 @@ namespace nkEngine
 
 			//ライトを設定
 			Effect_->SetValue("g_light", Light_, sizeof(Light));
+
+			//色の設定
+			Effect_->SetValue("g_Color", &Color_, sizeof(Color_));
 
 			//true or false 最終的にGPUに送る
 			int flag[4] = { 0 };
@@ -466,6 +477,11 @@ namespace nkEngine
 		//終了
 		Effect_->EndPass();
 		Effect_->End();
+
+		//元に戻れ
+		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+		Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
 		
 	}
 

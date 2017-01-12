@@ -122,7 +122,7 @@ namespace nkEngine
 
 	public:
 
-		/** UV座標 x:左.y:上. */
+		/** UV座標 x:左, y:上, z:右 ,w:下 . */
 		D3DXVECTOR4 RectUV_;
 		/** 色. */
 		D3DXVECTOR4 Color_;

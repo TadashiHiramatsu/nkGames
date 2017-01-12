@@ -211,9 +211,12 @@ namespace nkEngine
 	 */
 	void CGameObjectManager::AllDelete()
 	{
-		for (GameObjectListT objList : GameObjectArray_) 
+		//イテレータ取得
+		auto itList = GameObjectArray_.begin();
+		while (itList != GameObjectArray_.end())
 		{
-			objList.clear();
+			itList->clear();
+			itList++;
 		}
 	}
 

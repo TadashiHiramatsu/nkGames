@@ -48,13 +48,8 @@ VS_OUT vs_main(VS_IN In)
 float4 ps_main(VS_OUT In) : COLOR0
 {
 	float4 col = tex2D(g_diffuseTextureSampler, In.uv);
-	//色計算
-	col.r *= color.r;
-	col.g *= color.g;
-	col.b *= color.b;
-	//不透明度計算
-	col.a *= color.a;
-	return col;
+
+	return col * color;
 }
 
 technique Tech

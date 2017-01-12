@@ -52,7 +52,7 @@ namespace nkEngine
 		MouseWheel,		//!< ホイール.
 	};
 
-	enum KeyCode
+	enum KeyCodeE
 	{
 		Escape = DIK_ESCAPE,
 		Alpha1 = DIK_1,			//!< キーボードの1.
@@ -411,7 +411,7 @@ namespace nkEngine
 		 *
 		 * @return	True if it succeeds, false if it fails.
 		 */
-		bool GetKeyButton(KeyCode key)
+		bool GetKeyButton(KeyCodeE key)
 		{
 			return (bool)(Keyboard_[key] & 0x80);
 		}
@@ -426,7 +426,7 @@ namespace nkEngine
 		 *
 		 * @return	True if it succeeds, false if it fails.
 		 */
-		bool GetKeyButtonDown(KeyCode key)
+		bool GetKeyButtonDown(KeyCodeE key)
 		{
 			return (bool)(!(KeyboardBef_[key] & 0x80) && Keyboard_[key] & 0x80);
 		}
@@ -441,7 +441,7 @@ namespace nkEngine
 		 *
 		 * @return	True if it succeeds, false if it fails.
 		 */
-		bool GetKeyButtonUp(KeyCode key)
+		bool GetKeyButtonUp(KeyCodeE key)
 		{
 			return (bool)(KeyboardBef_[key] & 0x80 && !(Keyboard_[key] & 0x80));
 		}

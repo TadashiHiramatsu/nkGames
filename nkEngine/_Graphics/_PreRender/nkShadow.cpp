@@ -191,7 +191,7 @@ namespace nkEngine
 				//ビュープロジェクション行列のコピー
 				LightViewProjMatrix_ = ShadowReceiverParam_.LightViewProjMatrix_[i];
 				
-				for (auto model : ShadowModels_) 
+				for (auto model : ShadowModelList_)
 				{
 					model->RenderToShadowMap();
 				}
@@ -205,8 +205,7 @@ namespace nkEngine
 			Device->SetDepthStencilSurface(BackDepthBuffer);
 
 			//モデルの削除
-			ShadowModels_.clear();
-
+			ShadowModelList_.clear();
 		}
 
 	}
@@ -235,7 +234,7 @@ namespace nkEngine
 	 */
 	void CShadowMap::Entry(ModelRender* model)
 	{
-		ShadowModels_.push_back(model);
+		ShadowModelList_.push_back(model);
 	}
 
 }// namespace nkEngine

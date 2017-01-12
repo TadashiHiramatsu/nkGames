@@ -253,4 +253,7 @@ protected:
 	/** アニメーションイベント. */
 	AnimationEventController AnimationEvent_;
 
+	/** アルファデータ. */
+	float Alpha_ = 1.0f;
+
 };

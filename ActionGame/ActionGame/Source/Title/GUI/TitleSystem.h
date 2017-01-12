@@ -1,0 +1,117 @@
+/**
+ * @file Source\Title\GUI\TitleSystem.h
+ *
+ * タイトルシステムクラスの定義.
+ */
+#pragma once
+
+#include"../HUD/TitleBack.h"
+
+/**
+ * タイトルシステムクラス.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/12
+ */
+class TitleSystem : public IGameObject
+{
+public:
+
+	/** タイトルステート. */
+	enum TitleStateE
+	{
+		StartUp,	//!< 起動
+		Run,		//!< 稼働
+		BlackOut,	//!< ブラックアウト
+	};
+
+public:
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/12
+	 */
+	TitleSystem();
+
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/12
+	 */
+	~TitleSystem();
+
+	/**
+	 * 初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/12
+	 */
+	void Start()override;
+
+	/**
+	 * 更新.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/12
+	 */
+	void Update()override;
+
+	/**
+	 * ポストエフェクト後の描画.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/12
+	 */
+	void PostRender()override;
+
+	/**
+	 * 解放.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/12
+	 */
+	void Release()override;
+
+	/**
+	 * タイトルバックのポインタを設定.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/12
+	 *
+	 * @param [in,out] tb If non-null, the terabytes.
+	 */
+	void SetTitleBack(TitleBack* tb)
+	{
+		TB_ = tb;
+	}
+
+private:
+
+	/** タイトルネーム画像. */
+	Image TitleNameImage_;
+	/** タイトルネーム用トランスフォーム. */
+	RectTransform TitleNameRT_;
+
+	/** ニューゲーム画像. */
+	Image NewGameImage_;
+	/** ニューゲーム用トランスフォーム. */
+	RectTransform NewGameRT_;
+
+	/** コンティニュー画像. */
+	Image ContinueImage_;
+	/** コンティニュー用トランスフォーム. */
+	RectTransform ContinueRT_;
+
+	/** ステート. */
+	TitleStateE State_ = TitleStateE::StartUp;
+
+	/** ブラックアウト用カラーデータ. */
+	float BlackOutColor_ = 1.0f;
+
+	/** タイトルバックのポインタ. */
+	TitleBack* TB_;
+
+};

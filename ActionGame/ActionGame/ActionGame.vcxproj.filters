@@ -34,6 +34,9 @@
     <Filter Include="Title\HUD">
       <UniqueIdentifier>{f8181792-bf8d-47a0-810e-7c3515231c6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Title\GUI">
+      <UniqueIdentifier>{6d816d56-9b7f-4bbb-a020-814e3ce6ec34}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -102,6 +105,9 @@
     <ClCompile Include="Source\Title\HUD\TitleBack.cpp">
       <Filter>Title\HUD</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Title\GUI\TitleSystem.cpp">
+      <Filter>Title\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -169,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="Source\Title\HUD\TitleBack.h">
       <Filter>Title\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\GUI\TitleSystem.h">
+      <Filter>Title\GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
