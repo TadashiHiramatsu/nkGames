@@ -83,6 +83,19 @@ namespace nkEngine
 			Transform_ = transform;
 		}
 
+		/**
+		 * カメラのポインタを設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/12
+		 *
+		 * @param [in,out] camera If non-null, the camera.
+		 */
+		void SetCamera(Camera* camera)
+		{
+			Camera_ = camera;
+		}
+
 	private:
 
 		/** プリミティブ. */

@@ -13,8 +13,8 @@
 #include"Map\Skybox.h"
 #include"Monster\MonsterHabitat.h"
 //#include"GUI\InventoryWindow.h"
-#include"GUI\LifeGage.h"
-#include"GUI\ExpGage.h"
+#include"HUD\LifeGage.h"
+#include"HUD\ExpGage.h"
 
 #include"Item\ItemResource.h"
 

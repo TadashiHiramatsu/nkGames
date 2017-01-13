@@ -5,8 +5,7 @@
  */
 #include"stdafx.h"
 
-#include"Game/GameScene.h"
-#include"Title/TitleScene.h"
+#include"Source\Title\TitleScene.h"
 
 /**
  * エンジンの初期化関数.
@@ -47,12 +46,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//エンジンの初期化
 	InitEngine(hInstance);
 
-	//SceneManager().ChangeScene<GameScene>();
-
-	//タイトルシーンの追加
 	SceneManager().ChangeScene<TitleScene>();
 
 	//エンジン起動!!
 	Engine().RunGameLoop();
-
 }
