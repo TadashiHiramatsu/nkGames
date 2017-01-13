@@ -7,9 +7,6 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{dad0e502-0bab-434f-b68d-176c9dd57b36}</UniqueIdentifier>
     </Filter>
-    <Filter Include="debug">
-      <UniqueIdentifier>{bb1c3770-8a38-47b0-81fa-c9f7408ebccb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameObject">
       <UniqueIdentifier>{62f38837-f2b8-4852-8b46-adbeef9b05c4}</UniqueIdentifier>
     </Filter>
@@ -60,6 +57,9 @@
     </Filter>
     <Filter Include="Graphics\Buffer">
       <UniqueIdentifier>{46e14734-dad9-4f9c-b4fc-e3746743d7cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{bb1c3770-8a38-47b0-81fa-c9f7408ebccb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -348,10 +348,10 @@
       <Filter>Graphics\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="_Debug\nkAssert.h">
-      <Filter>debug</Filter>
+      <Filter>Debug</Filter>
     </ClInclude>
     <ClInclude Include="_Debug\nkLog.h">
-      <Filter>debug</Filter>
+      <Filter>Debug</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
