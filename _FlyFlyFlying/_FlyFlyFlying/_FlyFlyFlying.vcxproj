@@ -42,7 +42,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -146,11 +146,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Source\Title\Title.cpp" />
+    <ClCompile Include="Source\Title\GUI\TitleContinue.cpp" />
+    <ClCompile Include="Source\Title\GUI\TitleStart.cpp" />
+    <ClCompile Include="Source\Title\HUD\TitleBack.cpp" />
     <ClCompile Include="Source\Title\TitleCamera.cpp" />
-    <ClCompile Include="Source\Title\TitleContinue.cpp" />
     <ClCompile Include="Source\Title\TitleScene.cpp" />
-    <ClCompile Include="Source\Title\TitleStart.cpp" />
     <ClCompile Include="Source\Title\TitleSystem.cpp" />
     <ClCompile Include="Source\Title\TitleUnitychan.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -158,11 +158,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Title\Title.h" />
+    <ClInclude Include="Source\Title\GUI\TitleContinue.h" />
+    <ClInclude Include="Source\Title\GUI\TitleStart.h" />
+    <ClInclude Include="Source\Title\HUD\TitleBack.h" />
     <ClInclude Include="Source\Title\TitleCamera.h" />
-    <ClInclude Include="Source\Title\TitleContinue.h" />
     <ClInclude Include="Source\Title\TitleScene.h" />
-    <ClInclude Include="Source\Title\TitleStart.h" />
     <ClInclude Include="Source\Title\TitleSystem.h" />
     <ClInclude Include="Source\Title\TitleUnitychan.h" />
     <ClInclude Include="stdafx.h" />

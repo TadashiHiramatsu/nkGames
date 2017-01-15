@@ -5,6 +5,9 @@
  */
 #include"stdafx.h"
 
+/*----------------------------------------------------------------------------------------------------------*/
+#include"Source\Title\TitleScene.h"
+
  /**
  * エンジンの初期化関数.
  *
@@ -21,7 +24,7 @@ void InitEngine(HINSTANCE hInstance)
 	initparam.ScreenBufferH_ = 675;
 	initparam.FrameBufferW_ = initparam.ScreenBufferW_ * 2;
 	initparam.FrameBufferH_ = initparam.ScreenBufferH_ * 2;
-	initparam.GameName_ = "Hack and Slash";
+	initparam.GameName_ = "FlyFlyFlying";
 	initparam.isCenter_ = false;
 	Engine().Init(initparam);
 }
@@ -44,7 +47,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//エンジンの初期化
 	InitEngine(hInstance);
 
-	//SceneManager().ChangeScene<TitleScene>();
+	SceneManager().ChangeScene<TitleScene>();
 
 	//エンジン起動!!
 	Engine().RunGameLoop();

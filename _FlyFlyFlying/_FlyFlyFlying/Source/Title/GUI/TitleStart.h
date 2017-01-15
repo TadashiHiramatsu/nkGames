@@ -1,26 +1,69 @@
+/**
+ * @file Source\Title\GUI\TitleStart.h
+ *
+ * タイトルスタートクラスの定義.
+ */
 #pragma once
 
-#include"..\Frame\C2DObject.h"
-#include"..\Frame\Input.h"
-
-
-
-class CTitleStart
+/**
+ * タイトルスタートクラス.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/14
+ */
+class TitleStart : public IGameObject
 {
 public:
-	void Initialize();
-	void Update();
-	void Draw();
-	void Scale();
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/14
+	 */
+	TitleStart()
+	{
+	}
+
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/14
+	 */
+	~TitleStart()
+	{
+	}
+
+	/**
+	 * 初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/14
+	 */
+	void Start()override;
+
+	/**
+	 * 更新.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/14
+	 */
+	void Update()override;
+
+	/**
+	 * ポストエフェクト後の描画.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/14
+	 */
+	void PostRender()override;
+
 private:
-	C2DObject m_2Dobj;
 
-	D3DXVECTOR3 vec3Position;
-	D3DXVECTOR3 vec3Scale;
+	/** スタート画像. */
+	Image StartImage_;
+	/** スタート画像用トランスフォーム. */
+	RectTransform StartRT_;
 
-	BYTE diks[256];
-	
-	float scale;
-	const float MAX = 250.0f;
-	const float MIN = 200.0f;
 };

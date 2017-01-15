@@ -6,8 +6,8 @@
 #include"stdafx.h"
 #include"TitleScene.h"
 
-//---------------------------------------------------------------------------------------------------
-#include"HUD\TitleBack.h"
+/*------------------------------------------------------------------------------------------------------------*/
+
 #include"GUI\TitleSystem.h"
 
 /**
@@ -18,10 +18,7 @@
  */
 void TitleScene::Start()
 {
-	//背景の作成
-	TitleBack* titleback = NewGO<TitleBack>();
-
 	//タイトルシステムの作成
-	TitleSystem* titlesystem = NewGO<TitleSystem>();
-	titlesystem->SetTitleBack(titleback);
+	NewGO<TitleSystem>(1);
+
 }

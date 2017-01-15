@@ -9,26 +9,6 @@
 #include"../../Game/GameScene.h"
 
 /**
- * コンストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/12
- */
-TitleSystem::TitleSystem()
-{
-}
-
-/**
- * デストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/12
- */
-TitleSystem::~TitleSystem()
-{
-}
-
-/**
  * 初期化.
  *
  * @author HiramatsuTadashi
@@ -36,6 +16,9 @@ TitleSystem::~TitleSystem()
  */
 void TitleSystem::Start()
 {
+	//背景作成
+	TitleBack_ = NewGO<TitleBack>(0);
+
 	//タイトルネーム画像の初期化
 	TitleNameImage_.Load("Image/NonTitle.png");
 	TitleNameImage_.SetTransform(&TitleNameRT_);
@@ -119,13 +102,15 @@ void TitleSystem::Update()
 	break;
 	case TitleSystem::BlackOut:
 	{
+		//徐々に暗く
 		BlackOutColor_ = fmax(0.0f, BlackOutColor_ - 0.01f);
 
+		//色を作成
 		D3DXVECTOR4 color = D3DXVECTOR4(BlackOutColor_, BlackOutColor_, BlackOutColor_, 1.0f);
 		TitleNameImage_.Color_ = color;
 		NewGameImage_.Color_ = color;
 		ContinueImage_.Color_ = color;
-		TB_->GetImage().Color_ = color;
+		TitleBack_->SetColor(color);
 
 		//ブラックアウト終了
 		if (BlackOutColor_ <= 0.0f)
@@ -156,9 +141,4 @@ void TitleSystem::PostRender()
 	TitleNameImage_.Render();
 	NewGameImage_.Render();
 	ContinueImage_.Render();
-}
-
-void TitleSystem::Release()
-{
-
 }

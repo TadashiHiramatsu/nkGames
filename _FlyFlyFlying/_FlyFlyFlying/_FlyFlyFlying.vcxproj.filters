@@ -13,6 +13,9 @@
     <Filter Include="Title\HUD">
       <UniqueIdentifier>{c350b934-c3bc-4cf6-89b3-30e4b5878756}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Title\UnityChan">
+      <UniqueIdentifier>{236666b8-d6c6-463e-bb1a-8c06cef3ebdd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -24,23 +27,23 @@
     <ClCompile Include="Source\Title\TitleScene.cpp">
       <Filter>Title</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Title\TitleUnitychan.cpp">
-      <Filter>Title</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Title\TitleStart.cpp">
-      <Filter>Title\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Title\Title.cpp">
-      <Filter>Title\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Title\TitleContinue.cpp">
-      <Filter>Title\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Title\TitleSystem.cpp">
       <Filter>Title</Filter>
     </ClCompile>
     <ClCompile Include="Source\Title\TitleCamera.cpp">
       <Filter>Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Title\TitleUnitychan.cpp">
+      <Filter>Title\UnityChan</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Title\HUD\TitleBack.cpp">
+      <Filter>Title\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Title\GUI\TitleContinue.cpp">
+      <Filter>Title\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Title\GUI\TitleStart.cpp">
+      <Filter>Title\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,23 +53,23 @@
     <ClInclude Include="Source\Title\TitleScene.h">
       <Filter>Title</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Title\TitleUnitychan.h">
-      <Filter>Title</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Title\TitleStart.h">
-      <Filter>Title\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Title\Title.h">
-      <Filter>Title\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Title\TitleContinue.h">
-      <Filter>Title\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Title\TitleCamera.h">
       <Filter>Title</Filter>
     </ClInclude>
     <ClInclude Include="Source\Title\TitleSystem.h">
       <Filter>Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\TitleUnitychan.h">
+      <Filter>Title\UnityChan</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\HUD\TitleBack.h">
+      <Filter>Title\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\GUI\TitleContinue.h">
+      <Filter>Title\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\GUI\TitleStart.h">
+      <Filter>Title\GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

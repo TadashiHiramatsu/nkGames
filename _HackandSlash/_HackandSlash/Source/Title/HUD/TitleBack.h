@@ -21,7 +21,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
 	 */
-	TitleBack();
+	TitleBack()
+	{
+	}
 
 	/**
 	 * デストラクタ.
@@ -29,7 +31,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
 	 */
-	~TitleBack();
+	~TitleBack()
+	{
+	}
 
 	/**
 	 * 初期化.
@@ -56,16 +60,16 @@ public:
 	void PostRender()override;
 
 	/**
-	 * Imageクラスの取得.
+	 * 色を設定.
 	 *
 	 * @author HiramatsuTadashi
-	 * @date 2017/01/12
+	 * @date 2017/01/14
 	 *
-	 * @return The image.
+	 * @param [in,out] color The color.
 	 */
-	Image& GetImage()
+	void SetColor(D3DXVECTOR4& color)
 	{
-		return BackImage_;
+		BackImage_.Color_ = color;
 	}
 
 private:

@@ -31,6 +31,9 @@
     <Filter Include="Game\Map">
       <UniqueIdentifier>{625c818f-c2b8-4684-92ff-8c72b944e2a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Title\HUD">
+      <UniqueIdentifier>{50c2698e-2732-4b97-ae3f-2ce0c2654163}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -44,9 +47,6 @@
     </ClCompile>
     <ClCompile Include="Source\Game\GameScene.cpp">
       <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Title\HUD\TitleBack.cpp">
-      <Filter>Title</Filter>
     </ClCompile>
     <ClCompile Include="Source\Title\TitleScene.cpp">
       <Filter>Title</Filter>
@@ -105,6 +105,9 @@
     <ClCompile Include="Source\Game\GUI\DropItem.cpp">
       <Filter>Game\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Title\HUD\TitleBack.cpp">
+      <Filter>Title\HUD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -115,9 +118,6 @@
     </ClInclude>
     <ClInclude Include="Source\Game\GameScene.h">
       <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Title\HUD\TitleBack.h">
-      <Filter>Title</Filter>
     </ClInclude>
     <ClInclude Include="Source\Title\TitleScene.h">
       <Filter>Title</Filter>
@@ -178,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="Source\Game\GUI\DropItem.h">
       <Filter>Game\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\HUD\TitleBack.h">
+      <Filter>Title\HUD</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

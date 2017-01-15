@@ -1,25 +1,69 @@
+/**
+ * @file Source\Title\GUI\TitleContinue.h
+ *
+ * タイトルコンティニュークラスの定義.
+ */
 #pragma once
 
-#include"..\Frame\C2DObject.h"
-#include"..\Frame\Input.h"
-
-const float MAXC = 230.0f;
-const float MINC = 180.0f;
-
-class CTitleContinue
+/**
+ * タイトルコンティニュークラス.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/15
+ */
+class TitleContinue : public IGameObject
 {
 public:
-	void Initialize();
-	void Update();
-	void Draw();
-	void Scale();
+
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/15
+	 */
+	TitleContinue()
+	{
+	}
+
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/15
+	 */
+	~TitleContinue()
+	{
+	}
+
+	/**
+	 * 初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/15
+	 */
+	void Start()override;
+
+	/**
+	 * 更新.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/15
+	 */
+	void Update()override;
+
+	/**
+	 * ポストエフェクト後の描画.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/15
+	 */
+	void PostRender()override;
+
 private:
-	C2DObject m_2Dobj;
 
-	D3DXVECTOR3 vec3Position;
-	D3DXVECTOR3 vec3Scale;
+	/** コンティニュー画像. */
+	Image ContinueImage_;
+	/** コンティニュー画像用トランスフォーム. */
+	RectTransform ContinueRT_;
 
-	BYTE diks[256];
-
-	float scale;
 };

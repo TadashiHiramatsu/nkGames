@@ -6,3 +6,22 @@
 #include"stdafx.h"
 #include"TitleCamera.h"
 
+/**
+ * ‰Šú‰».
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/14
+ */
+void TitleCamera::Start()
+{
+}
+
+/**
+ * XV.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/14
+ */
+void TitleCamera::Update()
+{
+}

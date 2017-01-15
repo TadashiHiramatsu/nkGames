@@ -7,26 +7,6 @@
 #include"TitleBack.h"
 
 /**
- * コンストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/11
- */
-TitleBack::TitleBack()
-{
-}
-
-/**
- * デストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/11
- */
-TitleBack::~TitleBack()
-{
-}
-
-/**
  * 初期化.
  *
  * @author HiramatsuTadashi
@@ -34,13 +14,18 @@ TitleBack::~TitleBack()
  */
 void TitleBack::Start()
 {
+	//画像読み込み
 	BackImage_.Load("Image/TitleBack.jpg");
+	//トランスフォーム設定
 	BackImage_.SetTransform(&BackRT_);
 
+	//大きさをスクリーンサイズに設定
 	BackRT_.Width_ = Engine().GetScreenW();
 	BackRT_.Height_ = Engine().GetScreenH();
 
+	//アンカーを中心に設定
 	BackRT_.Anchor_ = RectTransform::MiddleCenter;
+
 }
 
 /**

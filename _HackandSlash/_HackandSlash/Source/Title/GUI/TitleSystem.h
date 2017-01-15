@@ -33,7 +33,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/12
 	 */
-	TitleSystem();
+	TitleSystem()
+	{
+	}
 
 	/**
 	 * デストラクタ.
@@ -41,7 +43,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/12
 	 */
-	~TitleSystem();
+	~TitleSystem()
+	{
+	}
 
 	/**
 	 * 初期化.
@@ -67,27 +71,6 @@ public:
 	 */
 	void PostRender()override;
 
-	/**
-	 * 解放.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/12
-	 */
-	void Release()override;
-
-	/**
-	 * タイトルバックのポインタを設定.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/12
-	 *
-	 * @param [in,out] tb If non-null, the terabytes.
-	 */
-	void SetTitleBack(TitleBack* tb)
-	{
-		TB_ = tb;
-	}
-
 private:
 
 	/** タイトルネーム画像. */
@@ -112,6 +95,6 @@ private:
 	float BlackOutColor_ = 1.0f;
 
 	/** タイトルバックのポインタ. */
-	TitleBack* TB_;
+	TitleBack* TitleBack_ = nullptr;
 
 };

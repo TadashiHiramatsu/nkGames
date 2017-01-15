@@ -5,19 +5,42 @@
  */
 #pragma once
 
-
+/**
+ * タイトルシーンクラス.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/14
+ */
 class TitleScene : public IScene
 {
 public:
-	TitleScene();
-	~TitleScene();
-	void Start()override;
 
-private:
-	CTitle  m_title;
-	CTitleStart m_start;
-	CTitleContinue m_continue;
-	Ccamera m_camera;
-	CTitleUnitychan m_Unitychan;
+	/**
+	 * コンストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/14
+	 */
+	TitleScene()
+	{
+	}
+
+	/**
+	 * デストラクタ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/14
+	 */
+	~TitleScene()
+	{
+	}
+
+	/**
+	 * 初期化.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/14
+	 */
+	void Start()override;
 
 };

@@ -1,42 +1,49 @@
+/**
+ * @file Source\Title\GUI\TitleContinue.cpp
+ *
+ * タイトルコンティニュークラスの実装.
+ */
+#include"stdafx.h"
 #include"TitleContinue.h"
-#include"..\Frame\haba.h"
 
-void CTitleContinue::Initialize()
+/**
+ * 初期化.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/15
+ */
+void TitleContinue::Start()
 {
-	//m_2Dobj.Initialize("Texture\\Title.jpg");
-	m_2Dobj.Initialize("Texture\\conte.png");
-	vec3Scale = D3DXVECTOR3(180.0f, 80.0f, 1.0f);
-	//vec3Position = D3DXVECTOR3(450.0f, 250.0f, 0.0f);
-	vec3Position = D3DXVECTOR3(WINDOW_WIDTH / 2, 530.0f, 0.0f);
-	scale = MAXC;
+	ContinueImage_.Load("Image/Continue.png");
+	ContinueImage_.SetTransform(&ContinueRT_);
+
+	ContinueRT_.Width_ = 180;
+	ContinueRT_.Height_ = 80;
+
+	ContinueRT_.Position_ = D3DXVECTOR2(0, -200);
+
+	ContinueRT_.Anchor_ = RectTransform::MiddleCenter;
+
 }
 
-void CTitleContinue::Update()
+/**
+ * 更新.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/15
+ */
+void TitleContinue::Update()
 {
-	Scale();
+	ContinueRT_.Update();
 }
 
-void CTitleContinue::Draw()
+/**
+ * ポストエフェクト後の描画.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/15
+ */
+void TitleContinue::PostRender()
 {
-	m_2Dobj.Draw(vec3Position, vec3Scale);
-}
-
-void CTitleContinue::Scale()
-{
-	if (vec3Scale.x < scale)
-	{
-		vec3Scale.x += 1.0f;
-		if (vec3Scale.x == scale)
-		{
-			scale = MINC;
-		}
-	}
-	if (vec3Scale.x > scale)
-	{
-		vec3Scale.x -= 1.0f;
-		if (vec3Scale.x == scale)
-		{
-			scale = MAXC;
-		}
-	}
+	ContinueImage_.Render();
 }
