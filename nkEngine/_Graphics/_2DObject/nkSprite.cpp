@@ -56,7 +56,8 @@ namespace nkEngine
 	 */
 	void Sprite::Start()
 	{
-		//パーティクルの初期化
+		//プリミティブの初期化
+
 		//頂点バッファの作成 
 		static SShapeVertex_PT vb[] =
 		{
@@ -93,6 +94,7 @@ namespace nkEngine
 			IndexFormat16,
 			ib
 		);
+
 	}
 
 	/**
@@ -103,20 +105,29 @@ namespace nkEngine
 	 */
 	void Sprite::Render()
 	{
-		//ビュープロジェクション行列の計算
-		D3DXMATRIX viewProj;
-		D3DXMatrixMultiply(&viewProj, &Camera_->GetViewMatrix(), &Camera_->GetProjectionMatrix());
+
+		//ワールドビュープロジェクション行列の計算
+		D3DXMATRIX m;
+		D3DXMatrixIdentity(&m);
+		D3DXMatrixMultiply(&m, &Transform_->WorldMatrix_, &Camera_->GetViewMatrix());
+		D3DXMatrixMultiply(&m, &m, &Camera_->GetProjectionMatrix());
 
 		//デバイスの取得
 		IDirect3DDevice9* Device = Engine().GetDevice();
+
+		//アルファブレンディングを行う
+		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+		// 透過処理を行う
+		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		// 半透明処理を行う
+		Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 
 		Effect_->SetTechnique("Sprite");
 
 		Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 		Effect_->BeginPass(0);
 
-		Effect_->SetValue("g_mWorld", &Transform_->WorldMatrix_, sizeof(D3DXMATRIX));
-		Effect_->SetValue("g_mViewProj", &viewProj, sizeof(D3DXMATRIX));
+		Effect_->SetValue("g_mWVP", &m, sizeof(D3DXMATRIX));
 
 		Effect_->SetTexture("g_Texture", Texture_.GetTexture());
 
@@ -132,6 +143,12 @@ namespace nkEngine
 
 		Effect_->EndPass();
 		Effect_->End();
+
+		//元に戻れ
+		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+		Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
+
 	}
 
 	/**

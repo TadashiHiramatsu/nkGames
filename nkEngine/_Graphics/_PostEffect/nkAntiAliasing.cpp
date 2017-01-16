@@ -10,75 +10,21 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
+	 * 作成.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
-	 */
-	AntiAliasing::AntiAliasing() :
-		Effect_(nullptr),
-		isEnable_(false)
-	{
-	}
-
-	/**
-	 * デストラクタ.
 	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
+	 * @param config The configuration.
 	 */
-	AntiAliasing::~AntiAliasing()
-	{
-	}
-
-	/**
-	 * 初期化.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	void AntiAliasing::Init()
+	void AntiAliasing::Create(const AntiAliasingConfigS& config)
 	{
 
-		isEnable_ = true;
+		//有効フラグをコピー
+		isEnable_ = config.isEnable_;
 		
 		//エフェクトのロード
 		Effect_ = EffectManager().LoadEffect("AntiAliasing.fx");
-
-		static SShapeVertex_PT vertex[] = 
-		{
-			{
-				-1.0f, 1.0f, 0.0f, 1.0f,
-				0.0f, 0.0f
-			},
-			{
-				1.0f, 1.0f, 0.0f, 1.0f,
-				1.0f, 0.0f
-			},
-			{
-				-1.0f, -1.0f, 0.0f, 1.0f,
-				0.0f, 1.0f
-			},
-			{
-				1.0f, -1.0f, 0.0f, 1.0f,
-				1.0f, 1.0f
-			},
-		};
-		static unsigned short index[] =
-		{
-			0,1,2,3
-		};
-
-		Primitive_.Create(
-			Primitive::TriangleStrip,
-			4,
-			sizeof(SShapeVertex_PT),
-			scShapeVertex_PT_Element,
-			vertex,
-			4,
-			IndexFormat16,
-			index
-		);
 
 	}
 
@@ -86,21 +32,20 @@ namespace nkEngine
 	 * 描画.
 	 *
 	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
+	 * @date 2017/01/16
+	 *
+	 * @param [in,out] postEffect If non-null, the post effect.
 	 */
-	void AntiAliasing::Render()
-	{	
+	void AntiAliasing::Render(PostEffect* postEffect)
+	{
 		if (isEnable_)
 		{
-			//アンチ有効
-			
-			int w = Engine().GetFrameW();
-			int h = Engine().GetFrameH();
+			//有効.
 
 			float texSize[2] =
 			{
-				w,
-				h,
+				Engine().GetFrameW(),
+				Engine().GetFrameH(),
 			};
 
 			Effect_->SetTechnique("FXAA");
@@ -110,19 +55,21 @@ namespace nkEngine
 
 			Effect_->SetTexture("g_Texture", ScreenRender().GetMainRenderTarget().GetTextureDX());
 			Effect_->SetValue("g_TexSize", texSize, sizeof(texSize));
-			
+
 			Effect_->CommitChanges();
-			
-			Engine().GetDevice()->SetStreamSource(0, Primitive_.GetVertexBuffer()->GetBody(), 0, Primitive_.GetVertexBuffer()->GetStride());
-			Engine().GetDevice()->SetIndices(Primitive_.GetIndexBuffer()->GetBody());
-			Engine().GetDevice()->SetVertexDeclaration(Primitive_.GetVertexDecl());
-			Engine().GetDevice()->DrawIndexedPrimitive(Primitive_.GetD3DPrimitiveType(), 0, 0, Primitive_.GetNumVertex(), 0, Primitive_.GetNumPolygon());
+
+			//レンダリングターゲットの変更
+			ScreenRender().ToggleMainRenderTarget();
+			//レンダリングターゲットを設定
+			Engine().GetDevice()->SetRenderTarget(0, ScreenRender().GetMainRenderTarget().GetSurface());
+			Engine().GetDevice()->SetDepthStencilSurface(ScreenRender().GetMainRenderTarget().GetDepthSurface());
+
+			postEffect->RenderFullScreen();
 
 			Effect_->EndPass();
 			Effect_->End();
 
 		}
-
 	}
 
 	/**

@@ -69,4 +69,46 @@ namespace nkEngine
 	
 	}
 
+	void Transform::BillboardUpdate(const D3DXMATRIX& rot)
+	{
+		D3DXMATRIX mTrans, mScale;
+
+		//移動行列の計算
+		D3DXMatrixTranslation(&mTrans, Position_.x, Position_.y, Position_.z);
+
+		//回転行列の計算
+		D3DXQUATERNION qRot;
+
+		float s;
+		s = sin(0);
+		qRot.x = rot.m[2][0] * s;
+		qRot.y = rot.m[2][1] * s;
+		qRot.z = rot.m[2][2] * s;
+		qRot.w = cos(0);
+
+		D3DXMATRIX rota;
+		D3DXMatrixRotationQuaternion(&rota, &qRot);
+
+		D3DXMatrixMultiply(&RotationMatrix_, &rot, &rota);
+
+		//拡大行列の計算
+		D3DXMatrixScaling(&mScale, Scale_.x, Scale_.y, Scale_.z);
+
+		//ローカル行列を計算
+		LocalMatrix_ = mScale * RotationMatrix_ * mTrans;
+
+		//親子関係を計算
+		if (ParentMatrix_)
+		{
+			D3DXMatrixMultiply(&WorldMatrix_, &LocalMatrix_, ParentMatrix_);
+		}
+		else
+		{
+			WorldMatrix_ = LocalMatrix_;
+		}
+
+		//ワールド行列の逆行列を計算
+		D3DXMatrixInverse(&WorldInvMatrix_, NULL, &WorldMatrix_);
+	}
+
 }// namespace nkEngine

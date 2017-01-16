@@ -14,7 +14,7 @@
  */
 Weapon::Weapon()
 {
-	Type = ItemType::Weapon;
+	Type_ = ItemTypeE::Weapon;
 }
 
 /**

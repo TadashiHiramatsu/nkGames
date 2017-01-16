@@ -4,10 +4,8 @@
  * Sprite用シェーダ.
  */
 
-/** ワールド行列. */
-float4x4 g_mWorld;
-/** ビュープロジェクション行列. */
-float4x4 g_mViewProj;
+/** ワールドビュープロジェクション行列. */
+float4x4 g_mWVP;
 
 /** UV矩形. */
 float4 g_RectUV;
@@ -66,16 +64,11 @@ VS_OUTPUT VSMain(VS_INPUT In)
 	//出力頂点
 	VS_OUTPUT Out;
 
-	//ポジション
-	float3 pos;
-
 	//ワールド行列計算
-	pos = mul(In.Pos, g_mWorld);
-	//ビュープロジェクション行列計算
-	Out.Pos = mul(float4(pos.xyz, 1.0f), g_mViewProj);
+	Out.Pos = mul(In.Pos, g_mWVP);
 
 	//UV計算
-	Out.uv = g_RectUV.xy * (1.0f - In.uv) + g_RectUV.zw * (In.uv);
+	Out.uv = In.uv;// = g_RectUV.xy * (1.0f - In.uv) + g_RectUV.zw * (In.uv);
 
 	return Out;
 }
@@ -95,14 +88,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 	//テクスチャカラー読み込み
 	float4 color = tex2D(g_TextureSampler,In.uv);
 
-	//色計算
-	color.r *= g_Color.r;
-	color.g *= g_Color.g;
-	color.b *= g_Color.b;
-	//不透明度計算
-	color.a *= g_Color.a;
-
-	return color;
+	return color * g_Color;
 }
 
 technique Sprite

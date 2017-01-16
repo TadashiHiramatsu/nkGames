@@ -7,6 +7,7 @@
 
 namespace nkEngine
 {
+	class PostEffect;
 
 	/**
 	 * アンチエイリアシングクラス.
@@ -24,7 +25,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		AntiAliasing();
+		AntiAliasing()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -32,23 +35,29 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		~AntiAliasing();
+		~AntiAliasing()
+		{
+		}
 
 		/**
-		 * 初期化.
+		 * 作成.
 		 *
 		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
+		 * @date 2017/01/16
+		 *
+		 * @param config The configuration.
 		 */
-		void Init();
+		void Create(const AntiAliasingConfigS& config);
 
 		/**
 		 * 描画.
 		 *
 		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
+		 * @date 2017/01/16
+		 *
+		 * @param [in,out] postEffect The post effect.
 		 */
-		void Render();
+		void Render(PostEffect* postEffect);
 
 		/**
 		 * 解放.
@@ -61,11 +70,10 @@ namespace nkEngine
 	private:
 
 		/** 有効フラグ. */
-		bool isEnable_;
+		bool isEnable_ = false;
 		/** エフェクト. */
-		ID3DXEffect* Effect_;
-		/** The primitive. */
-		Primitive Primitive_;
+		ID3DXEffect* Effect_ = nullptr;
 
 	};
-}
+
+}// namespace nkEngine

@@ -80,8 +80,9 @@ namespace nkEngine
 			//シーンクラスの初期化
 			NowScene_->Start();
 			
-			//シャドウクラスの初期化
-			Shadow().Create(NowScene_->GetGraphicsConfig().ShadowConfig_);
+			//グラフィックの初期化
+			ScreenRender().StartGraphic(NowScene_->GetGraphicsConfig());
+
 		}
 
 	private:

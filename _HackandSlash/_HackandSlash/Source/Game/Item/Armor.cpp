@@ -14,7 +14,7 @@
  */
 Armor::Armor()
 {
-	Type = ItemType::Armor;
+	Type_ = ItemTypeE::Armor;
 }
 
 /**
@@ -30,12 +30,16 @@ Armor::Armor()
  * @param	_AType		 	The type.
  * @param	_Defense	 	The defense.
  */
-Armor::Armor(int _ID, const char * _Name, const char * _IconFilePath, RarityCode _Rarity, ArmorType _AType, int _Defense)
+Armor::Armor(int _ID, char * _Name, char * _IconFilePath, RarityCodeE _Rarity, ArmorTypeE _AType, int _Defense)
 {
-	ID = _ID;
-	Name = _Name;
-	IconFilePath = _IconFilePath;
-	Rarity = _Rarity;
+	Type_ = ItemTypeE::Armor;
+
+	ID_ = _ID;
+
+	strcpy(Name_, _Name);
+	strcpy(IconFilePath_, _IconFilePath);
+
+	Rarity_ = _Rarity;
 	AType = _AType;
 	Defense = _Defense;
 }

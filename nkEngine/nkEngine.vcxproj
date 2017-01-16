@@ -170,7 +170,6 @@
     <ClInclude Include="_Debug\nkLog.h" />
     <ClInclude Include="_GameObject\nkGameObject.h" />
     <ClInclude Include="_GameObject\nkGameObjectManager.h" />
-    <ClInclude Include="_Graphics\nkBlur.h" />
     <ClInclude Include="_Graphics\nkCamera.h" />
     <ClInclude Include="_Graphics\nkEffectManager.h" />
     <ClInclude Include="_Graphics\nkGraphicsConfig.h" />
@@ -189,6 +188,8 @@
     <ClInclude Include="_Graphics\_Particle\nkParticleEmitter.h" />
     <ClInclude Include="_Graphics\_PostEffect\nkAntiAliasing.h" />
     <ClInclude Include="_Graphics\_PostEffect\nkBloom.h" />
+    <ClInclude Include="_Graphics\_PostEffect\nkBlur.h" />
+    <ClInclude Include="_Graphics\_PostEffect\nkPostEffect.h" />
     <ClInclude Include="_Graphics\_PreRender\nkShadow.h" />
     <ClInclude Include="_Graphics\_Sharp\nkSharpVertex.h" />
     <ClInclude Include="_Graphics\_UI\nkButton.h" />
@@ -226,7 +227,6 @@
     <ClCompile Include="_Component\nkRectTransform.cpp" />
     <ClCompile Include="_GameObject\nkGameObject.cpp" />
     <ClCompile Include="_GameObject\nkGameObjectManager.cpp" />
-    <ClCompile Include="_Graphics\nkBlur.cpp" />
     <ClCompile Include="_Graphics\nkCamera.cpp" />
     <ClCompile Include="_Graphics\nkEffectManager.cpp" />
     <ClCompile Include="_Graphics\nkIndexBuffer.cpp" />
@@ -244,6 +244,8 @@
     <ClCompile Include="_Graphics\_Particle\nkParticleEmitter.cpp" />
     <ClCompile Include="_Graphics\_PostEffect\nkAntiAliasing.cpp" />
     <ClCompile Include="_Graphics\_PostEffect\nkBloom.cpp" />
+    <ClCompile Include="_Graphics\_PostEffect\nkBlur.cpp" />
+    <ClCompile Include="_Graphics\_PostEffect\nkPostEffect.cpp" />
     <ClCompile Include="_Graphics\_PreRender\nkShadow.cpp" />
     <ClCompile Include="_Graphics\_UI\nkButton.cpp" />
     <ClCompile Include="_Graphics\_UI\nkImage.cpp" />

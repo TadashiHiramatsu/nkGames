@@ -55,7 +55,7 @@ namespace nkEngine
 		 *
 		 * @return	The graphics configuration.
 		 */
-		const SGraphicsConfig& GetGraphicsConfig() const
+		const GraphicsConfigS& GetGraphicsConfig() const
 		{
 			return GraphicsConfig_;
 		}
@@ -63,7 +63,7 @@ namespace nkEngine
 	protected:
 
 		/** グラフィックの設定. */
-		SGraphicsConfig GraphicsConfig_;
+		GraphicsConfigS GraphicsConfig_;
 	
 	};
 }

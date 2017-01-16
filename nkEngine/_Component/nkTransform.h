@@ -41,6 +41,14 @@ namespace nkEngine
 		 * @date 2017/01/10
 		 */
 		void Update();
+
+		/**
+		 * ビルボードする更新.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/16
+		 */
+		void BillboardUpdate(const D3DXMATRIX& rot);
 	
 	public:
 

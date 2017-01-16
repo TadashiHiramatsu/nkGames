@@ -5,8 +5,7 @@
  */
 #pragma once
 
-#include"_PostEffect\nkAntiAliasing.h"
-#include"_PostEffect\nkBloom.h"
+#include"_PostEffect\nkPostEffect.h"
 
 namespace nkEngine
 {
@@ -28,7 +27,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		CScreenRender();
+		CScreenRender()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -36,7 +37,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		~CScreenRender();
+		~CScreenRender()
+		{
+		}
 
 	public:
 
@@ -59,42 +62,83 @@ namespace nkEngine
 		 *
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
-		 *
-		 * @param initParam The init parameter.
 		 */
-		void Start(const InitParamS& initParam);
+		void Start();
 
 		/**
-		 * 更新.
+		 * グラフィック関連の初期化.
 		 *
 		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
+		 * @date 2017/01/16
+		 *
+		 * @param config The configuration.
 		 */
+		void StartGraphic(const GraphicsConfigS& config);
+
+		/**
+		* 更新.
+		*
+		* @author HiramatsuTadashi
+		* @date 2017/01/09
+		*/
 		void Loop();
 
 		/**
 		 * メインレンダーターゲットを取得.
 		 *
 		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
+		 * @date 2017/01/16
+		 *
+		 * @param num Number of.
 		 *
 		 * @return The main render target.
 		 */
 		RenderTarget& GetMainRenderTarget()
 		{
-			return MainRT_;
+			return MainRT_[CurrentMainRT_];
+		}
+
+		/**
+		 * メインレンダリングターゲットを切り替え.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/16
+		 */
+		void ToggleMainRenderTarget()
+		{
+			CurrentMainRT_ ^= 1;
 		}
 
 	private:
 
+		/**
+		 * バックバッファにレンダリング.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/16
+		 */
+		void BackBufferRender();
+
+	private:
+
+		/** デバイス. */
+		IDirect3DDevice9* Device_;
+
 		/** バックバッファのレンダーターゲット. */
 		RenderTarget BackBufferRT_;
+
+		/** 現在使用されているメインレンダーターゲット. */
+		unsigned char CurrentMainRT_ = 0;
 		/** メインのレンダーターゲット. */
-		RenderTarget MainRT_;
-		/** アンチエイリアシング. */
-		AntiAliasing AntiAliasing_;
-		/** ブルーム. */
-		Bloom Bloom_;
+		RenderTarget MainRT_[2];
+
+		/** The post effect. */
+		PostEffect PostEffect_;
+
+		/** プリミティブ. */
+		Primitive Primitive_;
+		/** エフェクト. */
+		ID3DXEffect* Effect_;
 
 	};
 

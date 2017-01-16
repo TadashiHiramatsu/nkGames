@@ -32,7 +32,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		~Light();
+		~Light()
+		{
+		}
 
 		/**
 		 * ディフューズライトの向きを設定.
@@ -120,6 +122,19 @@ namespace nkEngine
 			return AmbientLight_;
 		}
 
+		/**
+		 * 自己発光色の設定.
+		 *
+		 * @author HiramatsuTadashi
+		 * @date 2017/01/16
+		 *
+		 * @param color The color.
+		 */
+		void SetEmissionLightColor(const D3DXVECTOR3& color)
+		{
+			EmissionLightColor_ = color;
+		}
+
 	public:
 
 		/** ライトの数. */
@@ -133,6 +148,8 @@ namespace nkEngine
 		D3DXVECTOR4	DiffuseLightColor_[LIGHT_NUM];
 		/** 環境光. */
 		D3DXVECTOR3	AmbientLight_;
+		/** 自己発光色. */
+		D3DXVECTOR3 EmissionLightColor_;
 
 	};
 

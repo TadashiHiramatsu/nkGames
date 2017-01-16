@@ -13,7 +13,7 @@
  * @date	2016/12/31
  */
 IItem::IItem():
-	Type(ItemType::Other)
+	Type_(ItemTypeE::Other)
 {
 }
 

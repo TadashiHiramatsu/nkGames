@@ -6,7 +6,7 @@
 #pragma once
 
 #include"..\nkCamera.h"
-#include"..\nkBlur.h"
+#include"../_PostEffect/nkBlur.h"
 
 namespace nkEngine
 {

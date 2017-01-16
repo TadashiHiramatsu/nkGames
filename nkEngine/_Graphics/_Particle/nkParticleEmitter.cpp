@@ -49,8 +49,14 @@ namespace nkEngine
 
 		Timer_ = 0.0f;
 
+		//ファイルパスを作成
+		char* baseDir = "Particle/";
+		char fp[64];
+		strcpy(fp, baseDir);
+		strcat(fp, Param_.TexturePath_);
+
 		//テクスチャのロード
-		Texture_.Load(Param_.TexturePath_);
+		Texture_.Load(fp);
 
 	}
 

@@ -6,92 +6,39 @@
 #include"nkEngine/nkstdafx.h"
 #include"nkBloom.h"
 
+
 namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
+	 * 作成.
 	 *
 	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	Bloom::Bloom()
-	{
-	}
-
-	/**
-	 * デストラクタ.
+	 * @date 2017/01/16
 	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
+	 * @param config The configuration.
 	 */
-	Bloom::~Bloom()
+	void Bloom::Create(const BloomConfigS & config)
 	{
-	}
+		//有効フラグをコピー
+		isEnable_ = config.isEnable_;
 
-	/**
-	* 作成.
-	*
-	* @author HiramatsuTadashi
-	* @date 2017/01/09
-	*
-	* @param isEnable True if this object is enable.
-	*/
-	void Bloom::Create(bool isEnable)
-	{
-
-		if (isEnable)
+		if (isEnable_)
 		{
 			//内部解像度のサイズを計算
 			int w = Engine().GetFrameW();
 			int h = Engine().GetFrameH();
 
 			//輝度レンダリングターゲットの作成
-			LuminanceRT_.Create(w, h, 1, D3DFMT_A8R8G8B8, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);
+			LuminanceRT_.Create(w, h, 1, D3DFMT_A16B16G16R16F, D3DFMT_UNKNOWN, D3DMULTISAMPLE_NONE, 0);
 
 			//ブラーの初期化
 			Blur_[0].Init(w, h, *LuminanceRT_.GetTexture());
 			Blur_[1].Init(w, h, *Blur_[0].GetTexture());
 
 			//エフェクトのロード
-			Effect_ = EffectManager().LoadEffect("bloom.fx");
-			
-			isEnable_ = isEnable;
+			Effect_ = EffectManager().LoadEffect("Bloom.fx");
 
-			static SShapeVertex_PT vertex[] = 
-			{
-				{
-					-1.0f, 1.0f, 0.0f, 1.0f,
-					0.0f, 0.0f
-				},
-				{
-					1.0f, 1.0f, 0.0f, 1.0f,
-					1.0f, 0.0f
-				},
-				{
-					-1.0f, -1.0f, 0.0f, 1.0f,
-					0.0f, 1.0f
-				},
-				{
-					1.0f, -1.0f, 0.0f, 1.0f,
-					1.0f, 1.0f
-				},
-			};
-			static unsigned short index[] =
-			{
-				0,1,2,3
-			};
-			
-			Primitive_.Create(
-				Primitive::TriangleStrip,
-				4,
-				sizeof(SShapeVertex_PT),
-				scShapeVertex_PT_Element,
-				vertex,
-				4,
-				IndexFormat16,
-				index
-			);
 		}
 	}
 
@@ -99,13 +46,14 @@ namespace nkEngine
 	 * 描画.
 	 *
 	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
+	 * @date 2017/01/16
+	 *
+	 * @param [in,out] postEffect If non-null, the post effect.
 	 */
-	void Bloom::Render()
+	void Bloom::Render(PostEffect* postEffect)
 	{
 		if (isEnable_)
 		{
-
 			//デバイスの取得
 			IDirect3DDevice9* Device = Engine().GetDevice();
 
@@ -117,22 +65,19 @@ namespace nkEngine
 				//輝度に変更
 				Device->SetRenderTarget(0, LuminanceRT_.GetSurface());
 				Device->SetDepthStencilSurface(LuminanceRT_.GetDepthSurface());
-				
+
 				Device->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
-				
+
 				Effect_->SetTechnique("SamplingLuminance");
 
 				Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 				Effect_->BeginPass(0);
-				
+
 				Effect_->SetTexture("g_Scene", ScreenRender().GetMainRenderTarget().GetTextureDX());
-				
+
 				Effect_->CommitChanges();
 
-				Device->SetStreamSource(0, Primitive_.GetVertexBuffer()->GetBody(), 0, Primitive_.GetVertexBuffer()->GetStride());
-				Device->SetIndices(Primitive_.GetIndexBuffer()->GetBody());
-				Device->SetVertexDeclaration(Primitive_.GetVertexDecl());
-				Device->DrawIndexedPrimitive(Primitive_.GetD3DPrimitiveType(), 0, 0, Primitive_.GetNumVertex(), 0, Primitive_.GetNumPolygon());
+				postEffect->RenderFullScreen();
 
 				Effect_->EndPass();
 				Effect_->End();
@@ -144,16 +89,16 @@ namespace nkEngine
 			{
 				Blur_[i].Render();
 			}
-			
+
 			//ブルーム
 			{
 
-				float offset[] = 
+				float offset[] =
 				{
 					0.5f / Blur_[1].GetSizeW(),
 					0.5f / Blur_[1].GetSizeH()
 				};
-				
+
 				//メインレンダーに変更
 				Device->SetRenderTarget(0, ScreenRender().GetMainRenderTarget().GetSurface());
 				Device->SetDepthStencilSurface(ScreenRender().GetMainRenderTarget().GetDepthSurface());
@@ -167,17 +112,14 @@ namespace nkEngine
 
 				Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 				Effect_->BeginPass(0);
-				
+
 				Effect_->SetTexture("g_blur", Blur_[1].GetTexture()->GetTexture());
 				Effect_->SetValue("g_offset", offset, sizeof(offset));
-				
+
 				Effect_->CommitChanges();
 
-				Device->SetStreamSource(0, Primitive_.GetVertexBuffer()->GetBody(), 0, Primitive_.GetVertexBuffer()->GetStride());
-				Device->SetIndices(Primitive_.GetIndexBuffer()->GetBody());
-				Device->SetVertexDeclaration(Primitive_.GetVertexDecl());
-				Device->DrawIndexedPrimitive(Primitive_.GetD3DPrimitiveType(), 0, 0, Primitive_.GetNumVertex(), 0, Primitive_.GetNumPolygon());
-
+				postEffect->RenderFullScreen();
+				
 				Effect_->EndPass();
 				Effect_->End();
 
@@ -188,11 +130,20 @@ namespace nkEngine
 			}
 
 		}
-
 	}
 
 	/**
-	* Updates the weight described by dis.
+	 * 解放.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/16
+	 */
+	void Bloom::Release()
+	{
+	}
+
+	/**
+	* 重みを計算.
 	*
 	* @author HiramatsuTadashi
 	* @date 2017/01/09

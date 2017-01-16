@@ -141,4 +141,9 @@ private:
 	/** 消滅時間のローカルタイム. */
 	float DisappearanceLT_ = 0.0f;
 
+	/** 消滅パーティクル. */
+	ParticleEmitter Particle_;
+	/** 消滅パーティクルポジション. */
+	D3DXVECTOR3 ParticlePos_;
+
 };

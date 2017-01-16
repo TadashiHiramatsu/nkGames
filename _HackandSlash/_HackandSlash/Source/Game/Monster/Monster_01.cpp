@@ -6,7 +6,11 @@
 #include"stdafx.h"
 #include"Monster_01.h"
 
-#include"..\GameScene.h"
+/*---------------------------------------------------------------------------------------------------------*/
+#include"../GameCamera.h"
+
+#include"../Item/ItemResource.h"
+#include"../GUI/DropItem.h"
 
 //無名空間
 namespace
@@ -48,6 +52,31 @@ namespace
 		{
 			END_ANIMATION_EVENT(),
 		},
+	};
+
+	/** 消滅パーティクル. */
+	ParicleParameterS DisappearanceParticle =
+	{
+		"Soul_01.png",						//!< テクスチャのファイルパス。
+		D3DXVECTOR3(0.0f, 0.3f, 0.0f),		//!< 初速度。
+		1.0f,								//!< 寿命。単位は秒。
+		0.001f,								//!< 発生時間。単位は秒。
+		0.2f,								//!< パーティクルの幅。
+		0.2f,								//!< パーティクルの高さ。
+		D3DXVECTOR3(0.1f, 0.1f, 0.1f),		//!< 初期位置のランダム幅。
+		D3DXVECTOR3(0.0f, 0.2f, 0.0f),		//!< 初速度のランダム幅。
+		D3DXVECTOR3(0.0f, 0.2f, 0.0f),		//!< 速度の積分のときのランダム幅。
+		{									//!< UVテーブル。最大4まで保持できる。xが左上のu、yが左上のv、zが右下のu、wが右下のvになる。		
+			D3DXVECTOR4(0.0f,  0.0f, 1.0f, 1.0f),
+		},
+		0,									//!< UVテーブルのサイズ。
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!< 重力。	
+		true,								//!< 死ぬときにフェードアウトする？
+		0.5f,								//!< フェードする時間。
+		1.0f,								//!< 初期アルファ値。	
+		true,								//!< ビルボード？
+		1.0f,								//!< 輝度。ブルームが有効になっているとこれを強くすると光が溢れます。
+		1,									//!< 0半透明合成、1加算合成。
 	};
 
 }
@@ -114,6 +143,10 @@ void Monster_01::Start()
 	//コリジョンオブジェクトの初期化
 	CollisionObject_.reset(new btCollisionObject());
 	CollisionObject_->setCollisionShape(SphereShape_->GetBody());
+
+	//パーティクルの初期化
+	ParticlePos_ = Transform_.Position_;
+	Particle_.Init(g_MainCamera->GetCamera(), DisappearanceParticle, &ParticlePos_);
 
 }
 
@@ -262,6 +295,11 @@ void Monster_01::Update()
 			//消滅時間が経過した
 			if (DisappearanceTime_ <= DisappearanceLT_)
 			{
+				//パーティクル生成開始
+				Particle_.SetCreate(true);
+				//ポジション設定
+				ParticlePos_ = Transform_.Position_;
+
 				//徐々に透明に
 				Alpha_ = fmax(0.0f, Alpha_ - 0.01f);
 				if (Alpha_ <= 0.0f)
@@ -302,6 +340,9 @@ void Monster_01::Update()
 
 	//モデルレンダにアルファを設定
 	ModelRender_.SetAlpha(Alpha_);
+
+	//パーティクルの更新
+	Particle_.Update();
 
 	//基底クラスを更新
 	IMonster::Update();
@@ -372,6 +413,9 @@ void Monster_01::Render()
 {
 	//基底クラスの描画
 	IMonster::Render();
+
+	//パーティクルの描画
+	Particle_.Render();
 }
 
 /**
@@ -451,8 +495,11 @@ void Monster_01::Damage()
 			Player_->AddExperience(100);
 
 			//アイテムをドロップ
-			//DropItem* DI = NewGO<DropItem>();
-			//DI->SetTransform(transform);
+			DropItem* DI = NewGO<DropItem>();
+			//アイテムデータの取得
+			IItem* item = ItemResource().GetItem(21001);
+			//ドロップアイテムの初期化
+			DI->Start(item, g_MainCamera->GetCamera(), Transform_.Position_);
 		
 		}
 		else 

@@ -61,6 +61,9 @@
     <Filter Include="Debug">
       <UniqueIdentifier>{bb1c3770-8a38-47b0-81fa-c9f7408ebccb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{82e47fd3-eac7-4125-b71f-20aedb54d1ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nkEngine.cpp">
@@ -86,9 +89,6 @@
     </ClCompile>
     <ClCompile Include="_Component\nkTransform.cpp">
       <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\nkBlur.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="_Input\nkInput.cpp">
       <Filter>Input</Filter>
@@ -189,6 +189,12 @@
     <ClCompile Include="_Graphics\nkVertexBuffer.cpp">
       <Filter>Graphics\Buffer</Filter>
     </ClCompile>
+    <ClCompile Include="_Graphics\_PostEffect\nkPostEffect.cpp">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_PostEffect\nkBlur.cpp">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nkEngine.h">
@@ -220,9 +226,6 @@
     </ClInclude>
     <ClInclude Include="_Component\nkTransform.h">
       <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="_Graphics\nkBlur.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="_Input\nkInput.h">
       <Filter>Input</Filter>
@@ -352,6 +355,12 @@
     </ClInclude>
     <ClInclude Include="_Debug\nkLog.h">
       <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_PostEffect\nkPostEffect.h">
+      <Filter>Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_PostEffect\nkBlur.h">
+      <Filter>Graphics\PostEffect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -89,9 +89,6 @@ using namespace std;
 //プリレンダー
 #include"_Graphics\_Prerender\nkShadow.h"
 
-//ポストエフェクト
-#include"_Graphics\nkBlur.h"
-
 //UI
 #include"_Graphics\_UI\nkImage.h"
 #include"_Graphics\_UI\nkTestFont.h"

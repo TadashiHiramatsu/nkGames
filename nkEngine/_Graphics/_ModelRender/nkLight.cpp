@@ -35,17 +35,10 @@ namespace nkEngine
 
 		//環境光の設定
 		AmbientLight_ = D3DXVECTOR3(0.3f, 0.3f, 0.3f);
-
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	Light::~Light()
-	{
+		
+		//自己発光色の設定
+		EmissionLightColor_ = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	
 	}
 
 }// namespace nkEngine

@@ -14,7 +14,7 @@
  */
 Other::Other()
 {
-	Type = ItemType::Other;
+	Type_ = ItemTypeE::Other;
 }
 
 /**

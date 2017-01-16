@@ -21,21 +21,21 @@ public:
 	static const int SubTypeID = 1000;
 
 	/** レアリティ。ただそれだけ. */
-	enum RarityCode
+	enum RarityCodeE
 	{
-		Common = 1, //コモン。どこでも手に入る。
-		Magic, //マジック
-		Rare, //レア。
-		Unique, //ユニーク
+		Common = 1,		//!< コモン。どこでも手に入る。
+		Magic,			//!< マジック
+		Rare,			//!< レア。
+		Unique,			//!< ユニーク
 	};
 
 	/** アイテムのタイプ. */
 	/** アイテムIDの上一桁と一致. */
-	enum ItemType
+	enum ItemTypeE
 	{
-		Weapon = 1, //武器
-		Armor = 2, //防具
-		Other = 3, //その他
+		Weapon = 1,		//!< 武器
+		Armor = 2,		//!< 防具
+		Other = 3,		//!< その他
 	};
 
 public:
@@ -57,19 +57,88 @@ public:
 	 */
 	virtual ~IItem();
 
+	/**
+	 * IDを取得.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/16
+	 *
+	 * @return The identifier.
+	 */
+	int GetID()
+	{
+		return ID_;
+	}
+
+	/**
+	* アイテム名の取得.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/16
+	*
+	* @return Null if it fails, else the name.
+	*/
+	const char* GetName()
+	{
+		return Name_;
+	}
+
+	/**
+	 * アイコンファイルパスの取得.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/16
+	 *
+	 * @return Null if it fails, else the icon file path.
+	 */
+	const char* GetIconFilePath()
+	{
+		return IconFilePath_;
+	}
+
+	/**
+	 * レアリティの取得.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/16
+	 *
+	 * @return The rarity.
+	 */
+	RarityCodeE GetRarity()
+	{
+		return Rarity_;
+	}
+
+	/**
+	 * アイテムタイプの取得.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/16
+	 *
+	 * @return The item type.
+	 */
+	ItemTypeE GetItemType()
+	{
+		return Type_;
+	}
+
 protected:
-	/** アイテムを識別するためのコード. */
-	// 例:00000 
-	// 上一桁:アイテムタイプ
-	// 二桁目:サブタイプ
-	// 下三桁:個別ID
-	int ID;
+
+	/**   
+	* アイテムを識別するためのコード. 
+	* 例:00000 
+	* 上一桁:アイテムタイプ
+	* 二桁目:サブタイプ
+	* 下三桁:個別ID
+	*/
+	int ID_ = 0;
 	/** アイテムの名称。ゲーム内で表示するもの. */
-	const char* Name;
+	char Name_[64];
 	/** アイコンのファイルパス . */
-	const char* IconFilePath;
+	char IconFilePath_[64];
 	/** レアリティ. */
-	RarityCode Rarity;
+	RarityCodeE Rarity_;
 	/** アイテムタイプ. */
-	ItemType Type;
+	ItemTypeE Type_;
+
 };

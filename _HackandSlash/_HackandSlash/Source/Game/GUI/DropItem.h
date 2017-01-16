@@ -23,7 +23,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/12
 	 */
-	DropItem();
+	DropItem()
+	{
+	}
 
 	/**
 	 * デストラクタ.
@@ -31,10 +33,14 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/12
 	 */
-	~DropItem();
+	~DropItem()
+	{
+	}
 
 	/**
 	 * 初期化.
+	 * オーバーライドしていない
+	 * 自分で呼ぶ必要がある
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/12
@@ -63,5 +69,7 @@ private:
 	Sprite ItemSprite_;
 	/** アイテムデータ. */
 	IItem* Item_;
+	/** カメラ. */
+	Camera* Camera_;
 
 };

@@ -18,34 +18,49 @@ namespace nkEngine
 	{
 	public:
 
-		/**
-		 * コンストラクタ.
-		 *
-		 * @author	HiramatsuTadashi
-		 * @date	2017/01/07
-		 */
-		ShadowConfigS()
-		{
-			isEnable_ = isSoftShadowMap_ = false;
-			ShadowMapW_ = ShadowMapH_ = 512;
-			Fur_ = 1000.0f;
-			Near_ = 1.0f;
-		}
+		/** シャドウマップの有効フラグ. */
+		bool isEnable_ = false;
+		/** シャドウマップの横幅. */
+		int ShadowMapW_ = 512;
+		/** シャドウマップの縦幅. */
+		int ShadowMapH_ = 512;
+		/** ソフトシャドウマップの有効フラグ. */
+		bool isSoftShadowMap_ = false;
+		/** ファー. */
+		float Fur_ = 1000.0f;
+		/** ニア. */
+		float Near_ = 1.0f;
 
+	};
+
+	/**
+	 * ブルームクラスのコンフィグ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/16
+	 */
+	struct BloomConfigS
+	{
 	public:
 
-		/** シャドウマップの有効フラグ. */
-		bool isEnable_;
-		/** シャドウマップの横幅. */
-		int ShadowMapW_;
-		/** シャドウマップの縦幅. */
-		int ShadowMapH_;
-		/** ソフトシャドウマップの有効フラグ. */
-		bool isSoftShadowMap_;
-		/** ファー. */
-		float Fur_;
-		/** ニア. */
-		float Near_;
+		/** ブルームの有効フラグ. */
+		bool isEnable_ = false;
+	
+	};
+
+	/**
+	 * アンチエイリアスクラスのコンフィグ.
+	 *
+	 * @author HiramatsuTadashi
+	 * @date 2017/01/16
+	 */
+	struct AntiAliasingConfigS
+	{
+	public:
+
+		/** アンチエイリアスの有効フラグ. */
+		bool isEnable_ = false;
+	
 	};
 
 	/**
@@ -54,12 +69,16 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	struct SGraphicsConfig
+	struct GraphicsConfigS
 	{
 	public:
 
-		/** The shadow configuration. */
+		/** シャドウマップのコンフィグ. */
 		ShadowConfigS ShadowConfig_;
+		/** ブルームのコンフィグ. */
+		BloomConfigS BloomConfig_;
+		/** アンチエイリアスのコンフィグ. */
+		AntiAliasingConfigS AntiAliasingConfig_;
 
 	};
 

@@ -38,7 +38,7 @@ namespace nkEngine
 		UpdateWindow(Hwnd_);
 
 		//スクリーンレンダーの初期化
-		ScreenRender().Start(initParam);
+		ScreenRender().Start();
 
 		//ゲームオブジェクトの初期化
 		GameObjectManager().StartGOM(10);

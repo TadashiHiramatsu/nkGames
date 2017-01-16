@@ -5,7 +5,7 @@
  */
 #pragma once
 
-#include"..\nkBlur.h"
+#include"nkBlur.h"
 
 namespace nkEngine
 {
@@ -26,7 +26,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		Bloom();
+		Bloom()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -34,25 +36,29 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		~Bloom();
+		~Bloom()
+		{
+		}
 
 		/**
 		 * 作成.
 		 *
 		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
+		 * @date 2017/01/16
 		 *
-		 * @param isEnable True if this object is enable.
+		 * @param config The configuration.
 		 */
-		void Create(bool isEnable);
-		
+		void Create(const BloomConfigS& config);
+
 		/**
 		 * 描画.
 		 *
 		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
+		 * @date 2017/01/16
+		 *
+		 * @param [in,out] postEffect If non-null, the post effect.
 		 */
-		void Render();
+		void Render(PostEffect* postEffect);
 
 		/**
 		 * 解放.
@@ -65,7 +71,7 @@ namespace nkEngine
 	private:
 
 		/**
-		 * Updates the weight described by parameter1.
+		 * 重みを計算.
 		 *
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
@@ -86,8 +92,6 @@ namespace nkEngine
 		bool isEnable_;
 		/** The weights [num weights]. */
 		float Weights_[NUM_WEIGHTS];
-		/** The primitive. */
-		Primitive Primitive_;
 		/** The blur [ 2]. */
 		Blur Blur_[2];
 

@@ -18,16 +18,16 @@ class Armor : public IItem
 public:
 
 	/** Values that represent armor types. */
-	enum ArmorType
+	enum ArmorTypeE
 	{
-		Head = 1,	// “ª
-		Shoulders,	// Œ¨
-		Torso,		// “·
-		Wrists,		// ˜r
-		Hands,		// è
-		Waist,		// ˜
-		Legs,		// ‹r
-		Feet,		// ŒC
+		Head = 1,	//!< “ª
+		Shoulders,	//!< Œ¨
+		Torso,		//!< “·
+		Wrists,		//!< ˜r
+		Hands,		//!< è
+		Waist,		//!< ˜
+		Legs,		//!< ‹r
+		Feet,		//!< ŒC
 	};
 
 public:
@@ -53,7 +53,7 @@ public:
 	 * @param	_AType		 	The type.
 	 * @param	_Defense	 	The defense.
 	 */
-	Armor(int _ID, const char* _Name, const char* _IconFilePath, RarityCode _Rarity, ArmorType _AType,int _Defense);
+	Armor(int _ID, char* _Name, char* _IconFilePath, RarityCodeE _Rarity, ArmorTypeE _AType,int _Defense);
 
 	/**
 	 * Destructor.
@@ -65,7 +65,7 @@ public:
 private:
 
 	/** Type of the armor. */
-	ArmorType AType;
+	ArmorTypeE AType;
 	/** –hŒä—Í. */
 	int Defense = 0;
 };
