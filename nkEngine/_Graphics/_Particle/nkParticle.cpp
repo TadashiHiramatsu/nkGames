@@ -79,7 +79,7 @@ namespace nkEngine
 		);
 
 		//エフェクトのロード
-		Effect_ = EffectManager().LoadEffect("particle.fx");
+		Effect_ = EffectManager().LoadEffect("Particle.fx");
 
 		Scale_ = D3DXVECTOR3(param.W_, param.H_, 1);
 

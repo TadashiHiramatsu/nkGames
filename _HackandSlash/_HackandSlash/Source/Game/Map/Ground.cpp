@@ -9,26 +9,6 @@
 #include"..\GameCamera.h"
 
 /**
- * コンストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/10
- */
-Ground::Ground()
-{
-}
-
-/**
- * デストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/10
- */
-Ground::~Ground()
-{
-}
-
-/**
  * 初期化.
  *
  * @author HiramatsuTadashi
@@ -45,7 +25,7 @@ void Ground::Start()
 	//カメラの設定
 	ModelRender_.SetCamera(g_MainCamera->GetCamera());
 	//シャドウキャスターの設定true.
-	ModelRender_.SetShadowCasterFlag(true);
+	ModelRender_.SetShadowCasterFlag(false);
 	//シャドウレシーバーの設定true.
 	ModelRender_.SetShadowReceiverFlag(true);
 
@@ -56,6 +36,11 @@ void Ground::Start()
 	//スペキュラマップの設定
 	Specular_.Load("ground4_Specular.tga");
 	ModelRender_.SetSpecMap(&Specular_);
+
+	D3DXVECTOR3 dld;
+	D3DXVec3Normalize(&dld, &D3DXVECTOR3(5.0f, -5.0f, 5.0f));
+	Light_.SetDiffuseLightDirection(0, dld);
+	Light_.SetDiffuseLightColor(0, D3DXVECTOR4(1, 1, 1, 0));
 
 	//更新
 	Update();

@@ -89,7 +89,7 @@ struct VS_OUTPUT
 struct VS_OUTPUT_RENDER_SHADOW_MAP
 {
 	float4 Pos : POSITION;
-	float4 depth : TEXCOORD0;
+	float4 depth : TEXCOORD;
 };
 
 //ワールド座標とワールド法線をスキン行列から計算
@@ -231,7 +231,11 @@ VS_OUTPUT VSMainInstancing(VS_INPUT_INSTANCING In, uniform bool hasSkin)
 //return カラー
 float4 PSMain(VS_OUTPUT In) : COLOR
 {
-	float4 color = tex2D(g_diffuseTextureSampler,In.Tex0);
+	float4 color = 0.0f;
+	float4 diffuseColor = tex2D(g_diffuseTextureSampler,In.Tex0);
+	
+	color = diffuseColor;
+	
 	float3 normal = 0.0f;
 	if (g_flags.x)
 	{
@@ -252,8 +256,8 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		normal = In.Normal;
 	}
 
+	//ディフューズライトの計算
 	float4 lig = DiffuseLight(normal);
-
 
 	if (g_flags.z)
 	{
@@ -262,7 +266,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		float3 normalInCamera = mul(normal, g_mViewMatrixRotInv);
 		float t = 1.0f - abs(dot(normalInCamera, float3(0.0f, 0.0f, 1.0f)));
 		t = pow(t, 1.5f);
-		color.xyz += t * 0.7f;
+		lig.xyz += t * 0.7f;
 	}
 	if (g_isSpec)
 	{
@@ -275,13 +279,13 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		lig *= CalcShadow(In.LightViewPos_0, In.LightViewPos_1, In.LightViewPos_2);
 	}
 
-	//アンビエントライト
-	lig.xyz += g_light.ambient.xyz;
-
 	//自己発光色
 	lig.xyz += g_light.Emission;
 
 	color.xyz *= lig;
+
+	//アンビエントライト
+	color.xyz += diffuseColor.xyz * g_light.ambient.xyz;
 
 	if (g_fogParam.z > 1.9f)
 	{
@@ -360,7 +364,7 @@ float4 PSMainRenderShadowMap(VS_OUTPUT_RENDER_SHADOW_MAP In) : COLOR
 	float z = In.depth.z / In.depth.w;
 	float dx = ddx(z);
 	float dy = ddy(z);
-	return float4(z, z*z + 0.25f*(dx*dx + dy*dy), 0.0f, 1.0f);
+	return float4(z, z*z + 0.25f * (dx*dx + dy*dy), 0.0f, 1.0f);
 }
 
 

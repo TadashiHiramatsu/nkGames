@@ -58,12 +58,12 @@ namespace
 	ParticleParameterS DisappearanceParticle =
 	{
 		"Soul_01.png",						//!< テクスチャのファイルパス。
-		D3DXVECTOR3(0.0f, 0.3f, 0.0f),		//!< 初速度。
-		1.0f,								//!< 寿命。単位は秒。
+		D3DXVECTOR3(0.0f, 0.2f, 0.0f),		//!< 初速度。
+		2.0f,								//!< 寿命。単位は秒。
 		0.001f,								//!< 発生時間。単位は秒。
 		0.2f,								//!< パーティクルの幅。
 		0.2f,								//!< パーティクルの高さ。
-		D3DXVECTOR3(0.1f, 0.1f, 0.1f),		//!< 初期位置のランダム幅。
+		D3DXVECTOR3(0.1f, 0.0f, 0.1f),		//!< 初期位置のランダム幅。
 		D3DXVECTOR3(0.0f, 0.2f, 0.0f),		//!< 初速度のランダム幅。
 		D3DXVECTOR3(0.0f, 0.2f, 0.0f),		//!< 速度の積分のときのランダム幅。
 		{									//!< UVテーブル。最大4まで保持できる。xが左上のu、yが左上のv、zが右下のu、wが右下のvになる。		
@@ -72,33 +72,13 @@ namespace
 		0,									//!< UVテーブルのサイズ。
 		D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!< 重力。	
 		true,								//!< 死ぬときにフェードアウトする？
-		0.5f,								//!< フェードする時間。
+		1.0f,								//!< フェードする時間。
 		1.0f,								//!< 初期アルファ値。	
 		true,								//!< ビルボード？
-		1.0f,								//!< 輝度。ブルームが有効になっているとこれを強くすると光が溢れます。
+		0.1f,								//!< 輝度。ブルームが有効になっているとこれを強くすると光が溢れます。
 		1,									//!< 0半透明合成、1加算合成。
 	};
 
-}
-
-/**
- * コンストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/11
- */
-Monster_01::Monster_01()
-{
-}
-
-/**
- * デストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/11
- */
-Monster_01::~Monster_01()
-{
 }
 
 /**
@@ -119,7 +99,7 @@ void Monster_01::Start()
 	IMonster::Start();
 
 	//リムライトを有効に設定
-	ModelRender_.SetRimLight(true);
+	ModelRender_.SetRimLight(false);
 
 	//ステートを待機に設定
 	ChangeState(StateCodeE::StateWaiting);

@@ -199,12 +199,7 @@ namespace nkEngine
 		D3DCAPS9 d3dCaps;
 		Device->GetDeviceCaps(&d3dCaps);
 
-		//アルファブレンディングを行う
-		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-		// 透過処理を行う
-		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-		// 半透明処理を行う
-		Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+
 	
 		//テクニックを設定
 		{
@@ -292,6 +287,13 @@ namespace nkEngine
 				D3DXMATRIX viewProj;
 				D3DXMatrixMultiply(&viewProj, &Camera_->GetViewMatrix(),&Camera_->GetProjectionMatrix());
 				Effect_->SetMatrix("g_mViewProj", &viewProj);
+
+				//アルファブレンディングを行う
+				Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+				// 透過処理を行う
+				Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+				// 半透明処理を行う
+				Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 			}
 
 			//ライトを設定
@@ -319,19 +321,13 @@ namespace nkEngine
 				Effect_->SetTexture("g_ShadowMap_2", Shadow().GetTexture(2)->GetTexture());
 
 				const CShadowMap::ShadowReceiverParamS& param = Shadow().GetShadowReceiverParam();
-				Effect_->SetValue("g_ShadowReceiverParam", &param, sizeof(param));
+				Effect_->SetValue("g_ShadowReceiverParam", &param, sizeof(CShadowMap::ShadowReceiverParamS));
 			}
 
 			//リムライト
 			if (isRimLight_)
 			{
 				flag[2] = true;
-			}
-
-			//輝度
-			if (isLuminance_)
-			{
-				flag[3] = true;
 			}
 
 			Effect_->SetValue("g_flags", flag, sizeof(flag));

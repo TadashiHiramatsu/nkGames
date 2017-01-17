@@ -165,6 +165,7 @@ namespace nkEngine
 
 		/**
 		 * シャドウレシーバーのフラグを設定.
+		 * 影を落とすかどうか.
 		 *
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
@@ -187,19 +188,6 @@ namespace nkEngine
 		void SetRimLight(bool flag)
 		{
 			isRimLight_ = flag;
-		}
-
-		/**
-		 * 輝度を埋め込むフラグを設定.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/10
-		 *
-		 * @param flag 輝度を埋め込むフラグ.
-		 */
-		void SetLuminance(bool flag)
-		{
-			isLuminance_ = flag;
 		}
 
 		/**
@@ -409,8 +397,6 @@ namespace nkEngine
 		bool isShadowCaster_;
 		/** リムライトをするかどうか. */
 		bool isRimLight_;
-		/** 輝度を埋め込むか. */
-		bool isLuminance_;
 
 		/** 法線マップのTexture. */
 		Texture* NormalMap_;

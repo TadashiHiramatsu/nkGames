@@ -46,55 +46,6 @@ namespace
 
 	};
 
-	//遺産
-	///** The attack particle. */
-	//ParicleParameterS AttackParticle = 
-	//{
-	//	"fire_02.png",						//!< テクスチャのファイルパス。
-	//	D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!< 初速度。
-	//	0.1f,								//!< 寿命。単位は秒。
-	//	0.001f,								//!< 発生時間。単位は秒。
-	//	0.5f,								//!< パーティクルの幅。
-	//	0.5f,								//!< パーティクルの高さ。
-	//	D3DXVECTOR3(0.05f, 0.05f, 0.05f),	//!< 初期位置のランダム幅。
-	//	D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!< 初速度のランダム幅。
-	//	D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!< 速度の積分のときのランダム幅。
-	//	{									//!< UVテーブル。最大4まで保持できる。xが左上のu、yが左上のv、zが右下のu、wが右下のvになる。		
-	//		D3DXVECTOR4(0.0f,  0.0f, 1.0f, 1.0f),
-	//		D3DXVECTOR4(0.25f, 0.0f, 0.5f,  0.5f),
-	//		D3DXVECTOR4(0.5f,  0.0f, 0.75f, 0.5f),
-	//		D3DXVECTOR4(0.75f, 0.0f, 1.0f,  0.5f),
-	//	},
-	//	0,									//!< UVテーブルのサイズ。
-	//	D3DXVECTOR3(0.0f, 0.0f, 0.0f),		//!< 重力。	
-	//	true,								//!< 死ぬときにフェードアウトする？
-	//	0.5f,								//!< フェードする時間。
-	//	1.0f,								//!< 初期アルファ値。	
-	//	true,								//!< ビルボード？
-	//	1.0f,								//!< 輝度。ブルームが有効になっているとこれを強くすると光が溢れます。
-	//	1,									//!< 0半透明合成、1加算合成。
-	//};
-
-}
-
-/**
- * コンストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/10
- */
-Player::Player()
-{
-}
-
-/**
- * デストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/10
- */
-Player::~Player()
-{
 }
 
 /**
@@ -118,6 +69,11 @@ void Player::Start()
 	//シャドウレシーバーtrue
 	ModelRender_.SetShadowReceiverFlag(true);
 
+	D3DXVECTOR3 dld;
+	D3DXVec3Normalize(&dld, &D3DXVECTOR3(5.0f, -5.0f, 5.0f));
+	Light_.SetDiffuseLightDirection(0, dld);
+	Light_.SetDiffuseLightColor(0, D3DXVECTOR4(1, 1, 1, 0));
+
 	//ポジションをちょっと上に
 	Transform_.Position_ = D3DXVECTOR3(0, 1, 0);
 
@@ -140,10 +96,6 @@ void Player::Start()
 	//シャドウを計算
 	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 0.0f) + Transform_.Position_);
 	Shadow().SetLightTarget(Transform_.Position_);
-
-	//mParticle = Model.FindBoneWorldMatrix("Bip01_R_Finger0");
-	//ParticlePos = D3DXVECTOR3(mParticle->m[3][0], mParticle->m[3][1], mParticle->m[3][2]);
-	//Particle.Init(MainCamera.GetCamera(), AttackParticle, &ParticlePos);
 
 	//左手武器
 	WeaponModelRenderL_.Load("Weapon_Scythe.X", nullptr);
@@ -250,7 +202,6 @@ void Player::Update()
 		{
 			ChangeState(StateCodeE::StateAttack);
 
-			//Particle.SetCreate(true);
 		}
 	}
 	break;
@@ -264,13 +215,13 @@ void Player::Update()
 		{
 			//アニメーションが終了したので待機ステートに変更
 			ChangeState(StateCodeE::StateWaiting);
-			//Particle.SetCreate(false);
 		}
 	}
 	break;
 	case Player::StateDamage:
 	{
 		//どうしよう？
+		// 強攻撃を受けたときに使うので放置
 		//if (!Animation_.IsPlayAnim())
 		//{
 			//アニメーションが終了したので待機ステートに変更
@@ -347,9 +298,6 @@ void Player::Update()
 	WeaponTransformR_.Update();
 	WeaponModelRenderR_.Update();
 	
-	//ParticlePos = D3DXVECTOR3(mParticle->m[3][0], mParticle->m[3][1], mParticle->m[3][2]);
-	//Particle.Update();
-
 	//シャドウマップの更新
 	Shadow().SetLightPosition(D3DXVECTOR3(-5.0f, 5.0f, -5.0f) + Transform_.Position_);
 	Shadow().SetLightTarget(Transform_.Position_);
@@ -370,8 +318,6 @@ void Player::Render()
 	//武器の描画
 	WeaponModelRenderL_.Render();
 	WeaponModelRenderR_.Render();
-
-	//Particle.Render();
 
 }
 
@@ -499,19 +445,6 @@ void Player::ParameterUpdate()
 }
 
 /**
- * ステートの変更.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/10
- *
- * @param nextState State of the next.
- */
-void Player::ChangeState(StateCodeE nextState)
-{
-	State_ = nextState;
-}
-
-/**
  * アニメーション更新.
  *
  * @author HiramatsuTadashi
@@ -530,16 +463,17 @@ void Player::AnimationControl()
 		break;
 	case StateRun:
 		PlayAnimation(AnimationCodeE::AnimationRun, 0.1f);
-		time = 1.0f / 60;
 		break;
 	case StateAttack:
 		PlayAnimation(AnimationCodeE::AnimationAttack, 0.1f);
+		time = 1.0f / 30.0f;
 		break;
 	case StateDamage:
 		PlayAnimation(AnimationCodeE::AnimationHit, 0.1f);
 		break;
 	case StateDead:
 		PlayAnimation(AnimationCodeE::AnimationDead, 0.1f);
+		break;
 	default:
 		break;
 	}

@@ -47,7 +47,8 @@ namespace nkEngine
 		};
 
 		/** ライトビューの計算の仕方. */
-		enum CalcLightViewFuncE {
+		enum CalcLightViewFuncE 
+		{
 			CalcLightViewFunc_PositionDirection,	//!< ライトの位置と方向で計算する。
 			CalcLightViewFunc_PositionTarget,		//!< ライトの位置と注視点で計算する。
 		};
@@ -142,8 +143,8 @@ namespace nkEngine
 		 */
 		const Texture* GetTexture(int texNumber) const
 		{
-			return Blur_[texNumber].GetTexture();
-			//return m_shadowMapRT[texNumber].GetTexture();
+			//return Blur_[texNumber].GetTexture();
+			return ShadowMapRT_[texNumber].GetTexture();
 		}
 
 		/**

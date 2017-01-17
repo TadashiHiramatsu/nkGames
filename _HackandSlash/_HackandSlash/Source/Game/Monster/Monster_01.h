@@ -39,7 +39,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
 	 */
-	Monster_01();
+	Monster_01()
+	{
+	}
 
 	/**
 	 * デストラクタ.
@@ -47,7 +49,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
 	 */
-	~Monster_01();
+	~Monster_01()
+	{
+	}
 
 	/**
 	 * 初期化.

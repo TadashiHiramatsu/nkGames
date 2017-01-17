@@ -70,13 +70,14 @@ namespace nkEngine
 	 */
 	void CShadowMap::Create(const ShadowConfigS& config)
 	{
-
 		//解放
 		Release();
 
 		Near_ = config.Near_;
 		Far_ = config.Fur_;
+
 		isEnable_ = config.isEnable_;
+		
 		int w = config.ShadowMapW_;
 		int h = config.ShadowMapH_;
 
@@ -100,6 +101,11 @@ namespace nkEngine
 		
 		}
 
+		//バリアンスシャドウマップ
+		ShadowReceiverParam_.isVSM_ = true;
+
+		//シャドウマップの数
+		ShadowReceiverParam_.numShadowMap_ = MAX_SHADOW_MAP;
 	}
 
 	/**
@@ -149,12 +155,6 @@ namespace nkEngine
 
 			}
 
-			//バリアンスシャドウマップ
-			ShadowReceiverParam_.isVSM_ = true;
-
-			//シャドウマップの数
-			ShadowReceiverParam_.numShadowMap_ = MAX_SHADOW_MAP;
-
 		}
 
 	}
@@ -186,15 +186,19 @@ namespace nkEngine
 				Device->SetRenderTarget(0, ShadowMapRT_[i].GetSurface());
 				Device->SetDepthStencilSurface(ShadowMapRT_[i].GetDepthSurface());
 				
-				Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
+				Device->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0xffffffff, 1.0f, 0);
 
 				//ビュープロジェクション行列のコピー
 				LightViewProjMatrix_ = ShadowReceiverParam_.LightViewProjMatrix_[i];
+				
+				Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 				
 				for (auto model : ShadowModelList_)
 				{
 					model->RenderToShadowMap();
 				}
+				
+				Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 				//ブラーの描画
 				Blur_[i].Render();
@@ -203,6 +207,8 @@ namespace nkEngine
 			//バックバッファに戻す
 			Device->SetRenderTarget(0, BackBuffer);
 			Device->SetDepthStencilSurface(BackDepthBuffer);
+			BackBuffer->Release();
+			BackDepthBuffer->Release();
 
 			//モデルの削除
 			ShadowModelList_.clear();

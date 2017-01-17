@@ -1,7 +1,7 @@
 //影関係の関数集
 
 //シャドウ用のテクスチャ
-texture g_ShadowMap_0;
+texture g_ShadowMap_0 : register(t0);
 sampler g_ShadowMapSampler_0 =
 sampler_state
 {
@@ -13,7 +13,7 @@ sampler_state
 	AddressV = CLAMP;
 };
 
-texture g_ShadowMap_1;
+texture g_ShadowMap_1 : register(t1);
 sampler g_ShadowMapSampler_1 =
 sampler_state
 {
@@ -25,7 +25,7 @@ sampler_state
 	AddressV = CLAMP;
 };
 
-texture g_ShadowMap_2;
+texture g_ShadowMap_2 : register(t2);
 sampler g_ShadowMapSampler_2 =
 sampler_state
 {

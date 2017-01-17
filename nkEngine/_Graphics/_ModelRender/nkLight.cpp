@@ -26,15 +26,15 @@ namespace nkEngine
 		DiffuseLightDirection_[5] = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 
 		//ディフューズライト色
-		DiffuseLightColor_[0] = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-		DiffuseLightColor_[1] = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-		DiffuseLightColor_[2] = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-		DiffuseLightColor_[3] = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-		DiffuseLightColor_[4] = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
-		DiffuseLightColor_[5] = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+		DiffuseLightColor_[0] = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
+		DiffuseLightColor_[1] = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
+		DiffuseLightColor_[2] = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
+		DiffuseLightColor_[3] = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
+		DiffuseLightColor_[4] = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
+		DiffuseLightColor_[5] = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
 
 		//環境光の設定
-		AmbientLight_ = D3DXVECTOR3(0.3f, 0.3f, 0.3f);
+		AmbientLight_ = D3DXVECTOR3(0.5f, 0.5f, 0.5f);
 		
 		//自己発光色の設定
 		EmissionLightColor_ = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

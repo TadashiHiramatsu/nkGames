@@ -79,8 +79,8 @@ using namespace std;
 #include"_Graphics\nkPrimitive.h"
 #include"_Graphics\nkTexture.h"
 #include"_Graphics\nkRenderTarget.h"
-#include"_Graphics\nkVertexBuffer.h"
-#include"_Graphics\nkIndexBuffer.h"
+#include"_Graphics\_Buffer\nkVertexBuffer.h"
+#include"_Graphics\_Buffer\nkIndexBuffer.h"
 #include"_Graphics\nkEffectManager.h"
 
 //パーティクル

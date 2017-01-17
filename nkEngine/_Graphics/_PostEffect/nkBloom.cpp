@@ -30,15 +30,27 @@ namespace nkEngine
 			int h = Engine().GetFrameH();
 
 			//輝度レンダリングターゲットの作成
-			LuminanceRT_.Create(w, h, 1, D3DFMT_A16B16G16R16F, D3DFMT_UNKNOWN, D3DMULTISAMPLE_NONE, 0);
+			LuminanceRT_.Create(w, h, 1, D3DFMT_A16B16G16R16F, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);
 
-			//ブラーの初期化
-			Blur_[0].Init(w, h, *LuminanceRT_.GetTexture());
-			Blur_[1].Init(w, h, *Blur_[0].GetTexture());
+			for (int i = 0; i < NUM_DOWN_SAMPLING_RT / 2; i++)
+			{
+				//シフト量の計算
+				int shift = i + 1;
+
+				//ダウンサンプリング用RTの添え字を計算
+				int baseIndex = i * 2;
+				
+				//横ブラー用RTの作成
+				DownSamplingRT_[baseIndex].Create(w >> shift, h >> (shift - 1), 1, D3DFMT_A16B16G16R16F, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);	
+				//縦ブラー用RTの作成
+				DownSamplingRT_[baseIndex + 1].Create(w >> shift, h >> shift, 1, D3DFMT_A16B16G16R16F, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);	
+			}
+
+			//ぼかし合成用RTの作成
+			CombineRT_.Create(w >> 2, h >> 2, 1, D3DFMT_A16B16G16R16F, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);			
 
 			//エフェクトのロード
 			Effect_ = EffectManager().LoadEffect("Bloom.fx");
-
 		}
 	}
 
@@ -57,22 +69,25 @@ namespace nkEngine
 			//デバイスの取得
 			IDirect3DDevice9* Device = Engine().GetDevice();
 
+			//重み計算
 			UpdateWeight(25.0f);
 
-			//輝度摘出
+			//輝度抽出
 			{
 
-				//輝度に変更
+				//輝度抽出用のレンダリングターゲットに変更
 				Device->SetRenderTarget(0, LuminanceRT_.GetSurface());
 				Device->SetDepthStencilSurface(LuminanceRT_.GetDepthSurface());
 
-				Device->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0, 1.0f, 0);
+				//テクスチャのクリア
+				Device->Clear(0, nullptr, D3DCLEAR_TARGET, 0, 1.0f, 0);
 
 				Effect_->SetTechnique("SamplingLuminance");
 
 				Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 				Effect_->BeginPass(0);
 
+				//テクスチャの設定
 				Effect_->SetTexture("g_Scene", ScreenRender().GetMainRenderTarget().GetTextureDX());
 
 				Effect_->CommitChanges();
@@ -82,21 +97,168 @@ namespace nkEngine
 				Effect_->EndPass();
 				Effect_->End();
 
-			}
+			}//輝度抽出
 
-			//ブラー
-			for (int i = 0; i < 2; i++)
+			//輝度をぼかす
 			{
-				Blur_[i].Render();
-			}
+				//ループ用RTクラスのポインタ
+				RenderTarget* prevRT = &LuminanceRT_;
+				//ダウンサンプリング用RTの添え字
+				int rtIndex = 0;
+
+				for (int i = 0; i < NUM_DOWN_SAMPLING_RT / 2; i++)
+				{
+					//XBlur
+					{
+						//ダウンサンプリング用RTのXBlur用をレンダリングターゲットに設定
+						Device->SetRenderTarget(0, DownSamplingRT_[rtIndex].GetSurface());
+						Device->SetDepthStencilSurface(DownSamplingRT_[rtIndex].GetDepthSurface());
+
+						//画像をクリア
+						Device->Clear(0, nullptr, D3DCLEAR_TARGET, 0, 1.0f, 0);
+
+						//テクニックを設定
+						Effect_->SetTechnique("XBlur");
+
+						Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
+						Effect_->BeginPass(0);
+						
+						//画像サイズを計算
+						float size[2] = 
+						{
+							s_cast<float>(prevRT->GetSizeW()),
+							s_cast<float>(prevRT->GetSizeH())
+						};
+						//オフセットを計算
+						float offset[] = 
+						{
+							16.0f / s_cast<float>(prevRT->GetSizeW()),
+							0.0f
+						};
+
+						//画面サイズを設定
+						Effect_->SetValue("g_LuminanceTexSize", size, sizeof(size));
+						//オフセットを設定
+						Effect_->SetValue("g_Offset", offset, sizeof(size));
+						//重みを設定
+						Effect_->SetValue("g_Weight", Weights_, sizeof(Weights_));
+
+						//テクスチャを設定
+						Effect_->SetTexture( "g_Blur", prevRT->GetTextureDX());
+
+						Effect_->CommitChanges();
+
+						postEffect->RenderFullScreen();
+
+						Effect_->EndPass();
+						Effect_->End();
+					}//XBlur
+
+					//YBlur用を設定
+					prevRT = &DownSamplingRT_[rtIndex];
+					rtIndex++;
+
+					//YBlur
+					{
+						//ダウンサンプリング用RTのYBlur用をレンダリングターゲットに設定
+						Device->SetRenderTarget(0, DownSamplingRT_[rtIndex].GetSurface());
+						Device->SetDepthStencilSurface(DownSamplingRT_[rtIndex].GetDepthSurface());
+
+						//画像をクリア
+						Device->Clear(0, nullptr, D3DCLEAR_TARGET, 0, 1.0f, 0);
+
+						Effect_->SetTechnique("YBlur");
+
+						Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
+						Effect_->BeginPass(0);
+						
+						//サイズを計算
+						float size[2] = 
+						{
+							s_cast<float>(prevRT->GetSizeW()),	//横幅
+							s_cast<float>(prevRT->GetSizeH())	//高さ
+						};
+						//オフセットを計算
+						float offset[] = 
+						{
+							0.0f,										//横幅
+							16.0f / s_cast<float>(prevRT->GetSizeH()),	//高さ
+						};
+
+						//画面サイズを設定
+						Effect_->SetValue("g_LuminanceTexSize", size, sizeof(size));
+						//オフセットを設定
+						Effect_->SetValue("g_Offset", offset, sizeof(size));
+						//重みを設定
+						Effect_->SetValue("g_Weight", Weights_, sizeof(Weights_));
+
+						//テクスチャの設定
+						Effect_->SetTexture( "g_Blur", prevRT->GetTextureDX());
+						
+						Effect_->CommitChanges();
+
+						postEffect->RenderFullScreen();
+
+						Effect_->EndPass();
+						Effect_->End();
+					}
+
+					//XBlur用を設定
+					prevRT = &DownSamplingRT_[rtIndex];
+					rtIndex++;
+
+				}//YBlur
+
+			}//輝度をぼかす
+
+			//ボケフィルターの合成
+			{
+				
+				//アルファブレンドをなしに設定
+				Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+
+				Device->SetRenderTarget(0, CombineRT_.GetSurface());
+				Device->SetDepthStencilSurface(CombineRT_.GetDepthSurface());
+
+				//画像をクリア
+				Device->Clear(0, nullptr, D3DCLEAR_TARGET, 0, 1.0f, 0);
+				
+				float offset[] = 
+				{
+					0.5f / s_cast<float>(CombineRT_.GetSizeW()),
+					0.5f / s_cast<float>(CombineRT_.GetSizeH()),
+				};
+				
+				Effect_->SetTechnique("Combine");
+
+				Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
+				Effect_->BeginPass(0);
+
+				//テクスチャの設定
+				Effect_->SetTexture( "g_CombineTex00", DownSamplingRT_[1].GetTextureDX());
+				Effect_->SetTexture( "g_CombineTex01", DownSamplingRT_[3].GetTextureDX());
+				Effect_->SetTexture( "g_CombineTex02", DownSamplingRT_[5].GetTextureDX());
+				Effect_->SetTexture( "g_CombineTex03", DownSamplingRT_[7].GetTextureDX());
+				Effect_->SetTexture( "g_CombineTex04", DownSamplingRT_[9].GetTextureDX());
+
+				Effect_->SetValue( "g_Offset", offset, sizeof(offset));
+
+				Effect_->CommitChanges();
+
+				postEffect->RenderFullScreen();
+
+				Effect_->EndPass();
+				Effect_->End();
+
+			}//ボケフィルターの合成
 
 			//ブルーム
 			{
 
 				float offset[] =
 				{
-					0.5f / Blur_[1].GetSizeW(),
-					0.5f / Blur_[1].GetSizeH()
+					0.5f / s_cast<float>(CombineRT_.GetSizeW()),
+					0.5f / s_cast<float>(CombineRT_.GetSizeH())
 				};
 
 				//メインレンダーに変更
@@ -113,8 +275,8 @@ namespace nkEngine
 				Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 				Effect_->BeginPass(0);
 
-				Effect_->SetTexture("g_blur", Blur_[1].GetTexture()->GetTexture());
-				Effect_->SetValue("g_offset", offset, sizeof(offset));
+				Effect_->SetTexture("g_Blur", CombineRT_.GetTextureDX());
+				Effect_->SetValue("g_Offset", offset, sizeof(offset));
 
 				Effect_->CommitChanges();
 
@@ -127,7 +289,7 @@ namespace nkEngine
 				Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 				Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
-			}
+			}//ブルーム
 
 		}
 	}
@@ -156,25 +318,16 @@ namespace nkEngine
 
 		for (int i = 0; i < NUM_WEIGHTS; i++)
 		{
-
 			Weights_[i] = expf(-0.5f*(float)(i*i) / dis);
 
-			if (0 == i)
-			{
-				total += Weights_[i];
-			}
-			else
-			{
-				total += 2.0f * Weights_[i];
-
-			}
+			total += 2.0f * Weights_[i];
 		}
 
+		//規格化
 		for (int i = 0; i < NUM_WEIGHTS; i++)
 		{
 			Weights_[i] /= total;
 		}
-
 	}
 
 }// namespace nkEngine

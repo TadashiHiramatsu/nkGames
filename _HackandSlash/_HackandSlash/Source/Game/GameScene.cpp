@@ -42,6 +42,9 @@ void GameScene::Start()
 	GraphicsConfig_.ShadowConfig_.ShadowMapH_ = 2048;
 	GraphicsConfig_.ShadowConfig_.Fur_ = 100.0f;
 
+	GraphicsConfig_.BloomConfig_.isEnable_ = true;
+	GraphicsConfig_.AntiAliasingConfig_.isEnable_ = true;
+
 	//コリジョンワールドの作成
 	g_CollisionWorld = NewGO<CollisionWorld>();
 	//メインカメラの作成

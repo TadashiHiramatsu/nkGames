@@ -5,8 +5,8 @@
  */
 #pragma once
 
-#include"nkVertexBuffer.h"
-#include"nkIndexBuffer.h"
+#include"_Buffer\nkVertexBuffer.h"
+#include"_Buffer\nkIndexBuffer.h"
 
 namespace nkEngine
 {
@@ -25,7 +25,7 @@ namespace nkEngine
 		enum TypeE {
 			TriangleList,	//!< トライアングルリスト。
 			TriangleStrip,  //!< トライアングルストリップ。
-		    TypeNum,		//!< タイプの数
+			TypeNum,		//!< タイプの数
 		};
 
 	public:
@@ -71,7 +71,7 @@ namespace nkEngine
 			IndexFormatE				indexFormat,
 			void*						srcIndexbuffer
 		);
-		
+
 		/**
 		 * 解放.
 		 *
@@ -79,7 +79,7 @@ namespace nkEngine
 		 * @date	2017/01/07
 		 */
 		void Release();
-		
+
 		/**
 		 * 頂点バッファを取得.
 		 *
@@ -92,7 +92,7 @@ namespace nkEngine
 		{
 			return &VertexBuffer_;
 		}
-		
+
 		/**
 		 * インデックスバッファを取得.
 		 *
@@ -105,7 +105,7 @@ namespace nkEngine
 		{
 			return &IndexBuffer_;
 		}
-		
+
 		/**
 		 * プリミティブタイプを取得.
 		 *
@@ -118,7 +118,7 @@ namespace nkEngine
 		{
 			return D3DPrimitiveType_;
 		}
-		
+
 		/**
 		 * 頂点数を取得.
 		 *
@@ -131,7 +131,7 @@ namespace nkEngine
 		{
 			return numVertex_;
 		}
-		
+
 		/**
 		 * ポリゴン数を取得.
 		 *
@@ -144,7 +144,7 @@ namespace nkEngine
 		{
 			return numPolygon_;
 		}
-		
+
 		/**
 		 * 頂点定義を取得.
 		 *
@@ -159,7 +159,7 @@ namespace nkEngine
 		}
 
 	private:
-		
+
 		/** 頂点数. */
 		int	numVertex_;
 		/** 頂点ストライド. */
@@ -173,9 +173,9 @@ namespace nkEngine
 		/** インデックスバッファ. */
 		IndexBuffer IndexBuffer_;
 		/** プリミティブタイプ. */
-		TypeE Type_;			
+		TypeE Type_;
 		/** Type of the 3D primitive. */
-		D3DPRIMITIVETYPE D3DPrimitiveType_;	
+		D3DPRIMITIVETYPE D3DPrimitiveType_;
 
 	};
 

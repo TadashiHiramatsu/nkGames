@@ -21,7 +21,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	Ground();
+	Ground()
+	{
+	}
 
 	/**
 	 * デストラクタ.
@@ -29,7 +31,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	~Ground();
+	~Ground()
+	{
+	}
 
 	/**
 	 * 初期化.

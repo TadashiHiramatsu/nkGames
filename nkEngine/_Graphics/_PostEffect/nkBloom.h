@@ -5,8 +5,6 @@
  */
 #pragma once
 
-#include"nkBlur.h"
-
 namespace nkEngine
 {
 
@@ -82,18 +80,27 @@ namespace nkEngine
 
 	private:
 
-		/** Number of weights. */
-		static const int NUM_WEIGHTS = 8;
-		/** エフェクト. */
-		ID3DXEffect* Effect_;
-		/** レンダリングターゲット. */
-		RenderTarget LuminanceRT_;
 		/** 有効フラグ. */
 		bool isEnable_;
-		/** The weights [num weights]. */
+
+		/** 重み. */
+		static const int NUM_WEIGHTS = 8;
+		/** 重み [num weights]. */
 		float Weights_[NUM_WEIGHTS];
-		/** The blur [ 2]. */
-		Blur Blur_[2];
+
+		/** エフェクト. */
+		ID3DXEffect* Effect_;
+		
+		/** レンダリングターゲット. */
+		RenderTarget LuminanceRT_;
+	
+		/** ぼかし合成用のRT. */
+		RenderTarget CombineRT_;
+
+		/** ダウンサンプリング用RTの数. */
+		static const int NUM_DOWN_SAMPLING_RT = 10;
+		/** 輝度をダウンサンプリングするためのRT. */
+		RenderTarget DownSamplingRT_[NUM_DOWN_SAMPLING_RT];
 
 	};
 

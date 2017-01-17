@@ -183,12 +183,6 @@
     <ClCompile Include="_Physics\nkSphereCollider.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="_Graphics\nkIndexBuffer.cpp">
-      <Filter>Graphics\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\nkVertexBuffer.cpp">
-      <Filter>Graphics\Buffer</Filter>
-    </ClCompile>
     <ClCompile Include="_Graphics\_PostEffect\nkPostEffect.cpp">
       <Filter>Graphics\PostEffect</Filter>
     </ClCompile>
@@ -200,6 +194,12 @@
     </ClCompile>
     <ClCompile Include="_Resources\nkTextureResources.cpp">
       <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_Buffer\nkIndexBuffer.cpp">
+      <Filter>Graphics\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="_Graphics\_Buffer\nkVertexBuffer.cpp">
+      <Filter>Graphics\Buffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -350,12 +350,6 @@
     <ClInclude Include="_Physics\nkSphereCollider.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="_Graphics\nkIndexBuffer.h">
-      <Filter>Graphics\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="_Graphics\nkVertexBuffer.h">
-      <Filter>Graphics\Buffer</Filter>
-    </ClInclude>
     <ClInclude Include="_Debug\nkAssert.h">
       <Filter>Debug</Filter>
     </ClInclude>
@@ -373,6 +367,12 @@
     </ClInclude>
     <ClInclude Include="_Resources\nkTextureResources.h">
       <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_Buffer\nkIndexBuffer.h">
+      <Filter>Graphics\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="_Graphics\_Buffer\nkVertexBuffer.h">
+      <Filter>Graphics\Buffer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

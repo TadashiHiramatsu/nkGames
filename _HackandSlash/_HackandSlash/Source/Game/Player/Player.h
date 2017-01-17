@@ -97,7 +97,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	Player();
+	Player()
+	{
+	}
 
 	/**
 	 * デストラクタ.
@@ -105,7 +107,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	~Player();
+	~Player()
+	{
+	}
 
 	/**
 	 * 初期化.
@@ -204,7 +208,10 @@ private:
 	 *
 	 * @param nextState State of the next.
 	 */
-	void ChangeState(StateCodeE nextState);
+	void ChangeState(StateCodeE nextState)
+	{
+		State_ = nextState;
+	}
 
 	/**
 	 * アニメーション管理関数.

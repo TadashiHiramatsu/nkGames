@@ -5,7 +5,7 @@
  */
 #pragma once
 
-#include"..\nkVertexBuffer.h"
+#include"..\_Buffer\nkVertexBuffer.h"
 
 namespace nkEngine
 {
