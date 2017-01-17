@@ -16,7 +16,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	struct ParicleParameterS 
+	struct ParticleParameterS
 	{
 	public:
 
@@ -65,7 +65,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class ParticleEmitter
+	class ParticleEmitter : public IGameObject
 	{
 	public:
 
@@ -75,7 +75,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		ParticleEmitter();
+		ParticleEmitter()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -83,19 +85,22 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		~ParticleEmitter();
+		~ParticleEmitter()
+		{
+		}
 
 		/**
-		 * 初期化.
+		 * 初期化. オーバーライドじゃないため自分で呼ぶ必要がある.
 		 *
 		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
+		 * @date 2017/01/16
 		 *
 		 * @param [in,out] camera	    If non-null, the camera.
 		 * @param 		   param	    The parameter.
-		 * @param [in,out] emitPosition If non-null, the emit position.
+		 * @param 		   emitPosition The emit position.
+		 * @param 		   lifeTime	    The life time.
 		 */
-		void Init(Camera* camera, const ParicleParameterS& param, D3DXVECTOR3* emitPosition);
+		void Start(Camera* camera, const ParticleParameterS& param, D3DXVECTOR3& emitPosition,float lifeTime);
 
 		/**
 		 * 更新.
@@ -103,74 +108,38 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		void Update();
-
-		/**
-		 * 描画.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
-		 */
-		void Render();
+		void Update()override;
 
 		/**
 		 * パーティクルに力を加える.
 		 *
 		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
+		 * @date 2017/01/16
 		 *
-		 * @param addForce The add force.
+		 * @param force 力.
 		 */
-		void AddForce(const D3DXVECTOR3& addForce);
-
-		/**
-		 * 解放.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
-		 */
-		void Release()
-		{
-			auto p = ParticleList_.begin();
-
-			while (p != ParticleList_.end())
-			{
-				p = ParticleList_.erase(p);
-			}
-
-			ParticleList_.clear();
-		
-		}
-
-		/**
-		 * Sets a create.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
-		 *
-		 * @param _is True to is.
-		 */
-		void SetCreate(bool isCreate)
-		{
-			isCreate_ = isCreate;
-		}
+		void AddForce(const D3DXVECTOR3& force);
 
 	private:
 
-		/** タイマー. */
-		float Timer_;
+		/** 発生時間のローカルタイム. */
+		float IntervalLT_ = 0.0f;
 		/** カメラ. */
-		Camera*	Camera_;
+		Camera*	Camera_ = nullptr;
 		/** パラメータ. */
-		ParicleParameterS Param_;
+		ParticleParameterS Param_;
 		/** エミッターの座標. */
-		D3DXVECTOR3* EmitPosition_;
+		D3DXVECTOR3 EmitPosition_;
 		/** パーティクルのリスト. */
 		list<Particle*>	ParticleList_;
-		/** The texture. */
-		Texture Texture_;
-		/** 作成するか. */
-		bool isCreate_;
-	
+
+		/** エミッタの寿命. */
+		float LifeTime_ = 0.0f;
+		/** エミッタの寿命のローカルタイム. */
+		float LifeLT_ = 0.0f;
+
+		/** ファイルパス. */
+		char Filepath_[64];
+
 	};
 }

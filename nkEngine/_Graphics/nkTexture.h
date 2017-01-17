@@ -5,6 +5,8 @@
  */
 #pragma once
 
+#include"../_Resources/nkTextureResources.h"
+
 namespace nkEngine
 {
 
@@ -61,16 +63,15 @@ namespace nkEngine
 		}
 
 		/**
-		 * 読み込み.
-		 * "Asset/Texture/"内に保存されているテクスチャを読み込めます.
-		 * 
+		 * 読み込み. "Asset/Texture/"内に保存されているテクスチャを読み込めます.
 		 *
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 *
-		 * @param filePath "Asset/Texture/"を省いたファイルパス.
+		 * @param filePath		 "Asset/Texture/"を省いたファイルパス.
+		 * @param isRegistration (Optional) True if this object is registration.
 		 */
-		void Load(const char* filePath);
+		void Load(const char* filePath, bool isRegistration = false);
 
 		/**
 		 * 解放.
@@ -80,13 +81,19 @@ namespace nkEngine
 		 */
 		void Release()
 		{
-			SAFE_RELEASE(D3DTexture_);
+			if (!isRegistration_)
+			{
+				//リソースに登録していないのでここで解放.
+				SAFE_RELEASE(D3DTexture_);
+			}
 		}
 
 	private:
 
 		/** テクスチャ. */
 		IDirect3DTexture9* D3DTexture_;
+		/** テクスチャリソースに登録されているかフラグ. */
+		bool isRegistration_ = false;
 
 	};
 

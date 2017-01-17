@@ -121,6 +121,9 @@ namespace nkEngine
 		//Updateの後の更新
 		GameObjectManager().PostUpdate();
 
+		//削除登録されたGameObjectを削除
+		GameObjectManager().Delete();
+
 		//シーンの開始
 		Device_->BeginScene();
 
@@ -151,8 +154,7 @@ namespace nkEngine
 		Device_->EndScene();
 		Device_->Present(NULL, NULL, NULL, NULL);
 
-		//削除登録されたGameObjectを削除
-		GameObjectManager().Delete();
+
 	}
 
 	/**

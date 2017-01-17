@@ -12,39 +12,16 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	Particle::Particle() :
-		isDead_(false),
-		Timer_(0),
-		ApplyForce_(D3DXVECTOR3(0, 0, 0))
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	Particle::~Particle()
-	{
-	}
-
-	/**
 	 * 初期化.
 	 *
 	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
+	 * @date 2017/01/16
 	 *
 	 * @param [in,out] camera	    If non-null, the camera.
 	 * @param 		   param	    The parameter.
 	 * @param [in,out] emitPosition If non-null, the emit position.
 	 */
-	void Particle::Init(Camera* camera, const ParicleParameterS& param, D3DXVECTOR3* emitPosition)
+	void Particle::Start(Camera* camera, const ParticleParameterS& param, D3DXVECTOR3& emitPosition,char* filepath)
 	{
 
 		//パーティクルの幅の中心値を計算
@@ -121,7 +98,7 @@ namespace nkEngine
 		Velocity_.z += (((float)Random().GetRandDouble() - 0.5f) * 2.0f) * param.InitVelocityVelocityRandomMargin_.z;
 
 		//ポジション設定
-		Position_ = *emitPosition;
+		Position_ = emitPosition;
 		Position_.x += (((float)Random().GetRandDouble() - 0.5f) * 2.0f) * param.InitPositionRandomMargin_.x;
 		Position_.y += (((float)Random().GetRandDouble() - 0.5f) * 2.0f) * param.InitPositionRandomMargin_.y;
 		Position_.z += (((float)Random().GetRandDouble() - 0.5f) * 2.0f) * param.InitPositionRandomMargin_.z;
@@ -149,6 +126,7 @@ namespace nkEngine
 		AlphaBlendMode_ = param.AlphaBlendMode_;
 		RotateZ_ = PI * 2.0f * (float)Random().GetRandDouble();
 
+		Texture_.Load(filepath, true);
 	}
 
 	/**
@@ -260,6 +238,7 @@ namespace nkEngine
 
 		case StateDead:
 			isDead_ = true;
+			DeleteGO(this);
 			break;
 		}
 
@@ -273,7 +252,7 @@ namespace nkEngine
 	 *
 	 * @param [in,out] texture If non-null, the texture.
 	 */
-	void Particle::Render(IDirect3DTexture9* texture)
+	void Particle::Render()
 	{
 
 		//ワールドビュープロジェクション行列の計算
@@ -320,10 +299,7 @@ namespace nkEngine
 		Effect_->SetValue("g_alpha", &Alpha_, sizeof(Alpha_));
 		Effect_->SetValue("g_brightness", &Brightness_, sizeof(Brightness_));
 
-		if (texture) 
-		{
-			Effect_->SetTexture("g_texture", texture);
-		}
+		Effect_->SetTexture("g_texture", Texture_.GetTexture());
 
 		Effect_->CommitChanges();
 

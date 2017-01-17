@@ -195,6 +195,12 @@
     <ClCompile Include="_Graphics\_PostEffect\nkBlur.cpp">
       <Filter>Graphics\PostEffect</Filter>
     </ClCompile>
+    <ClCompile Include="_Sound\nkWaveFile.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="_Resources\nkTextureResources.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nkEngine.h">
@@ -361,6 +367,12 @@
     </ClInclude>
     <ClInclude Include="_Graphics\_PostEffect\nkBlur.h">
       <Filter>Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="_Sound\nkWaveFile.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="_Resources\nkTextureResources.h">
+      <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

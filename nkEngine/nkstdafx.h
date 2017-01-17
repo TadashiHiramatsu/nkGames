@@ -15,12 +15,15 @@
 #include<tchar.h>
 #include<stdio.h>
 #include<stdarg.h>
+#include<algorithm>
 
 //STL
 #include<map>
 #include<vector>
 #include<list>
-#include <deque>
+#include<deque>
+
+#include<thread>
 
 using namespace std;
 
@@ -56,6 +59,10 @@ using namespace std;
 #include"_Component\nkTransform.h"
 #include"_Component\nkRectTransform.h"
 #include"_Component\nkCharacterController.h"
+
+//ゲームオブジェクト
+#include"_GameObject\nkGameObject.h"
+#include"_GameObject\nkGameObjectManager.h"
 
 //物理エンジン
 #include"_Physics\nkPhysics.h"
@@ -98,10 +105,6 @@ using namespace std;
 #include"_Graphics\_ModelRender\nkModelRender.h"
 #include"_Resources\nkSkinModelDataHandle.h"
 #include"_Resources\nkSkinModelDataResources.h"
-
-//ゲームオブジェクト
-#include"_GameObject\nkGameObject.h"
-#include"_GameObject\nkGameObjectManager.h"
 
 //インプット
 #include"_Input\nkInput.h"

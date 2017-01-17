@@ -10,54 +10,28 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
+	 * 初期化. オーバーライドじゃないため自分で呼ぶ必要がある.
 	 *
 	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	ParticleEmitter::ParticleEmitter() :
-		isCreate_(false)
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	ParticleEmitter::~ParticleEmitter()
-	{
-	}
-
-	/**
-	 * 初期化.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
+	 * @date 2017/01/16
 	 *
 	 * @param [in,out] camera	    If non-null, the camera.
 	 * @param 		   param	    The parameter.
-	 * @param [in,out] emitPosition If non-null, the emit position.
+	 * @param 		   emitPosition The emit position.
+	 * @param 		   lifeTime	    The life time.
 	 */
-	void ParticleEmitter::Init(Camera* camera, const ParicleParameterS& param, D3DXVECTOR3* emitPosition)
+	void ParticleEmitter::Start(Camera* camera, const ParticleParameterS& param, D3DXVECTOR3& emitPosition, float lifeTime)
 	{
-		
 		Camera_ = camera;
 		Param_ = param;
 		EmitPosition_ = emitPosition;
 
-		Timer_ = 0.0f;
+		LifeTime_ = lifeTime;
 
-		//ファイルパスを作成
+		//ファイルパスの作成
 		char* baseDir = "Particle/";
-		char fp[64];
-		strcpy(fp, baseDir);
-		strcat(fp, Param_.TexturePath_);
-
-		//テクスチャのロード
-		Texture_.Load(fp);
-
+		strcpy(Filepath_, baseDir);
+		strcat(Filepath_, param.TexturePath_);
 	}
 
 	/**
@@ -68,47 +42,46 @@ namespace nkEngine
 	 */
 	void ParticleEmitter::Update()
 	{
-
-		if (Timer_ >= Param_.IntervalTime_ && isCreate_) 
+		if (LifeLT_ >= LifeTime_)
 		{
-			//パーティクルを生成。
-			Particle* p = new Particle();
-
-			//パーティクルの初期化
-			p->Init(Camera_, Param_, EmitPosition_);
-			
-			Timer_ = 0.0f;
-			
-			//パーティクルの登録
-			ParticleList_.push_back(p);
-
-		}
-
-		//タイマー計算
-		Timer_ += Time().DeltaTime();
-
-		auto p = ParticleList_.begin();
-
-		//パーティクルが死んでいるならリストから削除
-		while (p != ParticleList_.end()) 
-		{
-			if ((*p)->GetDead()) 
+			if (ParticleList_.size() == 0)
 			{
-				delete (*p);
-				p = ParticleList_.erase(p);
-			}
-			else
-			{
-				p++;
+				DeleteGO(this);
 			}
 		}
-
-		p = ParticleList_.begin();
-		
-		while (p != ParticleList_.end()) 
+		else
 		{
-			(*p++)->Update();
+			if (IntervalLT_ >= Param_.IntervalTime_)
+			{
+				//発生時間が経過しているのでパーティクル作成
+
+				//パーティクルを生成。
+				Particle* p = NewGO<Particle>();
+
+				//パーティクルの初期化
+				p->Start(Camera_, Param_, EmitPosition_, Filepath_);
+
+				//発生時間のローカルタイムを初期化
+				IntervalLT_ = 0.0f;
+
+				ParticleList_.push_back(p);
+			}
+
+			//タイマー計算
+			IntervalLT_ += Time().DeltaTime();
+			LifeLT_ += Time().DeltaTime();
 		}
+
+		//remove-eraseイディオム。
+		//削除するものを後ろにためる
+		auto delIt = remove_if(
+			ParticleList_.begin(),
+			ParticleList_.end(),
+			[](Particle* p)->bool { return p->GetDead(); }
+		);
+
+		//貯めた先端のイテレータから終端まで削除
+		ParticleList_.erase(delIt, ParticleList_.end());
 
 	}
 
@@ -122,27 +95,10 @@ namespace nkEngine
 	 */
 	void ParticleEmitter::AddForce(const D3DXVECTOR3& addForce)
 	{
-		for (auto p : ParticleList_) 
+		for (auto it : ParticleList_) 
 		{
-			p->AddForce(addForce);
+			it->AddForce(addForce);
 		}
-	}
-
-	/**
-	 * 描画.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	void ParticleEmitter::Render()
-	{
-		auto p = ParticleList_.begin();
-
-		while (p != ParticleList_.end()) 
-		{
-			(*p++)->Render(Texture_.GetTexture());
-		}
-
 	}
 
 }// namespace nkEngine

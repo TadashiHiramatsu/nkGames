@@ -210,8 +210,10 @@
     <ClInclude Include="_Physics\nkSphereCollider.h" />
     <ClInclude Include="_Resources\nkSkinModelDataHandle.h" />
     <ClInclude Include="_Resources\nkSkinModelDataResources.h" />
+    <ClInclude Include="_Resources\nkTextureResources.h" />
     <ClInclude Include="_Scene\nkScene.h" />
     <ClInclude Include="_Scene\nkSceneManager.h" />
+    <ClInclude Include="_Sound\nkWaveFile.h" />
     <ClInclude Include="_Timer\nkStopwatch.h" />
     <ClInclude Include="_Timer\nkTime.h" />
   </ItemGroup>
@@ -261,8 +263,10 @@
     <ClCompile Include="_Physics\nkSphereCollider.cpp" />
     <ClCompile Include="_Resources\nkSkinModelDataHandle.cpp" />
     <ClCompile Include="_Resources\nkSkinModelDataResources.cpp" />
+    <ClCompile Include="_Resources\nkTextureResources.cpp" />
     <ClCompile Include="_Scene\nkScene.cpp" />
     <ClCompile Include="_Scene\nkSceneManager.cpp" />
+    <ClCompile Include="_Sound\nkWaveFile.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
