@@ -23,7 +23,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	Skybox();
+	Skybox()
+	{
+	}
 
 	/**
 	 * デストラクタ.
@@ -31,7 +33,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	~Skybox();
+	~Skybox()
+	{
+	}
 
 	/**
 	 * 初期化.

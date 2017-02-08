@@ -1,8 +1,8 @@
 /**
- * @file _Graphics\nkVertexBuffer.cpp
- *
- * 頂点バッファクラスの実装.
- */
+* @file _Graphics\_Buffer\nkVertexBuffer.h
+*
+* 頂点バッファクラスの実装.
+*/
 #include"nkEngine/nkstdafx.h"
 #include"nkVertexBuffer.h"
 

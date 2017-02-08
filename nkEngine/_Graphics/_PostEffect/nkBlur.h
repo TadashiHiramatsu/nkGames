@@ -100,7 +100,7 @@ namespace nkEngine
 		/** ソースとなるテクスチャ. */
 		const Texture*	SrcTexture_;
 		/** エフェクト. */
-		ID3DXEffect* Effect_;
+		Effect* Effect_;
 		/** テクスチャの幅. */
 		int SrcTexWH_[2];
 		/** プリミティブ. */

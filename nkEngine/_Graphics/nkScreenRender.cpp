@@ -127,13 +127,13 @@ namespace nkEngine
 		//シーンの開始
 		Device_->BeginScene();
 
-		//レンダーターゲットをメインレンダーに設定
-		Device_->SetRenderTarget(0, MainRT_[CurrentMainRT_].GetSurface());
-		Device_->SetDepthStencilSurface(MainRT_[CurrentMainRT_].GetDepthSurface());
-		Device_->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
-
 		//プリレンダーの描画
 		Shadow().Render();
+
+		//レンダーターゲットをメインレンダーに設定
+		Device_->SetRenderTarget(0, GetMainRenderTarget().GetSurface());
+		Device_->SetDepthStencilSurface(GetMainRenderTarget().GetDepthSurface());
+		Device_->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(100, 100, 100), 1.0f, 0);
 
 		//Renderの前の描画
 		GameObjectManager().PreRender();
@@ -154,7 +154,6 @@ namespace nkEngine
 		Device_->EndScene();
 		Device_->Present(NULL, NULL, NULL, NULL);
 
-
 	}
 
 	/**
@@ -171,7 +170,7 @@ namespace nkEngine
 		Device_->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
 		//書き込まれているレンダリングターゲットを取得
-		RenderTarget& rt = MainRT_[CurrentMainRT_];
+		RenderTarget& rt = GetMainRenderTarget();
 
 		Effect_->SetTechnique("TransformedPrim");
 
@@ -187,7 +186,7 @@ namespace nkEngine
 		};
 
 		//テクスチャの設定
-		Effect_->SetTexture("g_Texture", rt.GetTextureDX());
+		Effect_->SetTexture("g_Texture", rt.GetTexture());
 		//オフセットの設定
 		Effect_->SetValue("g_Offset", offset, sizeof(offset));
 

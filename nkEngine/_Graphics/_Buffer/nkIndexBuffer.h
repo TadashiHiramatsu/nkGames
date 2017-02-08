@@ -1,5 +1,5 @@
 /**
- * @file _Graphics\nkIndexBuffer.h
+ * @file _Graphics\_Buffer\nkIndexBuffer.h
  *
  * インデックスバッファクラスの定義.
  */

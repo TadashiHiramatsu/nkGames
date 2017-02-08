@@ -7,6 +7,9 @@
 #include"Player.h"
 #include"../GameCamera.h"
 
+#include"Weapon.h"
+#include"Shield.h"
+
 //無名空間
 namespace
 {
@@ -18,32 +21,23 @@ namespace
 		{
 			END_ANIMATION_EVENT(),
 		},
-		//AnimationWalk
-		{
-			END_ANIMATION_EVENT(),
-		},
 		//AnimationRun
 		{
 			END_ANIMATION_EVENT(),
 		},
-		//AnimationAttack
+		//AnimationAttack_01
 		{
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.0f, 1.0f, 1.0f, 11, "LeftWeapon", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.1f, 1.0f, 1.0f, 11, "LeftWeapon", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.2f, 1.0f, 1.0f, 11, "LeftWeapon", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.3f, 1.0f, 1.0f, 11, "LeftWeapon", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.4f, 1.0f, 1.0f, 11, "LeftWeapon", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.7f,	0.1f, 0.2f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.75f, 0.1f, 0.2f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.8f,	0.1f, 0.2f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.85f, 0.1f, 0.2f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.9f,	0.1f, 0.2f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
 			END_ANIMATION_EVENT(),
 		},
-		//AnimationHit
-		{
-			END_ANIMATION_EVENT(),
-		},
-		//AnimationDead
+		//AnimationDeath_01
 		{
 			END_ANIMATION_EVENT(),
 		}
-
 	};
 
 }
@@ -57,7 +51,7 @@ namespace
 void Player::Start()
 {
 	//モデルファイルをロード
-	ModelRender_.Load("StealthChar.X",&Animation_);
+	ModelRender_.Load("Player.X",&Animation_);
 	//トランスフォームを設定
 	ModelRender_.SetTransform(&Transform_);
 	//ライトを設定
@@ -68,6 +62,14 @@ void Player::Start()
 	ModelRender_.SetShadowCasterFlag(true);
 	//シャドウレシーバーtrue
 	ModelRender_.SetShadowReceiverFlag(true);
+
+	//法線マップの設定
+	Normal_.Load("Player_n.png");
+	ModelRender_.SetNormalMap(&Normal_);
+
+	//スペキュラマップの設定
+	Specular_.Load("Player_s.png");
+	ModelRender_.SetSpecMap(&Specular_);
 
 	D3DXVECTOR3 dld;
 	D3DXVec3Normalize(&dld, &D3DXVECTOR3(5.0f, -5.0f, 5.0f));
@@ -85,31 +87,21 @@ void Player::Start()
 	//ステートを待機に
 	ChangeState(StateCodeE::StateWaiting);
 
+	Animation_.SetAnimationEndTime(AnimationCodeE::AnimationRun, 0.7);
+
 	//アニメーションループをfalseに設定
-	Animation_.SetAnimationLoopFlags(AnimationCodeE::AnimationAttack, false);
-	Animation_.SetAnimationLoopFlags(AnimationCodeE::AnimationDead, false);
-	Animation_.SetAnimationLoopFlags(AnimationCodeE::AnimationHit, false);
+	Animation_.SetAnimationLoopFlag(AnimationCodeE::AnimationAttack_01, false);
+	Animation_.SetAnimationLoopFlag(AnimationCodeE::AnimationDeath_01, false);
+
+
+	//武器と盾を作成
+	Weapon* wepon = NewGO<Weapon>(1);
+	wepon->Start(ModelRender_);
+	Shield* shild = NewGO<Shield>(1);
+	shild->Start(ModelRender_);
 
 	//アニメーションイベントを初期化
-	AnimationEvent_.Init(&ModelRender_, &Animation_, AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
-
-	//シャドウを計算
-	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 0.0f) + Transform_.Position_);
-	Shadow().SetLightTarget(Transform_.Position_);
-
-	//左手武器
-	WeaponModelRenderL_.Load("Weapon_Scythe.X", nullptr);
-	WeaponModelRenderL_.SetTransform(&WeaponTransformL_);
-	WeaponModelRenderL_.SetLight(&WeaponLightL_);
-	WeaponModelRenderL_.SetCamera(g_MainCamera->GetCamera());
-	WeaponTransformL_.ParentMatrix_ = ModelRender_.FindBoneWorldMatrix("LeftWeapon");
-	
-	//右手武器
-	WeaponModelRenderR_.Load("Weapon_Scythe.X", nullptr);
-	WeaponModelRenderR_.SetTransform(&WeaponTransformR_);
-	WeaponModelRenderR_.SetLight(&WeaponLightR_);
-	WeaponModelRenderR_.SetCamera(g_MainCamera->GetCamera());
-	WeaponTransformR_.ParentMatrix_ = ModelRender_.FindBoneWorldMatrix("RightWeapon");
+	AnimationEvent_.Init(&wepon->GetModelRender(), &Animation_, AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
 
 	//コリジョン初期化
 	SphereShape_.reset(new SphereCollider);
@@ -117,6 +109,9 @@ void Player::Start()
 	CollisionObject_.reset(new btCollisionObject());
 	CollisionObject_->setCollisionShape(SphereShape_->GetBody());
 
+	//シャドウを計算
+	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 0.0f) + Transform_.Position_);
+	Shadow().SetLightTarget(Transform_.Position_);
 }
 
 /**
@@ -136,39 +131,19 @@ void Player::Update()
 	switch (State_)
 	{
 	case Player::StateWaiting:
-	case Player::AnimationWalk:
 	case Player::StateRun:
 	{
 
 		//ジャンプ処理
-		if (Input().GetKeyButton(KeyCodeE::Space) && !CharacterController_.IsJump())
+		/*if (Input().GetKeyButton(KeyCodeE::Space) && !CharacterController_.IsJump())
 		{
 			moveSpeed.y = 5.0f;
 			CharacterController_.Jump();
-		}
+		}*/
 
 		//平行移動
 		D3DXVECTOR3 move = D3DXVECTOR3(0, 0, 0);
-		if (Input().GetKeyButton(KeyCodeE::W))
-		{
-			//正面
-			move += D3DXVECTOR3(0, 0, 1);
-		}
-		if (Input().GetKeyButton(KeyCodeE::S))
-		{
-			//後ろ
-			move += D3DXVECTOR3(0, 0, -1);
-		}
-		if (Input().GetKeyButton(KeyCodeE::A))
-		{
-			//左
-			move += D3DXVECTOR3(-1, 0, 0);
-		}
-		if (Input().GetKeyButton(KeyCodeE::D))
-		{
-			//右
-			move += D3DXVECTOR3(1, 0, 0);
-		}
+		move += D3DXVECTOR3(XInput().GetLeftStick().x, 0, XInput().GetLeftStick().y);
 
 		//カメラの正面方向に合わせる
 		D3DXVECTOR3 dirForward = g_MainCamera->GetDirectionForward();
@@ -234,7 +209,7 @@ void Player::Update()
 		moveSpeed.z *= 0.8f;
 	}
 	break;
-	case Player::StateDead:
+	case Player::StateDeath:
 	{
 		//死亡。移動を止める.
 		moveSpeed = D3DXVECTOR3(0, 0, 0);
@@ -260,7 +235,7 @@ void Player::Update()
 
 	//死んでいる又はダメージを受けている状態でなければ
 	//体力回復時間を更新する
-	if (State_ != StateDead && State_ != StateDamage)
+	if (State_ != StateDeath && State_ != StateDamage)
 	{
 		RecoveryLT_ += Time().DeltaTime();
 	}
@@ -290,16 +265,8 @@ void Player::Update()
 	//モデルレンダーの更新
 	ModelRender_.Update();
 
-	//左手武器の更新
-	WeaponTransformL_.Update();
-	WeaponModelRenderL_.Update();
-
-	//右手武器の更新
-	WeaponTransformR_.Update();
-	WeaponModelRenderR_.Update();
-	
 	//シャドウマップの更新
-	Shadow().SetLightPosition(D3DXVECTOR3(-5.0f, 5.0f, -5.0f) + Transform_.Position_);
+	Shadow().SetLightPosition(D3DXVECTOR3(-10.0f, 10.0f, -10.0f) + Transform_.Position_);
 	Shadow().SetLightTarget(Transform_.Position_);
 
 }
@@ -314,10 +281,6 @@ void Player::Render()
 {
 	//プレイヤーの描画
 	ModelRender_.Render();
-
-	//武器の描画
-	WeaponModelRenderL_.Render();
-	WeaponModelRenderR_.Render();
 
 }
 
@@ -340,7 +303,7 @@ void Player::Release()
  */
 void Player::Damage()
 {
-	if (State_ == StateDead)
+	if (State_ == StateDeath)
 	{
 		//死んでる...
 		return;
@@ -375,8 +338,6 @@ void Player::Damage()
 		);
 	}
 
-	static float InvincibleLT = 0.0f;
-
 	//無敵状態でなければ
 	if (Parameter_.InvincibleTime_ <= InvincibleLT)
 	{
@@ -390,19 +351,17 @@ void Player::Damage()
 			if (Parameter_.NowHp_ <= 0)
 			{
 				//死亡。
-				ChangeState(StateDead);
+				ChangeState(StateDeath);
 			}
 			else
 			{
-				ChangeState(StateDamage);
+				//無敵時間を初期化
+				InvincibleLT = 0.0f;
+				//ChangeState(StateDamage);
 			}
-
 		}
-
-		//無敵時間を初期化
-		InvincibleLT = 0.0f;
 	}
-	else if(State_ != StateDamage)
+	else
 	{
 		//ダメージを受けていないので無敵時間を更新
 		InvincibleLT += Time().DeltaTime();
@@ -452,27 +411,22 @@ void Player::ParameterUpdate()
  */
 void Player::AnimationControl()
 {
-	float time = 1.0f / 60.0f;
+	float time = Time().DeltaTime();
+
 	switch (State_)
 	{
 	case StateWaiting:
-		PlayAnimation(AnimationCodeE::AnimationWaiting, 0.1f);
-		break;
-	case StateWalk:
-		PlayAnimation(AnimationCodeE::AnimationWalk, 0.1f);
+		PlayAnimation(AnimationCodeE::AnimationWaiting, 0.3f);
 		break;
 	case StateRun:
-		PlayAnimation(AnimationCodeE::AnimationRun, 0.1f);
+		PlayAnimation(AnimationCodeE::AnimationRun, 0.3f);
+		time = 1.0f / 15.0f;
 		break;
 	case StateAttack:
-		PlayAnimation(AnimationCodeE::AnimationAttack, 0.1f);
-		time = 1.0f / 30.0f;
+		PlayAnimation(AnimationCodeE::AnimationAttack_01, 0.3f);
 		break;
-	case StateDamage:
-		PlayAnimation(AnimationCodeE::AnimationHit, 0.1f);
-		break;
-	case StateDead:
-		PlayAnimation(AnimationCodeE::AnimationDead, 0.1f);
+	case StateDeath:
+		PlayAnimation(AnimationCodeE::AnimationDeath_01, 0.3f);
 		break;
 	default:
 		break;

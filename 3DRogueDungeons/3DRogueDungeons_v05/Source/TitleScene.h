@@ -1,3 +1,11 @@
+/***********************************************************************/
+/*! @file  TitleScene.h
+ *  @brief
+ *  
+ *  @author 
+ *  @date 
+ */
+/***********************************************************************/
 #pragma once
 
 #include"IncludeManagers.h"
@@ -13,13 +21,20 @@ class CSceneManager;
 class CTitleScene :public CScene
 {
 public:
+	/***********************************************************************/
+	/*! @brief 
+	 * 
+	 *  @param[in,out] name 
+	 *  @retval  
+	 */
+	/***********************************************************************/
 	CTitleScene(const string& name) : CScene(name){ }
 	void Initialize();
 	void Update();
 	void Draw();
-	HRESULT CreateSprite();	//スプライト生成関数
+	HRESULT CreateSprite();	///<スプライト生成関数
 private:
-	LPD3DXSPRITE m_pSprite;	//スプライト
+	LPD3DXSPRITE m_pSprite;	///<スプライト
 	CTitleCursor* m_pTitleCursor;
 	CTitleBack* m_pTitleBack;
 };

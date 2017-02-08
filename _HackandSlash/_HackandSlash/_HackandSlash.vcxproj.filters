@@ -34,6 +34,21 @@
     <Filter Include="Title\HUD">
       <UniqueIdentifier>{50c2698e-2732-4b97-ae3f-2ce0c2654163}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{aac1659e-adef-4e6e-8651-d218e389f2b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\MenuWindow">
+      <UniqueIdentifier>{0231c762-bc06-41e7-8fe6-727ac1b9aa88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Player\Equipment">
+      <UniqueIdentifier>{14bacb0c-d6bc-4c9d-b092-af00d0a9d4bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\MenuWindow\Inventory">
+      <UniqueIdentifier>{8af18f1b-bf8a-4418-85a9-013acc9cfa2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Item">
+      <UniqueIdentifier>{9d809983-a6a7-491d-badc-927fc8477948}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -90,9 +105,6 @@
     <ClCompile Include="Source\Game\Item\Other.cpp">
       <Filter>Game\Item</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Item\Weapon.cpp">
-      <Filter>Game\Item</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Monster\Monster_01.cpp">
       <Filter>Game\Enemy</Filter>
     </ClCompile>
@@ -107,6 +119,33 @@
     </ClCompile>
     <ClCompile Include="Source\Title\HUD\TitleBack.cpp">
       <Filter>Title\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\WeaponItem.cpp">
+      <Filter>Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Test\TestScene.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Player\Shield.cpp">
+      <Filter>Game\Player\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Player\Weapon.cpp">
+      <Filter>Game\Player\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Test\MenuWindow\MenuSystem.cpp">
+      <Filter>Test\MenuWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Test\MenuWindow\MenuBar.cpp">
+      <Filter>Test\MenuWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Test\MenuWindow\IMenuWindow.cpp">
+      <Filter>Test\MenuWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Test\MenuWindow\Inventory\Inventory.cpp">
+      <Filter>Test\MenuWindow\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Test\Item\InventoryManager.cpp">
+      <Filter>Test\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,9 +203,6 @@
     <ClInclude Include="Source\Game\Item\Other.h">
       <Filter>Game\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Item\Weapon.h">
-      <Filter>Game\Item</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Monster\Monster_01.h">
       <Filter>Game\Enemy</Filter>
     </ClInclude>
@@ -181,6 +217,33 @@
     </ClInclude>
     <ClInclude Include="Source\Title\HUD\TitleBack.h">
       <Filter>Title\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\WeaponItem.h">
+      <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\TestScene.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Player\Shield.h">
+      <Filter>Game\Player\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Player\Weapon.h">
+      <Filter>Game\Player\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\MenuWindow\MenuSystem.h">
+      <Filter>Test\MenuWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\MenuWindow\MenuBar.h">
+      <Filter>Test\MenuWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\MenuWindow\IMenuWindow.h">
+      <Filter>Test\MenuWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\MenuWindow\Inventory\Inventory.h">
+      <Filter>Test\MenuWindow\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\Item\InventoryManager.h">
+      <Filter>Test\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

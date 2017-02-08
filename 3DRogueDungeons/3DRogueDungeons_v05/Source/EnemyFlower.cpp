@@ -1,5 +1,21 @@
+/***********************************************************************/
+/*! @file  EnemyFlower.cpp
+ *  @brief
+ *  
+ *  @author 
+ *  @date 
+ */
+/***********************************************************************/
 #include"EnemyFlower.h"
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] pDun 
+ *  @param[in,out] pPla 
+ *  @retval void
+ */
+/***********************************************************************/
 void CEnemyFlower::Initialize(CDungeon* pDun, CPlayer* pPla)
 {
 	XfileName = _T("XFile\\EnemyFlower.x");

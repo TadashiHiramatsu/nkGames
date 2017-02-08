@@ -1,6 +1,20 @@
+/***********************************************************************/
+/*! @file  TitleScene.cpp
+ *  @brief
+ *  
+ *  @author 
+ *  @date 
+ */
+/***********************************************************************/
 #include "TitleScene.h"
 
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void CTitleScene::Initialize()
 {
 	this->CreateSprite();
@@ -10,6 +24,12 @@ void CTitleScene::Initialize()
 	this->m_pTitleCursor->Initialize();
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void CTitleScene::Update()
 {
 	this->m_pTitleBack->Update();
@@ -21,6 +41,12 @@ void CTitleScene::Update()
 }
 
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void CTitleScene::Draw()
 {
 	this->m_pTitleBack->Draw(this->m_pSprite);
@@ -28,6 +54,12 @@ void CTitleScene::Draw()
 
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval HRESULT 
+ */
+/***********************************************************************/
 HRESULT CTitleScene::CreateSprite()
 {
 	if (FAILED(D3DXCreateSprite(graphicsDevice(), &m_pSprite)))

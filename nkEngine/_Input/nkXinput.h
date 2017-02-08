@@ -104,55 +104,52 @@ namespace nkEngine
 		void Update();
 		
 		/**
-		 * 左スティックのX軸の傾き量.
+		 * 左スティックの傾き量.
+		 * 左右.
 		 *
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 *
 		 * @return -1.0～1.0の正規化された値を返す.
 		 */
-		float GetStickL_X()
+		D3DXVECTOR2& GetLeftStick()
 		{
-			return LeftStickX_;
+			return LeftStick_;
 		}
 
 		/**
-		 * 左スティックのY軸の傾き量.
+		 * 右スティックの傾き量.
 		 *
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 *
 		 * @return -1.0～1.0の正規化された値を返す.
 		 */
-		float GetStickL_Y()
+		D3DXVECTOR2& GetRightStick()
 		{
-			return LeftStickY_;
+			return RightStick_;
 		}
 
-		/**
-		 * 右スティックのX軸の傾き量.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
-		 *
-		 * @return -1.0～1.0の正規化された値を返す.
-		 */
-		float GetStickR_X()
+		//左スティックの引数のベクトルからの角度を求める
+		float GetLeftStickAngle() const
 		{
-			return RightStickX_;
+			float angle = D3DXToDegree(atan2f(LeftStick_.y, LeftStick_.x));
+			if (angle < 0.0f)
+			{
+				angle += 360;
+			}
+			return angle;
 		}
 
-		/**
-		 * 右スティックのY軸の傾き量.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
-		 *
-		 * @return -1.0～1.0の正規化された値を返す.
-		 */
-		float GetStickR_Y()
+		//右スティックの引数のベクトルからの角度を求める
+		float GetRightStickAngle() const
 		{
-			return RightStickY_;
+			float angle = D3DXToDegree(atan2f(RightStick_.y, RightStick_.x));
+			if (angle < 0.0f)
+			{
+				angle += 360;
+			}
+			return angle;
 		}
 
 		/**
@@ -180,7 +177,7 @@ namespace nkEngine
 		 *
 		 * @return true:押された,false:押されてない.
 		 */
-		bool IsTrigger(ButtonE button)
+		bool IsTrigger(ButtonE button) const
 		{
 			return Trigger_[button] != 0;
 		}
@@ -193,7 +190,7 @@ namespace nkEngine
 		 *
 		 * @return 0～255.
 		 */
-		BYTE  GetTriggerL()
+		BYTE  GetTriggerL() const
 		{
 			return LeftTrigger_;
 		}
@@ -206,7 +203,7 @@ namespace nkEngine
 		 *
 		 * @return 0～255.
 		 */
-		BYTE  GetTriggerR()
+		BYTE  GetTriggerR() const
 		{
 			return RightTrigger_;
 		}
@@ -215,22 +212,22 @@ namespace nkEngine
 
 		/** The game pad. */
 		GamePadStateS GamePad_;
+		
 		/** トリガー入力のフラグ. */
 		int Trigger_[ButtonNum];
 		/** press入力のフラグ. */
 		int Press_[ButtonNum];
+		
 		/** 左トリガー. */
 		BYTE LeftTrigger_;
 		/** 右トリガー. */
 		BYTE RightTrigger_;
-		/** 左スティックのX軸の入力量. */
-		float LeftStickX_;
-		/** 左スティックのY軸の入力量. */
-		float LeftStickY_;
-		/** 右スティックのX軸の入力量. */
-		float RightStickX_;
-		/** 右スティックのY軸の入力量. */
-		float RightStickY_;
+
+		/** 左スティックの入力量. */
+		D3DXVECTOR2 LeftStick_;
+		
+		/** 右スティックの入力量. */
+		D3DXVECTOR2 RightStick_;
 
 	};
 

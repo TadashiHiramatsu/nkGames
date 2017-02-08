@@ -46,6 +46,8 @@ namespace nkEngine
 		//インプットの初期化
 		Input().Init(Hwnd_);
 
+		Random::Start();
+
 		return true;
 	}
 

@@ -41,7 +41,7 @@ public:
 			Experience_ = 0;
 			NextLevelExperience_ = 10;
 			Attack_ = 1;
-			MaxHp_ = NowHp_ = 100;
+			MaxHp_ = NowHp_ = 10;
 			InvincibleTime_ = 1.0f;
 		}
 
@@ -60,7 +60,8 @@ public:
 		/** 体力. */
 		int NowHp_;
 		/** 無敵時間. */
-		int InvincibleTime_;
+		float InvincibleTime_;
+
 
 	};
 
@@ -69,11 +70,9 @@ public:
 	{
 		AnimationInvalid = -1,	//!< 無し
 		AnimationWaiting = 0,	//!< 待機
-		AnimationWalk,			//!< 歩き
 		AnimationRun,			//!< 走り
-		AnimationAttack,		//!< 攻撃
-		AnimationHit,			//!< やられ
-		AnimationDead,			//!< 死亡
+		AnimationAttack_01,		//!< 攻撃
+		AnimationDeath_01,		//!< 死亡
 		AnimationNum,			//!< アニメーションの数
 	};
 
@@ -86,7 +85,7 @@ public:
 		StateRun,			//!< 走り
 		StateAttack,		//!< 攻撃
 		StateDamage,		//!< やられ
-		StateDead,			//!< 死亡
+		StateDeath,			//!< 死亡
 	};
 
 public:
@@ -198,6 +197,12 @@ public:
 		return Transform_.Position_;
 	}
 
+	//死んでいるかを返す
+	bool GetDeathFlag()
+	{
+		return (State_ == StateCodeE::StateDeath);
+	}
+
 private:
 
 	/**
@@ -240,6 +245,10 @@ private:
 	ModelRender ModelRender_;
 	/** アニメーション. */
 	Animation Animation_;
+	/** 法線マップ. */
+	Texture Normal_;
+	/** スペキュラマップ. */
+	Texture Specular_;
 
 	/** 状態. */
 	StateCodeE State_;
@@ -257,30 +266,15 @@ private:
 	/** プレイヤーのパラメータ. */
 	PlayerParameterS Parameter_;
 
-	//ParticleEmitter Particle;
-	//D3DXMATRIX* mParticle;
-	//D3DXVECTOR3 ParticlePos;
-
-	/** 左手武器のトランスフォーム. */
-	Transform WeaponTransformL_;
-	/** 左手武器のライト. */
-	Light WeaponLightL_;
-	/** 左手武器のモデルレンダー. */
-	ModelRender WeaponModelRenderL_;
-
-	/** 右手武器のトランスフォーム. */
-	Transform WeaponTransformR_;
-	/** 右手武器のライト. */
-	Light WeaponLightR_;
-	/** 右手武器のモデルレンダー. */
-	ModelRender WeaponModelRenderR_;
-
 	/** ライフ回復時間用ローカルタイム. */
 	float RecoveryLT_ = 0.0f;
+
+	/** 無敵時間用ローカルタイム. */
+	float InvincibleLT = 0.0f;
 
 	/** コリジョンオブジェクト. */
 	unique_ptr<btCollisionObject> CollisionObject_;
 	/** 球体形状コライダー. */
-	unique_ptr<SphereCollider>	SphereShape_;
+	unique_ptr<SphereCollider> SphereShape_;
 
 };

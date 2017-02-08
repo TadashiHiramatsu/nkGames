@@ -67,7 +67,9 @@ void LifeGage::Start()
 
 	//フォントの初期化
 	Life_.Create(20, 15);
+	Life_.SetTransform(&TextTransform_);
 
+	TextTransform_.Parent_ = &LifeFrameTransform_;
 }
 
 /**
@@ -113,6 +115,6 @@ void LifeGage::PostRender()
 	strcat_s(str, Max);
 
 	//フォントを描画
-	Life_.Render(str,D3DXVECTOR2(10,500));
+	Life_.Render(str);
 
 }

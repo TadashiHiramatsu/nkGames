@@ -13,15 +13,15 @@ namespace
 	/** The anchor offset[]. */
 	static const D3DXVECTOR2 AnchorOffset[] =
 	{
-		{ D3DXVECTOR2(-1, 1) },
-		{ D3DXVECTOR2(0	, 1) },
-		{ D3DXVECTOR2(1	, 1) },
+		{ D3DXVECTOR2(-1, -1) },
+		{ D3DXVECTOR2(0	, -1) },
+		{ D3DXVECTOR2(1	, -1) },
 		{ D3DXVECTOR2(-1, 0) },
 		{ D3DXVECTOR2(0	, 0) },
 		{ D3DXVECTOR2(1	, 0) },
-		{ D3DXVECTOR2(-1,-1) },
-		{ D3DXVECTOR2(0	,-1) },
-		{ D3DXVECTOR2(1	,-1) }
+		{ D3DXVECTOR2(-1,1) },
+		{ D3DXVECTOR2(0	,1) },
+		{ D3DXVECTOR2(1	,1) }
 	};
 }
 
@@ -37,7 +37,7 @@ namespace nkEngine
 	RectTransform::RectTransform() :
 		Parent_(nullptr),
 		Anchor_(AnchorPresetE::MiddleCenter),
-		Position_(D3DXVECTOR2(0, 0)),
+		Position_(D3DXVECTOR3(0, 0, 0)),
 		Width_(100),
 		Height_(100),
 		Pivot_(D3DXVECTOR2(0.5, 0.5)),
@@ -104,7 +104,7 @@ namespace nkEngine
 		trans += pivotOffset;
 
 		//à⁄ìÆçsóÒçÏê¨
-		D3DXMatrixTranslation(&mTrans, trans.x, trans.y, 0.0f);
+		D3DXMatrixTranslation(&mTrans, trans.x, trans.y, Position_.z);
 
 		//ägëÂ
 		D3DXVECTOR3 scale;

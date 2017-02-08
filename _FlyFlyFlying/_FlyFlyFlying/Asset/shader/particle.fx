@@ -41,14 +41,15 @@ VS_OUTPUT VSMain(VS_INPUT In)
 float4 PSMainTrans(VS_OUTPUT In):COLOR0
 {
 	float4 tex = tex2D(g_textureSampler, In.uv);
-	return float4(tex.xyz, tex.a*g_alpha * (1.0f / g_brightness));
+	return float4(tex.xyz + g_brightness, tex.a * g_alpha);
 }
 
 //加算合成用ピクセル
 float4 PSMainAdd(VS_OUTPUT In):COLOR0
 {
 	float4 tex = tex2D(g_textureSampler, In.uv);
-	return float4(tex.xyz * g_alpha * tex.a, 1.0f / g_brightness);
+
+	return float4(tex.xyz * g_alpha + g_brightness, 1.0f);
 }
 
 /*!
@@ -62,6 +63,7 @@ technique ColorTexPrimTrans
 		PixelShader = compile ps_2_0 PSMainTrans();
 	}
 }
+
 /*!
 * @brief	加算用テクニック。
 */

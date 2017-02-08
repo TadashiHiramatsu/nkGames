@@ -53,13 +53,14 @@ namespace nkEngine
 			Effect_->Begin(0, D3DXFX_DONOTSAVESTATE);
 			Effect_->BeginPass(0);
 
-			Effect_->SetTexture("g_Texture", ScreenRender().GetMainRenderTarget().GetTextureDX());
+			Effect_->SetTexture("g_Texture", ScreenRender().GetMainRenderTarget().GetTexture());
 			Effect_->SetValue("g_TexSize", texSize, sizeof(texSize));
 
 			Effect_->CommitChanges();
 
 			//レンダリングターゲットの変更
 			ScreenRender().ToggleMainRenderTarget();
+
 			//レンダリングターゲットを設定
 			Engine().GetDevice()->SetRenderTarget(0, ScreenRender().GetMainRenderTarget().GetSurface());
 			Engine().GetDevice()->SetDepthStencilSurface(ScreenRender().GetMainRenderTarget().GetDepthSurface());

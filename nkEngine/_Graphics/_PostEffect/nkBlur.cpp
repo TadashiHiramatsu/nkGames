@@ -146,7 +146,7 @@ namespace nkEngine
 				Effect_->Begin(0, D3DXFX_DONOTSAVESTATE);
 				Effect_->BeginPass(0);
 				
-				Effect_->SetTexture("g_blur", SrcTexture_->GetTexture());
+				Effect_->SetTexture("g_blur", SrcTexture_);
 				Effect_->SetValue("g_texSize", size, sizeof(size));
 				
 				Effect_->CommitChanges();
@@ -179,7 +179,7 @@ namespace nkEngine
 				Effect_->Begin(0, D3DXFX_DONOTSAVESTATE);
 				Effect_->BeginPass(0);
 				
-				Effect_->SetTexture("g_tex", BlurRT_[0].GetTextureDX());
+				Effect_->SetTexture("g_tex", BlurRT_[0].GetTexture());
 				Effect_->SetValue("g_texSize", size, sizeof(size));
 				
 				Effect_->CommitChanges();

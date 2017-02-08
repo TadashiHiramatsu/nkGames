@@ -9,26 +9,6 @@
 #include"..\GameCamera.h"
 
 /**
- * コンストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/10
- */
-Skybox::Skybox()
-{
-}
-
-/**
- * デストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/10
- */
-Skybox::~Skybox()
-{
-}
-
-/**
  * 初期化.
  *
  * @author HiramatsuTadashi
@@ -48,6 +28,7 @@ void Skybox::Start()
 	//環境光を最大にしてライティングを消す
 	Light_.SetAmbientLight(D3DXVECTOR3(1.0f, 1.0f, 1.0f));
 
+	Light_.SetEmissionLightColor(D3DXVECTOR3(0.1, 0.1, 0.1));
 }
 
 /**

@@ -1,3 +1,11 @@
+/***********************************************************************/
+/*! @file  3DData.h
+ *  @brief
+ *  
+ *  @author 
+ *  @date 
+ */
+/***********************************************************************/
 #pragma once
 #include"IncludeManagers.h"
 
@@ -7,9 +15,9 @@ public:
 	void Initialize();
 	void Draw();
 protected:
-	ID3DXBuffer *pMaterials;	//マテリアルポインタ
-	DWORD NumMaterials;			//マテリアル数
-	ID3DXMesh *pMesh;			//メッシュポインタ
-	LPCTSTR XfileName;			//Xファイル名
+	ID3DXBuffer *pMaterials;	///<マテリアルポインタ
+	DWORD NumMaterials;			///<マテリアル数
+	ID3DXMesh *pMesh;			///<メッシュポインタ
+	LPCTSTR XfileName;			///<Xファイル名
 	LPDIRECT3DTEXTURE9  *pTextures;
 };

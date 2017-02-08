@@ -1,5 +1,5 @@
 /**
- * @file _Graphics\nkIndexBuffer.cpp
+ * @file _Graphics\_Buffer\nkIndexBuffer.cpp
  *
  * インデックスバッファクラスの実装.
  */

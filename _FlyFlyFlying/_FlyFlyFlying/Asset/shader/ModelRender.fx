@@ -80,16 +80,13 @@ struct VS_OUTPUT
     float2 Tex0     : TEXCOORD0;
 	float3 Tangent	: TEXCOORD1; //接ベクトル
 	float4 WorldPos_Depth : TEXCOORD2; //xyzにワールド座標。wには射影空間でのdepthが格納される。
-	float4 LightViewPos_0 : TEXCOORD3;
-	float4 LightViewPos_1 : TEXCOORD4;
-	float4 LightViewPos_2 : TEXCOORD5;
 };
 
 //シャドウマップ出力頂点
 struct VS_OUTPUT_RENDER_SHADOW_MAP
 {
 	float4 Pos : POSITION;
-	float4 depth : TEXCOORD0;
+	float4 depth : TEXCOORD;
 };
 
 //ワールド座標とワールド法線をスキン行列から計算
@@ -161,11 +158,13 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
 {
 	VS_OUTPUT Out = (VS_OUTPUT)0;
 	float3 Pos, Normal, Tangent;
-	if (hasSkin) {
+	if (hasSkin) 
+	{
 		//スキンあり。
 		CalcWorldPosAndNormalFromSkinMatrix(In, Pos, Normal, Tangent, true);
 	}
-	else {
+	else 
+	{
 		//スキンなし。
 		CalcWorldPosAndNormal(In, Pos, Normal, Tangent, true);
 	}
@@ -175,12 +174,7 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
 	Out.Normal = normalize(Normal);
 	Out.Tangent = normalize(Tangent);
 	Out.Tex0 = In.Tex0;
-	if (g_flags.y) {
-		//シャドウレシーバー。
-		Out.LightViewPos_0 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[0]);
-		Out.LightViewPos_1 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[1]);
-		Out.LightViewPos_2 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[2]);
-	}
+
 	return Out;
 }
 
@@ -192,11 +186,13 @@ VS_OUTPUT VSMainInstancing(VS_INPUT_INSTANCING In, uniform bool hasSkin)
 {
 	VS_OUTPUT Out = (VS_OUTPUT)0;
 	float3 Pos, Normal, Tangent;
-	if (hasSkin) {
+	if (hasSkin) 
+	{
 		//スキンあり。
 		CalcWorldPosAndNormalFromSkinMatrix(In.base, Pos, Normal, Tangent, true);
 	}
-	else {
+	else
+	{
 		//スキンなし。
 		CalcWorldPosAndNormal(In.base, Pos, Normal, Tangent, true);
 	}
@@ -211,12 +207,7 @@ VS_OUTPUT VSMainInstancing(VS_INPUT_INSTANCING In, uniform bool hasSkin)
 	Out.WorldPos_Depth.w = Out.Pos.w;
 	Out.Normal = mul(normalize(Normal), worldMat);
 	Out.Tex0 = In.base.Tex0;
-	if (g_flags.y) {
-		//シャドウレシーバー。
-		Out.LightViewPos_0 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[0]);
-		Out.LightViewPos_1 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[1]);
-		Out.LightViewPos_2 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[2]);
-	}
+
 	return Out;
 }
 
@@ -225,7 +216,11 @@ VS_OUTPUT VSMainInstancing(VS_INPUT_INSTANCING In, uniform bool hasSkin)
 //return カラー
 float4 PSMain(VS_OUTPUT In) : COLOR
 {
-	float4 color = tex2D(g_diffuseTextureSampler,In.Tex0);
+	float4 color = 0.0f;
+	float4 diffuseColor = tex2D(g_diffuseTextureSampler,In.Tex0);
+	
+	color = diffuseColor;
+	
 	float3 normal = 0.0f;
 	if (g_flags.x)
 	{
@@ -246,19 +241,8 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		normal = In.Normal;
 	}
 
+	//ディフューズライトの計算
 	float4 lig = DiffuseLight(normal);
-
-	if (g_flags.y)
-	{
-		//影
-		lig *= CalcShadow(In.LightViewPos_0, In.LightViewPos_1, In.LightViewPos_2);
-	}
-
-	if (g_isSpec)
-	{
-		//スペキュラライト。
-		lig.xyz += CalcSpecular(In.WorldPos_Depth, normal, In.Tex0);
-	}
 
 	if (g_flags.z)
 	{
@@ -267,26 +251,36 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		float3 normalInCamera = mul(normal, g_mViewMatrixRotInv);
 		float t = 1.0f - abs(dot(normalInCamera, float3(0.0f, 0.0f, 1.0f)));
 		t = pow(t, 1.5f);
-		color.xyz += t * 0.7f;
+		lig.xyz += t * 0.7f;
+	}
+	if (g_isSpec)
+	{
+		//スペキュラライト。
+		lig.xyz += CalcSpecular(In.WorldPos_Depth, normal, In.Tex0);
+	}
+	if (g_flags.y)
+	{
+		//影
+		lig.xyz *= CalcShadow(In.WorldPos_Depth.xyz);
 	}
 
+	//自己発光色
+	lig.xyz += g_light.Emission;
+
+	color *= lig;
 
 	//アンビエントライト
-	lig.xyz += g_light.ambient.xyz;
-	color.xyz *= lig;
+	color.xyz += diffuseColor.xyz * g_light.ambient.xyz;
 
-	////アルファに輝度を埋め込む
-	//if (g_flags.w){
-	//	color.a *= CalcLuminance(color.xyz);
-	//}
-
-	if (g_fogParam.z > 1.9f) {
+	if (g_fogParam.z > 1.9f)
+	{
 		//高さフォグ
 		float h = max(In.WorldPos_Depth.y - g_fogParam.y, 0.0f);
 		float t = min(h / g_fogParam.x, 1.0f);
 		color.xyz = lerp(float3(0.25f, 0.05f, 0.05f), color.xyz, t);
 	}
-	else if (g_fogParam.z > 0.0f) {
+	else if (g_fogParam.z > 0.0f) 
+	{
 		//距離フォグ
 		float z = length(In.WorldPos_Depth.xyz - g_cameraPos);
 		z = max(z - g_fogParam.x, 0.0f);
@@ -355,7 +349,7 @@ float4 PSMainRenderShadowMap(VS_OUTPUT_RENDER_SHADOW_MAP In) : COLOR
 	float z = In.depth.z / In.depth.w;
 	float dx = ddx(z);
 	float dy = ddy(z);
-	return float4(z, z*z + 0.25f*(dx*dx + dy*dy), 0.0f, 1.0f);
+	return float4(z, z*z + 0.25f * (dx*dx + dy*dy), 0.0f, 1.0f);
 }
 
 

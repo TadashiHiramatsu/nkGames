@@ -7,6 +7,7 @@
 
 #include"Source\Title\TitleScene.h"
 #include"Source\Game\GameScene.h"
+#include"Source\Test\TestScene.h"
 
 /**
  * エンジンの初期化関数.
@@ -48,7 +49,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	InitEngine(hInstance);
 
 	//SceneManager().ChangeScene<TitleScene>();
-	SceneManager().ChangeScene<GameScene>();
+	//SceneManager().ChangeScene<GameScene>();
+	SceneManager().ChangeScene<TestScene>();
 
 	//エンジン起動!!
 	Engine().RunGameLoop();

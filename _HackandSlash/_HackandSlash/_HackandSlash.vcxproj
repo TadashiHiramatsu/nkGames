@@ -159,7 +159,7 @@
     <ClCompile Include="Source\Game\Item\IItem.cpp" />
     <ClCompile Include="Source\Game\Item\ItemResource.cpp" />
     <ClCompile Include="Source\Game\Item\Other.cpp" />
-    <ClCompile Include="Source\Game\Item\Weapon.cpp" />
+    <ClCompile Include="Source\Game\Item\WeaponItem.cpp" />
     <ClCompile Include="Source\Game\Map\Ground.cpp" />
     <ClCompile Include="Source\Game\Map\MapChip.cpp" />
     <ClCompile Include="Source\Game\Map\Skybox.cpp" />
@@ -167,6 +167,14 @@
     <ClCompile Include="Source\Game\Monster\MonsterHabitat.cpp" />
     <ClCompile Include="Source\Game\Monster\Monster_01.cpp" />
     <ClCompile Include="Source\Game\Player\Player.cpp" />
+    <ClCompile Include="Source\Game\Player\Shield.cpp" />
+    <ClCompile Include="Source\Game\Player\Weapon.cpp" />
+    <ClCompile Include="Source\Test\Item\InventoryManager.cpp" />
+    <ClCompile Include="Source\Test\MenuWindow\IMenuWindow.cpp" />
+    <ClCompile Include="Source\Test\MenuWindow\Inventory\Inventory.cpp" />
+    <ClCompile Include="Source\Test\MenuWindow\MenuSystem.cpp" />
+    <ClCompile Include="Source\Test\MenuWindow\MenuBar.cpp" />
+    <ClCompile Include="Source\Test\TestScene.cpp" />
     <ClCompile Include="Source\Title\GUI\TitleSystem.cpp" />
     <ClCompile Include="Source\Title\HUD\TitleBack.cpp" />
     <ClCompile Include="Source\Title\TitleScene.cpp" />
@@ -187,7 +195,7 @@
     <ClInclude Include="Source\Game\Item\IItem.h" />
     <ClInclude Include="Source\Game\Item\ItemResource.h" />
     <ClInclude Include="Source\Game\Item\Other.h" />
-    <ClInclude Include="Source\Game\Item\Weapon.h" />
+    <ClInclude Include="Source\Game\Item\WeaponItem.h" />
     <ClInclude Include="Source\Game\Map\Ground.h" />
     <ClInclude Include="Source\Game\Map\MapChip.h" />
     <ClInclude Include="Source\Game\Map\Skybox.h" />
@@ -195,6 +203,14 @@
     <ClInclude Include="Source\Game\Monster\MonsterHabitat.h" />
     <ClInclude Include="Source\Game\Monster\Monster_01.h" />
     <ClInclude Include="Source\Game\Player\Player.h" />
+    <ClInclude Include="Source\Game\Player\Shield.h" />
+    <ClInclude Include="Source\Game\Player\Weapon.h" />
+    <ClInclude Include="Source\Test\Item\InventoryManager.h" />
+    <ClInclude Include="Source\Test\MenuWindow\IMenuWindow.h" />
+    <ClInclude Include="Source\Test\MenuWindow\Inventory\Inventory.h" />
+    <ClInclude Include="Source\Test\MenuWindow\MenuSystem.h" />
+    <ClInclude Include="Source\Test\MenuWindow\MenuBar.h" />
+    <ClInclude Include="Source\Test\TestScene.h" />
     <ClInclude Include="Source\Title\GUI\TitleSystem.h" />
     <ClInclude Include="Source\Title\HUD\TitleBack.h" />
     <ClInclude Include="Source\Title\TitleScene.h" />

@@ -34,7 +34,7 @@ namespace nkEngine
 		DiffuseLightColor_[5] = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
 
 		//ŠÂ‹«Œõ‚Ìİ’è
-		AmbientLight_ = D3DXVECTOR3(0.5f, 0.5f, 0.5f);
+		AmbientLight_ = D3DXVECTOR3(0.2f, 0.2f, 0.2f);
 		
 		//©ŒÈ”­ŒõF‚Ìİ’è
 		EmissionLightColor_ = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

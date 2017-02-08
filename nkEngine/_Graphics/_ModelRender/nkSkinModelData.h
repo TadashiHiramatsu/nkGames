@@ -6,6 +6,7 @@
 #pragma once
 
 #include"..\_Buffer\nkVertexBuffer.h"
+#include"../nkTexture.h"
 
 namespace nkEngine
 {
@@ -35,8 +36,10 @@ namespace nkEngine
 	{
 	public:
 
+		/** D3Dテクスチャ. */
+		LPDIRECT3DTEXTURE9* D3DTexture_;
 		/** テクスチャ. */
-		LPDIRECT3DTEXTURE9* Texture_;
+		Texture* Texture_;
 		/** オリジナルメッシュ. */
 		LPD3DXMESH OrigMesh_;
 		/** 属性テーブル. */

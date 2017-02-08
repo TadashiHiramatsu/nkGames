@@ -85,7 +85,7 @@ namespace nkEngine
 		 * @param animationIndex アニメーションナンバー.
 		 * @param _loopflag		 ループフラグ.
 		 */
-		void SetAnimationLoopFlags(int animationIndex, bool _loopflag)
+		void SetAnimationLoopFlag(int animationIndex, bool _loopflag)
 		{
 			//アニメーションが存在していれば
 			if (animationIndex < AnimNum_)

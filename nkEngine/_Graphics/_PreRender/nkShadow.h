@@ -143,8 +143,8 @@ namespace nkEngine
 		 */
 		const Texture* GetTexture(int texNumber) const
 		{
-			//return Blur_[texNumber].GetTexture();
-			return ShadowMapRT_[texNumber].GetTexture();
+			return Blur_[texNumber].GetTexture();
+			//return ShadowMapRT_[texNumber].GetTexture();
 		}
 
 		/**

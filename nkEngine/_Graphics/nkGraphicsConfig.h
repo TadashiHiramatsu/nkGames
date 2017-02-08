@@ -27,7 +27,7 @@ namespace nkEngine
 		/** ソフトシャドウマップの有効フラグ. */
 		bool isSoftShadowMap_ = false;
 		/** ファー. */
-		float Fur_ = 1000.0f;
+		float Far_ = 100.0f;
 		/** ニア. */
 		float Near_ = 1.0f;
 

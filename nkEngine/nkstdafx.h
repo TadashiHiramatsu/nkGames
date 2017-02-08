@@ -16,6 +16,7 @@
 #include<stdio.h>
 #include<stdarg.h>
 #include<algorithm>
+#include<time.h>
 
 //STL
 #include<map>
@@ -75,13 +76,14 @@ using namespace std;
 //カメラ
 #include"_Graphics\nkCamera.h"
 
-#include"_Graphics\_Sharp\nkSharpVertex.h"
+#include"_Graphics\_Effect\nkEffectManager.h"
+
+#include"_Graphics\_Shape\nkShapeVertex.h"
 #include"_Graphics\nkPrimitive.h"
 #include"_Graphics\nkTexture.h"
 #include"_Graphics\nkRenderTarget.h"
 #include"_Graphics\_Buffer\nkVertexBuffer.h"
 #include"_Graphics\_Buffer\nkIndexBuffer.h"
-#include"_Graphics\nkEffectManager.h"
 
 //パーティクル
 #include"_Graphics/_Particle/nkParticleEmitter.h"
@@ -98,7 +100,7 @@ using namespace std;
 
 //UI
 #include"_Graphics\_UI\nkImage.h"
-#include"_Graphics\_UI\nkTestFont.h"
+#include"_Graphics\_UI\nkText.h"
 
 //スキンモデルレンダー
 #include"_Graphics\_ModelRender\nkAnimation.h"

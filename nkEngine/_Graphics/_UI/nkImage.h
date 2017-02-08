@@ -112,7 +112,7 @@ namespace nkEngine
 	private:
 
 		/** エフェクト. */
-		ID3DXEffect* Effect_;
+		Effect* Effect_;
 		/** プリミティブ. */
 		Primitive Primitive_;
 		/** テクスチャ. */

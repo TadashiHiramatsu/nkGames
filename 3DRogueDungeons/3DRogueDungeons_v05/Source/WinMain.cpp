@@ -1,5 +1,23 @@
+/***********************************************************************/
+/*! @file  WinMain.cpp
+ *  @brief
+ *  
+ *  @author 
+ *  @date 
+ */
+/***********************************************************************/
 #include"WinMain.h"
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] hInstance 
+ *  @param[in,out] hPrevInstance 
+ *  @param[in,out] lpCmdLine 
+ *  @param[in,out] nCmdShow 
+ *  @retval int APIENTRY 
+ */
+/***********************************************************************/
 int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
 {
 	MSG msg; 
@@ -26,6 +44,16 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	return 0;
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] hWnd 
+ *  @param[in,out] mes 
+ *  @param[in,out] wParam 
+ *  @param[in,out] lParam 
+ *  @retval LRESULT CALLBACK 
+ */
+/***********************************************************************/
 LRESULT CALLBACK WndProc(HWND hWnd, UINT mes, WPARAM wParam, LPARAM lParam){
 	
 	switch (mes)
@@ -46,6 +74,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT mes, WPARAM wParam, LPARAM lParam){
 	return DefWindowProc(hWnd, mes, wParam, lParam);
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] hInstance 
+ *  @retval ATOM 
+ */
+/***********************************************************************/
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
 	WNDCLASSEX wcex = {
@@ -65,6 +100,14 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 	return RegisterClassEx(&wcex);
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] hInstance 
+ *  @param[in,out] nCmdShow 
+ *  @retval BOOL 
+ */
+/***********************************************************************/
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
 	hInst = hInstance;
@@ -93,6 +136,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	return TRUE;
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void Initialize()
 {
 	graphicsDevice().InitD3d(hWnd);
@@ -100,6 +149,12 @@ void Initialize()
 	SINSTANCE(CSceneManager)->InitializeScene();
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void Update()
 {
 	//SceneManager‚Ìupdate
@@ -107,6 +162,12 @@ void Update()
 
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void Draw()
 {
 	(*graphicsDevice()).Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);

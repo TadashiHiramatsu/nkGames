@@ -34,12 +34,12 @@ namespace
 		SAFE_DELETE_ARRAY(pMeshContainer->BoneOffsetMatrix_);
 
 		//テクスチャが存在していれば
-		if (pMeshContainer->Texture_ != NULL)
+		if (pMeshContainer->D3DTexture_ != NULL)
 		{
 			//マテリアル削除
 			for (UINT iMaterial = 0; iMaterial < pMeshContainer->NumMaterials; iMaterial++)
 			{
-				SAFE_RELEASE(pMeshContainer->Texture_[iMaterial]);
+				SAFE_RELEASE(pMeshContainer->D3DTexture_[iMaterial]);
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace
 		SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
 		SAFE_RELEASE(pMeshContainer->pSkinInfo);
 		//自作メンバのデリート
-		SAFE_DELETE_ARRAY(pMeshContainer->Texture_);
+		SAFE_DELETE_ARRAY(pMeshContainer->D3DTexture_);
 		SAFE_DELETE_ARRAY(pMeshContainer->BoneMatrixPtrs_);
 		//自作メンバのリリース
 		SAFE_RELEASE(pMeshContainer->BoneCombinationBuf_);
@@ -454,7 +454,8 @@ namespace
 		//   the D3D9 materials and texture names instead of the EffectInstance style materials
 		pMeshContainer->NumMaterials = max(1, NumMaterials);
 		pMeshContainer->pMaterials = new D3DXMATERIAL[pMeshContainer->NumMaterials];
-		pMeshContainer->Texture_ = new LPDIRECT3DTEXTURE9[pMeshContainer->NumMaterials];
+		pMeshContainer->D3DTexture_ = new LPDIRECT3DTEXTURE9[pMeshContainer->NumMaterials];
+		pMeshContainer->Texture_ = new Texture[pMeshContainer->NumMaterials];
 		pMeshContainer->pAdjacency = new DWORD[NumFaces * 3];
 		if ((pMeshContainer->pAdjacency == NULL) || (pMeshContainer->pMaterials == NULL))
 		{
@@ -463,7 +464,7 @@ namespace
 		}
 
 		memcpy(pMeshContainer->pAdjacency, pAdjacency, sizeof(DWORD) * NumFaces * 3);
-		memset(pMeshContainer->Texture_, 0, sizeof(LPDIRECT3DTEXTURE9) * pMeshContainer->NumMaterials);
+		memset(pMeshContainer->D3DTexture_, 0, sizeof(LPDIRECT3DTEXTURE9) * pMeshContainer->NumMaterials);
 
 		// if materials provided, copy them
 		if (NumMaterials > 0)
@@ -481,11 +482,12 @@ namespace
 					if (FAILED(D3DXCreateTextureFromFile(
 						pd3dDevice,
 						filePath,
-						&pMeshContainer->Texture_[iMaterial]))
+						&pMeshContainer->D3DTexture_[iMaterial]))
 						) {
-						pMeshContainer->Texture_[iMaterial] = NULL;
+						pMeshContainer->D3DTexture_[iMaterial] = NULL;
 					}
 
+					pMeshContainer->Texture_[iMaterial].SetTextureDX(pMeshContainer->D3DTexture_[iMaterial]);
 					// don't remember a pointer into the dynamic memory, just forget the name after loading
 					pMeshContainer->pMaterials[iMaterial].pTextureFilename = NULL;
 				}

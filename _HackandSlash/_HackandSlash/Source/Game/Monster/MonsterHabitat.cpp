@@ -114,8 +114,9 @@ void MonsterHabitat::Appearance()
 	Monster_01* m = new Monster_01;
 
 	//出現位置を計算
-	D3DXVECTOR3 pos = D3DXVECTOR3(Random().GetRandDouble0() * Parameter_.Distance_, 0, Random().GetRandDouble0() * Parameter_.Distance_);
+	D3DXVECTOR3 pos = D3DXVECTOR3((Random::value() - 0.5f) * Parameter_.Distance_, 0, (Random::value() - 0.5f) * Parameter_.Distance_);
 	pos += Parameter_.Position_;
+	
 	//出現位置を設定
 	m->SetPosition(pos);
 	//モンスターにプレイヤーのポインタを設定

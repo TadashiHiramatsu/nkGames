@@ -6,7 +6,7 @@
 #pragma once
 
 #include"Other.h"
-#include"Weapon.h"
+#include"WeaponItem.h"
 #include"Armor.h"
 
 /**

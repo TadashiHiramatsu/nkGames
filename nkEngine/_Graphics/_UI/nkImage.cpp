@@ -47,7 +47,7 @@ namespace nkEngine
 		Effect_ = EffectManager().LoadEffect("Image.fx");
 
 		Texture_.reset(new Texture);
-		Texture_->Load(filepass);
+		Texture_->Load(filepass,true);
 
 		Init();
 	}
@@ -155,7 +155,7 @@ namespace nkEngine
 		Effect_->BeginPass(0);
 
 		Effect_->SetMatrix("matWorld", &RectTransform_->WorldProjMatrix_);
-		Effect_->SetTexture("g_diffuseTexture", Texture_->GetTexture());
+		Effect_->SetTexture("g_diffuseTexture", Texture_.get());
 		Effect_->SetValue("uvRect", &RectUV_, sizeof(RectUV_));
 		Effect_->SetValue("color", &Color_, sizeof(Color_));
 

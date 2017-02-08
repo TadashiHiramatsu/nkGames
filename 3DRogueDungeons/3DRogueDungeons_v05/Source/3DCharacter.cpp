@@ -1,5 +1,20 @@
+/***********************************************************************/
+/*! @file  3DCharacter.cpp
+ *  @brief
+ *  
+ *  @author 
+ *  @date 
+ */
+/***********************************************************************/
 #include"3DCharacter.h"
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] pDun 
+ *  @retval void
+ */
+/***********************************************************************/
 void C3DCharacter::Initialize(CDungeon* pDun)
 {
 	vec3Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -10,6 +25,12 @@ void C3DCharacter::Initialize(CDungeon* pDun)
 	C3DData::Initialize();
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void C3DCharacter::Draw()
 {
 	D3DXMatrixScaling(&matScale, vec3Scale.x, vec3Scale.y, vec3Scale.z);
@@ -19,6 +40,13 @@ void C3DCharacter::Draw()
 	C3DData::Draw();
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] pos 
+ *  @retval BOOL 
+ */
+/***********************************************************************/
 BOOL C3DCharacter::WallCollision(D3DXVECTOR3 pos)
 {
 	if (DD->getmapid(pos) == MapID::MAP_WALL)
@@ -28,6 +56,14 @@ BOOL C3DCharacter::WallCollision(D3DXVECTOR3 pos)
 	return false;
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] APos 
+ *  @param[in,out] BPos 
+ *  @retval void
+ */
+/***********************************************************************/
 void C3DCharacter::setFront(D3DXVECTOR3 APos, D3DXVECTOR3 BPos)
 {
 	vec3Front.x = APos.x - BPos.x;
@@ -38,6 +74,13 @@ void C3DCharacter::setFront(D3DXVECTOR3 APos, D3DXVECTOR3 BPos)
 	vec3Front.z = vec3Front.z / L;
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] trans 
+ *  @retval void
+ */
+/***********************************************************************/
 void C3DCharacter::setTrans(D3DXVECTOR3 trans)
 {
 	vec3Trans = D3DXVECTOR3(trans);

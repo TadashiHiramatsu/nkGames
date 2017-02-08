@@ -73,7 +73,8 @@ void ExpGage::Start()
 
 	//レベル表示フォントの作成
 	Level_.Create(20, 20);
-
+	Level_.SetTransform(&TextTransform_);
+	TextTransform_.Parent_ = &ExpFrameTransform_;
 }
 
 /**
@@ -115,6 +116,6 @@ void ExpGage::PostRender()
 	x /= 2;
 
 	//レベルを描画
-	Level_.Render(level, D3DXVECTOR2(x - 10,y - 20));
+	Level_.Render(level);
 
 }

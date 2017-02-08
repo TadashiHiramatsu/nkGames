@@ -89,6 +89,7 @@ private:
 	int* NowExp_;
 
 	/** Œ»İ‚ÌƒŒƒxƒ‹‚ğ•\¦‚·‚é. */
-	TestFont Level_;
+	Text Level_;
+	RectTransform TextTransform_;
 
 };

@@ -49,18 +49,7 @@ float4 PSMainAdd(VS_OUTPUT In):COLOR0
 {
 	float4 tex = tex2D(g_textureSampler, In.uv);
 
-	float4 color;
-
-	color.xyz = tex.xyz;
-
-	if (tex.a != 0.0f)
-	{
-		color.xyz += g_brightness;
-	}
-
-	color.a = tex.a * g_alpha;
-
-	return color;
+	return float4(tex.xyz * g_alpha + g_brightness, 1.0f);
 }
 
 /*!

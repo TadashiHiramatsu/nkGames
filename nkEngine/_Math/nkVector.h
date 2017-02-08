@@ -1,14 +1,14 @@
 /**
  * @file	_Math\nkVector.h
  *
- * ベクタークラスの定義.
+ * ベクトルクラスの定義.
  */
 #pragma once
 
 namespace nkEngine
 {
 	/**
-	 * ベクトル2クラス.
+	 * 二次元ベクトルクラス.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/30
@@ -190,19 +190,21 @@ namespace nkEngine
 		 */
 		struct { float x_, y_, z_; };
 
-		/** The zero. */
+	public:
+
+		/** ゼロ. */
 		static const Vector3 Zero;
-		/** The right. */
+		/** 右. */
 		static const Vector3 Right;
-		/** The left. */
+		/** 左. */
 		static const Vector3 Left;
-		/** The up. */
+		/** 上. */
 		static const Vector3 Up;
-		/** The down. */
+		/** 下. */
 		static const Vector3 Down;
-		/** The front. */
+		/** 前. */
 		static const Vector3 Front;
-		/** The back. */
+		/** 後. */
 		static const Vector3 Back;
 		/** The axis x coordinate. */
 		static const Vector3 AxisX;
@@ -210,7 +212,7 @@ namespace nkEngine
 		static const Vector3 AxisY;
 		/** The axis z coordinate. */
 		static const Vector3 AxisZ;
-		/** The one. */
+		/** イチ. */
 		static const Vector3 One;
 
 	};

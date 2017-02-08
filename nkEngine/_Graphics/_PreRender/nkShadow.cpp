@@ -31,7 +31,7 @@ namespace nkEngine
 	CShadowMap::CShadowMap() :
 		isEnable_(false),
 		Near_(1.0f),
-		Far_(1000.0f),
+		Far_(100.0f),
 		Aspect_(1.0f),
 		CalcLightViewFunc_(CalcLightViewFunc_PositionTarget),
 		LightTarget_(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
@@ -74,7 +74,7 @@ namespace nkEngine
 		Release();
 
 		Near_ = config.Near_;
-		Far_ = config.Fur_;
+		Far_ = config.Far_;
 
 		isEnable_ = config.isEnable_;
 		
@@ -148,7 +148,7 @@ namespace nkEngine
 			for (int i = 0; i < MAX_SHADOW_MAP; i++) 
 			{
 				//プロジェクション行列を作成。平行投影.
-				D3DXMatrixOrthoLH(&ProjMatrix_, ShadowAreaW_[i] * Aspect_,ShadowAreaH_[i],Near_,Far_);
+				D3DXMatrixOrthoLH(&ProjMatrix_, ShadowAreaW_[i] * Aspect_, ShadowAreaH_[i], Near_, Far_);
 
 				//ビュープロジェクション行列の作成
 				D3DXMatrixMultiply(&ShadowReceiverParam_.LightViewProjMatrix_[i], &LightViewMatrix_, &ProjMatrix_);

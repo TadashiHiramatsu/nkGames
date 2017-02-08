@@ -25,7 +25,7 @@ void Ground::Start()
 	//カメラの設定
 	ModelRender_.SetCamera(g_MainCamera->GetCamera());
 	//シャドウキャスターの設定true.
-	ModelRender_.SetShadowCasterFlag(false);
+	ModelRender_.SetShadowCasterFlag(true);
 	//シャドウレシーバーの設定true.
 	ModelRender_.SetShadowReceiverFlag(true);
 

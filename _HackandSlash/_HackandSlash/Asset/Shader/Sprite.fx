@@ -68,7 +68,7 @@ VS_OUTPUT VSMain(VS_INPUT In)
 	Out.Pos = mul(In.Pos, g_mWVP);
 
 	//UVŒvŽZ
-	Out.uv = In.uv;// = g_RectUV.xy * (1.0f - In.uv) + g_RectUV.zw * (In.uv);
+	Out.uv = g_RectUV.xy * (1.0f - In.uv) + g_RectUV.zw * (In.uv);
 
 	return Out;
 }

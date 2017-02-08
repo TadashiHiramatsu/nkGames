@@ -1,7 +1,7 @@
 //影関係の関数集
 
 //シャドウ用のテクスチャ
-texture g_ShadowMap_0;
+texture g_ShadowMap_0 : register(t0);
 sampler g_ShadowMapSampler_0 =
 sampler_state
 {
@@ -12,8 +12,8 @@ sampler_state
 	AddressU = CLAMP;
 	AddressV = CLAMP;
 };
-
-texture g_ShadowMap_1;
+//シャドウ用のテクスチャ
+texture g_ShadowMap_1 : register(t1);
 sampler g_ShadowMapSampler_1 =
 sampler_state
 {
@@ -24,8 +24,8 @@ sampler_state
 	AddressU = CLAMP;
 	AddressV = CLAMP;
 };
-
-texture g_ShadowMap_2;
+//シャドウ用のテクスチャ
+texture g_ShadowMap_2 : register(t2);
 sampler g_ShadowMapSampler_2 =
 sampler_state
 {
@@ -48,24 +48,11 @@ struct SShadowReceiverParam
 	int numShadowMap; //シャドウマップの枚数
 };
 
-SShadowReceiverParam g_ShadowReceiverParam; //シャドウレシーバーのパラメータ
+SShadowReceiverParam g_ShadowReceiverParam : register(c0);	 //シャドウレシーバーのパラメータ
 
 //影の計算
-//param[in] 一つ目のライトビューポジション
-//param[in] 二つ目のライトビューポジション
-//param[in] 三つ目のライトビューポジション
-//return 影の値
-float CalcShadow(
-	float4 lightViewPos_0,
-	float4 lightViewPos_1,
-	float4 lightViewPos_2)
+float CalcShadow(float3 worldPos)
 {
-	//ループで回せるように
-	float4x4 mLightViewPos;
-	mLightViewPos[0] = lightViewPos_0;
-	mLightViewPos[1] = lightViewPos_1;
-	mLightViewPos[2] = lightViewPos_2;
-
 	sampler texSampler[MAX_SHADOW_MAP];
 	texSampler[0] = g_ShadowMapSampler_0;
 	texSampler[1] = g_ShadowMapSampler_1;
@@ -77,7 +64,7 @@ float CalcShadow(
 	for (int i = 0; i < g_ShadowReceiverParam.numShadowMap; i++)
 	{
 		//影落とす
-		float4 posInLVP = mLightViewPos[i];
+		float4 posInLVP = mul(float4(worldPos, 1.0f), g_ShadowReceiverParam.mLightViewProj[i] );
 		posInLVP.xyz /= posInLVP.w;
 
 		//uv座標に変換

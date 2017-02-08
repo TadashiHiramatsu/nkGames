@@ -10,6 +10,7 @@
 #include"nkLight.h"
 #include"../nkCamera.h"
 #include"../nkTexture.h"
+#include"../_Effect/nkEffect.h"
 
 namespace nkEngine
 {
@@ -380,7 +381,7 @@ namespace nkEngine
 		/** ライトクラス. */
 		Light* Light_;
 		/** エフェクト. */
-		ID3DXEffect* Effect_;
+		Effect* Effect_;
 		/** カメラのアドレス. */
 		Camera* Camera_;
 		/** トランスフォーム 委譲したクラスのトランスフォームのアドレス. */

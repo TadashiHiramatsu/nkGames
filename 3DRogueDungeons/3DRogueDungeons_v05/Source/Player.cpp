@@ -1,5 +1,20 @@
+/***********************************************************************/
+/*! @file  Player.cpp
+ *  @brief
+ *  
+ *  @author 
+ *  @date 
+ */
+/***********************************************************************/
 #include"Player.h"
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] pDun 
+ *  @retval void
+ */
+/***********************************************************************/
 void CPlayer::Initialize(CDungeon* pDun)
 {
 	XfileName = _T("XFile\\Player.x");
@@ -11,6 +26,12 @@ void CPlayer::Initialize(CDungeon* pDun)
 	C3DCharacter::Initialize(pDun);
 	m_camesa.Initialize();
 }
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void CPlayer::Updata()
 {
 	D3DXMatrixIdentity(&matWorld);

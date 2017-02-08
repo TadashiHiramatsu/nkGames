@@ -88,7 +88,7 @@ namespace nkEngine
 				Effect_->BeginPass(0);
 
 				//テクスチャの設定
-				Effect_->SetTexture("g_Scene", ScreenRender().GetMainRenderTarget().GetTextureDX());
+				Effect_->SetTexture("g_Scene", ScreenRender().GetMainRenderTarget().GetTexture());
 
 				Effect_->CommitChanges();
 
@@ -144,7 +144,7 @@ namespace nkEngine
 						Effect_->SetValue("g_Weight", Weights_, sizeof(Weights_));
 
 						//テクスチャを設定
-						Effect_->SetTexture( "g_Blur", prevRT->GetTextureDX());
+						Effect_->SetTexture( "g_Blur", prevRT->GetTexture());
 
 						Effect_->CommitChanges();
 
@@ -193,7 +193,7 @@ namespace nkEngine
 						Effect_->SetValue("g_Weight", Weights_, sizeof(Weights_));
 
 						//テクスチャの設定
-						Effect_->SetTexture( "g_Blur", prevRT->GetTextureDX());
+						Effect_->SetTexture( "g_Blur", prevRT->GetTexture());
 						
 						Effect_->CommitChanges();
 
@@ -235,11 +235,11 @@ namespace nkEngine
 				Effect_->BeginPass(0);
 
 				//テクスチャの設定
-				Effect_->SetTexture( "g_CombineTex00", DownSamplingRT_[1].GetTextureDX());
-				Effect_->SetTexture( "g_CombineTex01", DownSamplingRT_[3].GetTextureDX());
-				Effect_->SetTexture( "g_CombineTex02", DownSamplingRT_[5].GetTextureDX());
-				Effect_->SetTexture( "g_CombineTex03", DownSamplingRT_[7].GetTextureDX());
-				Effect_->SetTexture( "g_CombineTex04", DownSamplingRT_[9].GetTextureDX());
+				Effect_->SetTexture( "g_CombineTex00", DownSamplingRT_[1].GetTexture());
+				Effect_->SetTexture( "g_CombineTex01", DownSamplingRT_[3].GetTexture());
+				Effect_->SetTexture( "g_CombineTex02", DownSamplingRT_[5].GetTexture());
+				Effect_->SetTexture( "g_CombineTex03", DownSamplingRT_[7].GetTexture());
+				Effect_->SetTexture( "g_CombineTex04", DownSamplingRT_[9].GetTexture());
 
 				Effect_->SetValue( "g_Offset", offset, sizeof(offset));
 
@@ -275,7 +275,7 @@ namespace nkEngine
 				Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 				Effect_->BeginPass(0);
 
-				Effect_->SetTexture("g_Blur", CombineRT_.GetTextureDX());
+				Effect_->SetTexture("g_Blur", CombineRT_.GetTexture());
 				Effect_->SetValue("g_Offset", offset, sizeof(offset));
 
 				Effect_->CommitChanges();

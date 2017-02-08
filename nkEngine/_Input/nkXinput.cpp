@@ -90,10 +90,8 @@ namespace nkEngine
 	 * @date 2017/01/09
 	 */
 	CXinput::CXinput() :
-		LeftStickX_(0.0f),
-		LeftStickY_(0.0f),
-		RightStickX_(0.0f),
-		RightStickY_(0.0f),
+		LeftStick_(D3DXVECTOR2(0, 0)),
+		RightStick_(D3DXVECTOR2(0, 0)),
 		LeftTrigger_(0),
 		RightTrigger_(0)
 	{
@@ -123,14 +121,14 @@ namespace nkEngine
 		//ゲームパッドのステートを取得
 		DWORD result = XInputGetState(0, &GamePad_.State_);
 
-		if (result == ERROR_SUCCESS) 
+		if (result == ERROR_SUCCESS)
 		{
 			//接続されている
 			GamePad_.Connected_ = true;
 
-			for (const VirtualPadToXPad& vPadToXPad : vPadToXPadTable) 
+			for (const VirtualPadToXPad& vPadToXPad : vPadToXPadTable)
 			{
-				if (GamePad_.State_.Gamepad.wButtons & vPadToXPad.xButton_) 
+				if (GamePad_.State_.Gamepad.wButtons & vPadToXPad.xButton_)
 				{
 					Trigger_[vPadToXPad.vButton_] = 1 ^ Press_[vPadToXPad.vButton_];
 					Press_[vPadToXPad.vButton_] = 1;
@@ -148,28 +146,27 @@ namespace nkEngine
 			{
 				GamePad_.State_.Gamepad.sThumbLX = 0;
 				GamePad_.State_.Gamepad.sThumbLY = 0;
-				LeftStickX_ = 0.0f;
-				LeftStickY_ = 0.0f;
+				LeftStick_ = D3DXVECTOR2(0, 0);
 			}
-			else 
+			else
 			{
 				//左スティックの入力量。正規化
-				if (GamePad_.State_.Gamepad.sThumbLX > 0) 
+				if (GamePad_.State_.Gamepad.sThumbLX > 0)
 				{
-					LeftStickX_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbLX) / SHRT_MAX;
+					LeftStick_.x = s_cast<float>(GamePad_.State_.Gamepad.sThumbLX) / SHRT_MAX;
 				}
-				else 
+				else
 				{
-					LeftStickX_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbLX) / -SHRT_MIN;
+					LeftStick_.x = s_cast<float>(GamePad_.State_.Gamepad.sThumbLX) / -SHRT_MIN;
 				}
 
-				if (GamePad_.State_.Gamepad.sThumbLY > 0) 
+				if (GamePad_.State_.Gamepad.sThumbLY > 0)
 				{
-					LeftStickY_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbLY) / SHRT_MAX;
+					LeftStick_.y = s_cast<float>(GamePad_.State_.Gamepad.sThumbLY) / SHRT_MAX;
 				}
-				else 
+				else
 				{
-					LeftStickY_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbLY) / -SHRT_MIN;
+					LeftStick_.y = s_cast<float>(GamePad_.State_.Gamepad.sThumbLY) / -SHRT_MIN;
 				}
 			}
 
@@ -180,28 +177,27 @@ namespace nkEngine
 			{
 				GamePad_.State_.Gamepad.sThumbRX = 0;
 				GamePad_.State_.Gamepad.sThumbRY = 0;
-				RightStickX_ = 0.0f;
-				RightStickY_ = 0.0f;
+				RightStick_ = D3DXVECTOR2(0, 0);
 			}
 			else
 			{
 				//右スティックの入力量。
-				if (GamePad_.State_.Gamepad.sThumbRX > 0) 
+				if (GamePad_.State_.Gamepad.sThumbRX > 0)
 				{
-					RightStickX_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbRX) / SHRT_MAX;
+					RightStick_.x = s_cast<float>(GamePad_.State_.Gamepad.sThumbRX) / SHRT_MAX;
 				}
-				else 
+				else
 				{
-					RightStickX_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbRX) / -SHRT_MIN;
+					RightStick_.x = s_cast<float>(GamePad_.State_.Gamepad.sThumbRX) / -SHRT_MIN;
 				}
 
 				if (GamePad_.State_.Gamepad.sThumbRY > 0)
 				{
-					RightStickY_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbRY) / SHRT_MAX;
+					RightStick_.y = s_cast<float>(GamePad_.State_.Gamepad.sThumbRY) / SHRT_MAX;
 				}
-				else 
+				else
 				{
-					RightStickY_ = s_cast<float>(GamePad_.State_.Gamepad.sThumbRY) / -SHRT_MIN;
+					RightStick_.y = s_cast<float>(GamePad_.State_.Gamepad.sThumbRY) / -SHRT_MIN;
 				}
 			}
 			LeftTrigger_ = GamePad_.State_.Gamepad.bLeftTrigger;
@@ -210,7 +206,7 @@ namespace nkEngine
 		else
 		{
 			//接続されていない場合はキーボードの入力でエミュレートする。
-			if (GamePad_.Connected_) 
+			if (GamePad_.Connected_)
 			{
 				//未接続になった。
 				memset(&GamePad_, 0, sizeof(GamePad_));
@@ -218,47 +214,45 @@ namespace nkEngine
 				memset(Press_, 0, sizeof(Press_));
 			}
 
-			LeftStickX_ = 0.0f;
-			LeftStickY_ = 0.0f;
-			RightStickX_ = 0.0f;
-			RightStickY_ = 0.0f;
+			LeftStick_ = D3DXVECTOR2(0, 0);
+			RightStick_ = D3DXVECTOR2(0, 0);
 			LeftTrigger_ = 0;
 			RightTrigger_ = 0;
 
-			if (GetAsyncKeyState(VK_LEFT)) 
+			if (GetAsyncKeyState(VK_LEFT))
 			{
-				RightStickX_ += -1.0f;
+				RightStick_.x += -1.0f;
 			}
 			if (GetAsyncKeyState(VK_RIGHT))
 			{
-				RightStickX_ += 1.0f;
+				RightStick_.x += 1.0f;
 			}
 			if (GetAsyncKeyState(VK_UP))
 			{
-				RightStickY_ += 1.0f;
+				RightStick_.y += 1.0f;
 			}
 			if (GetAsyncKeyState(VK_DOWN))
 			{
-				RightStickY_ += -1.0f;
+				RightStick_.y += -1.0f;
 			}
 
-			if (GetAsyncKeyState('A')) 
+			if (GetAsyncKeyState('A'))
 			{
-				LeftStickX_ += -1.0f;
+				LeftStick_.x += -1.0f;
 			}
 			if (GetAsyncKeyState('D'))
 			{
-				LeftStickX_ += 1.0f;
+				LeftStick_.x += 1.0f;
 			}
 			if (GetAsyncKeyState('W'))
 			{
-				LeftStickY_ += 1.0f;
+				LeftStick_.y += 1.0f;
 			}
-			if (GetAsyncKeyState('S')) 
+			if (GetAsyncKeyState('S'))
 			{
-				LeftStickY_ += -1.0f;
+				LeftStick_.y += -1.0f;
 			}
-		
+
 			if (GetAsyncKeyState('1'))
 			{
 				LeftTrigger_ = 255;
@@ -270,12 +264,12 @@ namespace nkEngine
 
 			for (const VirtualPadToKeyboard& vPadToKeyboard : vPadToKeyboardTable)
 			{
-				if (GetAsyncKeyState(vPadToKeyboard.KeyCoord_)) 
+				if (GetAsyncKeyState(vPadToKeyboard.KeyCoord_))
 				{
 					Trigger_[vPadToKeyboard.vButton_] = 1 ^ Press_[vPadToKeyboard.vButton_];
 					Press_[vPadToKeyboard.vButton_] = 1;
 				}
-				else 
+				else
 				{
 					Trigger_[vPadToKeyboard.vButton_] = 0;
 					Press_[vPadToKeyboard.vButton_] = 0;

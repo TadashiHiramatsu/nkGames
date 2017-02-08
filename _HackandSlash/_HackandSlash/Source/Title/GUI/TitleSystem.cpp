@@ -29,7 +29,7 @@ void TitleSystem::Start()
 	
 	TitleNameRT_.Width_ = 0;
 	TitleNameRT_.Height_ = 150;
-	TitleNameRT_.Position_ = D3DXVECTOR2(250,200);
+	TitleNameRT_.Position_ = D3DXVECTOR3(250, 200, 0);
 
 	//ニューゲーム画像の初期化
 	NewGameImage_.Load("Image/NewGame.png");
@@ -44,8 +44,8 @@ void TitleSystem::Start()
 	NewGameRT_.Height_ = ContinueRT_.Height_ = 80;
 
 	//位置を設定
-	NewGameRT_.Position_ = D3DXVECTOR2(300, -100);
-	ContinueRT_.Position_ = D3DXVECTOR2(300, -200);
+	NewGameRT_.Position_ = D3DXVECTOR3(300, -100,0);
+	ContinueRT_.Position_ = D3DXVECTOR3(300, -200,0);
 
 }
 

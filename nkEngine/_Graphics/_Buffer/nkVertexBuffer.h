@@ -1,5 +1,5 @@
 /**
- * @file _Graphics\nkVertexBuffer.h
+ * @file _Graphics\_Buffer\nkVertexBuffer.h
  *
  * 頂点バッファクラスの定義.
  */

@@ -1,5 +1,21 @@
+/***********************************************************************/
+/*! @file  EnemySlime.cpp
+ *  @brief
+ *  
+ *  @author 
+ *  @date 
+ */
+/***********************************************************************/
 #include"EnemySlime.h"
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] pDun 
+ *  @param[in,out] pPla 
+ *  @retval void
+ */
+/***********************************************************************/
 void CEnemySlime::Initialize(CDungeon* pDun, CPlayer* pPla)
 {
 	XfileName = _T("XFile\\EnemySlime.x");

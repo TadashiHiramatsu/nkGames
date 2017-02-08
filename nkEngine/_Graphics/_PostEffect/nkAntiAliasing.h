@@ -72,7 +72,7 @@ namespace nkEngine
 		/** 有効フラグ. */
 		bool isEnable_ = false;
 		/** エフェクト. */
-		ID3DXEffect* Effect_ = nullptr;
+		Effect* Effect_ = nullptr;
 
 	};
 

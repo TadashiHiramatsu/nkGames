@@ -103,7 +103,7 @@ namespace nkEngine
 		/** アンカー初期値は中心. */
 		AnchorPresetE Anchor_;
 		/** ポジション. */
-		D3DXVECTOR2 Position_;
+		D3DXVECTOR3 Position_;
 		/** 横幅. */
 		float Width_;
 		/** 縦幅. */

@@ -72,10 +72,12 @@ namespace nkEngine
 	 */
 	void PostEffect::Render()
 	{
+	
 		//ブルームの描画
 		Bloom_.Render(this);
 		//アンチエイリアスの描画
 		AntiAliasing_.Render(this);
+
 	}
 
 	/**

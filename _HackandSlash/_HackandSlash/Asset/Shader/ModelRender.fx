@@ -80,9 +80,6 @@ struct VS_OUTPUT
     float2 Tex0     : TEXCOORD0;
 	float3 Tangent	: TEXCOORD1; //接ベクトル
 	float4 WorldPos_Depth : TEXCOORD2; //xyzにワールド座標。wには射影空間でのdepthが格納される。
-	float4 LightViewPos_0 : TEXCOORD3;
-	float4 LightViewPos_1 : TEXCOORD4;
-	float4 LightViewPos_2 : TEXCOORD5;
 };
 
 //シャドウマップ出力頂点
@@ -177,13 +174,7 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
 	Out.Normal = normalize(Normal);
 	Out.Tangent = normalize(Tangent);
 	Out.Tex0 = In.Tex0;
-	if (g_flags.y)
-	{
-		//シャドウレシーバー。
-		Out.LightViewPos_0 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[0]);
-		Out.LightViewPos_1 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[1]);
-		Out.LightViewPos_2 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[2]);
-	}
+
 	return Out;
 }
 
@@ -216,13 +207,7 @@ VS_OUTPUT VSMainInstancing(VS_INPUT_INSTANCING In, uniform bool hasSkin)
 	Out.WorldPos_Depth.w = Out.Pos.w;
 	Out.Normal = mul(normalize(Normal), worldMat);
 	Out.Tex0 = In.base.Tex0;
-	if (g_flags.y)
-	{
-		//シャドウレシーバー。
-		Out.LightViewPos_0 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[0]);
-		Out.LightViewPos_1 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[1]);
-		Out.LightViewPos_2 = mul(float4(Pos.xyz, 1.0f), g_ShadowReceiverParam.mLightViewProj[2]);
-	}
+
 	return Out;
 }
 
@@ -276,13 +261,13 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 	if (g_flags.y)
 	{
 		//影
-		lig *= CalcShadow(In.LightViewPos_0, In.LightViewPos_1, In.LightViewPos_2);
+		lig.xyz *= CalcShadow(In.WorldPos_Depth.xyz);
 	}
 
 	//自己発光色
 	lig.xyz += g_light.Emission;
 
-	color.xyz *= lig;
+	color *= lig;
 
 	//アンビエントライト
 	color.xyz += diffuseColor.xyz * g_light.ambient.xyz;

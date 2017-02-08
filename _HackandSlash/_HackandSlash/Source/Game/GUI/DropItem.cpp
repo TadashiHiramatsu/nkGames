@@ -6,6 +6,8 @@
 #include"stdafx.h"
 #include"DropItem.h"
 
+#include"../GameCamera.h"
+
 /**
  * 初期化.
  *
@@ -13,10 +15,9 @@
  * @date 2017/01/16
  *
  * @param [in,out] item   If non-null, the item.
- * @param [in,out] camera If non-null, the camera.
  * @param [in,out] pos    The position.
  */
-void DropItem::Start(IItem* item, Camera* camera, D3DXVECTOR3 & pos)
+void DropItem::Start(IItem* item, D3DXVECTOR3 & pos)
 {
 	//アイテムデータをコピー
 	Item_ = item;
@@ -26,8 +27,7 @@ void DropItem::Start(IItem* item, Camera* camera, D3DXVECTOR3 & pos)
 	ItemSprite_.Start();
 
 	//カメラを設定
-	ItemSprite_.SetCamera(camera);
-	Camera_ = camera;
+	ItemSprite_.SetCamera(g_MainCamera->GetCamera());
 
 	//トランスフォームを設定
 	ItemSprite_.SetTransform(&Transform_);
@@ -35,7 +35,8 @@ void DropItem::Start(IItem* item, Camera* camera, D3DXVECTOR3 & pos)
 	//ポジションを設定
 	Transform_.Position_ = pos + D3DXVECTOR3(0, 0.1f, 0);
 
-	Transform_.Scale_ = D3DXVECTOR3(0.1f, 0.1f, 1);
+	//大きさを調整
+	Transform_.Scale_ = D3DXVECTOR3(0.1f, 0.1f, 1.0f);
 
 }
 
@@ -48,7 +49,7 @@ void DropItem::Start(IItem* item, Camera* camera, D3DXVECTOR3 & pos)
 void DropItem::Update()
 {
 	//カメラの回転行列を取得
-	D3DXMATRIX rot = Camera_->GetRotationMatrix();
+	D3DXMATRIX rot = g_MainCamera->GetCamera()->GetRotationMatrix();
 
 	//トランスフォームの更新
 	Transform_.BillboardUpdate(rot);
@@ -60,7 +61,7 @@ void DropItem::Update()
  * @author HiramatsuTadashi
  * @date 2017/01/16
  */
-void DropItem::PostRender()
+void DropItem::Render()
 {
 	//スプライトの表示
 	ItemSprite_.Render();

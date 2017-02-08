@@ -1,5 +1,21 @@
+/***********************************************************************/
+/*! @file  EnemyInsect.cpp
+ *  @brief
+ *  
+ *  @author 
+ *  @date 
+ */
+/***********************************************************************/
 #include"EnemyInsect.h"
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] pDun 
+ *  @param[in,out] pPla 
+ *  @retval void
+ */
+/***********************************************************************/
 void CEnemyInsect::Initialize(CDungeon* pDun, CPlayer* pPla)
 {
 	XfileName = _T("XFile\\EnemyInsect.x");

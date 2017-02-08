@@ -19,14 +19,15 @@ sampler_state
 float4 g_cameraPos;
 bool g_isSpec;
 
-struct  SLight
+struct  LightS
 {
 	float3 diffuseLightDir[NUM_DIFFUSE_LIGHT];
 	float4 diffuseLightColor[NUM_DIFFUSE_LIGHT];
 	float3 ambient;
+	float3 Emission;
 };
 
-SLight g_light;
+LightS g_light;
 
 //ディフューズライトの計算
 float4 DiffuseLight(float3 normal)

@@ -111,7 +111,7 @@ namespace nkEngine
 		/** プリミティブ. */
 		Primitive Primitive_; 
 		/** エフェクト. */
-		ID3DXEffect* Effect_;
+		Effect* Effect_;
 		/** カメラ. */
 		Camera* Camera_;
 

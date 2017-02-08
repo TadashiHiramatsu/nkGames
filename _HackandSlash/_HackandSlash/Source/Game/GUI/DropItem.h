@@ -38,14 +38,17 @@ public:
 	}
 
 	/**
-	 * 初期化.
-	 * オーバーライドしていない
-	 * 自分で呼ぶ必要がある
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/12
-	 */
-	void Start(IItem* item, Camera* camera, D3DXVECTOR3& pos);
+	* 初期化.
+	* オーバーライドしていない.
+	* 自分で呼ぶ必要あり.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/16
+	*
+	* @param [in,out] item   If non-null, the item.
+	* @param [in,out] pos    The position.
+	*/
+	void Start(IItem* item, D3DXVECTOR3& pos);
 
 	/**
 	 * 更新.
@@ -61,7 +64,7 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/12
 	 */
-	void PostRender()override;
+	void Render()override;
 
 private:
 
@@ -69,7 +72,5 @@ private:
 	Sprite ItemSprite_;
 	/** アイテムデータ. */
 	IItem* Item_;
-	/** カメラ. */
-	Camera* Camera_;
 
 };

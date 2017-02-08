@@ -33,11 +33,11 @@ namespace
 		},
 		//AnimationAttack_01
 		{
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.0f, 1.0f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.1f, 1.0f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.2f, 1.0f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.3f, 1.0f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.4f, 1.0f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.0f, 0.1f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.1f, 0.1f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.2f, 0.1f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.3f, 0.1f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.4f, 0.1f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
 			END_ANIMATION_EVENT(),
 		},
 		//AnimationAttack_02
@@ -60,7 +60,7 @@ namespace
 		"Soul_01.png",						//!< テクスチャのファイルパス。
 		D3DXVECTOR3(0.0f, 0.2f, 0.0f),		//!< 初速度。
 		2.0f,								//!< 寿命。単位は秒。
-		0.001f,								//!< 発生時間。単位は秒。
+		0.3f,								//!< 発生時間。単位は秒。
 		0.2f,								//!< パーティクルの幅。
 		0.2f,								//!< パーティクルの高さ。
 		D3DXVECTOR3(0.1f, 0.0f, 0.1f),		//!< 初期位置のランダム幅。
@@ -75,8 +75,8 @@ namespace
 		1.0f,								//!< フェードする時間。
 		1.0f,								//!< 初期アルファ値。	
 		true,								//!< ビルボード？
-		0.1f,								//!< 輝度。ブルームが有効になっているとこれを強くすると光が溢れます。
-		1,									//!< 0半透明合成、1加算合成。
+		1.0f,								//!< 輝度。ブルームが有効になっているとこれを強くすると光が溢れます。
+		0,									//!< 0半透明合成、1加算合成。
 	};
 
 }
@@ -108,9 +108,9 @@ void Monster_01::Start()
 	PlayAnimation(AnimationWaiting,0.3f);
 
 	//アニメーションのロープフラグを設定
-	Animation_.SetAnimationLoopFlags(AnimationAttack_01, false);
-	Animation_.SetAnimationLoopFlags(AnimationHit, false);
-	Animation_.SetAnimationLoopFlags(AnimationDeath, false);
+	Animation_.SetAnimationLoopFlag(AnimationAttack_01, false);
+	Animation_.SetAnimationLoopFlag(AnimationHit, false);
+	Animation_.SetAnimationLoopFlag(AnimationDeath, false);
 
 	//キャラクターコントローラの初期化
 	CharacterController_.Init(Radius_, Height_, Transform_.Position_);
@@ -141,7 +141,7 @@ void Monster_01::Update()
 	{
 	case StateWaiting:
 	{
-		if (GetToPlayerDis() <= toPlayerMaxDis_)
+		if (GetToPlayerDis() <= toPlayerMaxDis_ && !Player_->GetDeathFlag())
 		{
 			//プレイヤーを発見したので追いかけ状態に変化
 			ChangeState(StateCodeE::StateChase);
@@ -158,7 +158,7 @@ void Monster_01::Update()
 			ChangeState(StateCodeE::StateLoitering);
 
 			//目的地を算出
-			Destination_ = D3DXVECTOR2((Random().GetRandDouble() - 0.5f)*Distance_, (Random().GetRandDouble() - 0.5f)*Distance_) + 
+			Destination_ = D3DXVECTOR2((Random::value() - 0.5f) * Distance_, (Random::value() - 0.5f) * Distance_) + 
 				D3DXVECTOR2(DefaultPosition_.x, DefaultPosition_.z);
 
 			//立ち止まりローカルタイムを初期化
@@ -172,7 +172,7 @@ void Monster_01::Update()
 	break;
 	case StateLoitering:
 	{
-		if (GetToPlayerDis() <= toPlayerMaxDis_)
+		if (GetToPlayerDis() <= toPlayerMaxDis_ && !Player_->GetDeathFlag())
 		{
 			//プレイヤーを発見したので追いかけ状態に変化
 			ChangeState(StateCodeE::StateChase);
@@ -200,14 +200,13 @@ void Monster_01::Update()
 	case StateChase:
 	{
 
-		if (GetToPlayerDis() >= toPlayerMaxDis_)
+		if (GetToPlayerDis() >= toPlayerMaxDis_ || Player_->GetDeathFlag())
 		{
 			//プレイヤーを見失ったので待機状態に変化
 			ChangeState(StateCodeE::StateWaiting);
 			break;
 		}
-
-		if (GetToPlayerDis() <= PlayerAttackDis_)
+		else if (GetToPlayerDis() <= PlayerAttackDis_ && !Player_->GetDeathFlag())
 		{
 			//プレイヤーを攻撃する距離まで追い詰めたので攻撃状態に変化
 			ChangeState(StateCodeE::StateAttack);
@@ -230,7 +229,7 @@ void Monster_01::Update()
 		if (!Animation_.IsPlayAnim())
 		{
 			//攻撃のアニメーションが終わっていれば
-			if (GetToPlayerDis() > PlayerAttackDis_)
+			if (GetToPlayerDis() > PlayerAttackDis_ || Player_->GetDeathFlag())
 			{
 				//攻撃距離から離れたので追いかけ状態に変化
 				ChangeState(StateCodeE::StateChase);
@@ -262,10 +261,24 @@ void Monster_01::Update()
 
 	}
 	break;
-	case StateDead:
+	case StateDeath:
 	{
 		if (!Animation_.IsPlayAnim())
 		{
+
+			if (isOnceDeath)
+			{
+				isOnceDeath = false;
+
+				D3DXMATRIX posmatrix = *ModelRender_.FindBoneWorldMatrix("chestcontrol");
+				D3DXVECTOR3 pos;
+				pos.x = posmatrix.m[3][0];
+				pos.y = posmatrix.m[3][1];
+				pos.z = posmatrix.m[3][2];
+				ParticleEmitter* pe = NewGO<ParticleEmitter>();
+				pe->Start(g_MainCamera->GetCamera(), DisappearanceParticle, pos, 8.0f);
+			}
+
 			//消滅時間のローカルタイムを加算
 			DisappearanceLT_ += Time().DeltaTime();
 			//消滅時間が経過した
@@ -327,7 +340,7 @@ void Monster_01::AnimationControl()
 {
 	
 	//アニメーションタイム
-	float AnimationTime = 1.0f / 60.0f;
+	float AnimationTime = Time().DeltaTime();
 	
 	//状態によってアニメーションを変化
 	switch (State_)
@@ -357,7 +370,7 @@ void Monster_01::AnimationControl()
 		PlayAnimation(AnimationHit, 0.3f);
 		break;
 
-	case StateDead:
+	case StateDeath:
 		//死亡アニメーション
 		PlayAnimation(AnimationDeath, 0.3f);
 		break;
@@ -404,7 +417,7 @@ void Monster_01::Release()
  */
 void Monster_01::Damage()
 {
-	if (State_ == StateDead)
+	if (State_ == StateDeath)
 	{
 		//死んでる。
 		return;
@@ -455,21 +468,19 @@ void Monster_01::Damage()
 			//死亡。
 	
 			//死亡状態に変化
-			ChangeState(StateDead);
+			ChangeState(StateDeath);
 
 			//プレイヤーに経験値を加算
 			Player_->AddExperience(100);
 
 			//アイテムをドロップ
-			DropItem* DI = NewGO<DropItem>();
+			DropItem* di = NewGO<DropItem>();
 			//アイテムデータの取得
 			IItem* item = ItemResource().GetItem(21001);
 			//ドロップアイテムの初期化
-			DI->Start(item, g_MainCamera->GetCamera(), Transform_.Position_);
-			
+			di->Start(item, Transform_.Position_);
 
-			ParticleEmitter* pe = NewGO<ParticleEmitter>();
-			pe->Start(g_MainCamera->GetCamera(), DisappearanceParticle, Transform_.Position_, 8.0f);
+			isOnceDeath = true;
 
 		}
 		else 

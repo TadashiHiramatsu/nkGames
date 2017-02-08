@@ -31,7 +31,7 @@ protected:
 		StateChase,		//!< 追いかけ
 		StateAttack,	//!< 攻撃
 		StateDamage,	//!< ダメージ
-		StateDead,		//!< そして死
+		StateDeath,		//!< そして死
 	};
 
 public:
@@ -94,6 +94,7 @@ public:
 
 	/**
 	 * ポジションを設定.
+	 * 出現位置を設定するときのために使っているので他で使うと不具合.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
@@ -103,6 +104,7 @@ public:
 	void SetPosition(D3DXVECTOR3& pos)
 	{
 		Transform_.Position_ = pos;
+		DefaultPosition_ = pos;
 	}
 
 	/**
@@ -255,5 +257,8 @@ protected:
 
 	/** アルファデータ. */
 	float Alpha_ = 1.0f;
+
+	//死亡パーティクルを出すための一度きりのフラグ
+	bool isOnceDeath = false;
 
 };

@@ -89,7 +89,7 @@ namespace nkEngine
 		float Weights_[NUM_WEIGHTS];
 
 		/** エフェクト. */
-		ID3DXEffect* Effect_;
+		Effect* Effect_;
 		
 		/** レンダリングターゲット. */
 		RenderTarget LuminanceRT_;

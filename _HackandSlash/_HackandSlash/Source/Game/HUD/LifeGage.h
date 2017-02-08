@@ -82,7 +82,8 @@ private:
 	Image LifeImage_;
 
 	/** ライフの数値を表示するフォント. */
-	TestFont Life_;
+	Text Life_;
+	RectTransform TextTransform_;
 
 	/** プレイヤーのポインタ. */
 	Player* Player_;

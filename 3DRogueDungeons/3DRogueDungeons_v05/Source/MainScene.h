@@ -1,3 +1,11 @@
+/***********************************************************************/
+/*! @file  MainScene.h
+ *  @brief
+ *  
+ *  @author 
+ *  @date 
+ */
+/***********************************************************************/
 #pragma once
 
 #include"IncludeManagers.h"
@@ -21,6 +29,13 @@ class CSceneManager;
 class CMainScene :public CScene
 {
 public:
+	/***********************************************************************/
+	/*! @brief 
+	 * 
+	 *  @param[in,out] name 
+	 *  @retval  
+	 */
+	/***********************************************************************/
 	CMainScene(const string& name) : CScene(name){ }
 	void Initialize();
 	void Update();
@@ -28,7 +43,7 @@ public:
 	void setEnemy();
 	void Cllision();
 
-	HRESULT CreateSprite();	//スプライト生成関数
+	HRESULT CreateSprite();	///<スプライト生成関数
 private:
 	CDungeon* m_Dun;
 	CPlayer* m_player;
@@ -40,10 +55,10 @@ private:
 
 	D3DLIGHT9 light1;
 
-	D3DXMATRIX World;          // 立方体ワールド変換行列
-	D3DXMATRIX Persp;   // 射影変換行列
+	D3DXMATRIX World;          ///< 立方体ワールド変換行列
+	D3DXMATRIX Persp;   ///< 射影変換行列
 
-	LPD3DXSPRITE m_pSprite;	//スプライト
+	LPD3DXSPRITE m_pSprite;	///<スプライト
 	CLifeGage* Life;
 
 	short num=0;

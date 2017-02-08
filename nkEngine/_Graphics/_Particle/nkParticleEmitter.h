@@ -100,7 +100,7 @@ namespace nkEngine
 		 * @param 		   emitPosition The emit position.
 		 * @param 		   lifeTime	    The life time.
 		 */
-		void Start(Camera* camera, const ParticleParameterS& param, D3DXVECTOR3& emitPosition,float lifeTime);
+		void Start(Camera* camera, const ParticleParameterS& param, D3DXVECTOR3& emitPosition, float lifeTime);
 
 		/**
 		 * çXêV.

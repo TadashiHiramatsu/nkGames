@@ -1,5 +1,19 @@
+/***********************************************************************/
+/*! @file  Dungeon.cpp
+ *  @brief
+ *  
+ *  @author 
+ *  @date 
+ */
+/***********************************************************************/
 #include"Dungeon.h"
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval  
+ */
+/***********************************************************************/
 CDungeon::CDungeon()
 {
 	m_space.height = MAP_HEIGHT;
@@ -9,6 +23,12 @@ CDungeon::CDungeon()
 	m_Stairs.Initialize("XFile\\Stairs.x");
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void CDungeon::Initialize()
 {
 	memset(m_map, MAP_WALL, sizeof(m_map));
@@ -19,6 +39,15 @@ void CDungeon::Initialize()
 	this->MakeFloor();
 	this->MakeStairs();
 }
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] t_room 
+ *  @param[in,out] splited_room1 
+ *  @param[in,out] splited_room2 
+ *  @retval void
+ */
+/***********************************************************************/
 void CDungeon::DivideX(Space& t_room, Space& splited_room1, Space& splited_room2)
 {
 	if (t_room.width > MIN_ROOM_WIDTH * 2){
@@ -39,6 +68,15 @@ void CDungeon::DivideX(Space& t_room, Space& splited_room1, Space& splited_room2
 		splited_room2.height = t_room.height;
 	}
 }
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] t_room 
+ *  @param[in,out] splited_room1 
+ *  @param[in,out] splited_room2 
+ *  @retval void
+ */
+/***********************************************************************/
 void CDungeon::DivideY(Space& t_room, Space& splited_room1, Space& splited_room2)
 {
 	if (t_room.height > MIN_ROOM_HEIGHT * 2){
@@ -59,6 +97,13 @@ void CDungeon::DivideY(Space& t_room, Space& splited_room1, Space& splited_room2
 		splited_room2.height = t_room.height + t_room.baseY - (num + 1);
 	}
 }
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] t_room 
+ *  @retval void
+ */
+/***********************************************************************/
 void CDungeon::Divide(Space& t_room)
 {
 	Space splited_room1, splited_room2;
@@ -85,6 +130,12 @@ void CDungeon::Divide(Space& t_room)
 		this->m_spaceVec.push_back(t_room);
 	}
 }
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void CDungeon::MakeRoom()
 {
 	for (it = m_spaceVec.begin(); it != m_spaceVec.end(); it++)
@@ -110,6 +161,12 @@ void CDungeon::MakeRoom()
 		}
 	}
 }
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void CDungeon::MakeFloor()
 {
 	//用意されたスペースすべて
@@ -183,6 +240,12 @@ void CDungeon::MakeFloor()
 	}
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void CDungeon::MakeStairs()
 {
 	bool f = false;
@@ -204,6 +267,12 @@ void CDungeon::MakeStairs()
 }
 
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval void
+ */
+/***********************************************************************/
 void CDungeon::Draw()
 {
 	for (short j = 0, x = 0; j < MAP_HEIGHT; j++, x += 32)
@@ -235,6 +304,12 @@ void CDungeon::Draw()
 	}
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @retval D3DXVECTOR3 
+ */
+/***********************************************************************/
 D3DXVECTOR3 CDungeon::getroom()
 {
 	D3DXVECTOR3 pos;
@@ -250,6 +325,13 @@ D3DXVECTOR3 CDungeon::getroom()
 	return pos;
 }
 
+/***********************************************************************/
+/*! @brief 
+ * 
+ *  @param[in,out] pos 
+ *  @retval MapID 
+ */
+/***********************************************************************/
 MapID CDungeon::getmapid(D3DXVECTOR3 pos)
 {
 	short x = (short)(pos.x + 16.0f) / 32;

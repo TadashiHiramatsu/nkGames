@@ -129,7 +129,7 @@ namespace nkEngine
 
 		Effect_->SetValue("g_mWVP", &m, sizeof(D3DXMATRIX));
 
-		Effect_->SetTexture("g_Texture", Texture_.GetTexture());
+		Effect_->SetTexture("g_Texture", &Texture_);
 
 		Effect_->SetValue("g_RectUV", &RectUV_, sizeof(RectUV_));
 		Effect_->SetValue("g_Color", &Color_, sizeof(Color_));

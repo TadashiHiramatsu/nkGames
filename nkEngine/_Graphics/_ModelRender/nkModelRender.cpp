@@ -309,16 +309,16 @@ namespace nkEngine
 			if (NormalMap_ != nullptr)
 			{
 				flag[0] = true;
-				Effect_->SetTexture("g_normalMap", NormalMap_->GetTexture());
+				Effect_->SetTexture("g_normalMap", NormalMap_);
 			}
 
 			//シャドウレシーバー
 			if (!isRenderToShadowMap && isShadowReceiver_)
 			{
 				flag[1] = true;
-				Effect_->SetTexture("g_ShadowMap_0", Shadow().GetTexture(0)->GetTexture());
-				Effect_->SetTexture("g_ShadowMap_1", Shadow().GetTexture(1)->GetTexture());
-				Effect_->SetTexture("g_ShadowMap_2", Shadow().GetTexture(2)->GetTexture());
+				Effect_->SetTexture("g_ShadowMap_0", Shadow().GetTexture(0));
+				Effect_->SetTexture("g_ShadowMap_1", Shadow().GetTexture(1));
+				Effect_->SetTexture("g_ShadowMap_2", Shadow().GetTexture(2));
 
 				const CShadowMap::ShadowReceiverParamS& param = Shadow().GetShadowReceiverParam();
 				Effect_->SetValue("g_ShadowReceiverParam", &param, sizeof(CShadowMap::ShadowReceiverParamS));
@@ -343,7 +343,7 @@ namespace nkEngine
 			//スペキュラマップ
 			if (SpecMap_ != nullptr)
 			{
-				Effect_->SetTexture("g_speculerMap", SpecMap_->GetTexture());
+				Effect_->SetTexture("g_speculerMap", SpecMap_);
 				Effect_->SetBool("g_isSpec", true);
 			}
 			else
@@ -409,7 +409,7 @@ namespace nkEngine
 				Effect_->SetInt("g_numBone", pMeshContainer->NumInfl_);
 				
 				//ディフューズテクスチャ
-				Effect_->SetTexture("g_diffuseTexture", pMeshContainer->Texture_[pBoneComb[iAttrib].AttribId]);
+				Effect_->SetTexture("g_diffuseTexture", &pMeshContainer->Texture_[pBoneComb[iAttrib].AttribId]);
 
 				//カメラの回転行列の逆行列
 				Effect_->SetMatrix("g_mViewMatrixRotInv",&Camera_->GetRotationInvMatrix());
@@ -452,7 +452,7 @@ namespace nkEngine
 			for (DWORD i = 0; i < pMeshContainer->NumMaterials; i++)
 			{
 				//ディフューズテクスチャ
-				Effect_->SetTexture("g_diffuseTexture", pMeshContainer->Texture_[i]);
+				Effect_->SetTexture("g_diffuseTexture", &pMeshContainer->Texture_[i]);
 
 				Effect_->CommitChanges();
 
