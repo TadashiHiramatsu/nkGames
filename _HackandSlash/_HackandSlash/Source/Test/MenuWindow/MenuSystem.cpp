@@ -19,6 +19,11 @@ void MenuSystem::Update()
 	if (XInput().IsTrigger(ButtonE::ButtonStart))
 	{
 		isEffectiveness_ = !isEffectiveness_;
+		
+		if (!isEffectiveness_)
+		{
+			IMenuWindow_->Close();
+		}
 	}
 
 	if (isEffectiveness_)

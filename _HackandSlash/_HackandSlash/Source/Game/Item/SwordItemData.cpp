@@ -1,10 +1,10 @@
 /**
- * @file	Source\Game\Item\WeaponItem.cpp
+ * @file	Source\Game\Item\SwordItemData.cpp
  *
  * Implements the weapon class.
  */
 #include"stdafx.h"
-#include"WeaponItem.h"
+#include"SwordItemData.h"
 
 /**
  * Default constructor.
@@ -12,9 +12,9 @@
  * @author	HiramatsuTadashi
  * @date	2016/12/31
  */
-WeaponItem::WeaponItem()
+SwordItemData::SwordItemData()
 {
-	Type_ = ItemTypeE::Weapon;
+	Type_ = ItemTypeE::Sword;
 }
 
 /**
@@ -23,7 +23,7 @@ WeaponItem::WeaponItem()
  * @author	HiramatsuTadashi
  * @date	2016/12/31
  */
-WeaponItem::~WeaponItem()
+SwordItemData::~SwordItemData()
 {
 }
 

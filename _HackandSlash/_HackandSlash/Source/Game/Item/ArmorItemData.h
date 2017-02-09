@@ -1,33 +1,29 @@
 /**
- * @file	Source\Game\Item\Armor.h
+ * @file	Source\Game\Item\ArmorItemData.h
  *
- * Declares the armor class.
+ * Declares the ArmorItemData class.
  */
 #pragma once
 
-#include"IItem.h"
+#include"IItemData.h"
 
 /**
- * An armor.
+ * An ArmorItemData.
  *
  * @author	HiramatsuTadashi
  * @date	2016/12/31
  */
-class Armor : public IItem
+class ArmorItemData : public IItemData
 {
 public:
 
-	/** Values that represent armor types. */
-	enum ArmorTypeE
+	/** Values that represent ArmorItem types. */
+	enum ArmorItemTypeE
 	{
-		Head = 1,	//!< “ª
-		Shoulders,	//!< Œ¨
-		Torso,		//!< “·
-		Wrists,		//!< ˜r
-		Hands,		//!< Žè
-		Waist,		//!< ˜
-		Legs,		//!< ‹r
-		Feet,		//!< ŒC
+		Helm = 1,	//!< “ª
+		Armor,		//!< “·
+		Arm,		//!< ˜r
+		Greaves,	//!< ‹r
 	};
 
 public:
@@ -38,7 +34,7 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
 	 */
-	Armor();
+	ArmorItemData();
 
 	/**
 	 * Constructor.
@@ -49,11 +45,10 @@ public:
 	 * @param	_ID			 	The identifier.
 	 * @param	_Name		 	The name.
 	 * @param	_IconFilePath	Full pathname of the icon file.
-	 * @param	_Rarity		 	The rarity.
 	 * @param	_AType		 	The type.
 	 * @param	_Defense	 	The defense.
 	 */
-	Armor(int _ID, char* _Name, char* _IconFilePath, RarityCodeE _Rarity, ArmorTypeE _AType,int _Defense);
+	ArmorItemData(int _ID, char* _Name, char* _IconFilePath, ArmorItemTypeE _AType,int _Defense);
 
 	/**
 	 * Destructor.
@@ -61,11 +56,17 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
 	 */
-	~Armor();
+	~ArmorItemData();
+
+	ArmorItemTypeE GetArmorType()
+	{
+		return AType;
+	}
+
 private:
 
-	/** Type of the armor. */
-	ArmorTypeE AType;
+	/** Type of the ArmorItem. */
+	ArmorItemTypeE AType;
 	/** –hŒä—Í. */
 	int Defense = 0;
 };

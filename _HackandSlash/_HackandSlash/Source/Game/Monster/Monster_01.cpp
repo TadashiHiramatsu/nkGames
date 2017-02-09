@@ -9,7 +9,7 @@
 /*---------------------------------------------------------------------------------------------------------*/
 #include"../GameCamera.h"
 
-#include"../Item/ItemResource.h"
+#include"../../Game/Item/ItemDataResource.h"
 #include"../GUI/DropItem.h"
 
 //無名空間
@@ -476,7 +476,7 @@ void Monster_01::Damage()
 			//アイテムをドロップ
 			DropItem* di = NewGO<DropItem>();
 			//アイテムデータの取得
-			IItem* item = ItemResource().GetItem(21001);
+			IItemData* item = ItemDataResource().GetItem(21001);
 			//ドロップアイテムの初期化
 			di->Start(item, Transform_.Position_);
 

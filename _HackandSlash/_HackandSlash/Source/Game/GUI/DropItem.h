@@ -5,7 +5,7 @@
  */
 #pragma once
 
-#include"../Item/IItem.h"
+#include"../Item/IItemData.h"
 
 /**
  * ドロップアイテムクラス.
@@ -48,7 +48,7 @@ public:
 	* @param [in,out] item   If non-null, the item.
 	* @param [in,out] pos    The position.
 	*/
-	void Start(IItem* item, D3DXVECTOR3& pos);
+	void Start(IItemData* item, D3DXVECTOR3& pos);
 
 	/**
 	 * 更新.
@@ -71,6 +71,6 @@ private:
 	/** アイテムのスプライト. */
 	Sprite ItemSprite_;
 	/** アイテムデータ. */
-	IItem* Item_;
+	IItemData* Item_;
 
 };

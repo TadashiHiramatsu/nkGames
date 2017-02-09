@@ -32,6 +32,10 @@ public:
 		return NameTransform_;
 	}
 
+	virtual void Close() 
+	{
+	}
+
 protected:
 
 	Image NameImage_;

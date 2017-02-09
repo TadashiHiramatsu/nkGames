@@ -1,11 +1,11 @@
 /**
- * @file	Source\Game\Item\WeaponItem.h
+ * @file	Source\Game\Item\SwordItemData.h
  *
  * Declares the weapon class.
  */
 #pragma once
 
-#include"IItem.h"
+#include"IItemData.h"
 
 /**
  * A weapon.
@@ -13,7 +13,7 @@
  * @author	HiramatsuTadashi
  * @date	2016/12/31
  */
-class WeaponItem : public IItem
+class SwordItemData : public IItemData
 {
 public:
 
@@ -25,7 +25,7 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
 	 */
-	WeaponItem();
+	SwordItemData();
 
 	/**
 	 * Destructor.
@@ -33,7 +33,7 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
 	 */
-	~WeaponItem();
+	~SwordItemData();
 
 private:
 

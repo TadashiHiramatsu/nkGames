@@ -46,6 +46,8 @@ namespace nkEngine
 		//倍率を計算
 		Magnification = Engine().GetFrameH() / Engine().GetScreenH();
 
+		Format_ = FormatE::Center;
+
 		Height_ = height;
 		Width_ = width;
 
@@ -84,11 +86,27 @@ namespace nkEngine
 		pos.y = Transform_->WorldMatrix_._42;
 
 		pos.x += Engine().GetScreenW() / 2;
-		pos.y += Engine().GetScreenH() / 2;
+		pos.y = (Engine().GetScreenH() / 2) - pos.y;
+
+		pos.y += Transform_->Position_.y * 2;
 
 		int num = strlen(text);
 
-		int idx = num / 2 * Width_;
+		int idx = 0;
+
+		switch (Format_)
+		{
+		case nkEngine::Text::Left:
+			idx = 0;
+			break;
+		case nkEngine::Text::Center:
+			idx = num / 2 * Width_;
+			break;
+		default:
+			idx = 0;
+			break;
+		}
+
 		
 		RECT rc =
 		{

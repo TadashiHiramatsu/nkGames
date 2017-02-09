@@ -75,9 +75,6 @@
     <ClCompile Include="Source\Game\AnimationEvent\CollisionWorld.cpp">
       <Filter>Game\AnimationEvent</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Item\Armor.cpp">
-      <Filter>Game\Item</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\HUD\ExpGage.cpp">
       <Filter>Game\HUD</Filter>
     </ClCompile>
@@ -96,15 +93,6 @@
     <ClCompile Include="Source\Game\Map\Skybox.cpp">
       <Filter>Game\Map</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Item\IItem.cpp">
-      <Filter>Game\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Item\ItemResource.cpp">
-      <Filter>Game\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Item\Other.cpp">
-      <Filter>Game\Item</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Monster\Monster_01.cpp">
       <Filter>Game\Enemy</Filter>
     </ClCompile>
@@ -119,9 +107,6 @@
     </ClCompile>
     <ClCompile Include="Source\Title\HUD\TitleBack.cpp">
       <Filter>Title\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Item\WeaponItem.cpp">
-      <Filter>Game\Item</Filter>
     </ClCompile>
     <ClCompile Include="Source\Test\TestScene.cpp">
       <Filter>Test</Filter>
@@ -146,6 +131,27 @@
     </ClCompile>
     <ClCompile Include="Source\Test\Item\InventoryManager.cpp">
       <Filter>Test\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Test\MenuWindow\Inventory\ItemDetailRender.cpp">
+      <Filter>Test\MenuWindow\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\SwordItemData.cpp">
+      <Filter>Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\IItemData.cpp">
+      <Filter>Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\ItemDataResource.cpp">
+      <Filter>Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\ArmorItemData.cpp">
+      <Filter>Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\AccessoryItemData.cpp">
+      <Filter>Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\ShieldItemData.cpp">
+      <Filter>Game\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,9 +179,6 @@
     <ClInclude Include="Source\Game\AnimationEvent\CollisionWorld.h">
       <Filter>Game\AnimationEvent</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Item\Armor.h">
-      <Filter>Game\Item</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\HUD\ExpGage.h">
       <Filter>Game\HUD</Filter>
     </ClInclude>
@@ -194,15 +197,6 @@
     <ClInclude Include="Source\Game\Map\Skybox.h">
       <Filter>Game\Map</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Item\IItem.h">
-      <Filter>Game\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Item\ItemResource.h">
-      <Filter>Game\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Item\Other.h">
-      <Filter>Game\Item</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Monster\Monster_01.h">
       <Filter>Game\Enemy</Filter>
     </ClInclude>
@@ -217,9 +211,6 @@
     </ClInclude>
     <ClInclude Include="Source\Title\HUD\TitleBack.h">
       <Filter>Title\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Item\WeaponItem.h">
-      <Filter>Game\Item</Filter>
     </ClInclude>
     <ClInclude Include="Source\Test\TestScene.h">
       <Filter>Test</Filter>
@@ -244,6 +235,27 @@
     </ClInclude>
     <ClInclude Include="Source\Test\Item\InventoryManager.h">
       <Filter>Test\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\MenuWindow\Inventory\ItemDetailRender.h">
+      <Filter>Test\MenuWindow\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\SwordItemData.h">
+      <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\IItemData.h">
+      <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\ItemDataResource.h">
+      <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\ArmorItemData.h">
+      <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\AccessoryItemData.h">
+      <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\ShieldItemData.h">
+      <Filter>Game\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,8 @@
 #pragma once
 
-#include"../../Game/Item/IItem.h"
+#include"../../Game/Item/IItemData.h"
+
+#include"../../Game/Item/ArmorItemData.h"
 
 /**
 * 拾ったアイテムを管理するクラス.
@@ -24,7 +26,7 @@ public:
 	};
 
 
-public:
+private:
 
 	//コンストラクタ
 	CInventoryManager()
@@ -36,17 +38,40 @@ public:
 	{
 	}
 
+public:
+
+	static CInventoryManager& GetInstance()
+	{
+		static CInventoryManager instance;
+		return instance;
+	}
+
+
 	//初期化
 	void Start();
 
 	//アイテムの設定
-	void SetItem(IItem* item, ItemTypeE type);
+	void SetItem(IItemData* item);
 
 	//アイテムの取得
-	IItem* GetItem(ItemTypeE type, int num);
+	IItemData* GetItem(ItemTypeE type, int num);
+
+	int GetItemSize(ItemTypeE type)
+	{
+		return ItemList[type].size();
+	}
 
 private:
 
-	vector<IItem*> ItemList[ItemTypeE::TypeNum];
+	void SetArmor(ArmorItemData* item);
+
+private:
+
+	vector<IItemData*> ItemList[ItemTypeE::TypeNum];
 
 };
+
+static CInventoryManager& InventoryManager()
+{
+	return CInventoryManager::GetInstance();
+}

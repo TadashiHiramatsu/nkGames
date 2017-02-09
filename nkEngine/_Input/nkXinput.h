@@ -105,7 +105,6 @@ namespace nkEngine
 		
 		/**
 		 * 左スティックの傾き量.
-		 * 左右.
 		 *
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09

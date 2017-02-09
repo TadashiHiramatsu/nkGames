@@ -34,7 +34,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		~Image();
+		~Image()
+		{
+		}
 
 		/**
 		 * ファイルのロードを行う.
@@ -126,6 +128,8 @@ namespace nkEngine
 		D3DXVECTOR4 RectUV_;
 		/** 色. */
 		D3DXVECTOR4 Color_;
+
+		bool isInit = false;
 
 	};
 

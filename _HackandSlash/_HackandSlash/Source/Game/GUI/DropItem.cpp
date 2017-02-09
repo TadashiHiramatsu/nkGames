@@ -17,7 +17,7 @@
  * @param [in,out] item   If non-null, the item.
  * @param [in,out] pos    The position.
  */
-void DropItem::Start(IItem* item, D3DXVECTOR3 & pos)
+void DropItem::Start(IItemData* item, D3DXVECTOR3 & pos)
 {
 	//アイテムデータをコピー
 	Item_ = item;

@@ -13,15 +13,15 @@ namespace
 	/** The anchor offset[]. */
 	static const D3DXVECTOR2 AnchorOffset[] =
 	{
-		{ D3DXVECTOR2(-1, -1) },
-		{ D3DXVECTOR2(0	, -1) },
-		{ D3DXVECTOR2(1	, -1) },
+		{ D3DXVECTOR2(-1, 1) },
+		{ D3DXVECTOR2(0	, 1) },
+		{ D3DXVECTOR2(1	, 1) },
 		{ D3DXVECTOR2(-1, 0) },
 		{ D3DXVECTOR2(0	, 0) },
 		{ D3DXVECTOR2(1	, 0) },
-		{ D3DXVECTOR2(-1,1) },
-		{ D3DXVECTOR2(0	,1) },
-		{ D3DXVECTOR2(1	,1) }
+		{ D3DXVECTOR2(-1,-1) },
+		{ D3DXVECTOR2(0	,-1) },
+		{ D3DXVECTOR2(1	,-1) }
 	};
 }
 

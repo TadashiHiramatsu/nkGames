@@ -16,16 +16,13 @@
 #include"HUD\LifeGage.h"
 #include"HUD\ExpGage.h"
 
-#include"Item\ItemResource.h"
+#include"Item\ItemDataResource.h"
 
 /** コリジョンワールド. */
 CollisionWorld* g_CollisionWorld = nullptr;
 
 /** メインカメラ. */
 GameCamera* g_MainCamera = nullptr;
-
-/** インベントリウィンドウ. */
-//InventoryWindow* g_Inventory = nullptr;
 
 /**
  * 初期化.
@@ -52,7 +49,7 @@ void GameScene::Start()
 	g_MainCamera = NewGO<GameCamera>(1);
 
 	//アイテムデータのロード
-	ItemResource().Load();
+	ItemDataResource().Load();
 
 	//プレイヤーの作成
 	Player* player = NewGO<Player>();

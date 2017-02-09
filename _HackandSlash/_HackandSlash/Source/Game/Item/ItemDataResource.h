@@ -1,13 +1,12 @@
 /**
- * @file	Source\Game\Item\ItemResource.h
+ * @file	Source\Game\Item\CItemDataResource.h
  *
  * Declares the item resource class.
  */
 #pragma once
 
-#include"Other.h"
-#include"WeaponItem.h"
-#include"Armor.h"
+#include"SwordItemData.h"
+#include"ArmorItemData.h"
 
 /**
  * An item resource.
@@ -15,7 +14,7 @@
  * @author	HiramatsuTadashi
  * @date	2017/01/03
  */
-class CItemResource
+class CItemDataResource
 {
 private:
 
@@ -25,7 +24,9 @@ private:
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/03
 	 */
-	CItemResource();
+	CItemDataResource()
+	{
+	}
 
 	/**
 	 * Destructor.
@@ -33,7 +34,9 @@ private:
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/03
 	 */
-	~CItemResource();
+	~CItemDataResource()
+	{
+	}
 
 public:
 
@@ -45,9 +48,9 @@ public:
 	 *
 	 * @return	The instance.
 	 */
-	static CItemResource& GetInstance()
+	static CItemDataResource& GetInstance()
 	{
-		static CItemResource instance;
+		static CItemDataResource instance;
 		return instance;
 	}
 
@@ -65,7 +68,7 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/03
 	 */
-	void LoadFile(char* _FilePath,IItem::ItemTypeE _Type);
+	void LoadFile(char* _FilePath,IItemData::ItemTypeE _Type);
 
 	/**
 	 * Gets an item.
@@ -77,7 +80,7 @@ public:
 	 *
 	 * @return	Null if it fails, else the item.
 	 */
-	IItem* GetItem(int _Number)
+	IItemData* GetItem(int _Number)
 	{
 		auto& it = ItemList.find(_Number);
 		if (it == ItemList.end())
@@ -89,10 +92,10 @@ public:
 
 private:
 	/** List of items. */
-	map<int, IItem*> ItemList;
+	map<int, IItemData*> ItemList;
 };
 
-static CItemResource& ItemResource()
+static CItemDataResource& ItemDataResource()
 {
-	return CItemResource::GetInstance();
+	return CItemDataResource::GetInstance();
 }

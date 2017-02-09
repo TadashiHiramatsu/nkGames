@@ -24,16 +24,6 @@ namespace nkEngine
 	}
 
 	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	Image::~Image()
-	{
-	}
-
-	/**
 	* ファイルのロードを行う.
 	* エフェクトとテクスチャ.
 	*
@@ -47,9 +37,12 @@ namespace nkEngine
 		Effect_ = EffectManager().LoadEffect("Image.fx");
 
 		Texture_.reset(new Texture);
-		Texture_->Load(filepass,true);
+		Texture_->Load(filepass, true);
 
-		Init();
+		if (!isInit)
+		{
+			Init();
+		}
 	}
 
 	/**
@@ -67,7 +60,10 @@ namespace nkEngine
 
 		Texture_ = tex;
 
-		Init();
+		if (!isInit)
+		{
+			Init();
+		}
 	}
 
 	/**
@@ -81,7 +77,10 @@ namespace nkEngine
 	{
 		Effect_ = EffectManager().LoadEffect("Image.fx");
 
-		Init();
+		if (!isInit)
+		{
+			Init();
+		}
 	}
 
 	/**
@@ -129,6 +128,7 @@ namespace nkEngine
 			index
 		);
 
+		isInit = true;
 	}
 
 	/**

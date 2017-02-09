@@ -35,6 +35,12 @@ namespace nkEngine
 			HEAVY		= FW_HEAVY
 		};
 
+		enum FormatE
+		{
+			Left,	//!< ¶‹l‚ß
+			Center, //!< ’†‰›
+		};
+
 	public:
 
 		/**
@@ -94,6 +100,11 @@ namespace nkEngine
 			Color_ = color;
 		}
 
+		void SetFormat(FormatE format)
+		{
+			Format_ = format;
+		}
+
 	private:
 
 		/** ƒtƒHƒ“ƒg. */
@@ -107,6 +118,8 @@ namespace nkEngine
 		RectTransform* Transform_;
 
 		D3DXVECTOR4 Color_ = D3DXVECTOR4(0, 0, 0, 255);
+
+		FormatE Format_;
 	};
 
 }// namespace nkEngine
