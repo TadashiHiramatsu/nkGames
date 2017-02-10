@@ -68,7 +68,7 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/03
 	 */
-	void LoadFile(char* _FilePath,IItemData::ItemTypeE _Type);
+	void LoadFile(char* _FilePath);
 
 	/**
 	 * Gets an item.

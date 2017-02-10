@@ -49,6 +49,15 @@
     <Filter Include="Test\Item">
       <UniqueIdentifier>{9d809983-a6a7-491d-badc-927fc8477948}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Item\Resource">
+      <UniqueIdentifier>{ba8a0702-882a-43d4-858f-e22db9afeb53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Player">
+      <UniqueIdentifier>{8cf1fbde-4325-4be6-ab6b-7e6fb5c34fd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Item\Data">
+      <UniqueIdentifier>{06c816fe-382f-4b85-a974-43b3e0428ce6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -135,23 +144,32 @@
     <ClCompile Include="Source\Test\MenuWindow\Inventory\ItemDetailRender.cpp">
       <Filter>Test\MenuWindow\Inventory</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Item\SwordItemData.cpp">
-      <Filter>Game\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Item\IItemData.cpp">
-      <Filter>Game\Item</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Item\ItemDataResource.cpp">
-      <Filter>Game\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Item\ArmorItemData.cpp">
-      <Filter>Game\Item</Filter>
+      <Filter>Game\Item\Resource</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Item\AccessoryItemData.cpp">
-      <Filter>Game\Item</Filter>
+      <Filter>Game\Item\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\ArmorItemData.cpp">
+      <Filter>Game\Item\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\IItemData.cpp">
+      <Filter>Game\Item\Data</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Item\ShieldItemData.cpp">
-      <Filter>Game\Item</Filter>
+      <Filter>Game\Item\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\SwordItemData.cpp">
+      <Filter>Game\Item\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Test\Item\EquipmentItem.cpp">
+      <Filter>Test\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Test\Player\PlayerEquipment.cpp">
+      <Filter>Test\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Test\MenuWindow\Inventory\EquipmentDetailRender.cpp">
+      <Filter>Test\MenuWindow\Inventory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -239,23 +257,35 @@
     <ClInclude Include="Source\Test\MenuWindow\Inventory\ItemDetailRender.h">
       <Filter>Test\MenuWindow\Inventory</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Item\SwordItemData.h">
-      <Filter>Game\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Item\IItemData.h">
-      <Filter>Game\Item</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Item\ItemDataResource.h">
-      <Filter>Game\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Item\ArmorItemData.h">
-      <Filter>Game\Item</Filter>
+      <Filter>Game\Item\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Item\AccessoryItemData.h">
-      <Filter>Game\Item</Filter>
+      <Filter>Game\Item\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\ArmorItemData.h">
+      <Filter>Game\Item\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\IItemData.h">
+      <Filter>Game\Item\Data</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Item\ShieldItemData.h">
-      <Filter>Game\Item</Filter>
+      <Filter>Game\Item\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\SwordItemData.h">
+      <Filter>Game\Item\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\Item\EquipmentItem.h">
+      <Filter>Test\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\Player\PlayerEquipment.h">
+      <Filter>Test\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\MenuWindow\Inventory\EquipmentDetailRender.h">
+      <Filter>Test\MenuWindow\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Test\Item\ItemType.h">
+      <Filter>Test\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

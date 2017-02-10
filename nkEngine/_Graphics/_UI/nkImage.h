@@ -111,6 +111,11 @@ namespace nkEngine
 			RectTransform_ = rt;
 		}
 
+		void SetMonochrome(bool flag)
+		{
+			isMonochrome_ = flag;
+		}
+
 	private:
 
 		/** エフェクト. */
@@ -130,6 +135,8 @@ namespace nkEngine
 		D3DXVECTOR4 Color_;
 
 		bool isInit = false;
+
+		bool isMonochrome_ = false;
 
 	};
 

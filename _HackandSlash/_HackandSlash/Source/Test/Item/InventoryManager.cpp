@@ -13,36 +13,28 @@ void CInventoryManager::Start()
 
 	for (int i = 0; i < 6; i++)
 	{
-		SetItem(ItemDataResource().GetItem(31001 + i));
+		EquipmentItem* item = new EquipmentItem(ItemDataResource().GetItem(3001 + i));
+		SetItem(item);
 	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		EquipmentItem* item = new EquipmentItem(ItemDataResource().GetItem(4001));
+		SetItem(item);
+	}
+
 }
 
-void CInventoryManager::SetItem(IItemData * item)
+void CInventoryManager::SetItem(EquipmentItem* item)
 {
-	switch (item->GetItemType())
-	{
-	case IItemData::ItemTypeE::Sword:
-	{
-		ItemList[Sword].push_back(item);
-	}
-	break;
-	case IItemData::ItemTypeE::Armor:
-	{
-		ArmorItemData* armor = dynamic_cast<ArmorItemData*>(item);
-		SetArmor(armor);
-	}
-	break;
-	default:
-		break;
-	}
-	
+	ItemList[item->GetItemType()].push_back(item);
 }
 
-IItemData * CInventoryManager::GetItem(ItemTypeE type, int num)
+EquipmentItem* CInventoryManager::GetItem(ItemTypeE type, int num)
 {
-	try 
+	try
 	{
-		return ItemList[type].at(num);
+		return ItemList[type].at(num);;
 	}
 	catch(out_of_range& ex)
 	{
@@ -50,28 +42,20 @@ IItemData * CInventoryManager::GetItem(ItemTypeE type, int num)
 	}
 }
 
-void CInventoryManager::SetArmor(ArmorItemData* item)
+EquipmentItem * CInventoryManager::ChangeItem(ItemTypeE type,EquipmentItem* item, int num)
 {
-	ItemTypeE type;
+	EquipmentItem* retitem = nullptr;
 
-	switch (item->GetArmorType())
+	retitem = GetItem(type, num);
+	
+	if (item != nullptr)
 	{
-	case ArmorItemData::ArmorItemTypeE::Helm:
-		type = ItemTypeE::Helm;
-		break;
-	case ArmorItemData::ArmorItemTypeE::Armor:
-		type = ItemTypeE::Armor;
-		break;
-	case ArmorItemData::ArmorItemTypeE::Arm:
-		type = ItemTypeE::Arm;
-		break;
-	case ArmorItemData::ArmorItemTypeE::Greaves:
-		type = ItemTypeE::Greaves;
-		break;
-	default:
-		break;
+		ItemList[type][num] = item;
+	}
+	else
+	{
+		ItemList[type].erase(ItemList[type].begin() + num);
 	}
 
-	ItemList[type].push_back(item);
-
+	return retitem;
 }

@@ -14,8 +14,7 @@
  */
 ArmorItemData::ArmorItemData()
 {
-	Type_ = ItemTypeE::Armor;
-	AType = ArmorItemTypeE::Helm;
+	Type_ = ItemTypeE::Helm;
 	Defense = 1;
 }
 
@@ -28,19 +27,18 @@ ArmorItemData::ArmorItemData()
  * @param	_ID			 	The identifier.
  * @param	_Name		 	The name.
  * @param	_IconFilePath	Full pathname of the icon file.
- * @param	_AType		 	The type.
+ * @param	type		 	The type.
  * @param	_Defense	 	The defense.
  */
-ArmorItemData::ArmorItemData(int _ID, char * _Name, char * _IconFilePath, ArmorItemTypeE _AType, int _Defense)
+ArmorItemData::ArmorItemData(int _ID, char * _Name, char * _IconFilePath, ItemTypeE type, int _Defense)
 {
-	Type_ = ItemTypeE::Armor;
-
 	ID_ = _ID;
 
 	strcpy(Name_, _Name);
 	strcpy(IconFilePath_, _IconFilePath);
 
-	AType = _AType;
+	Type_ = type;
+
 	Defense = _Defense;
 }
 

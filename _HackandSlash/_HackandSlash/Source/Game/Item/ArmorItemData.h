@@ -17,17 +17,6 @@ class ArmorItemData : public IItemData
 {
 public:
 
-	/** Values that represent ArmorItem types. */
-	enum ArmorItemTypeE
-	{
-		Helm = 1,	//!< “ª
-		Armor,		//!< “·
-		Arm,		//!< ˜r
-		Greaves,	//!< ‹r
-	};
-
-public:
-
 	/**
 	 * Default constructor.
 	 *
@@ -45,10 +34,10 @@ public:
 	 * @param	_ID			 	The identifier.
 	 * @param	_Name		 	The name.
 	 * @param	_IconFilePath	Full pathname of the icon file.
-	 * @param	_AType		 	The type.
+	 * @param	type		 	The type.
 	 * @param	_Defense	 	The defense.
 	 */
-	ArmorItemData(int _ID, char* _Name, char* _IconFilePath, ArmorItemTypeE _AType,int _Defense);
+	ArmorItemData(int _ID, char* _Name, char* _IconFilePath, ItemTypeE type,int _Defense);
 
 	/**
 	 * Destructor.
@@ -58,15 +47,9 @@ public:
 	 */
 	~ArmorItemData();
 
-	ArmorItemTypeE GetArmorType()
-	{
-		return AType;
-	}
-
 private:
 
-	/** Type of the ArmorItem. */
-	ArmorItemTypeE AType;
 	/** –hŒä—Í. */
 	int Defense = 0;
+
 };

@@ -1,8 +1,6 @@
 #include"stdafx.h"
 #include"Inventory.h"
 
-#include"../../Item/InventoryManager.h"
-
 void Inventory::Start(RectTransform * rt, float namepos)
 {
 	State_ = StateE::Select;
@@ -67,16 +65,17 @@ void Inventory::Start(RectTransform * rt, float namepos)
 		IconBackTransform_[i].Height_ = 60;
 		IconBackTransform_[i].Position_ = pos[i / 2];
 
-	}
+		BefSelect_[i] = NowSelect_[i] = 0;
 
-	IconImage_[0].Load("Icon/Arm.png");		//腕
-	IconImage_[1].Load("Icon/Armor.png");		//胴
-	IconImage_[2].Load("Icon/Helm.png");		//頭
-	IconImage_[3].Load("Icon/Shield.png");		//盾
+	}
 	IconImage_[4].Load("Icon/Sword.png");		//剣
-	IconImage_[5].Load("Icon/Accessory.png");	//アクセ
+	IconImage_[3].Load("Icon/Shield.png");		//盾
+	IconImage_[2].Load("Icon/Helm.png");		//頭
+	IconImage_[1].Load("Icon/Armor.png");		//胴
+	IconImage_[0].Load("Icon/Arm.png");			//腕
+	IconImage_[7].Load("Icon/Greaves.png");		//脚
 	IconImage_[6].Load("Icon/Accessory.png");	//アクセ
-	IconImage_[7].Load("Icon/Greaves.png");			//脚
+	IconImage_[5].Load("Icon/Accessory.png");	//アクセ
 
 	for (int i = 0; i < MAX_EQUIPMENT; i++)
 	{
@@ -106,9 +105,13 @@ void Inventory::Start(RectTransform * rt, float namepos)
 		DetailSelectImage_.Load("Image/SelectItem.png");
 		DetailSelectImage_.SetTransform(&DetailSelectTransform_);
 		DetailSelectTransform_.Parent_ = ItemDetailRender_[0].GetTransform();
-		DetailSelectTransform_.Width_ = DetailSelectTransform_.Parent_->Width_ + 5;
+		DetailSelectTransform_.Width_ = DetailSelectTransform_.Parent_->Width_ + 2;
 		DetailSelectTransform_.Height_ = DetailSelectTransform_.Parent_->Height_ + 5;
 	}
+	
+	EquipmentDetailRender_.Start(&DetailTransform_);
+
+
 
 }
 
@@ -119,25 +122,33 @@ void Inventory::Update()
 	case Inventory::Select:
 	{
 
-		D3DXVECTOR2 LeftStick = XInput().GetLeftStick();
-		if (D3DXVec2Length(&LeftStick) > 0.0f)
+		float Len = D3DXVec2Length(&XInput().GetLeftStick());
+		if (Len > 0.8f)
 		{
-			float angle = XInput().GetLeftStickAngle();
-			SelectEquipment_ = (int)angle / (360 / MAX_EQUIPMENT);
+			int angle = XInput().GetLeftStickAngle() + (360 / MAX_EQUIPMENT / 2);
+			int num = (angle / (360 / MAX_EQUIPMENT)) % MAX_EQUIPMENT;
+			SelectEquipment_ = (ItemTypeE)num;
 		}
 
 		if (XInput().IsTrigger(ButtonE::ButtonA))
 		{
-			//Aボタンが押されたので詳細状態に変化.
-			ChangeState(StateE::Detail);
-			break;
+			//Aボタンが押された.
+			if (InventoryManager().GetItemSize(SelectEquipmentCode[SelectEquipment_]) > 0)
+			{
+				DetailSelectTransform_.Parent_ = ItemDetailRender_[NowSelect_[SelectEquipment_]].GetTransform();
+				DetailSelectTransform_.Update();
+				ChangeState(StateE::Detail);
+				break;
+			}
 		}
 
 	}
 	break;
 	case Inventory::Detail:
 	{
-		BefSelect_ = NowSelect_;
+
+		//前フレームの結果を代入.
+		BefSelect_[SelectEquipment_] = NowSelect_[SelectEquipment_];
 
 		static bool flag[2] =
 		{ false,false };
@@ -148,7 +159,7 @@ void Inventory::Update()
 			if (!flag[0])
 			{
 
-				if (NowSelect_ <= 0)
+				if (NowSelect_[SelectEquipment_] <= 0)
 				{
 					LeadIdx[SelectEquipment_]--;
 					
@@ -159,7 +170,7 @@ void Inventory::Update()
 					}
 				}
 
-				NowSelect_ = max(0, NowSelect_ - 1);
+				NowSelect_[SelectEquipment_] = max(0, NowSelect_[SelectEquipment_] - 1);
 
 				flag[0] = true;
 			}
@@ -175,33 +186,22 @@ void Inventory::Update()
 			if (!flag[1])
 			{
 
-				if (NowSelect_ >= MAX_DISPLAY - 1)
+				int limit = InventoryManager().GetItemSize(SelectEquipmentCode[SelectEquipment_]);
+				int num = limit - MAX_DISPLAY;
+
+				if (NowSelect_[SelectEquipment_] >= MAX_DISPLAY - 1)
 				{
 					LeadIdx[SelectEquipment_]++;
 
-					CInventoryManager::ItemTypeE SelectNumber[8] =
+					if (LeadIdx[SelectEquipment_] > num)
 					{
-						CInventoryManager::Arm,			//腕
-						CInventoryManager::Armor,		//胸
-						CInventoryManager::Helm,		//頭
-						CInventoryManager::Shield,		//盾
-						CInventoryManager::Sword,		//剣
-						CInventoryManager::Accessory,	//アクセサリー
-						CInventoryManager::Accessory,	//アクセサリー
-						CInventoryManager::Greaves		//脚
-					};
-
-					//限界まで表示
-					int limit = InventoryManager().GetItemSize(SelectNumber[SelectEquipment_]);
-					limit -= MAX_DISPLAY;
-
-					if (LeadIdx[SelectEquipment_] > limit)
-					{
-						LeadIdx[SelectEquipment_] = limit;
+						LeadIdx[SelectEquipment_] = num;
 					}
 				}
-
-				NowSelect_ = min(MAX_DISPLAY - 1, NowSelect_ + 1);
+				else
+				{
+					NowSelect_[SelectEquipment_] = min(MAX_DISPLAY - 1 + num, NowSelect_[SelectEquipment_] + 1);
+				}
 
 				flag[1] = true;
 			}
@@ -211,18 +211,24 @@ void Inventory::Update()
 			flag[1] = false;
 		}
 
-		if (BefSelect_ != NowSelect_)
+		if (BefSelect_[SelectEquipment_] != NowSelect_[SelectEquipment_])
 		{
-			DetailSelectTransform_.Parent_ = ItemDetailRender_[NowSelect_].GetTransform();
+			DetailSelectTransform_.Parent_ = ItemDetailRender_[NowSelect_[SelectEquipment_]].GetTransform();
 		}
 
 		DetailSelectTransform_.Update();
+
+		if (XInput().IsTrigger(ButtonE::ButtonA))
+		{
+			ChangeItem();
+		}
 
 		if (XInput().IsTrigger(ButtonE::ButtonB))
 		{
 			ChangeState(StateE::Select);
 			break;
 		}
+
 
 	}
 	break;
@@ -251,6 +257,15 @@ void Inventory::Update()
 			IconTransform_[i].Height_ = DefaultIconSize_;
 		}
 
+		if (InventoryManager().GetItemSize(SelectEquipmentCode[i]) <= 0)
+		{
+			IconImage_[i].SetMonochrome(true);
+		}
+		else
+		{
+			IconImage_[i].SetMonochrome(false);
+		}
+
 		IconTransform_[i].Update();
 
 	}
@@ -261,6 +276,8 @@ void Inventory::Update()
 	{
 		ItemDetailRender_[i].Update();
 	}
+
+	EquipmentDetailRender_.Update();
 
 }
 
@@ -291,22 +308,13 @@ void Inventory::Render()
 	};
 	SelectName_.Render(Name[SelectEquipment_]);
 
-	CInventoryManager::ItemTypeE SelectNumber[8] =
-	{
-		CInventoryManager::Arm,			//腕
-		CInventoryManager::Armor,		//胸
-		CInventoryManager::Helm,		//頭
-		CInventoryManager::Shield,		//盾
-		CInventoryManager::Sword,		//剣
-		CInventoryManager::Accessory,	//アクセサリー
-		CInventoryManager::Accessory,	//アクセサリー
-		CInventoryManager::Greaves		//脚
-	};
 	for (int i = 0; i < MAX_DISPLAY; i++)
 	{
-		IItemData* item = InventoryManager().GetItem(SelectNumber[SelectEquipment_], i + LeadIdx[SelectEquipment_]);
+		EquipmentItem* item = InventoryManager().GetItem(SelectEquipmentCode[SelectEquipment_], i + LeadIdx[SelectEquipment_]);
 		ItemDetailRender_[i].Render(item);
 	}
+
+	EquipmentDetailRender_.Render(PlayerEquipment_.GetEquipmentItem(SelectEquipmentCode[SelectEquipment_]));
 
 	switch (State_)
 	{
@@ -322,5 +330,21 @@ void Inventory::Render()
 	default:
 		break;
 	}
+
+}
+
+void Inventory::ChangeItem()
+{
+
+	int select = NowSelect_[SelectEquipment_] + LeadIdx[SelectEquipment_];
+	
+	//現在装備しているアイテムを取得
+	EquipmentItem* item = PlayerEquipment_.GetEquipmentItem(SelectEquipmentCode[SelectEquipment_]);
+
+	//入れ替えるアイテムを取得
+	EquipmentItem* ret = InventoryManager().ChangeItem(SelectEquipmentCode[SelectEquipment_],item, select);
+
+	//設定
+	PlayerEquipment_.SetEquipmentItem(ret);
 
 }

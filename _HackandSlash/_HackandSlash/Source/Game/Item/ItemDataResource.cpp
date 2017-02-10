@@ -6,12 +6,14 @@
 #include"stdafx.h"
 #include"ItemDataResource.h"
 
+#include"../../Test/Item/ItemType.h"
+
 void CItemDataResource::Load()
 {
-	LoadFile("ArmorItemData.csv", IItemData::ItemTypeE::Armor);
+	LoadFile("ArmorItemData.csv");
 }
 
-void CItemDataResource::LoadFile(char * filePath, IItemData::ItemTypeE type)
+void CItemDataResource::LoadFile(char * filePath)
 {
 	vector<vector<string>> table;
 
@@ -24,12 +26,12 @@ void CItemDataResource::LoadFile(char * filePath, IItemData::ItemTypeE type)
 		vector<string> record; //1行分
 		record = table[row]; //1行分読み込み
 
+		ItemTypeE type = (ItemTypeE)(stoi(record[3]));
+
 		//ID計算
 		int id = 0;
-		//上一桁
-		id += (int)IItemData::Armor * IItemData::TypeID;
-		//上2桁目
-		id += stoi(record[3]) * IItemData::SubTypeID;
+		//上1桁
+		id += (type + 1) * IItemData::SubTypeID;
 		//下3桁
 		id += stoi(record[0]);
 
@@ -43,25 +45,31 @@ void CItemDataResource::LoadFile(char * filePath, IItemData::ItemTypeE type)
 		char namefp[64];
 		strcpy(namefp, record[1].c_str());
 
-
 		//タイプによって違う初期化
 		switch (type)
 		{
-		case IItemData::Sword:
+		case Sword:
 			break;
-		case IItemData::Shield:
+		case Shield:
 			break;
-		case IItemData::Armor:
+		case Helm:
+		case Armor:
+		case Arm:
+		case Greaves:
 		{
-			ArmorItemData::ArmorItemTypeE type = (ArmorItemData::ArmorItemTypeE)stoi(record[3]);
 			int defense = stoi(record[4]);
 			//アイテムデータ作成
 			item = new ArmorItemData(id, namefp, iconfp, type, defense);
 		}
 		break;
-		case IItemData::Accessory:
+		case Accessory:
+			break;
+		case TypeNum:
+			break;
+		default:
 			break;
 		}
+		
 		//登録
 		ItemList.insert(make_pair(id, item));
 

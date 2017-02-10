@@ -1,7 +1,7 @@
 #pragma once
 
-#include"../../Game/Item/IItemData.h"
-
+#include"EquipmentItem.h"
+#include"ItemType.h"
 #include"../../Game/Item/ArmorItemData.h"
 
 /**
@@ -10,21 +10,6 @@
 */
 class CInventoryManager
 {
-
-public:
-
-	enum ItemTypeE
-	{
-		Sword,		//!< 剣
-		Shield,		//!< 盾
-		Helm,		//!< 頭
-		Armor,		//!< 胸
-		Arm,		//!< 腕
-		Greaves,	//!< 脚
-		Accessory,	//!< アクセサリー
-		TypeNum,    //!< 数
-	};
-
 
 private:
 
@@ -46,28 +31,25 @@ public:
 		return instance;
 	}
 
-
 	//初期化
 	void Start();
 
 	//アイテムの設定
-	void SetItem(IItemData* item);
+	void SetItem(EquipmentItem* item);
 
 	//アイテムの取得
-	IItemData* GetItem(ItemTypeE type, int num);
+	EquipmentItem* GetItem(ItemTypeE type, int num);
 
 	int GetItemSize(ItemTypeE type)
 	{
 		return ItemList[type].size();
 	}
 
-private:
-
-	void SetArmor(ArmorItemData* item);
+	EquipmentItem* ChangeItem(ItemTypeE type,EquipmentItem* item, int num);
 
 private:
 
-	vector<IItemData*> ItemList[ItemTypeE::TypeNum];
+	vector<EquipmentItem*> ItemList[ItemTypeE::TypeNum];
 
 };
 

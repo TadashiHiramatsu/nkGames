@@ -21,6 +21,9 @@ float4x4 matWorld; //ワールド行列.
 float4 uvRect; //UV矩形.
 float4 color; //色.
 
+/** モノクロフラグ. */
+bool isMonochrome;
+
 struct VS_IN
 {
 	float4 pos		: POSITION;
@@ -47,9 +50,23 @@ VS_OUT vs_main(VS_IN In)
 
 float4 ps_main(VS_OUT In) : COLOR0
 {
-	float4 col = tex2D(g_diffuseTextureSampler, In.uv);
 
-	return col * color;
+	float4 ret;
+	float4 col = tex2D(g_diffuseTextureSampler, In.uv) * color;
+
+	ret = col;
+
+	if (isMonochrome)
+	{
+		//モノクロ化にするときのRGBの分担割合。
+		float4 tomono = float4(0.298912, 0.586611, 0.114478, 0.0);
+		//テクスチャのピクセル色に頂点色を合成する
+		ret = dot(col, tomono);
+		//アルファ値だけは元のテクスチャに戻す
+		ret.w = col.w;
+	}
+
+	return ret;
 }
 
 technique Tech

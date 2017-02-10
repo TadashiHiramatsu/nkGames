@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../../../Game/Item/IItemData.h"
+#include"../../Item/EquipmentItem.h"
 
 class ItemDetailRender
 {
@@ -10,7 +10,7 @@ public:
 
 	void Update();
 
-	void Render(IItemData* item);
+	void Render(EquipmentItem* item);
 
 	RectTransform* GetTransform()
 	{
@@ -25,6 +25,9 @@ private:
 
 	Image IconBackImage_;
 	RectTransform IconBackTransform_;
+
+	Image IconImage_;
+	RectTransform IconTransform_;
 
 	//–¼‘O•\Ž¦
 	Text NameText_;

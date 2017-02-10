@@ -3,6 +3,11 @@
 #include"../IMenuWindow.h"
 #include"ItemDetailRender.h"
 
+#include"../../Item/InventoryManager.h"
+
+#include"../../Player/PlayerEquipment.h"
+#include"../Inventory/EquipmentDetailRender.h"
+
 class Inventory : public IMenuWindow
 {
 public:
@@ -33,6 +38,8 @@ private:
 		State_ = state;
 	}
 
+	void ChangeItem();
+
 private:
 
 	/** 最高装備数. */
@@ -56,7 +63,19 @@ private:
 
 	/** 先頭引数. */
 	int LeadIdx[MAX_EQUIPMENT];
-	
+
+	ItemTypeE SelectEquipmentCode[MAX_EQUIPMENT] = 
+	{
+		ItemTypeE::Arm,
+		ItemTypeE::Armor,
+		ItemTypeE::Helm,
+		ItemTypeE::Shield,
+		ItemTypeE::Sword,
+		ItemTypeE::Accessory,
+		ItemTypeE::Accessory,
+		ItemTypeE::Greaves,
+	};
+
 	/** 選択中の装備. */
 	int SelectEquipment_ = 0;
 
@@ -75,8 +94,8 @@ private:
 
 	const static int MAX_DISPLAY = 4;
 
-	int BefSelect_ = 0;
-	int NowSelect_ = 0;
+	int BefSelect_[MAX_EQUIPMENT];
+	int NowSelect_[MAX_EQUIPMENT];
 
 	Image DetailSelectImage_;
 	RectTransform DetailSelectTransform_;
@@ -85,5 +104,10 @@ private:
 	ItemDetailRender ItemDetailRender_[MAX_DISPLAY];
 
 	StateE State_;
+
+	/** 装備アイテム描画. */
+	EquipmentDetailRender EquipmentDetailRender_;
+	
+	PlayerEquipment PlayerEquipment_;
 
 };

@@ -5,6 +5,8 @@
  */
 #pragma once
 
+#include"../../Test/Item/ItemType.h"
+
 /**
  * アイテムの基底クラス 
  * アイテムをリソースクラスで扱うため 
@@ -28,16 +30,6 @@ public:
 	//	Rare,			//!< レア.
 	//	Unique,			//!< ユニーク.
 	//};
-
-	/** アイテムのタイプ. */
-	/** アイテムIDの上一桁と一致. */
-	enum ItemTypeE
-	{
-		Sword = 1,	//!< 剣
-		Shield,		//!< 盾
-		Armor,		//!< 防具
-		Accessory,  //!< アクセサリ
-	};
 
 public:
 

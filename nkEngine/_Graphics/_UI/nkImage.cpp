@@ -91,6 +91,7 @@ namespace nkEngine
 	*/
 	void Image::Init()
 	{
+		isMonochrome_ = false;
 
 		static SShapeVertex_PT vertex[] =
 		{
@@ -158,6 +159,7 @@ namespace nkEngine
 		Effect_->SetTexture("g_diffuseTexture", Texture_.get());
 		Effect_->SetValue("uvRect", &RectUV_, sizeof(RectUV_));
 		Effect_->SetValue("color", &Color_, sizeof(Color_));
+		Effect_->SetBool("isMonochrome", isMonochrome_);
 
 		Effect_->CommitChanges();
 
