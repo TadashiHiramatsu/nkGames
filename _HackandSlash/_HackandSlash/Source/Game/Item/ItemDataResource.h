@@ -5,8 +5,8 @@
  */
 #pragma once
 
-#include"SwordItemData.h"
-#include"ArmorItemData.h"
+#include"ItemData/SwordItemData.h"
+#include"ItemData/ArmorItemData.h"
 
 /**
  * An item resource.

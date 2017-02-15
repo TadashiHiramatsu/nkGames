@@ -6,8 +6,6 @@
 #include"stdafx.h"
 #include"ItemDataResource.h"
 
-#include"../../Test/Item/ItemType.h"
-
 void CItemDataResource::Load()
 {
 	LoadFile("ArmorItemData.csv");

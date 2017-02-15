@@ -149,6 +149,7 @@ namespace nkEngine
 
 		//“§‰ßˆ—‚ðs‚¤
 		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		Device->SetRenderState(D3DRS_ZENABLE, FALSE);
 
 		Effect_->SetTechnique("Tech");
 
@@ -173,6 +174,8 @@ namespace nkEngine
 
 		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
+		Device->SetRenderState(D3DRS_ZENABLE, TRUE);
+
 
 	}
 

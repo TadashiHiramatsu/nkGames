@@ -31,9 +31,9 @@ sampler g_diffuseTextureSampler =
 sampler_state
 {
 	Texture = <g_diffuseTexture>;
-    MipFilter = NONE;
-    MinFilter = NONE;
-    MagFilter = NONE;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
     AddressU = Wrap;
 	AddressV = Wrap;
 };
@@ -44,9 +44,9 @@ sampler g_normalMapSampler =
 sampler_state
 {
 	Texture = <g_normalMap>;
-	MipFilter = NONE;
-	MinFilter = NONE;
-	MagFilter = NONE;
+	MipFilter = LINEAR;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
 	AddressU = Wrap;
 	AddressV = Wrap;
 };
@@ -277,7 +277,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		//‚‚³ƒtƒHƒO
 		float h = max(In.WorldPos_Depth.y - g_fogParam.y, 0.0f);
 		float t = min(h / g_fogParam.x, 1.0f);
-		color.xyz = lerp(float3(0.25f, 0.05f, 0.05f), color.xyz, t);
+		color.xyz = lerp(float3(1.0f, 1.0f, 1.0f), color.xyz, t);
 	}
 	else if (g_fogParam.z > 0.0f) 
 	{
@@ -285,7 +285,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		float z = length(In.WorldPos_Depth.xyz - g_cameraPos);
 		z = max(z - g_fogParam.x, 0.0f);
 		float t = z / g_fogParam.y;
-		color.xyz = lerp(color.xyz, float3(0.25f, 0.05f, 0.05f), t);
+		color.xyz = lerp(color.xyz, float3(1.0f, 1.0f, 1.0f), t);
 	}
 
 	return color * g_Color;

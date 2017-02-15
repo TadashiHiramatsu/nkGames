@@ -3,6 +3,7 @@
 #include"MenuBar.h"
 
 #include"Inventory/Inventory.h"
+#include"../../Player/Player.h"
 
 class MenuSystem : public IGameObject
 {
@@ -19,13 +20,18 @@ public:
 	}
 
 	//‰Šú‰»
-	void Start()override;
+	void Start(Player* player);
 
 	//XV
 	void Update()override;
 	
 	//•`‰æ
 	void PostRender()override;
+
+	bool GetEffectiveness()
+	{
+		return isEffectiveness_;
+	}
 
 private:
 
@@ -39,3 +45,5 @@ private:
 	unique_ptr<IMenuWindow> IMenuWindow_;
 
 };
+
+extern MenuSystem* g_MenuSystem;

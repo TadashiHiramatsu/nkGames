@@ -92,4 +92,6 @@ private:
 	/** Œ»İ‚Ì‘Ì—Í‚Ì’l. */
 	int* NowLife_;
 
+	D3DXVECTOR2 value;
+
 };

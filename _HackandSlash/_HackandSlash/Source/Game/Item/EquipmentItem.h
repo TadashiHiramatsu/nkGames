@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../../Game/Item/IItemData.h"
+#include"ItemData\IItemData.h"
 
 class EquipmentItem
 {
@@ -37,6 +37,11 @@ public:
 	const char* GetName()
 	{
 		return ItemData_->GetName();
+	}
+
+	int GetParameter()
+	{
+		return ItemData_->GetParameter();
 	}
 
 private:

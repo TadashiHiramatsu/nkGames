@@ -5,17 +5,17 @@
 * 左手に装備する盾のクラス
 *
 */
-class Shield : public IGameObject
+class EquipmentShield : public IGameObject
 {
 public:
 
 	//コンストラクタ
-	Shield()
+	EquipmentShield()
 	{
 	}
 
 	//デストラクタ
-	~Shield()
+	~EquipmentShield()
 	{
 	}
 

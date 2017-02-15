@@ -7,8 +7,11 @@
 #include"Player.h"
 #include"../GameCamera.h"
 
-#include"Weapon.h"
-#include"Shield.h"
+#include"EquipmentWeapon.h"
+#include"EquipmentShield.h"
+
+#include"../Window/MenuWindow/MenuSystem.h"
+#include"../DropItem/DropItemManager.h"
 
 //無名空間
 namespace
@@ -95,9 +98,9 @@ void Player::Start()
 
 
 	//武器と盾を作成
-	Weapon* wepon = NewGO<Weapon>(1);
+	EquipmentWeapon* wepon = NewGO<EquipmentWeapon>(1);
 	wepon->Start(ModelRender_);
-	Shield* shild = NewGO<Shield>(1);
+	EquipmentShield* shild = NewGO<EquipmentShield>(1);
 	shild->Start(ModelRender_);
 
 	//アニメーションイベントを初期化
@@ -143,7 +146,12 @@ void Player::Update()
 
 		//平行移動
 		D3DXVECTOR3 move = D3DXVECTOR3(0, 0, 0);
-		move += D3DXVECTOR3(XInput().GetLeftStick().x, 0, XInput().GetLeftStick().y);
+
+		if (!g_MenuSystem->GetEffectiveness())
+		{
+			//メニューが表示されていなければ移動させる.
+			move += D3DXVECTOR3(XInput().GetLeftStick().x, 0, XInput().GetLeftStick().y);
+		}
 
 		//カメラの正面方向に合わせる
 		D3DXVECTOR3 dirForward = g_MainCamera->GetDirectionForward();
@@ -173,10 +181,9 @@ void Player::Update()
 		}
 
 		//攻撃
-		if (Input().GetMoudeButtonDown(MouseButtonE::MouseLeft) && !CharacterController_.IsJump())
+		if(XInput().IsTrigger(ButtonE::ButtonA) && !CharacterController_.IsJump() && !g_MenuSystem->GetEffectiveness() && !g_DropItemManager->GetisGetItem())
 		{
 			ChangeState(StateCodeE::StateAttack);
-
 		}
 	}
 	break;

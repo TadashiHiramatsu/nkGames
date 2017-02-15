@@ -68,6 +68,7 @@ void Inventory::Start(RectTransform * rt, float namepos)
 		BefSelect_[i] = NowSelect_[i] = 0;
 
 	}
+
 	IconImage_[4].Load("Icon/Sword.png");		//剣
 	IconImage_[3].Load("Icon/Shield.png");		//盾
 	IconImage_[2].Load("Icon/Helm.png");		//頭
@@ -95,9 +96,10 @@ void Inventory::Start(RectTransform * rt, float namepos)
 	SelectNameTransform_.Anchor_ = RectTransform::AnchorPresetE::TopCenter;
 	SelectNameTransform_.Position_.y = 30;
 
+	//所持アイテムの詳細表示ウィンドウの初期化
 	for (int i = 0; i < 4; i++)
 	{
-		float posy = i * -130 - 70;
+		float posy = i * -126 - 80;
 		ItemDetailRender_[i].Start(&DetailTransform_, D3DXVECTOR3(0, posy, 0));
 	}
 
@@ -111,7 +113,21 @@ void Inventory::Start(RectTransform * rt, float namepos)
 	
 	EquipmentDetailRender_.Start(&DetailTransform_);
 
+	{//所持品テキストの初期化
+		ShojiText_.Create(15, 15);
+		ShojiText_.SetTransform(&ShojiTransform_);
+		ShojiTransform_.Parent_ = &DetailTransform_;
+		ShojiTransform_.Anchor_ = RectTransform::AnchorPresetE::TopCenter;
+		ShojiTransform_.Position_ = D3DXVECTOR3(-130, 65, 0);
+	}
 
+	{//所持品テキストの初期化
+		SoubiText_.Create(15, 15);
+		SoubiText_.SetTransform(&SoubiTransform_);
+		SoubiTransform_.Parent_ = &DetailTransform_;
+		SoubiTransform_.Anchor_ = RectTransform::AnchorPresetE::TopCenter;
+		SoubiTransform_.Position_ = D3DXVECTOR3(130, 65, 0);
+	}
 
 }
 
@@ -162,7 +178,7 @@ void Inventory::Update()
 				if (NowSelect_[SelectEquipment_] <= 0)
 				{
 					LeadIdx[SelectEquipment_]--;
-					
+
 					//限界まで表示
 					if (LeadIdx[SelectEquipment_] < 0)
 					{
@@ -279,6 +295,10 @@ void Inventory::Update()
 
 	EquipmentDetailRender_.Update();
 
+	{//テキストの更新
+		ShojiTransform_.Update();
+		SoubiTransform_.Update();
+	}
 }
 
 void Inventory::Render()
@@ -314,7 +334,12 @@ void Inventory::Render()
 		ItemDetailRender_[i].Render(item);
 	}
 
-	EquipmentDetailRender_.Render(PlayerEquipment_.GetEquipmentItem(SelectEquipmentCode[SelectEquipment_]));
+	EquipmentDetailRender_.Render(Player_->GetEquipmentItem(SelectEquipmentCode[SelectEquipment_]));
+
+	{//テキストの表示
+		ShojiText_.Render("所持品");
+		SoubiText_.Render("装備品");
+	}
 
 	switch (State_)
 	{
@@ -339,12 +364,12 @@ void Inventory::ChangeItem()
 	int select = NowSelect_[SelectEquipment_] + LeadIdx[SelectEquipment_];
 	
 	//現在装備しているアイテムを取得
-	EquipmentItem* item = PlayerEquipment_.GetEquipmentItem(SelectEquipmentCode[SelectEquipment_]);
+	EquipmentItem* item = Player_->GetEquipmentItem(SelectEquipmentCode[SelectEquipment_]);
 
 	//入れ替えるアイテムを取得
 	EquipmentItem* ret = InventoryManager().ChangeItem(SelectEquipmentCode[SelectEquipment_],item, select);
 
 	//設定
-	PlayerEquipment_.SetEquipmentItem(ret);
+	Player_->SetEquipmentItem(ret);
 
 }

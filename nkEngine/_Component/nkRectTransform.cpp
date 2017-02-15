@@ -79,8 +79,10 @@ namespace nkEngine
 		int screenWCenter = Engine().GetScreenW() / 2;
 		int screenHCenter = Engine().GetScreenH() / 2;
 
-		D3DXVECTOR2 trans = Position_;
-
+		D3DXVECTOR2 trans;
+		trans.x = Position_.x;
+		trans.y = Position_.y;
+		
 		//ƒAƒ“ƒJ[‚ğ‰æ–Ê‚Éİ’è
 		D3DXVECTOR2 AnchorValue;
 		AnchorValue.x = screenWCenter;

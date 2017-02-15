@@ -3,9 +3,10 @@
 #include"../IMenuWindow.h"
 #include"ItemDetailRender.h"
 
-#include"../../Item/InventoryManager.h"
+#include"../../../Item/InventoryManager.h"
 
-#include"../../Player/PlayerEquipment.h"
+#include"../../../Player/PlayerEquipment.h"
+
 #include"../Inventory/EquipmentDetailRender.h"
 
 class Inventory : public IMenuWindow
@@ -108,6 +109,12 @@ private:
 	/** 装備アイテム描画. */
 	EquipmentDetailRender EquipmentDetailRender_;
 	
-	PlayerEquipment PlayerEquipment_;
+	/** 所持品テキスト. */
+	Text ShojiText_;
+	RectTransform ShojiTransform_;
+
+	/** 装備品テキスト. */
+	Text SoubiText_;
+	RectTransform SoubiTransform_;
 
 };

@@ -16,8 +16,9 @@
  *
  * @param [in,out] item   If non-null, the item.
  * @param [in,out] pos    The position.
+ * @param [in,out] player プレイヤーのポインタ.
  */
-void DropItem::Start(IItemData* item, D3DXVECTOR3 & pos)
+void DropItem::Start(EquipmentItem* item, D3DXVECTOR3 & pos, Player* player)
 {
 	//アイテムデータをコピー
 	Item_ = item;
@@ -38,6 +39,9 @@ void DropItem::Start(IItemData* item, D3DXVECTOR3 & pos)
 	//大きさを調整
 	Transform_.Scale_ = D3DXVECTOR3(0.1f, 0.1f, 1.0f);
 
+	//プレイヤーの位置ベクトルのポインタを設定
+	PlayerPos_ = &player->Transform_.Position_;
+
 }
 
 /**
@@ -48,6 +52,12 @@ void DropItem::Start(IItemData* item, D3DXVECTOR3 & pos)
  */
 void DropItem::Update()
 {
+	//プレイヤーへのベクトルを求める
+	D3DXVECTOR3 toPlayer = *PlayerPos_ - Transform_.Position_;
+
+	//距離を代入
+	toPlayerLength_ = D3DXVec3Length(&toPlayer);
+
 	//カメラの回転行列を取得
 	D3DXMATRIX rot = g_MainCamera->GetCamera()->GetRotationMatrix();
 

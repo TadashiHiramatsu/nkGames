@@ -5,17 +5,17 @@
 * 左手に装備する武器のクラス
 *
 */
-class Weapon : public IGameObject
+class EquipmentWeapon : public IGameObject
 {
 public:
 
 	//コンストラクタ
-	Weapon()
+	EquipmentWeapon()
 	{
 	}
 	
 	//デストラクタ
-	~Weapon()
+	~EquipmentWeapon()
 	{
 	}
 

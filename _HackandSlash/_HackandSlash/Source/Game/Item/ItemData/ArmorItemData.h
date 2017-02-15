@@ -47,9 +47,14 @@ public:
 	 */
 	~ArmorItemData();
 
+	int GetParameter()override
+	{
+		return Defense_;
+	}
+
 private:
 
 	/** –hŒä—Í. */
-	int Defense = 0;
+	int Defense_ = 0;
 
 };

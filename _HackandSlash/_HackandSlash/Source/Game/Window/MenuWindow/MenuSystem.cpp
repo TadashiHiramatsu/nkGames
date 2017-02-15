@@ -2,14 +2,16 @@
 #include"MenuSystem.h"
 
 //‰Šú‰»
-void MenuSystem::Start()
+void MenuSystem::Start(Player * player)
 {
 	MenuBar_.Start();
 
 	float size = MenuBar_.GetTransform()->Width_;
 
 	IMenuWindow_.reset(new Inventory);
-	IMenuWindow_->Start(MenuBar_.GetTransform(), size /2);
+	IMenuWindow_->Start(MenuBar_.GetTransform(), size / 2);
+
+	IMenuWindow_->SetPlayer(player);
 }
 
 //XV

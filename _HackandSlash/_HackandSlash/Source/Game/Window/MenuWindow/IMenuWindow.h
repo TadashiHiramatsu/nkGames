@@ -1,5 +1,7 @@
 #pragma once
 
+#include"../../Player/Player.h"
+
 class IMenuWindow
 {
 public:
@@ -36,9 +38,16 @@ public:
 	{
 	}
 
+	void SetPlayer(Player* player)
+	{
+		Player_ = player;
+	}
+
 protected:
 
 	Image NameImage_;
 	RectTransform NameTransform_;
+
+	Player* Player_;
 
 };

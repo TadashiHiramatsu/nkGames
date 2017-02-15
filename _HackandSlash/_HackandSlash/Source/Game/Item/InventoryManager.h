@@ -1,8 +1,7 @@
 #pragma once
 
 #include"EquipmentItem.h"
-#include"ItemType.h"
-#include"../../Game/Item/ArmorItemData.h"
+#include"ItemData\ArmorItemData.h"
 
 /**
 * 拾ったアイテムを管理するクラス.

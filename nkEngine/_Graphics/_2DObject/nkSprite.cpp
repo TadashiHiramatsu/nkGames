@@ -149,6 +149,8 @@ namespace nkEngine
 		Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
 		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
 
+
+
 	}
 
 	/**

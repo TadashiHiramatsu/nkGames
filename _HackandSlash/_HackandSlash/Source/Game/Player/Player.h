@@ -9,6 +9,8 @@
 #include"..\AnimationEvent\AnimationEventController.h"
 #include"..\AnimationEvent\CollisionWorld.h"
 
+#include"PlayerEquipment.h"
+
 /**
  * プレイヤークラス.
  *
@@ -203,6 +205,16 @@ public:
 		return (State_ == StateCodeE::StateDeath);
 	}
 
+	EquipmentItem* GetEquipmentItem(ItemTypeE type)
+	{
+		return PlayerEquipment_.GetEquipmentItem(type);
+	}
+
+	void SetEquipmentItem(EquipmentItem* item)
+	{
+		PlayerEquipment_.SetEquipmentItem(item);
+	}
+
 private:
 
 	/**
@@ -276,5 +288,8 @@ private:
 	unique_ptr<btCollisionObject> CollisionObject_;
 	/** 球体形状コライダー. */
 	unique_ptr<SphereCollider> SphereShape_;
+
+	/** 装備情報. */
+	PlayerEquipment PlayerEquipment_;
 
 };

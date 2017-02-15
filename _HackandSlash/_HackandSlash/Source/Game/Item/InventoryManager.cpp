@@ -2,7 +2,6 @@
 #include"InventoryManager.h"
 
 #include"../../Game/Item/ItemDataResource.h"
-#include"../../Game/Item/ArmorItemData.h"
 
 void CInventoryManager::Start()
 {

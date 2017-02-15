@@ -66,10 +66,12 @@ void LifeGage::Start()
 	NowLife_ = &Player_->GetParameter().NowHp_;
 
 	//フォントの初期化
-	Life_.Create(20, 15);
+	Life_.Create(15, 15);
 	Life_.SetTransform(&TextTransform_);
-
+	Life_.SetFormat(Text::Left);
 	TextTransform_.Parent_ = &LifeFrameTransform_;
+	TextTransform_.Anchor_ = RectTransform::AnchorPresetE::TopLeft;
+	TextTransform_.Position_.y = -15;
 }
 
 /**
@@ -81,12 +83,17 @@ void LifeGage::Start()
 void LifeGage::Update()
 {
 	//表示領域と大きさを計算
-	LifeImage_.RectUV_.y = 1.0f - (float)*NowLife_ / (float)*MaxLife_;
-	LifeTransform_.Height_ = (float)*NowLife_ / (float)*MaxLife_ * 140;
+	value.x = 1.0f - (float)*NowLife_ / (float)*MaxLife_;
+	value.y = (float)*NowLife_ / (float)*MaxLife_ * 140;
+
+	LifeImage_.RectUV_.y = value.x;
+	LifeTransform_.Height_ = value.y;
 
 	//トランスフォームの更新
 	LifeFrameTransform_.Update();
 	LifeTransform_.Update();
+
+	TextTransform_.Update();
 
 }
 

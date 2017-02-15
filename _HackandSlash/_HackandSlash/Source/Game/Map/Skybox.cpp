@@ -25,6 +25,8 @@ void Skybox::Start()
 	//ライトの設定
 	ModelRender_.SetLight(&Light_);
 
+	ModelRender_.SetFogParam(ModelRender::FogFuncE::FogFuncHeight, 400.0f, 0.0f);
+
 	//環境光を最大にしてライティングを消す
 	Light_.SetAmbientLight(D3DXVECTOR3(1.0f, 1.0f, 1.0f));
 

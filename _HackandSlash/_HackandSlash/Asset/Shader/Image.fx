@@ -10,9 +10,9 @@ sampler g_diffuseTextureSampler =
 sampler_state
 {
 	Texture = <g_diffuseTexture>;
-	MipFilter = NONE;
-	MinFilter = NONE;
-	MagFilter = NONE;
+	MipFilter = LINEAR;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
 	AddressU = Wrap;
 	AddressV = Wrap;
 };

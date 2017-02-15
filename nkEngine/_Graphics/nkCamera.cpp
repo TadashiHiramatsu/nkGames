@@ -95,14 +95,14 @@ namespace nkEngine
 	* @author HiramatsuTadashi
 	* @date 2017/01/09
 	*
-	* @param rot 回転量。ラジアン.
+	* @param rot 回転量。度.
 	*/
 	void Camera::SpinHorizontally(float rot)
 	{
 
 		D3DXMATRIX tmp;
 		
-		D3DXMatrixRotationY(&tmp, rot);
+		D3DXMatrixRotationY(&tmp, D3DXToRadian(rot));
 
 		D3DXVec3TransformCoord(&PosDirection_, &PosDirection_, &tmp);
 
@@ -114,16 +114,16 @@ namespace nkEngine
 	* @author HiramatsuTadashi
 	* @date 2017/01/09
 	*
-	* @param rot 回転量。ラジアン.
+	* @param rot 回転量。度.
 	*/
 	void Camera::SpinVertically(float rot)
 	{
-
+		
 		D3DXQUATERNION qua;
 		D3DXMATRIX tmp;
 
 		//横方向を計算
-		D3DXQuaternionRotationAxis(&qua, &D3DXVECTOR3(-PosDirection_.z, 0, PosDirection_.x), rot);
+		D3DXQuaternionRotationAxis(&qua, &D3DXVECTOR3(-PosDirection_.z, 0, PosDirection_.x), D3DXToRadian(rot));
 
 		D3DXMatrixRotationQuaternion(&tmp, &qua);
 		D3DXVec3TransformCoord(&PosDirection_, &PosDirection_, &tmp);

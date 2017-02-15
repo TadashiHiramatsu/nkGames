@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../../Item/EquipmentItem.h"
+#include"../../../Item/EquipmentItem.h"
 
 class ItemDetailRender
 {
@@ -32,5 +32,11 @@ private:
 	//–¼‘O•\Ž¦
 	Text NameText_;
 	RectTransform NameTransform_;
+
+	Text ParameterText_;
+	RectTransform ParameterTransform_;
+
+	Text ParamNameText_;
+	RectTransform ParamNameTransform_;
 
 };

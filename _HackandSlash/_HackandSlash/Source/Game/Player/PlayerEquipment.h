@@ -1,7 +1,6 @@
 #pragma once
 
 #include"../Item/EquipmentItem.h"
-#include"../Item/ItemType.h"
 
 class PlayerEquipment
 {

@@ -121,6 +121,10 @@ private:
 	float Distance_;
 	/** The view inverse matrix. */
 	const D3DXMATRIX* ViewInvMatrix_;
+	/** 回転スピード.一秒間に回転する角度.*/
+	float SpinSpeed = 45;
+
+
 };
 
 /** グローバル. */

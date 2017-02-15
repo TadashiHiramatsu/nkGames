@@ -37,6 +37,8 @@ void Ground::Start()
 	Specular_.Load("ground4_Specular.tga");
 	ModelRender_.SetSpecMap(&Specular_);
 
+	ModelRender_.SetFogParam(ModelRender::FogFuncE::FogFuncDist, 100.0f, 120.0f);
+
 	D3DXVECTOR3 dld;
 	D3DXVec3Normalize(&dld, &D3DXVECTOR3(5.0f, -5.0f, 5.0f));
 	Light_.SetDiffuseLightDirection(0, dld);

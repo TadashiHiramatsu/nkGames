@@ -10,7 +10,7 @@
 #include"../GameCamera.h"
 
 #include"../../Game/Item/ItemDataResource.h"
-#include"../GUI/DropItem.h"
+#include"../DropItem/DropItemManager.h"
 
 //無名空間
 namespace
@@ -33,11 +33,11 @@ namespace
 		},
 		//AnimationAttack_01
 		{
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.0f, 0.1f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.1f, 0.1f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.2f, 0.1f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.3f, 0.1f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.4f, 0.1f, 1.0f, 10, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.0f, 0.1f, 1.0f, 1, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.1f, 0.1f, 1.0f, 1, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.2f, 0.1f, 1.0f, 1, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.3f, 0.1f, 1.0f, 1, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.4f, 0.1f, 1.0f, 1, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
 			END_ANIMATION_EVENT(),
 		},
 		//AnimationAttack_02
@@ -473,12 +473,11 @@ void Monster_01::Damage()
 			//プレイヤーに経験値を加算
 			Player_->AddExperience(100);
 
-			//アイテムをドロップ
-			DropItem* di = NewGO<DropItem>();
 			//アイテムデータの取得
-			IItemData* item = ItemDataResource().GetItem(21001);
-			//ドロップアイテムの初期化
-			di->Start(item, Transform_.Position_);
+			EquipmentItem* item = new EquipmentItem(ItemDataResource().GetItem(3001));
+
+			//ドロップアイテムマネージャに登録
+			g_DropItemManager->SetDropItem(item, Transform_.Position_);
 
 			isOnceDeath = true;
 

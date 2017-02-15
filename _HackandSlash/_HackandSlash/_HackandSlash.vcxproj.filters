@@ -19,9 +19,6 @@
     <Filter Include="Game\Item">
       <UniqueIdentifier>{415084f1-5f1f-4776-a2c9-b72bce07de3c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\GUI">
-      <UniqueIdentifier>{cf63d552-5f80-4528-8aa2-e5e015a8447f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\HUD">
       <UniqueIdentifier>{8a449b9a-c1a4-4573-be7e-f62984b0ec87}</UniqueIdentifier>
     </Filter>
@@ -34,29 +31,26 @@
     <Filter Include="Title\HUD">
       <UniqueIdentifier>{50c2698e-2732-4b97-ae3f-2ce0c2654163}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Test">
-      <UniqueIdentifier>{aac1659e-adef-4e6e-8651-d218e389f2b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Test\MenuWindow">
-      <UniqueIdentifier>{0231c762-bc06-41e7-8fe6-727ac1b9aa88}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Player\Equipment">
       <UniqueIdentifier>{14bacb0c-d6bc-4c9d-b092-af00d0a9d4bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Test\MenuWindow\Inventory">
-      <UniqueIdentifier>{8af18f1b-bf8a-4418-85a9-013acc9cfa2e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Test\Item">
-      <UniqueIdentifier>{9d809983-a6a7-491d-badc-927fc8477948}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\Item\Resource">
       <UniqueIdentifier>{ba8a0702-882a-43d4-858f-e22db9afeb53}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Test\Player">
-      <UniqueIdentifier>{8cf1fbde-4325-4be6-ab6b-7e6fb5c34fd1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Item\Data">
+    <Filter Include="Game\Item\ItemData">
       <UniqueIdentifier>{06c816fe-382f-4b85-a974-43b3e0428ce6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\DropItem">
+      <UniqueIdentifier>{824dfaf4-6f1e-4b46-9e3b-dbb7e359e1e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Window">
+      <UniqueIdentifier>{a538dd98-e02d-4019-b217-3d977fdba2a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Window\MenuWindow">
+      <UniqueIdentifier>{1fe8a98c-6836-4663-adb8-99c29985295d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Window\MenuWindow\Inventory">
+      <UniqueIdentifier>{462c59db-9da5-4e56-ac5a-63781ca44605}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,65 +105,65 @@
     <ClCompile Include="Source\Game\Player\Player.cpp">
       <Filter>Game\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\GUI\DropItem.cpp">
-      <Filter>Game\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Title\HUD\TitleBack.cpp">
       <Filter>Title\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Test\TestScene.cpp">
-      <Filter>Test</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Player\Shield.cpp">
-      <Filter>Game\Player\Equipment</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Player\Weapon.cpp">
-      <Filter>Game\Player\Equipment</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Test\MenuWindow\MenuSystem.cpp">
-      <Filter>Test\MenuWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Test\MenuWindow\MenuBar.cpp">
-      <Filter>Test\MenuWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Test\MenuWindow\IMenuWindow.cpp">
-      <Filter>Test\MenuWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Test\MenuWindow\Inventory\Inventory.cpp">
-      <Filter>Test\MenuWindow\Inventory</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Test\Item\InventoryManager.cpp">
-      <Filter>Test\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Test\MenuWindow\Inventory\ItemDetailRender.cpp">
-      <Filter>Test\MenuWindow\Inventory</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Item\ItemDataResource.cpp">
       <Filter>Game\Item\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Item\AccessoryItemData.cpp">
-      <Filter>Game\Item\Data</Filter>
+    <ClCompile Include="Source\Game\Item\ItemData\AccessoryItemData.cpp">
+      <Filter>Game\Item\ItemData</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Item\ArmorItemData.cpp">
-      <Filter>Game\Item\Data</Filter>
+    <ClCompile Include="Source\Game\Item\ItemData\ArmorItemData.cpp">
+      <Filter>Game\Item\ItemData</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Item\IItemData.cpp">
-      <Filter>Game\Item\Data</Filter>
+    <ClCompile Include="Source\Game\Item\ItemData\IItemData.cpp">
+      <Filter>Game\Item\ItemData</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Item\ShieldItemData.cpp">
-      <Filter>Game\Item\Data</Filter>
+    <ClCompile Include="Source\Game\Item\ItemData\ShieldItemData.cpp">
+      <Filter>Game\Item\ItemData</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Item\SwordItemData.cpp">
-      <Filter>Game\Item\Data</Filter>
+    <ClCompile Include="Source\Game\Item\ItemData\SwordItemData.cpp">
+      <Filter>Game\Item\ItemData</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Test\Item\EquipmentItem.cpp">
-      <Filter>Test\Item</Filter>
+    <ClCompile Include="Source\Game\Item\EquipmentItem.cpp">
+      <Filter>Game\Item</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Test\Player\PlayerEquipment.cpp">
-      <Filter>Test\Player</Filter>
+    <ClCompile Include="Source\Game\Item\InventoryManager.cpp">
+      <Filter>Game\Item</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Test\MenuWindow\Inventory\EquipmentDetailRender.cpp">
-      <Filter>Test\MenuWindow\Inventory</Filter>
+    <ClCompile Include="Source\Game\Player\PlayerEquipment.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Player\EquipmentShield.cpp">
+      <Filter>Game\Player\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Player\EquipmentWeapon.cpp">
+      <Filter>Game\Player\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\DropItem\DropItem.cpp">
+      <Filter>Game\DropItem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Window\MenuWindow\IMenuWindow.cpp">
+      <Filter>Game\Window\MenuWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Window\MenuWindow\MenuBar.cpp">
+      <Filter>Game\Window\MenuWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Window\MenuWindow\MenuSystem.cpp">
+      <Filter>Game\Window\MenuWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Window\MenuWindow\Inventory\ItemDetailRender.cpp">
+      <Filter>Game\Window\MenuWindow\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Window\MenuWindow\Inventory\EquipmentDetailRender.cpp">
+      <Filter>Game\Window\MenuWindow\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Window\MenuWindow\Inventory\Inventory.cpp">
+      <Filter>Game\Window\MenuWindow\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\DropItem\DropItemManager.cpp">
+      <Filter>Game\DropItem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,68 +218,68 @@
     <ClInclude Include="Source\Game\Player\Player.h">
       <Filter>Game\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\GUI\DropItem.h">
-      <Filter>Game\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Title\HUD\TitleBack.h">
       <Filter>Title\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Test\TestScene.h">
-      <Filter>Test</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Player\Shield.h">
-      <Filter>Game\Player\Equipment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Player\Weapon.h">
-      <Filter>Game\Player\Equipment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Test\MenuWindow\MenuSystem.h">
-      <Filter>Test\MenuWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Test\MenuWindow\MenuBar.h">
-      <Filter>Test\MenuWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Test\MenuWindow\IMenuWindow.h">
-      <Filter>Test\MenuWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Test\MenuWindow\Inventory\Inventory.h">
-      <Filter>Test\MenuWindow\Inventory</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Test\Item\InventoryManager.h">
-      <Filter>Test\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Test\MenuWindow\Inventory\ItemDetailRender.h">
-      <Filter>Test\MenuWindow\Inventory</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Item\ItemDataResource.h">
       <Filter>Game\Item\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Item\AccessoryItemData.h">
-      <Filter>Game\Item\Data</Filter>
+    <ClInclude Include="Source\Game\Item\ItemData\AccessoryItemData.h">
+      <Filter>Game\Item\ItemData</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Item\ArmorItemData.h">
-      <Filter>Game\Item\Data</Filter>
+    <ClInclude Include="Source\Game\Item\ItemData\ArmorItemData.h">
+      <Filter>Game\Item\ItemData</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Item\IItemData.h">
-      <Filter>Game\Item\Data</Filter>
+    <ClInclude Include="Source\Game\Item\ItemData\IItemData.h">
+      <Filter>Game\Item\ItemData</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Item\ShieldItemData.h">
-      <Filter>Game\Item\Data</Filter>
+    <ClInclude Include="Source\Game\Item\ItemData\ItemType.h">
+      <Filter>Game\Item\ItemData</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Item\SwordItemData.h">
-      <Filter>Game\Item\Data</Filter>
+    <ClInclude Include="Source\Game\Item\ItemData\ShieldItemData.h">
+      <Filter>Game\Item\ItemData</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Test\Item\EquipmentItem.h">
-      <Filter>Test\Item</Filter>
+    <ClInclude Include="Source\Game\Item\ItemData\SwordItemData.h">
+      <Filter>Game\Item\ItemData</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Test\Player\PlayerEquipment.h">
-      <Filter>Test\Player</Filter>
+    <ClInclude Include="Source\Game\Item\EquipmentItem.h">
+      <Filter>Game\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Test\MenuWindow\Inventory\EquipmentDetailRender.h">
-      <Filter>Test\MenuWindow\Inventory</Filter>
+    <ClInclude Include="Source\Game\Item\InventoryManager.h">
+      <Filter>Game\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Test\Item\ItemType.h">
-      <Filter>Test\Item</Filter>
+    <ClInclude Include="Source\Game\Player\PlayerEquipment.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Player\EquipmentShield.h">
+      <Filter>Game\Player\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Player\EquipmentWeapon.h">
+      <Filter>Game\Player\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\DropItem\DropItem.h">
+      <Filter>Game\DropItem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Window\MenuWindow\IMenuWindow.h">
+      <Filter>Game\Window\MenuWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Window\MenuWindow\MenuBar.h">
+      <Filter>Game\Window\MenuWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Window\MenuWindow\MenuSystem.h">
+      <Filter>Game\Window\MenuWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Window\MenuWindow\Inventory\Inventory.h">
+      <Filter>Game\Window\MenuWindow\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Window\MenuWindow\Inventory\ItemDetailRender.h">
+      <Filter>Game\Window\MenuWindow\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Window\MenuWindow\Inventory\EquipmentDetailRender.h">
+      <Filter>Game\Window\MenuWindow\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\DropItem\DropItemManager.h">
+      <Filter>Game\DropItem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

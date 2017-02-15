@@ -15,7 +15,7 @@
 ArmorItemData::ArmorItemData()
 {
 	Type_ = ItemTypeE::Helm;
-	Defense = 1;
+	Defense_ = 1;
 }
 
 /**
@@ -39,7 +39,7 @@ ArmorItemData::ArmorItemData(int _ID, char * _Name, char * _IconFilePath, ItemTy
 
 	Type_ = type;
 
-	Defense = _Defense;
+	Defense_ = _Defense;
 }
 
 /**

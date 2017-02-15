@@ -75,6 +75,7 @@ void ExpGage::Start()
 	Level_.Create(20, 20);
 	Level_.SetTransform(&TextTransform_);
 	TextTransform_.Parent_ = &ExpFrameTransform_;
+	TextTransform_.Anchor_ = RectTransform::TopCenter;
 }
 
 /**
@@ -91,6 +92,8 @@ void ExpGage::Update()
 	//トランスフォームの更新
 	ExpFrameTransform_.Update();
 	ExpTransform_.Update();
+
+	TextTransform_.Update();
 
 }
 

@@ -1,15 +1,15 @@
 #include"stdafx.h"
-#include"Shield.h"
+#include"EquipmentWeapon.h"
 
 #include"../GameCamera.h"
 
-void Shield::Start(ModelRender& parent)
+void EquipmentWeapon::Start(ModelRender& parent)
 {
-	ModelRender_.Load("Shield.X", nullptr);
+	ModelRender_.Load("Weapon.X", nullptr);
 	ModelRender_.SetTransform(&Transform_);
 	ModelRender_.SetLight(&Light_);
 	ModelRender_.SetCamera(g_MainCamera->GetCamera());
-	Transform_.ParentMatrix_ = parent.FindBoneWorldMatrix("LeftShield");
+	Transform_.ParentMatrix_ = parent.FindBoneWorldMatrix("RightWeapon");
 
 	D3DXVECTOR3 dld;
 	D3DXVec3Normalize(&dld, &D3DXVECTOR3(5.0f, -5.0f, 5.0f));
@@ -26,13 +26,13 @@ void Shield::Start(ModelRender& parent)
 
 }
 
-void Shield::Update()
+void EquipmentWeapon::Update()
 {
 	Transform_.Update();
 	ModelRender_.Update();
 }
 
-void Shield::Render()
+void EquipmentWeapon::Render()
 {
 	ModelRender_.Render();
 }

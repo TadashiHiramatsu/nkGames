@@ -6,6 +6,8 @@
 #include"stdafx.h"
 #include"GameCamera.h"
 
+#include"Window\MenuWindow\MenuSystem.h"
+
 /**
  * コンストラクタ.
  *
@@ -55,21 +57,11 @@ void GameCamera::Start()
 void GameCamera::Update()
 {
 	//カメラまわすよー
-	if (Input().GetKeyButton(KeyCodeE::Up))
+	
+	if (!g_MenuSystem->GetEffectiveness())
 	{
-		Camera_.SpinVertically(-0.03f);
-	}
-	if (Input().GetKeyButton(KeyCodeE::Down))
-	{
-		Camera_.SpinVertically(0.03f);
-	}
-	if (Input().GetKeyButton(KeyCodeE::Left))
-	{
-		Camera_.SpinHorizontally(-0.03f);
-	}
-	if (Input().GetKeyButton(KeyCodeE::Right))
-	{
-		Camera_.SpinHorizontally(0.03f);
+		Camera_.SpinHorizontally(XInput().GetRightStick().x * SpinSpeed * Time().DeltaTime());
+		Camera_.SpinVertically(XInput().GetRightStick().y * SpinSpeed * Time().DeltaTime() * -1);
 	}
 
 	Camera_.SetTarget(Player_->Transform_.Position_ + D3DXVECTOR3(0, 0.6f, 0));

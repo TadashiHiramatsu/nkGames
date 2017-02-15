@@ -42,9 +42,9 @@ sampler g_TextureSampler =
 sampler_state
 {
 	Texture = <g_Texture>;
-	MipFilter = NONE;
-	MinFilter = NONE;
-	MagFilter = NONE;
+	MipFilter = LINEAR;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
 	AddressU = Wrap;
 	AddressV = Wrap;
 };

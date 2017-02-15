@@ -5,7 +5,7 @@
  */
 #pragma once
 
-#include"../../Test/Item/ItemType.h"
+#include"ItemType.h"
 
 /**
  * アイテムの基底クラス 
@@ -104,6 +104,12 @@ public:
 	ItemTypeE GetItemType()
 	{
 		return Type_;
+	}
+
+	//各種パラメータを取得する.
+	virtual int GetParameter()
+	{
+		return -1;
 	}
 
 protected:

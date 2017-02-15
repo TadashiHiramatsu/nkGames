@@ -12,17 +12,25 @@
 #include"Map\Ground.h"
 #include"Map\Skybox.h"
 #include"Monster\MonsterHabitat.h"
-//#include"GUI\InventoryWindow.h"
 #include"HUD\LifeGage.h"
 #include"HUD\ExpGage.h"
 
 #include"Item\ItemDataResource.h"
+#include"Window\MenuWindow\MenuSystem.h"
+
+#include"DropItem\DropItemManager.h"
 
 /** コリジョンワールド. */
 CollisionWorld* g_CollisionWorld = nullptr;
 
 /** メインカメラ. */
 GameCamera* g_MainCamera = nullptr;
+
+/** メニューシステム. */
+MenuSystem* g_MenuSystem = nullptr;
+
+/** ドロップアイテムマネージャ. */
+DropItemManager* g_DropItemManager = nullptr;
 
 /**
  * 初期化.
@@ -68,14 +76,21 @@ void GameScene::Start()
 	MonsterHabitat* mh = NewGO<MonsterHabitat>();
 	mh->SetPlayer(player);
 
-	//UI
-	//g_Inventory = NewGO<InventoryWindow>();
-	
 	//ライフゲージ
 	LifeGage* lifeGage = NewGO<LifeGage>();
 	lifeGage->SetPlayer(player);
+
 	//経験値バー
 	ExpGage* expGage = NewGO<ExpGage>();
 	expGage->SetPlayer(player);
+
+	//UI
+	g_MenuSystem = NewGO<MenuSystem>();
+	g_MenuSystem->Start(player);
+
+	InventoryManager().Start();
+
+	g_DropItemManager = NewGO<DropItemManager>();
+	g_DropItemManager->SetPlayer(player);
 
 }

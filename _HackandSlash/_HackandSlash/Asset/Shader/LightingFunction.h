@@ -9,9 +9,9 @@ sampler g_speculerMapSampler =
 sampler_state
 {
 	Texture = <g_speculerMap>;
-	MipFilter = NONE;
-	MinFilter = NONE;
-	MagFilter = NONE;
+	MipFilter = LINEAR;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
 	AddressU = Wrap;
 	AddressV = Wrap;
 };
