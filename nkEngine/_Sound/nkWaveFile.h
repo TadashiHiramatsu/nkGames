@@ -41,6 +41,7 @@ namespace nkEngine
 		 */
 		~WaveFile()
 		{
+			Release();
 		}
 
 		/**
@@ -53,6 +54,82 @@ namespace nkEngine
 		 */
 		void Open(const char* fileName);
 
+		/**
+		* 波形データの読み込み.
+		*
+		* @param pBuffer [out]	波形データを読み込むバッファ.
+		* @param size			読み込むデータサイズ.
+		* @param currentsize	?.
+		*/
+		void Read(char* pBuffer, unsigned int size, unsigned int* currentsize);
+
+		/**
+		* 波形データの非同期読み込み.
+		*
+		* @param pBuffer [out]	波形データを読み込むバッファ.
+		* @param size			読み込むデータサイズ.
+		* @param currentsize	?.
+		*/
+		void ReadAsync(char* pBuffer, unsigned int size, unsigned int* currentsize);
+
+		/**
+		* 読み込み終了判定の取得.
+		*/
+		bool IsReadEnd() const
+		{
+			return isReadEnd_;
+		}
+
+		/**
+		* 波形データのシーク位置をリセット.
+		*/
+		void ResetFile();
+
+		/**
+		* 解放.
+		*/
+		void Release();
+
+		/**
+		* ファイルサイズを取得.
+		*/
+		DWORD GetSize() const
+		{
+			return DwSize_;
+		}
+
+		/**
+		* ファイルフォーマットを取得.
+		*/
+		WAVEFORMATEX* GetFormat()const
+		{
+			return WaveFormat_;
+		}
+
+		/**
+		* ファイル名のハッシュ値を取得.
+		*/
+		UINT GetFileNameHash() const
+		{
+			return FileNameHash_;
+		}
+
+		/**
+		* 読み込み先のバッファを確保.
+		*/
+		void AllocReadBuffer(int size)
+		{
+			ReadBuffer_.reset(new char[size]);
+		}
+
+		/**
+		* 読み込み先のバッファを取得.
+		*/
+		char* GetReadBuffer()
+		{
+			return ReadBuffer_.get();
+		}
+
 	private:
 
 		/** 読み込み先のバッファ. */
@@ -60,7 +137,7 @@ namespace nkEngine
 		/** waveファイルのハンドル. */
 		HMMIO Hmmio_ = nullptr;
 		/** waveファイルのフォーマット定義. */
-		WAVEFORMATEX* Pwfx_ = nullptr;
+		WAVEFORMATEX* WaveFormat_ = nullptr;
 		/** waveファイルを読み込むときに使用する. */
 		MMCKINFO ChunkRiff_;
 		/** waveファイルのサイズ. */
@@ -77,8 +154,8 @@ namespace nkEngine
 
 		/** ファイルパス. */
 		string FilePath_;
-		/** ファイルパスのハッシュコード. */
-		unsigned int FilePathHash_ = 0;
+		/** ファイル名のハッシュコード. */
+		UINT FileNameHash_ = 0;
 
 	};
 }

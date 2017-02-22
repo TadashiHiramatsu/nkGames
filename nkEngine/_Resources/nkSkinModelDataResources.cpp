@@ -64,7 +64,7 @@ namespace nkEngine
 
 			//ƒŠƒXƒg‚É“o˜^
 			InstancingList_.push_back(SkinModelData);
-			skinModelDataHandle.Init(SkinModelData, anim, false);
+			skinModelDataHandle.Load(SkinModelData, anim, false);
 		}
 		else
 		{
@@ -78,12 +78,12 @@ namespace nkEngine
 				SkinModelDataPtrT SkinModelData(new SkinModelData);
 				SkinModelData->LoadModelData(filePath, anim);
 				SkinModelDataMap_.insert(make_pair(hash, SkinModelData));
-				skinModelDataHandle.Init(SkinModelData, anim, false);
+				skinModelDataHandle.Load(SkinModelData, anim, false);
 			}
 			else
 			{
 				//Šù‘¶
-				skinModelDataHandle.Init(it->second, anim, true);
+				skinModelDataHandle.Load(it->second, anim, true);
 			}
 		}
 	}

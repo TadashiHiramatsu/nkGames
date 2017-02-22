@@ -6,6 +6,7 @@
 #pragma once
 
 #include"_Physics\nkPhysics.h"
+#include"_Sound\nkSoundEngine.h"
 
 namespace nkEngine
 {
@@ -219,6 +220,14 @@ namespace nkEngine
 			return ScreenBufferH_; 
 		}
 
+		/**
+		* サウンドエンジンの取得.
+		*/
+		CSoundEngine& GetSoundEngine()
+		{
+			return SoundEngine_;
+		}
+
 	private:
 
 		/**
@@ -278,8 +287,12 @@ namespace nkEngine
 		IDirect3D9* D3DObject_;
 		/** DirectXデバイス. */
 		IDirect3DDevice9* D3DDevice_;
+
 		/** 物理ワールド. */
 		CPhysics Physics_;
+
+		/** サウンドエンジン. */
+		CSoundEngine SoundEngine_;
 
 	};
 
@@ -306,7 +319,15 @@ namespace nkEngine
 	 */
 	inline static CPhysics& Physics()
 	{
-		return CEngine::instance().GetPhysics();
+		return Engine().GetPhysics();
+	}
+
+	/**
+	* サウンドエンジンの取得.
+	*/
+	inline static CSoundEngine& SoundEngine()
+	{
+		return Engine().GetSoundEngine();
 	}
 
 }// namesoace nkEngine

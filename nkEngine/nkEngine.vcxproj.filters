@@ -213,6 +213,15 @@
     <ClCompile Include="_Graphics\_UI\nkText.cpp">
       <Filter>Graphics\UI</Filter>
     </ClCompile>
+    <ClCompile Include="_Sound\nkSoundSource.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="_Sound\nkWaveFileBank.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="_Sound\nkSoundEngine.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nkEngine.h">
@@ -394,6 +403,15 @@
     </ClInclude>
     <ClInclude Include="_Graphics\_UI\nkText.h">
       <Filter>Graphics\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="_Sound\nkSoundSource.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="_Sound\nkWaveFileBank.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="_Sound\nkSoundEngine.h">
+      <Filter>Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

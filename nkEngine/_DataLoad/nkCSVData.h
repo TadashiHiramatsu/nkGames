@@ -14,6 +14,8 @@
 namespace nkEngine
 {
 
+	typedef vector<vector<string>> CSVDataTableT;
+
 	/**
 	 * CSVファイル読み込みクラス.
 	 *
@@ -34,13 +36,11 @@ namespace nkEngine
 		 * @param [in]	  	filePath	"Asset/Data/"を省いたファイルパス.
 		 * @param [in,out]	table   	この引数にデータが返ってくる.
 		 */
-		static void Load(const char* filePath, vector<vector<string>>& table)
+		static void Load(const char* filePath, CSVDataTableT& table)
 		{
 			//ファイルパスの作成
-			char* baseDir = "Asset/Data/";
-			char fileP[64];
-			strcpy(fileP, baseDir);
-			strcat(fileP, filePath);
+			char fileP[1024];
+			sprintf(fileP, "Asset/Data/%s.csv", filePath);
 
 			//ファイルを開く
 			fstream file(fileP);

@@ -251,8 +251,6 @@ private:
 
 private:
 
-	/** ライト. */
-	Light Light_;
 	/** モデルレンダー. */
 	ModelRender ModelRender_;
 	/** アニメーション. */

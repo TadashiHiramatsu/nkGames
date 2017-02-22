@@ -5,7 +5,9 @@
  */
 #include"stdafx.h"
 #include"Player.h"
+
 #include"../GameCamera.h"
+#include"../GameLight.h"
 
 #include"EquipmentWeapon.h"
 #include"EquipmentShield.h"
@@ -58,7 +60,7 @@ void Player::Start()
 	//トランスフォームを設定
 	ModelRender_.SetTransform(&Transform_);
 	//ライトを設定
-	ModelRender_.SetLight(&Light_);
+	ModelRender_.SetLight(g_GameLight->GetLight());
 	//カメラを設定
 	ModelRender_.SetCamera(g_MainCamera->GetCamera());
 	//シャドウキャスターtrue
@@ -74,13 +76,8 @@ void Player::Start()
 	Specular_.Load("Player_s.png");
 	ModelRender_.SetSpecMap(&Specular_);
 
-	D3DXVECTOR3 dld;
-	D3DXVec3Normalize(&dld, &D3DXVECTOR3(5.0f, -5.0f, 5.0f));
-	Light_.SetDiffuseLightDirection(0, dld);
-	Light_.SetDiffuseLightColor(0, D3DXVECTOR4(1, 1, 1, 0));
-
 	//ポジションをちょっと上に
-	Transform_.Position_ = D3DXVECTOR3(0, 1, 0);
+	Transform_.Position_ = D3DXVECTOR3(0, 10, 0);
 
 	//キャラクターコントローラーの初期化
 	Radius_ = 0.4f;
@@ -90,11 +87,11 @@ void Player::Start()
 	//ステートを待機に
 	ChangeState(StateCodeE::StateWaiting);
 
-	Animation_.SetAnimationEndTime(AnimationCodeE::AnimationRun, 0.7);
+	//Animation_.SetAnimationEndTime(AnimationCodeE::AnimationRun, 0.7);
 
 	//アニメーションループをfalseに設定
-	Animation_.SetAnimationLoopFlag(AnimationCodeE::AnimationAttack_01, false);
-	Animation_.SetAnimationLoopFlag(AnimationCodeE::AnimationDeath_01, false);
+	//Animation_.SetAnimationLoopFlag(AnimationCodeE::AnimationAttack_01, false);
+	//Animation_.SetAnimationLoopFlag(AnimationCodeE::AnimationDeath_01, false);
 
 
 	//武器と盾を作成
@@ -104,7 +101,7 @@ void Player::Start()
 	shild->Start(ModelRender_);
 
 	//アニメーションイベントを初期化
-	AnimationEvent_.Init(&wepon->GetModelRender(), &Animation_, AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
+	//AnimationEvent_.Init(&wepon->GetModelRender(), &Animation_, AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
 
 	//コリジョン初期化
 	SphereShape_.reset(new SphereCollider);
@@ -162,10 +159,8 @@ void Player::Update()
 		moveDir.z = dirRight.z * move.x + dirForward.z * move.z;
 
 		//ムーブスピードを計算
-		static float MOVE_SPEED = 2.0f;
-		moveSpeed.x = moveDir.x * MOVE_SPEED;
-		moveSpeed.z = moveDir.z * MOVE_SPEED;
-
+		static float MOVE_SPEED = 100.0f;
+		moveSpeed = moveDir * MOVE_SPEED * Time().DeltaTime();
 
 		//走っている
 		float len = D3DXVec3Length(&moveDir);
@@ -238,7 +233,7 @@ void Player::Update()
 	AnimationControl();
 
 	//アニメーションイベントの更新
-	AnimationEvent_.Update();
+	//AnimationEvent_.Update();
 
 	//死んでいる又はダメージを受けている状態でなければ
 	//体力回復時間を更新する

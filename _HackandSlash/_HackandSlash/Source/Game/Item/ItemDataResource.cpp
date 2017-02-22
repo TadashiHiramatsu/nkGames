@@ -8,12 +8,12 @@
 
 void CItemDataResource::Load()
 {
-	LoadFile("ArmorItemData.csv");
+	LoadFile("ArmorItemData");
 }
 
 void CItemDataResource::LoadFile(char * filePath)
 {
-	vector<vector<string>> table;
+	CSVDataTableT table;
 
 	CSVData csv;
 	csv.Load(filePath, table);

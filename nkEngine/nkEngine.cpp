@@ -46,6 +46,9 @@ namespace nkEngine
 		//インプットの初期化
 		Input().Init(Hwnd_);
 
+		//サウンドエンジンの初期化.
+		SoundEngine_.Init();
+
 		Random::Start();
 
 		return true;
@@ -86,6 +89,8 @@ namespace nkEngine
 			{
 				//物理ワールドの更新
 				Physics_.Update();
+				//サウンドエンジンの更新
+				SoundEngine_.Update();
 
 				//スクリーンレンダーの更新
 				ScreenRender().Loop();

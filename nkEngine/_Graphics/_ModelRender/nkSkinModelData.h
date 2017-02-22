@@ -290,6 +290,17 @@ namespace nkEngine
 			return VertexBufferStride_;
 		}
 
+		/**
+		* 先頭のボーン行列を取得.
+		*
+		* @return 先頭のボーン行列.
+		*/
+		D3DXMATRIX* GetRootBoneWorldMatrix()
+		{
+			D3DXFRAME_DERIVED* frameDer = (D3DXFRAME_DERIVED*)FrameRoot_;
+			return (D3DXMATRIX*)&frameDer->CombinedTransformationMatrix_;
+		}
+
 	private:
 
 		/**

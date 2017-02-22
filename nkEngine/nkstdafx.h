@@ -33,7 +33,11 @@ using namespace std;
 #include<d3dx9.h>
 #include<dinput.h>
 #include<XInput.h>
+#include<xaudio2.h>
+#include<x3daudio.h>
+#include<xaudio2fx.h>
 
+#pragma comment(lib, "winmm.lib")
 #ifdef _DEBUG
 #include<DxErr.h>
 #pragma comment(lib, "dxerr.lib")

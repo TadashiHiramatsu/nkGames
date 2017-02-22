@@ -55,7 +55,7 @@ namespace nkEngine
 		}
 
 		/**
-		 * 初期化.
+		 * 読み込み.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
@@ -64,7 +64,7 @@ namespace nkEngine
 		 * @param [in,out]	anim   	アニメーション.
 		 * @param 		  	isClone	クローンフラグ.
 		 */
-		void Init(const SkinModelDataPtrT& skin, Animation* anim, bool isClone);
+		void Load(const SkinModelDataPtrT& skin, Animation* anim, bool isClone);
 	
 	private:
 

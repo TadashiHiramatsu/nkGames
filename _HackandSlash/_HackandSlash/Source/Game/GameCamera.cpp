@@ -41,7 +41,7 @@ void GameCamera::Start()
 	Camera_.SetPosDirection(D3DXVECTOR3(0.0f, 0.2f, -1.0f));
 	Camera_.SetTarget(Player_->Transform_.Position_ + D3DXVECTOR3(0, 0.4f, 0));
 
-	Distance_ = 3.0f;
+	Distance_ = 8.0f;
 	Camera_.SetDistance(Distance_);
 	Camera_.Update();
 

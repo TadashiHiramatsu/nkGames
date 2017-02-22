@@ -71,9 +71,6 @@ private:
 
 	/** モデルレンダー. */
 	ModelRender ModelRender_;
-	/** ライト. */
-	Light Light_;
-
 
 	/** 剛体. */
 	RigidBody RigidBody_;

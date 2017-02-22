@@ -6,12 +6,17 @@
 #include"stdafx.h"
 #include"GameScene.h"
 
-#include"Player\Player.h"
 #include"AnimationEvent\CollisionWorld.h"
+
 #include"GameCamera.h"
+#include"GameLight.h"
+
+#include"Player\Player.h"
+
 #include"Map\Ground.h"
 #include"Map\Skybox.h"
-#include"Monster\MonsterHabitat.h"
+#include"Map\Map.h"
+
 #include"HUD\LifeGage.h"
 #include"HUD\ExpGage.h"
 
@@ -20,17 +25,21 @@
 
 #include"DropItem\DropItemManager.h"
 
-/** コリジョンワールド. */
+
+/** コリジョンワールドのグローバルポインタ. */
 CollisionWorld* g_CollisionWorld = nullptr;
 
-/** メインカメラ. */
+/** メインカメラのグローバルポインタ. */
 GameCamera* g_MainCamera = nullptr;
 
-/** メニューシステム. */
+/** メニューシステムのグローバルポインタ. */
 MenuSystem* g_MenuSystem = nullptr;
 
-/** ドロップアイテムマネージャ. */
+/** ドロップアイテムマネージャのグローバルポインタ. */
 DropItemManager* g_DropItemManager = nullptr;
+
+/** ゲームライトクラスのグローバルポインタ. */
+GameLight* g_GameLight = nullptr;
 
 /**
  * 初期化.
@@ -59,6 +68,10 @@ void GameScene::Start()
 	//アイテムデータのロード
 	ItemDataResource().Load();
 
+	//ゲームライトの初期化
+	g_GameLight = new GameLight();
+	g_GameLight->Start();
+
 	//プレイヤーの作成
 	Player* player = NewGO<Player>();
 
@@ -72,9 +85,7 @@ void GameScene::Start()
 	Skybox* skybox = NewGO<Skybox>();
 	skybox->SetPlayer(player);
 
-	//モンスターの住処
-	MonsterHabitat* mh = NewGO<MonsterHabitat>();
-	mh->SetPlayer(player);
+	NewGO<Map>();
 
 	//ライフゲージ
 	LifeGage* lifeGage = NewGO<LifeGage>();

@@ -36,8 +36,6 @@ private:
 
 	/** モデルレンダリングクラス. */
 	ModelRender ModelRender_;
-	/** ライトクラス. */
-	Light Light_;
 
 	/** 法線マップ. */
 	Texture Normal_;
