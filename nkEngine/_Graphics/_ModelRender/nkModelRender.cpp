@@ -371,6 +371,7 @@ namespace nkEngine
 				fogParam.z = 0.0f;
 			}
 			Effect_->SetVector("g_fogParam", &fogParam);
+			Effect_->SetVector("g_fogColor", &FogColor_);
 
 		}
 

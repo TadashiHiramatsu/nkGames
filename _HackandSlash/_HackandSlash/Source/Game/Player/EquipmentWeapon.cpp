@@ -6,18 +6,18 @@
 
 void EquipmentWeapon::Start(ModelRender& parent)
 {
-	ModelRender_.Load("Weapon.X", nullptr);
+	ModelRender_.Load("Sword_01.X", nullptr);
 	ModelRender_.SetTransform(&Transform_);
 	ModelRender_.SetLight(g_GameLight->GetLight());
 	ModelRender_.SetCamera(g_MainCamera->GetCamera());
-	Transform_.ParentMatrix_ = parent.FindBoneWorldMatrix("RightWeapon");
+	Transform_.ParentMatrix_ = parent.FindBoneWorldMatrix("Sword_joint");
 
 	//法線マップの設定
-	Normal_.Load("Player_n.png");
+	Normal_.Load("Paladin_normal.png");
 	ModelRender_.SetNormalMap(&Normal_);
 
 	//スペキュラマップの設定
-	Specular_.Load("Player_s.png");
+	Specular_.Load("Paladin_specular.png");
 	ModelRender_.SetSpecMap(&Specular_);
 
 }

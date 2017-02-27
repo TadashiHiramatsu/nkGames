@@ -21,6 +21,8 @@ bool g_isDepthField;
 
 //フォグパラメータ x:フォグがかかり始める距離 ,y:フォグがかかりきる距離 ,z:フォグの種類
 float4 g_fogParam;
+//フォグの色.
+float4 g_fogColor;
 
 /** 外部設定カラー. */
 float4 g_Color;
@@ -277,7 +279,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		//高さフォグ
 		float h = max(In.WorldPos_Depth.y - g_fogParam.y, 0.0f);
 		float t = min(h / g_fogParam.x, 1.0f);
-		color.xyz = lerp(float3(1.0f, 1.0f, 1.0f), color.xyz, t);
+		color.xyz = lerp(float3(g_fogColor.x, g_fogColor.y, g_fogColor.z), color.xyz, t);
 	}
 	else if (g_fogParam.z > 0.0f) 
 	{
@@ -285,7 +287,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		float z = length(In.WorldPos_Depth.xyz - g_cameraPos);
 		z = max(z - g_fogParam.x, 0.0f);
 		float t = z / g_fogParam.y;
-		color.xyz = lerp(color.xyz, float3(1.0f, 1.0f, 1.0f), t);
+		color.xyz = lerp(color.xyz, float3(g_fogColor.x, g_fogColor.y, g_fogColor.z), t);
 	}
 
 	return color * g_Color;

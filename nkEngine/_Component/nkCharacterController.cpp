@@ -90,6 +90,75 @@ namespace
 
 	};
 
+	/**
+	* 衝突したときに呼ばれるコールバック(壁用).
+	*/
+	struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
+	{
+	public:
+
+		/**
+		* 衝突したときに呼ばれるコールバック関数.
+		*/
+		virtual	btScalar addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+		{
+			if (convexResult.m_hitCollisionObject == MyCol_) 
+			{
+				//自分に衝突した.
+				return 0.0f;
+			}
+
+			//衝突点の法線を引っ張ってくる。
+			D3DXVECTOR3 hitNormalTmp = convexResult.m_hitNormalLocal;
+
+			//上方向と衝突点の法線のなす角度を求める。
+			float angle = fabsf(acosf(D3DXVec3Dot(&hitNormalTmp, &D3DXVECTOR3(0, 1, 0))));
+
+			if (angle >= PI * 0.3f
+				|| convexResult.m_hitCollisionObject->getUserIndex() == CollisionAttr_Character) 
+			{
+				//地面の傾斜が54度以上なので壁とみなす。
+				//もしくはコリジョン属性がキャラクタなので壁とみなす。
+
+				//衝突した.
+				isHit_ = true;
+
+				//衝突した位置を取得.
+				D3DXVECTOR3 hitPosTmp = convexResult.m_hitPointLocal;
+
+				//交点との距離を調べる。
+				D3DXVECTOR3 vDist = hitPosTmp - StartPosition_;
+				vDist.y = 0.0f;
+
+				float distTmp = D3DXVec3Length(&vDist);
+
+				if (distTmp < Dist_) {
+					//この衝突点の方が近いので、最近傍の衝突点を更新する。
+					HitPosition_ = hitPosTmp;
+					Dist_ = distTmp;
+					HitNormal_ = hitNormalTmp;
+				}
+			}
+			return 0.0f;
+		}
+
+	public:
+
+		/** 衝突フラグ. */
+		bool isHit_ = false;
+		/** 衝突点. */
+		D3DXVECTOR3 HitPosition_ = D3DXVECTOR3(0.0f, -FLT_MAX, 0.0f);
+		/** レイの始点. */
+		D3DXVECTOR3 StartPosition_ = D3DXVECTOR3(0, 0, 0);
+		/** 衝突点の法線. */
+		D3DXVECTOR3 HitNormal_ = D3DXVECTOR3(0, 0, 0);
+		/** 自分自身。自分自身との衝突を除外するためのメンバ. */
+		btCollisionObject* MyCol_ = nullptr;
+		/** 衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値. */
+		float Dist_ = FLT_MAX;
+
+	};
+
 }
 
 namespace nkEngine
@@ -108,16 +177,6 @@ namespace nkEngine
 		Height_(0.0f),
 		Gravity_(-9.8f),
 		MoveSpeed_(D3DXVECTOR3(0,0,0))
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	CharacterController::~CharacterController()
 	{
 	}
 
@@ -179,6 +238,116 @@ namespace nkEngine
 		D3DXVECTOR3 addPos = MoveSpeed_;
 		addPos *= Time().DeltaTime();
 		nextPos += addPos;
+
+		D3DXVECTOR3 originalXZDir = addPos;
+		originalXZDir.y = 0.0f;
+		D3DXVec3Normalize(&originalXZDir, &originalXZDir);
+
+		//XZ平面での衝突検出と衝突解決を行う。
+		{
+			int loopCount = 0;
+			while (true) 
+			{
+				//現在の座標から次の移動先へ向かうベクトルを求める。
+				
+				D3DXVECTOR3 addPos = nextPos - Position_;
+
+				//高さを消す.
+				D3DXVECTOR3 addPosXZ = addPos;
+				addPosXZ.y = 0.0f;
+
+				if (D3DXVec3Length(&addPosXZ) < FLT_EPSILON) 
+				{
+					//XZ平面で動きがないので調べる必要なし。
+					//FLT_EPSILONは1より大きい、最小の値との差分を表す定数。
+					//とても小さい値のことです。
+					break;
+				}
+
+				//カプセルコライダーの中心座標 + 0.2の座標をposTmpに求める。
+				D3DXVECTOR3 posTmp = Position_;
+				posTmp.y += Height_ * 0.5f + Radius_ + 0.2f;
+
+				//レイを作成。
+				btTransform start, end;
+				start.setIdentity();
+				end.setIdentity();
+				
+				//始点はカプセルコライダーの中心座標 + 0.2の座標をposTmpに求める。
+				start.setOrigin(btVector3(posTmp.x, posTmp.y, posTmp.z));
+				
+				//終点は次の移動先。XZ平面での衝突を調べるので、yはposTmp.yを設定する。
+				end.setOrigin(btVector3(nextPos.x, posTmp.y, nextPos.z));
+
+				SweepResultWall callback;
+				
+				//コリジョンを設定.
+				callback.MyCol_ = RigidBody_.GetBody();
+
+				//スタート座標.
+				callback.StartPosition_ = posTmp;
+				
+				//衝突検出。
+				Physics().ConvexSweepTest((const btConvexShape*)Collider_.GetBody(), start, end, callback);
+
+				if (callback.isHit_) 
+				{
+					//当たった。
+					//壁。
+					D3DXVECTOR3 vT0, vT1;
+
+					//XZ平面上での移動後の座標をvT0に、交点の座標をvT1に設定する。
+					vT0 = D3DXVECTOR3(nextPos.x, 0.0f, nextPos.z);
+					vT1 = D3DXVECTOR3(callback.HitPosition_.x, 0.0f, callback.HitPosition_.z);
+
+					//めり込みが発生している移動ベクトルを求める。
+					D3DXVECTOR3 vMerikomi = vT0 - vT1;
+
+					//XZ平面での衝突した壁の法線を求める。。
+					D3DXVECTOR3 hitNormalXZ = callback.HitNormal_;
+					hitNormalXZ.y = 0.0f;
+					D3DXVec3Normalize(&hitNormalXZ, &hitNormalXZ);
+
+					//めり込みベクトルを壁の法線に射影する。
+					float fT0 = D3DXVec3Dot(&hitNormalXZ, &vMerikomi);
+
+					//押し戻し返すベクトルを求める。
+					//押し返すベクトルは壁の法線に射影されためり込みベクトル+半径。
+					D3DXVECTOR3 vOffset = hitNormalXZ;
+					vOffset *= (-fT0 + Radius_);
+
+					//押し戻す.
+					nextPos += vOffset;
+
+					D3DXVECTOR3 currentDir = nextPos - Position_;
+					currentDir.y = 0.0f;
+					D3DXVec3Normalize(&currentDir, &currentDir);
+
+					if (D3DXVec3Dot(&currentDir,&originalXZDir) < 0.0f)
+					{
+						//角に入った時のキャラクタの振動を防止するために、
+						//移動先が逆向きになったら移動をキャンセルする。
+						nextPos.x = Position_.x;
+						nextPos.z = Position_.z;
+						break;
+					}
+				}
+				else 
+				{
+					//どことも当たらないので終わり。
+					break;
+				}
+
+				loopCount++;
+				if (loopCount == 5) 
+				{
+					break;
+				}
+			}
+		}
+		//XZの移動は確定。
+		Position_.x = nextPos.x;
+		Position_.z = nextPos.z;
 
 		//下方向を調べる。
 		{

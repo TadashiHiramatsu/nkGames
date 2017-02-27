@@ -141,7 +141,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
 	 */
-	AnimationEventController();
+	AnimationEventController()
+	{
+	}
 
 	/**
 	 * デストラクタ.
@@ -149,7 +151,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
 	 */
-	~AnimationEventController();
+	~AnimationEventController()
+	{
+	}
 
 	/**
 	 * 初期化.
@@ -197,7 +201,7 @@ private:
 	{
 
 		/** アニメーションイベントグループ. */
-		AnimationEventGroupS EventGroup_;
+		AnimationEventGroupS* EventGroup_;
 		/** イベントの発生フラグ. */
 		bool isInvokes_[ANIMATION_EVENT_MAX];
 

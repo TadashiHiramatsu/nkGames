@@ -16,9 +16,9 @@
  * @date 2017/01/11
  */
 IEnemy::IEnemy():
-	Radius_(0.4f),
-	Height_(0.3f),
-	Hp_(10),
+	Radius_(0.3f),
+	Height_(0.5f),
+	Hp_(50),
 	Distance_(10),
 	toPlayerMaxDis_(20),
 	PlayerAttackDis_(0.3f),
@@ -97,6 +97,5 @@ void IEnemy::Render()
  */
 void IEnemy::Release()
 {
-	//キャラクターコントローラの剛体を削除
-	CharacterController_.RemoveRigidBody();
+	
 }

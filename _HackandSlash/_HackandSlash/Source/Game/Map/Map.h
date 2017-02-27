@@ -7,6 +7,24 @@
 */
 class Map : public IGameObject
 {
+private:
+
+	/** ƒ}ƒbƒv“Ç‚İ‚İƒR[ƒh. */
+	enum MapReadCodeE
+	{
+		ModelName,  //!< ƒ‚ƒfƒ‹–¼
+		PositionX,	//!< ˆÊ’uX
+		PositionY,	//!< ˆÊ’uY
+		PositionZ,	//!< ˆÊ’uZ
+		RotationX,  //!< ‰ñ“]X
+		RotationY,  //!< ‰ñ“]Y
+		RotationZ,  //!< ‰ñ“]Z
+		RotationW,  //!< ‰ñ“]W
+		ScaleX,		//!< Šg‘åX
+		ScaleY,		//!< Šg‘åY
+		ScaleZ,		//!< Šg‘åZ
+	};
+
 public:
 
 	/**

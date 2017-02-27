@@ -19,30 +19,30 @@ void Map::Start()
 		MapChipInfoS* mapchipinfo = new MapChipInfoS();
 
 		//ƒ‚ƒfƒ‹–¼Ý’è
-		mapchipinfo->ModelName_ = record[MapChipInfoCode::ModelName];
+		mapchipinfo->ModelName_ = record[MapReadCodeE::ModelName];
 
 		//ˆÊ’u“Ç‚Ýž‚Ý
 		D3DXVECTOR3 pos;
-		pos.x = stof(record[MapChipInfoCode::PositionX]);
-		pos.y = stof(record[MapChipInfoCode::PositionY]);
-		pos.z = stof(record[MapChipInfoCode::PositionZ]);
+		pos.x = stof(record[MapReadCodeE::PositionX]);
+		pos.y = stof(record[MapReadCodeE::PositionY]);
+		pos.z = stof(record[MapReadCodeE::PositionZ]);
 		//ˆÊ’uÝ’è
 		mapchipinfo->Transform_.Position_ = pos;
 
 		//‰ñ“]“Ç‚Ýž‚Ý
 		D3DXQUATERNION rot;
-		rot.x = stof(record[MapChipInfoCode::RotationX]);
-		rot.y = stof(record[MapChipInfoCode::RotationY]);
-		rot.z = stof(record[MapChipInfoCode::RotationZ]);
-		rot.w = stof(record[MapChipInfoCode::RotationW]);
+		rot.x = stof(record[MapReadCodeE::RotationX]);
+		rot.y = stof(record[MapReadCodeE::RotationY]);
+		rot.z = stof(record[MapReadCodeE::RotationZ]);
+		rot.w = stof(record[MapReadCodeE::RotationW]);
 		//‰ñ“]Ý’è
 		mapchipinfo->Transform_.Rotation_ = rot;
 
 		//Šg‘å“Ç‚Ýž‚Ý
 		D3DXVECTOR3 scale;
-		scale.x = stof(record[MapChipInfoCode::ScaleX]);
-		scale.y = stof(record[MapChipInfoCode::ScaleY]);
-		scale.z = stof(record[MapChipInfoCode::ScaleZ]);
+		scale.x = stof(record[MapReadCodeE::ScaleX]);
+		scale.y = stof(record[MapReadCodeE::ScaleY]);
+		scale.z = stof(record[MapReadCodeE::ScaleZ]);
 		//Šg‘åÝ’è
 		mapchipinfo->Transform_.Scale_ = scale;
 

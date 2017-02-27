@@ -1,27 +1,14 @@
 #pragma once
 
+/** 
+* マップチップクラスの読み込みデータ.
+*/
 struct MapChipInfoS
 {
 	/** モデル名. */
 	string ModelName_;
 	/** トランスフォーム. */
 	Transform Transform_;
-};
-
-/** ファイル読み込みコード. */
-enum MapChipInfoCode
-{
-	ModelName,  //!< モデル名
-	PositionX,	//!< 位置X
-	PositionY,	//!< 位置Y
-	PositionZ,	//!< 位置Z
-	RotationX,  //!< 回転X
-	RotationY,  //!< 回転Y
-	RotationZ,  //!< 回転Z
-	RotationW,  //!< 回転W
-	ScaleX,		//!< 拡大X
-	ScaleY,		//!< 拡大Y
-	ScaleZ,		//!< 拡大Z
 };
 
 /**

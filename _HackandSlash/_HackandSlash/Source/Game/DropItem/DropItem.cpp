@@ -34,14 +34,18 @@ void DropItem::Start(EquipmentItem* item, D3DXVECTOR3 & pos, Player* player)
 	ItemSprite_.SetTransform(&Transform_);
 
 	//ポジションを設定
-	Transform_.Position_ = pos + D3DXVECTOR3(0, 0.1f, 0);
+	Transform_.Position_ = pos + D3DXVECTOR3(0, 0.3f, 0);
 
 	//大きさを調整
-	Transform_.Scale_ = D3DXVECTOR3(0.1f, 0.1f, 1.0f);
+	Transform_.Scale_ = D3DXVECTOR3(0.2f, 0.2f, 1.0f);
 
 	//プレイヤーの位置ベクトルのポインタを設定
 	PlayerPos_ = &player->Transform_.Position_;
 
+	//カメラの回転行列を取得
+	D3DXMATRIX rot = g_MainCamera->GetCamera()->GetRotationMatrix();
+	//トランスフォームの更新
+	Transform_.BillboardUpdate(rot);
 }
 
 /**

@@ -10,13 +10,13 @@ void DropItemManager::Start()
 {
 	DropItemList_.clear();
 
-	PickUpDistance_ = 0.3;
+	PickUpDistance_ = 1.0f;
 
 	AButtonSprite_.Load("Image/AButton.png");
 	AButtonSprite_.Start();
 	AButtonSprite_.SetTransform(&AButtonTransform_);
 	AButtonSprite_.SetCamera(g_MainCamera->GetCamera());
-	AButtonTransform_.Scale_ = D3DXVECTOR3(0.05f, 0.05f, 0.05f);
+	AButtonTransform_.Scale_ = D3DXVECTOR3(0.1f, 0.1f, 1.0f);
 
 }
 
@@ -44,7 +44,7 @@ void DropItemManager::Update()
 		{
 			isGetItem_ = true;
 			D3DXVECTOR3 pos = (*it)->Transform_.Position_;
-			AButtonTransform_.Position_ = pos + D3DXVECTOR3(0, 0.2f, 0);
+			AButtonTransform_.Position_ = pos + D3DXVECTOR3(0, 0.5f, 0);
 			AButtonTransform_.BillboardUpdate(g_MainCamera->GetCamera()->GetRotationMatrix());
 		}
 		else

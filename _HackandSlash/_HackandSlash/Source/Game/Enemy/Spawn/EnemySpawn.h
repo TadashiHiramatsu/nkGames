@@ -7,6 +7,31 @@
 
 #include"../IEnemy.h"
 
+ /**
+ * エネミースポナークラスの読み込みデータ.
+ *
+ * @author HiramatsuTadashi
+ * @date 2017/01/11
+ */
+struct EnemySpawnInfoS
+{
+public:
+
+	/** 中心地. */
+	D3DXVECTOR3 Position_ = D3DXVECTOR3(0, 0, 0);
+	/** 距離. */
+	float Distance_ = 0;
+	/** 出現最大数. */
+	int EnemyMax_ = 10;
+	/** 出現間隔. */
+	float SpawnTime_ = 1;
+	/** レベル. */
+	int EnemyLevel_ = 1;
+	/** 敵の種類. */
+	int EnemyID_ = 0;
+
+};
+
 /**
  * エネミースポナークラス.
  * 中心地から敵は出現する.
@@ -17,33 +42,6 @@
  */
 class EnemySpawn : public IGameObject
 {
-public:
-
-	/**
-	 * エネミースポナークラスのパラメータ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/11
-	 */
-	struct ESParameterS
-	{
-	public:
-
-		/** 中心地. */
-		D3DXVECTOR3 Position_ = D3DXVECTOR3(0, 0, 0);
-		/** 距離. */
-		float Distance_ = 0;
-		/** 出現最大数. */
-		int EnemyMax_ = 10;
-		/** 出現間隔. */
-		float SpawnTime_ = 1;
-		/** レベル. */
-		int EnemyLevel_ = 1;
-		/** 敵の種類. */
-		int EnemyID_ = 0;
-
-	};
-
 public:
 
 	/**
@@ -68,11 +66,12 @@ public:
 
 	/**
 	 * 初期化.
+	 * オーバーライドしていない.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
 	 */
-	void Start()override;
+	void Start(EnemySpawnInfoS info);
 
 	/**
 	 * 更新.
@@ -111,18 +110,41 @@ public:
 		Player_ = p;
 	}
 
+	/**
+	* 更新を行うかどうかの更新.
+	*/
+	float ToPlayerUpdate()
+	{
+		D3DXVECTOR3 ToPlayer = Player_->Transform_.Position_ - Transform_.Position_;
+
+		ToPlayerLength_ = D3DXVec3Length(&ToPlayer);
+
+		return ToPlayerLength_;
+	}
+
 private:
 
-	/** モンスターハンターポータブルじゃないよ. */
-	ESParameterS Parameter_;
+	/** 距離. */
+	float Distance_ = 0;
+	/** 出現最大数. */
+	int EnemyMax_ = 10;
+	/** レベル. */
+	int EnemyLevel_ = 1;
+	/** 敵の種類. */
+	int EnemyID_ = 0;
 
 	/** 出現したモンスターを登録する. */
 	vector<IEnemy*> EnemyList_;
 	
+	/** 出現間隔. */
+	float SpawnTime_ = 1;
 	/** 出現時間のローカルタイム. */
 	float SpawnLT_ = 0.0f;
 
 	/** プレイヤーのポインタ. */
 	Player* Player_;
+
+	/** プレイヤーとの距離. */
+	float ToPlayerLength_ = 0;
 
 };

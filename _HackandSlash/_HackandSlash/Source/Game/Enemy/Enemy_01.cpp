@@ -33,15 +33,9 @@ namespace
 		},
 		//AnimationAttack_01
 		{
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.0f, 0.1f, 1.0f, 1, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
 			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.1f, 0.1f, 1.0f, 1, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.2f, 0.1f, 1.0f, 1, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
 			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.3f, 0.1f, 1.0f, 1, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.4f, 0.1f, 1.0f, 1, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
-			END_ANIMATION_EVENT(),
-		},
-		//AnimationAttack_02
-		{
+			EMIT_DAMAGE_TO_PLAYER_COLLISION_EVENT(0.5f, 0.1f, 1.0f, 1, "Joint_3_3", D3DXVECTOR3(0,0,0), 0),
 			END_ANIMATION_EVENT(),
 		},
 		//AnimationHit
@@ -58,14 +52,14 @@ namespace
 	ParticleParameterS DisappearanceParticle =
 	{
 		"Soul_01.png",						//!< テクスチャのファイルパス。
-		D3DXVECTOR3(0.0f, 0.2f, 0.0f),		//!< 初速度。
+		D3DXVECTOR3(0.0f, 0.5f, 0.0f),		//!< 初速度。
 		2.0f,								//!< 寿命。単位は秒。
 		0.3f,								//!< 発生時間。単位は秒。
-		0.2f,								//!< パーティクルの幅。
-		0.2f,								//!< パーティクルの高さ。
-		D3DXVECTOR3(0.1f, 0.0f, 0.1f),		//!< 初期位置のランダム幅。
-		D3DXVECTOR3(0.0f, 0.2f, 0.0f),		//!< 初速度のランダム幅。
-		D3DXVECTOR3(0.0f, 0.2f, 0.0f),		//!< 速度の積分のときのランダム幅。
+		0.5f,								//!< パーティクルの幅。
+		0.5f,								//!< パーティクルの高さ。
+		D3DXVECTOR3(0.3f, 0.0f, 0.3f),		//!< 初期位置のランダム幅。
+		D3DXVECTOR3(0.0f, 0.3f, 0.0f),		//!< 初速度のランダム幅。
+		D3DXVECTOR3(0.0f, 0.3f, 0.0f),		//!< 速度の積分のときのランダム幅。
 		{									//!< UVテーブル。最大4まで保持できる。xが左上のu、yが左上のv、zが右下のu、wが右下のvになる。		
 			D3DXVECTOR4(0.0f,  0.0f, 1.0f, 1.0f),
 		},
@@ -91,15 +85,12 @@ void Enemy_01::Start()
 {
 
 	//スキンモデルデータをロード
-	SMDResources().Load(SkinModelDataHandle_, "Monster_01.X", &Animation_);
+	SMDResources().Load(SkinModelDataHandle_, "Enemy_01.X", &Animation_);
 	//モデルレンダを初期化
 	ModelRender_.Load(SkinModelDataHandle_.GetBody());
 
 	//基底クラスの初期化
-	Enemy_01::Start();
-
-	//リムライトを有効に設定
-	ModelRender_.SetRimLight(false);
+	IEnemy::Start();
 
 	//ステートを待機に設定
 	ChangeState(StateCodeE::StateWaiting);
@@ -123,6 +114,10 @@ void Enemy_01::Start()
 	//コリジョンオブジェクトの初期化
 	CollisionObject_.reset(new btCollisionObject());
 	CollisionObject_->setCollisionShape(SphereShape_->GetBody());
+
+	Hp_ = 30;
+
+	PlayerAttackDis_ = 1.0f;
 
 }
 
@@ -158,7 +153,7 @@ void Enemy_01::Update()
 			ChangeState(StateCodeE::StateLoitering);
 
 			//目的地を算出
-			Destination_ = D3DXVECTOR2((Random::value() - 0.5f) * Distance_, (Random::value() - 0.5f) * Distance_) + 
+			Destination_ = D3DXVECTOR2((Random().value() - 0.5f) * Distance_, (Random().value() - 0.5f) * Distance_) +
 				D3DXVECTOR2(DefaultPosition_.x, DefaultPosition_.z);
 
 			//立ち止まりローカルタイムを初期化
@@ -326,7 +321,7 @@ void Enemy_01::Update()
 	ModelRender_.SetAlpha(Alpha_);
 
 	//基底クラスを更新
-	Enemy_01::Update();
+	IEnemy::Update();
 
 }
 
@@ -393,7 +388,7 @@ void Enemy_01::AnimationControl()
 void Enemy_01::Render()
 {
 	//基底クラスの描画
-	Enemy_01::Render();
+	IEnemy::Render();
 
 }
 
@@ -406,7 +401,7 @@ void Enemy_01::Render()
 void Enemy_01::Release()
 {
 	//基底クラスの解放
-	Enemy_01::Release();
+	IEnemy::Release();
 }
 
 /**
@@ -472,6 +467,9 @@ void Enemy_01::Damage()
 
 			//プレイヤーに経験値を加算
 			Player_->AddExperience(100);
+
+			//キャラクターコントローラの剛体を削除
+			CharacterController_.RemoveRigidBody();
 
 			//アイテムデータの取得
 			EquipmentItem* item = new EquipmentItem(ItemDataResource().GetItem(3001));

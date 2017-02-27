@@ -42,8 +42,8 @@ public:
 			Level_ = 1;
 			Experience_ = 0;
 			NextLevelExperience_ = 10;
-			Attack_ = 1;
-			MaxHp_ = NowHp_ = 10;
+			Attack_ = 10;
+			MaxHp_ = NowHp_ = 100;
 			InvincibleTime_ = 1.0f;
 		}
 
@@ -71,7 +71,7 @@ public:
 	enum AnimationCodeE
 	{
 		AnimationInvalid = -1,	//!< –³‚µ
-		AnimationWaiting = 0,	//!< ‘Ò‹@
+		AnimationIdol = 0,	//!< ‘Ò‹@
 		AnimationRun,			//!< ‘–‚è
 		AnimationAttack_01,		//!< UŒ‚
 		AnimationDeath_01,		//!< Ž€–S

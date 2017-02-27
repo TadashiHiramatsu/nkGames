@@ -10,13 +10,30 @@
 
 /**
  * 初期化.
+ * オーバーライドしていない.
  *
  * @author HiramatsuTadashi
  * @date 2017/01/11
  */
-void EnemySpawn::Start()
+void EnemySpawn::Start(EnemySpawnInfoS info)
 {
+	//位置を設定
+	Transform_.Position_ = info.Position_;
 
+	//出現範囲
+	Distance_ = info.Distance_;
+
+	//エネミー数
+	EnemyMax_ = info.EnemyMax_;
+
+	//エネミーレベル
+	EnemyLevel_ = info.EnemyLevel_;
+
+	//ID設定
+	EnemyID_ = info.EnemyID_;
+
+	//出現速度
+	SpawnTime_ = info.SpawnTime_;
 }
 
 /**
@@ -27,10 +44,10 @@ void EnemySpawn::Start()
  */
 void EnemySpawn::Update()
 {
-	if (EnemyList_.size() <= Parameter_.EnemyMax_)
+	if (EnemyList_.size() <= EnemyMax_)
 	{
 		//モンスターの出現数が最大に足しいていないので
-		if (Parameter_.SpawnTime_ <= SpawnLT_)
+		if (SpawnTime_ <= SpawnLT_)
 		{
 			//出現時間を経過しているので出現
 			Appearance();
@@ -54,7 +71,8 @@ void EnemySpawn::Update()
 
 			//モンスターをリストから削除
 			it = EnemyList_.erase(it);
-
+			
+			continue;
 		}
 
 		//更新
@@ -91,8 +109,8 @@ void EnemySpawn::Appearance()
 	Enemy_01* enemy = new Enemy_01();
 
 	//出現位置を計算
-	D3DXVECTOR3 pos = D3DXVECTOR3((Random::value() - 0.5f) * Parameter_.Distance_, 0, (Random::value() - 0.5f) * Parameter_.Distance_);
-	pos += Parameter_.Position_;
+	D3DXVECTOR3 pos = D3DXVECTOR3((Random().value() - 0.5f) * Distance_, 0, (Random().value() - 0.5f) * Distance_);
+	pos += Transform_.Position_;
 	
 	//出現位置を設定
 	enemy->SetPosition(pos);

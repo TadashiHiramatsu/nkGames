@@ -122,7 +122,7 @@ namespace nkEngine
 		 *
 		 * @return	A reference to a CEngine.
 		 */
-		inline static CEngine& instance()
+		inline static CEngine& GetInstance()
 		{
 			static CEngine instance;
 			return instance;
@@ -306,7 +306,7 @@ namespace nkEngine
 	 */
 	inline static CEngine& Engine()
 	{
-		return CEngine::instance();
+		return CEngine::GetInstance();
 	}
 
 	/**

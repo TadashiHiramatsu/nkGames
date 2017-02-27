@@ -34,7 +34,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		~CharacterController();
+		~CharacterController()
+		{
+		}
 
 		/**
 		 * ‰Šú‰».

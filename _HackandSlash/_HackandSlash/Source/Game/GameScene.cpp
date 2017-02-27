@@ -25,6 +25,8 @@
 
 #include"DropItem\DropItemManager.h"
 
+#include"Enemy\Spawn\EnemySpawnManager.h"
+
 
 /** コリジョンワールドのグローバルポインタ. */
 CollisionWorld* g_CollisionWorld = nullptr;
@@ -87,6 +89,9 @@ void GameScene::Start()
 
 	NewGO<Map>();
 
+	EnemySpawnManager* esm = NewGO<EnemySpawnManager>();
+	esm->SetPlayer(player);
+
 	//ライフゲージ
 	LifeGage* lifeGage = NewGO<LifeGage>();
 	lifeGage->SetPlayer(player);
@@ -101,7 +106,7 @@ void GameScene::Start()
 
 	InventoryManager().Start();
 
-	g_DropItemManager = NewGO<DropItemManager>();
+	g_DropItemManager = NewGO<DropItemManager>(3);
 	g_DropItemManager->SetPlayer(player);
 
 }

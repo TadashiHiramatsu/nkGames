@@ -8,26 +8,6 @@
 #include"CollisionWorld.h"
 
 /**
- * コンストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/11
- */
-AnimationEventController::AnimationEventController()
-{
-}
-
-/**
- * デストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/11
- */
-AnimationEventController::~AnimationEventController()
-{
-}
-
-/**
 * 初期化.
 *
 * @author HiramatsuTadashi
@@ -53,7 +33,7 @@ void AnimationEventController::Init(ModelRender* model, Animation* anim, Animati
 	EventGroupTableList_.resize(tblSize);
 	for (int i = 0; i < tblSize; i++)
 	{
-		EventGroupTableList_[i].EventGroup_ = eventGroupTbl[i];
+		EventGroupTableList_[i].EventGroup_ = &eventGroupTbl[i];
 		memset(EventGroupTableList_[i].isInvokes_, 0, sizeof(EventGroupTableList_[i].isInvokes_));
 	}
 
@@ -93,12 +73,12 @@ void AnimationEventController::Update()
 		AnimationEventGroupTableS& eventGroupTable = EventGroupTableList_[currentAnimNo];
 
 		//イベントタイプが無効になるまで
-		for (int i = 0; eventGroupTable.EventGroup_.Event_[i].EventType_ != Invalid;i++)
+		for (int i = 0; eventGroupTable.EventGroup_->Event_[i].EventType_ != Invalid;i++)
 		{
 			//発生したことがなければ
 			if (eventGroupTable.isInvokes_[i] == false)
 			{
-				InvokeAnimationEvent(eventGroupTable.EventGroup_.Event_[i]);
+				InvokeAnimationEvent(eventGroupTable.EventGroup_->Event_[i]);
 				//発生済みに変更
 				eventGroupTable.isInvokes_[i] = true;
 			}
@@ -115,25 +95,19 @@ void AnimationEventController::Update()
 	AnimationEventGroupTableS& eventGroupTable = EventGroupTableList_[currentAnimNo];
 
 	//イベントタイプが無効になるまで更新
-	for (int i = 0;eventGroupTable.EventGroup_.Event_[i].EventType_ != Invalid;i++)
+	for (int i = 0;eventGroupTable.EventGroup_->Event_[i].EventType_ != Invalid;i++)
 	{
 		//発生させたことがなければ
 		if (eventGroupTable.isInvokes_[i] == false)
 		{
 			//まだイベントが発生していない
-			if (eventGroupTable.EventGroup_.Event_[i].Time_ <= animTime)
+			if (eventGroupTable.EventGroup_->Event_[i].Time_ <= animTime)
 			{
 				//イベント発生する時間が経過した
-				InvokeAnimationEvent(eventGroupTable.EventGroup_.Event_[i]);
+				InvokeAnimationEvent(eventGroupTable.EventGroup_->Event_[i]);
 				//発生済みに変更
 				eventGroupTable.isInvokes_[i] = true;
 
-			}
-			else
-			{
-				//時間経過ごとに登録している場合は
-				//次の所からを見ても発生することがないためBreakしてもいいのでは？
-				break;
 			}
 
 		}
@@ -164,12 +138,11 @@ void AnimationEventController::InvokeAnimationEvent(const AnimationEventS& event
 		//ボーンを取得 この動作重くね？
 		D3DXMATRIX* bone = ModelRender_->FindBoneWorldMatrix(event.strArg_[0]);
 
-		//ポジションの移動を取得
-		D3DXVECTOR3 pos = event.vArg_[0];
-
 		//ボーンが存在していれば
 		if (bone != NULL)
 		{
+			//ポジションの移動を取得
+			D3DXVECTOR3 pos = event.vArg_[0];
 
 			//ポジションの移動分を計算
 			D3DXVec3TransformCoord(&pos, &pos, bone);
@@ -187,12 +160,12 @@ void AnimationEventController::InvokeAnimationEvent(const AnimationEventS& event
 		//ボーンを取得 この動作重くね？
 		D3DXMATRIX* bone = ModelRender_->FindBoneWorldMatrix(event.strArg_[0]);
 		
-		//ポジションの移動分を取得
-		D3DXVECTOR3 pos = event.vArg_[0];
-
 		//ボーンが存在していれば
 		if (bone != NULL)
 		{
+
+			//ポジションの移動分を取得
+			D3DXVECTOR3 pos = event.vArg_[0];
 
 			//ポジションの移動分を計算
 			D3DXVec3TransformCoord(&pos, &pos, bone);

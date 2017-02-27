@@ -49,8 +49,6 @@ namespace nkEngine
 		//サウンドエンジンの初期化.
 		SoundEngine_.Init();
 
-		Random::Start();
-
 		return true;
 	}
 
@@ -252,14 +250,14 @@ namespace nkEngine
 			switch (wParam) {
 				//エスケープキー
 			case VK_ESCAPE:
-				instance().Final();
+				GetInstance().Final();
 				PostQuitMessage(0);
 				return 0;
 			}
 			break;
 //#endif
 		case WM_DESTROY:
-			instance().Final();
+			GetInstance().Final();
 			PostQuitMessage(0);
 			return 0;
 		default:

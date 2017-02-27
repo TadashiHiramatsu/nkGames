@@ -34,7 +34,7 @@ namespace nkEngine
 		D3DXVECTOR4 uv;
 		if (param.UVTableSize_ > 0) 
 		{
-			uv = param.UVTable_[Random::Range(0, param.UVTableSize_ -1)];
+			uv = param.UVTable_[Random().Range(0, param.UVTableSize_ -1)];
 		}
 		else 
 		{
@@ -93,15 +93,15 @@ namespace nkEngine
 		Velocity_ = param.InitVelocity_;
 
 		//初速度に乱数を加える。
-		Velocity_.x += (((float)Random::value() - 0.5f) * 2.0f) * param.InitVelocityVelocityRandomMargin_.x;
-		Velocity_.y += (((float)Random::value() - 0.5f) * 2.0f) * param.InitVelocityVelocityRandomMargin_.y;
-		Velocity_.z += (((float)Random::value() - 0.5f) * 2.0f) * param.InitVelocityVelocityRandomMargin_.z;
+		Velocity_.x += (((float)Random().value() - 0.5f) * 2.0f) * param.InitVelocityVelocityRandomMargin_.x;
+		Velocity_.y += (((float)Random().value() - 0.5f) * 2.0f) * param.InitVelocityVelocityRandomMargin_.y;
+		Velocity_.z += (((float)Random().value() - 0.5f) * 2.0f) * param.InitVelocityVelocityRandomMargin_.z;
 
 		//ポジション設定
 		Position_ = emitPosition;
-		Position_.x += (((float)Random::value() - 0.5f) * 2.0f) * param.InitPositionRandomMargin_.x;
-		Position_.y += (((float)Random::value() - 0.5f) * 2.0f) * param.InitPositionRandomMargin_.y;
-		Position_.z += (((float)Random::value() - 0.5f) * 2.0f) * param.InitPositionRandomMargin_.z;
+		Position_.x += (((float)Random().value() - 0.5f) * 2.0f) * param.InitPositionRandomMargin_.x;
+		Position_.y += (((float)Random().value() - 0.5f) * 2.0f) * param.InitPositionRandomMargin_.y;
+		Position_.z += (((float)Random().value() - 0.5f) * 2.0f) * param.InitPositionRandomMargin_.z;
 
 		AddVelocityRandomMargih_ = param.AddVelocityRandomMargih_;
 		
@@ -124,7 +124,7 @@ namespace nkEngine
 		isBillboard_ = param.isBillboard_;
 		Brightness_ = param.Brightness_;
 		AlphaBlendMode_ = param.AlphaBlendMode_;
-		RotateZ_ = PI * 2.0f * (float)Random::value();
+		RotateZ_ = PI * 2.0f * (float)Random().value();
 		
 		Texture_.Load(filepath, true);
 	}
@@ -146,9 +146,9 @@ namespace nkEngine
 		addGrafity *= deltaTime;
 		Velocity_ += addGrafity;
 		D3DXVECTOR3 force = ApplyForce_;
-		force.x += (((float)Random::value() - 0.5f) * 2.0f) * AddVelocityRandomMargih_.x;
-		force.y += (((float)Random::value() - 0.5f) * 2.0f) * AddVelocityRandomMargih_.y;
-		force.z += (((float)Random::value() - 0.5f) * 2.0f) * AddVelocityRandomMargih_.z;
+		force.x += (((float)Random().value() - 0.5f) * 2.0f) * AddVelocityRandomMargih_.x;
+		force.y += (((float)Random().value() - 0.5f) * 2.0f) * AddVelocityRandomMargih_.y;
+		force.z += (((float)Random().value() - 0.5f) * 2.0f) * AddVelocityRandomMargih_.z;
 		force *= deltaTime;
 		Velocity_ += force;
 		D3DXVECTOR3 addPos = Velocity_;

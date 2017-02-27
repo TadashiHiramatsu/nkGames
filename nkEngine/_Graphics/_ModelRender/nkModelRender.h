@@ -239,15 +239,17 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 *
-		 * @param fogfunc The フォグの種類.
-		 * @param idx0    The フォグがかかり始める距離.
-		 * @param idx1    The フォグがかかりきる距離.
+		 * @param fogfunc フォグの種類.
+		 * @param idx0    フォグがかかり始める距離.
+		 * @param idx1    フォグがかかりきる距離.
+		 * @param color	　フォグの色
 		 */
-		void SetFogParam(FogFuncE fogfunc, float idx0, float idx1)
+		void SetFogParam(FogFuncE fogfunc, float idx0, float idx1, const D3DXVECTOR4& color)
 		{
 			FogFunc_ = fogfunc;
 			FogParam_[0] = idx0;
 			FogParam_[1] = idx1;
+			FogColor_ = color;
 		}
 
 		/**
@@ -408,6 +410,8 @@ namespace nkEngine
 		FogFuncE FogFunc_;
 		/** フォグのパラメータ. */
 		float FogParam_[2];
+		/** フォグの色. */
+		D3DXVECTOR4 FogColor_ = D3DXVECTOR4(0, 0, 0, 1);
 
 		/** 色. */
 		D3DXVECTOR4 Color_ = D3DXVECTOR4(1, 1, 1, 1);

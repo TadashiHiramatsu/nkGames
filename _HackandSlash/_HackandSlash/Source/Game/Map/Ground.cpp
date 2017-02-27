@@ -18,7 +18,7 @@
 void Ground::Start()
 {
 	//モデルのロード
-	ModelRender_.Load("Ground_01.X",nullptr);
+	ModelRender_.Load("Ground.X",nullptr);
 	//トランスフォームの設定
 	ModelRender_.SetTransform(&Transform_);
 	//ライトの設定
@@ -38,13 +38,13 @@ void Ground::Start()
 	Specular_.Load("ground4_Specular.tga");
 	ModelRender_.SetSpecMap(&Specular_);
 
-	//ModelRender_.SetFogParam(ModelRender::FogFuncE::FogFuncDist, 100.0f, 120.0f);
+	ModelRender_.SetFogParam(ModelRender::FogFuncE::FogFuncDist, 350.0f, 600.0f, D3DXVECTOR4(1, 1, 1, 1));
 
 	//更新
 	Update();
 
 	//ワールド行列の取得
-	WorldMatrix_ = ModelRender_.FindBoneWorldMatrix("Plane001");
+	WorldMatrix_ = ModelRender_.FindBoneWorldMatrix("Plane002");
 
 	//メッシュコライダーの作成
 	MeshCollider_.Create(&ModelRender_, WorldMatrix_);

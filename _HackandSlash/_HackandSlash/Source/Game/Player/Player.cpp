@@ -32,11 +32,11 @@ namespace
 		},
 		//AnimationAttack_01
 		{
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.7f,	0.1f, 0.2f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.75f, 0.1f, 0.2f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.8f,	0.1f, 0.2f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.85f, 0.1f, 0.2f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.9f,	0.1f, 0.2f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.5f,	0.1f, 0.8f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.55f, 0.1f, 0.8f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.6f,	0.1f, 0.8f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.65f, 0.1f, 0.8f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.7f,	0.1f, 0.8f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
 			END_ANIMATION_EVENT(),
 		},
 		//AnimationDeath_01
@@ -69,29 +69,30 @@ void Player::Start()
 	ModelRender_.SetShadowReceiverFlag(true);
 
 	//法線マップの設定
-	Normal_.Load("Player_n.png");
+	Normal_.Load("Paladin_normal.png");
 	ModelRender_.SetNormalMap(&Normal_);
 
 	//スペキュラマップの設定
-	Specular_.Load("Player_s.png");
+	Specular_.Load("Paladin_specular.png");
 	ModelRender_.SetSpecMap(&Specular_);
 
 	//ポジションをちょっと上に
-	Transform_.Position_ = D3DXVECTOR3(0, 10, 0);
+	Transform_.Position_ = D3DXVECTOR3(0, 5, 0);
 
 	//キャラクターコントローラーの初期化
-	Radius_ = 0.4f;
-	Height_ = 0.3f;
+	//ここら辺直さなきゃな
+	Radius_ = 0.6f;
+	Height_ = 1.8f;
 	CharacterController_.Init(Radius_, Height_, Transform_.Position_);
 
 	//ステートを待機に
 	ChangeState(StateCodeE::StateWaiting);
 
-	//Animation_.SetAnimationEndTime(AnimationCodeE::AnimationRun, 0.7);
+	Animation_.SetAnimationEndTime(AnimationCodeE::AnimationRun, 0.7);
 
 	//アニメーションループをfalseに設定
-	//Animation_.SetAnimationLoopFlag(AnimationCodeE::AnimationAttack_01, false);
-	//Animation_.SetAnimationLoopFlag(AnimationCodeE::AnimationDeath_01, false);
+	Animation_.SetAnimationLoopFlag(AnimationCodeE::AnimationAttack_01, false);
+	Animation_.SetAnimationLoopFlag(AnimationCodeE::AnimationDeath_01, false);
 
 
 	//武器と盾を作成
@@ -101,7 +102,7 @@ void Player::Start()
 	shild->Start(ModelRender_);
 
 	//アニメーションイベントを初期化
-	//AnimationEvent_.Init(&wepon->GetModelRender(), &Animation_, AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
+	AnimationEvent_.Init(&wepon->GetModelRender(), &Animation_, AnimationEventTbl, sizeof(AnimationEventTbl) / sizeof(AnimationEventTbl[0]));
 
 	//コリジョン初期化
 	SphereShape_.reset(new SphereCollider);
@@ -135,11 +136,11 @@ void Player::Update()
 	{
 
 		//ジャンプ処理
-		/*if (Input().GetKeyButton(KeyCodeE::Space) && !CharacterController_.IsJump())
+		if (Input().GetKeyButton(KeyCodeE::Space))
 		{
-			moveSpeed.y = 5.0f;
+			moveSpeed.y += 15.0f;
 			CharacterController_.Jump();
-		}*/
+		}
 
 		//平行移動
 		D3DXVECTOR3 move = D3DXVECTOR3(0, 0, 0);
@@ -229,11 +230,19 @@ void Player::Update()
 	//計算終了後のポジションを受け取る
 	Transform_.Position_ = CharacterController_.GetPosition();
 
+	{
+		AnimationEventTbl[AnimationAttack_01].Event_[0].iArg_[0] = Parameter_.Attack_;
+		AnimationEventTbl[AnimationAttack_01].Event_[1].iArg_[0] = Parameter_.Attack_;
+		AnimationEventTbl[AnimationAttack_01].Event_[2].iArg_[0] = Parameter_.Attack_;
+		AnimationEventTbl[AnimationAttack_01].Event_[3].iArg_[0] = Parameter_.Attack_;
+		AnimationEventTbl[AnimationAttack_01].Event_[4].iArg_[0] = Parameter_.Attack_;
+	}
+
 	//アニメーションの更新
 	AnimationControl();
 
 	//アニメーションイベントの更新
-	//AnimationEvent_.Update();
+	AnimationEvent_.Update();
 
 	//死んでいる又はダメージを受けている状態でなければ
 	//体力回復時間を更新する
@@ -387,15 +396,15 @@ void Player::ParameterUpdate()
 		Parameter_.Experience_ -= Parameter_.NextLevelExperience_;
 
 		//必要経験値量を更新
-		int a = Parameter_.NextLevelExperience_ * 1.1;
+		int a = Parameter_.NextLevelExperience_ * 1.2;
 		int b = Parameter_.Level_ * 15;
 		Parameter_.NextLevelExperience_ = (a + b) / 2;
 
 		//意味ない
-		Parameter_.Attack_ *= 1.1;
+		Parameter_.Attack_ *= 1.2;
 
 		//Hp上昇
-		float idx = Parameter_.MaxHp_ * 1.1 - Parameter_.MaxHp_;
+		float idx = Parameter_.MaxHp_ * 1.2 - Parameter_.MaxHp_;
 		Parameter_.MaxHp_ += idx;
 		Parameter_.NowHp_ += idx;
 		
@@ -418,7 +427,7 @@ void Player::AnimationControl()
 	switch (State_)
 	{
 	case StateWaiting:
-		PlayAnimation(AnimationCodeE::AnimationWaiting, 0.3f);
+		PlayAnimation(AnimationCodeE::AnimationIdol, 0.3f);
 		break;
 	case StateRun:
 		PlayAnimation(AnimationCodeE::AnimationRun, 0.3f);

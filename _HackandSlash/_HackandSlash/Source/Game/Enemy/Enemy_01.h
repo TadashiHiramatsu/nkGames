@@ -25,7 +25,6 @@ public:
 		AnimationWalk,			//!< •à‚«
 		AnimationRun,			//!< ‘–‚è
 		AnimationAttack_01,		//!< UŒ‚‚P
-		AnimationAttack_02,		//!< UŒ‚‚Q
 		AnimationHit,			//!< ƒ_ƒ[ƒW
 		AnimationDeath,			//!< Ž€
 		AnimationNum,			//!< ƒAƒjƒ[ƒVƒ‡ƒ“‚Ì”
