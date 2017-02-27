@@ -10,18 +10,6 @@ void CInventoryManager::Start()
 		ItemList[i].clear();
 	}
 
-	for (int i = 0; i < 6; i++)
-	{
-		EquipmentItem* item = new EquipmentItem(ItemDataResource().GetItem(3001 + i));
-		SetItem(item);
-	}
-
-	for (int i = 0; i < 3; i++)
-	{
-		EquipmentItem* item = new EquipmentItem(ItemDataResource().GetItem(4001));
-		SetItem(item);
-	}
-
 }
 
 void CInventoryManager::SetItem(EquipmentItem* item)

@@ -93,7 +93,7 @@ void TitleSystem::Update()
 	break;
 	case TitleSystem::Run:
 	{
-		if (Input().GetMoudeButtonDown(MouseButtonE::MouseLeft))
+		if (XInput().IsTrigger(ButtonE::ButtonA))
 		{
 			//エンターキーを押された
 			State_ = BlackOut;
@@ -140,5 +140,5 @@ void TitleSystem::PostRender()
 {
 	TitleNameImage_.Render();
 	NewGameImage_.Render();
-	ContinueImage_.Render();
+	//ContinueImage_.Render();
 }

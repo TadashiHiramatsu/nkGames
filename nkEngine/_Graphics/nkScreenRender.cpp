@@ -133,7 +133,7 @@ namespace nkEngine
 		//レンダーターゲットをメインレンダーに設定
 		Device_->SetRenderTarget(0, GetMainRenderTarget().GetSurface());
 		Device_->SetDepthStencilSurface(GetMainRenderTarget().GetDepthSurface());
-		Device_->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(100, 100, 100), 1.0f, 0);
+		Device_->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
 		//Renderの前の描画
 		GameObjectManager().PreRender();
