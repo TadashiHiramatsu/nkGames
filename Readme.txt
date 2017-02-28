@@ -1,19 +1,19 @@
 ・現在動くプロジェクト
-	ackandSlash
+	HackandSlash
 
 ・実行ファイル
-	exe内にあります。
+	exe/HackandSlash/_HackandSlash.exe
 
 ・動画
-	movie内にあります。
+	movie/Hack and Slash 2017_02_28 16_02_28.mp4
 
 ・作品説明
-	作品説明用のドキュメントが直下にあります。
+	document/HackandSlash作品説明.docx
 
 ・プロジェクト
-	_FlyFlyFlying
+	_FlyFlyFlying(エンジン調整中につき動作不可)
 	_HackandSlash
-	nkARMORED_CORE
+	nkARMORED_CORE(エンジン調整中につき動作不可)
 
 ・エンジン
 	nkEngine(自作ライブラリ)
