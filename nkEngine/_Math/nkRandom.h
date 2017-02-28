@@ -50,7 +50,7 @@ namespace nkEngine
 		*/
 		int Range(int min, int max)
 		{
-			return min + (GetRandInt() * (max - min + 1) / (1 + 0xffffffffUL));
+			return min + (GetRandInt() % (max - min + 1));
 		}
 
 		/** 

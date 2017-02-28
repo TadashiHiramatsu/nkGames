@@ -20,22 +20,33 @@ public:
 	{
 	}
 
-	/** 初期化. */
+	/** 
+	* 初期化. 
+	*/
 	void Start()override;
 
-	/** 更新. */
+	/**
+	* 更新. 
+	*/
 	void Update()override;
 
-	/** 描画. */
+	/** 
+	* 描画. 
+	*/
 	void Render()override;
 
-	/** 装備アイテムをドロップアイテムにしてリストに登録する. */
-	void SetDropItem(EquipmentItem* item, D3DXVECTOR3& pos);
+	/** 
+	* 装備アイテムをドロップアイテムにしてリストに登録する. 
+	*
+	* @param level	敵のレベル.
+	* @param pos	ドロップする座標.
+	**/
+	void SetDropItem(int level, D3DXVECTOR3& pos);
 
 	/** プレイヤーのポインタを設定. */
-	void SetPlayer(Player* player)
+	void SetPlayer(Player* p)
 	{
-		Player_ = player;
+		Player_ = p;
 	}
 
 	bool GetisGetItem()

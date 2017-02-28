@@ -34,9 +34,6 @@
     <Filter Include="Game\Player\Equipment">
       <UniqueIdentifier>{14bacb0c-d6bc-4c9d-b092-af00d0a9d4bd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Item\Resource">
-      <UniqueIdentifier>{ba8a0702-882a-43d4-858f-e22db9afeb53}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Item\ItemData">
       <UniqueIdentifier>{06c816fe-382f-4b85-a974-43b3e0428ce6}</UniqueIdentifier>
     </Filter>
@@ -102,16 +99,10 @@
     <ClCompile Include="Source\Title\HUD\TitleBack.cpp">
       <Filter>Title\HUD</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Item\ItemDataResource.cpp">
-      <Filter>Game\Item\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Game\Item\ItemData\AccessoryItemData.cpp">
       <Filter>Game\Item\ItemData</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Item\ItemData\ArmorItemData.cpp">
-      <Filter>Game\Item\ItemData</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Item\ItemData\IItemData.cpp">
       <Filter>Game\Item\ItemData</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Item\ItemData\ShieldItemData.cpp">
@@ -177,6 +168,9 @@
     <ClCompile Include="Source\Game\Enemy\Spawn\EnemySpawn.cpp">
       <Filter>Game\Enemy\Spawn</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Item\ItemDataResource.cpp">
+      <Filter>Game\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -223,9 +217,6 @@
     </ClInclude>
     <ClInclude Include="Source\Title\HUD\TitleBack.h">
       <Filter>Title\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Item\ItemDataResource.h">
-      <Filter>Game\Item\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Item\ItemData\AccessoryItemData.h">
       <Filter>Game\Item\ItemData</Filter>
@@ -301,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Enemy\Spawn\EnemySpawn.h">
       <Filter>Game\Enemy\Spawn</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\ItemDataResource.h">
+      <Filter>Game\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

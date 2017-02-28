@@ -16,6 +16,21 @@
  */
 class CItemDataResource
 {
+public:
+
+	/** アイテムデータ読み込みコード. */
+	enum ItemDataReadCodeE
+	{
+		ItemID = 0,		//!< アイテムID.
+		ItemName,		//!< アイテム名.
+		FileName,		//!< ファイル名.
+		ItemType,		//!< アイテムタイプ.
+		Defense,		//!< 防御力.
+		MinLevel,		//!< 最低レベル.
+		MaxLevel,		//!< 最高レベル.
+		Probability,	//!< ドロップ率.
+	};
+
 private:
 
 	/**
@@ -76,18 +91,23 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/05
 	 *
-	 * @param	_Number	Number of.
+	 * @param	id	アイテムID.
 	 *
 	 * @return	Null if it fails, else the item.
 	 */
-	IItemData* GetItem(int _Number)
+	IItemData* GetItem(int id)
 	{
-		auto& it = ItemList.find(_Number);
+		auto& it = ItemList.find(id);
 		if (it == ItemList.end())
 		{
-			NK_ASSERT(false, "_Numberのアイテムが存在しません");
+			NK_ASSERT(false, "idのアイテムが存在しません");
 		}
 		return it->second;
+	}
+
+	map<int, IItemData*>& GetItemMap()
+	{
+		return ItemList;
 	}
 
 private:

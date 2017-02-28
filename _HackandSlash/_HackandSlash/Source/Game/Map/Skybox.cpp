@@ -25,7 +25,7 @@ void Skybox::Start()
 	//ライトの設定
 	ModelRender_.SetLight(&Light_);
 
-	ModelRender_.SetFogParam(ModelRender::FogFuncE::FogFuncHeight, 150.0f, 0.0f, D3DXVECTOR4(1,1,1, 1));
+	ModelRender_.SetFogParam(ModelRender::FogFuncE::FogFuncHeight, 150.0f, 0.0f, D3DXVECTOR4(1, 1, 1, 1));
 
 	//環境光を最大にしてライティングを消す
 	Light_.SetAmbientLight(D3DXVECTOR3(1.0f, 1.0f, 1.0f));
@@ -43,6 +43,7 @@ void Skybox::Update()
 	//親子関係に変更してもいいかも
 	//ポジションをプレイヤーの位置に
 	Transform_.Position_ = Player_->Transform_.Position_;
+	Transform_.Position_.y = 0;
 
 	//トランスフォームの更新
 	Transform_.Update();

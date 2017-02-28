@@ -116,6 +116,8 @@ void EnemySpawn::Appearance()
 	enemy->SetPosition(pos);
 	//モンスターにプレイヤーのポインタを設定
 	enemy->SetPlayer(Player_);
+	//レベルを設定
+	enemy->SetLevel(EnemyLevel_);
 	//モンスターの初期化
 	enemy->Start();
 

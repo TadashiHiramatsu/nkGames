@@ -19,17 +19,7 @@ class IItemData
 {
 public:
 
-	static const int TypeID = 10000;
-	static const int SubTypeID = 1000;
-
-	/** レアリティ。ただそれだけ. */
-	//enum RarityCodeE
-	//{
-	//	Common = 1,		//!< コモン。どこでも手に入る.
-	//	Magic,			//!< マジック.
-	//	Rare,			//!< レア.
-	//	Unique,			//!< ユニーク.
-	//};
+	static const int TypeID = 1000;
 
 public:
 
@@ -112,14 +102,37 @@ public:
 		return -1;
 	}
 
+	/**
+	* 最低レベルを取得.
+	*/
+	int GetMinLevel()
+	{
+		return MinLevel_;
+	}
+
+	/**
+	* 最高レベルを取得.
+	*/
+	int GetMaxLevel()
+	{
+		return MaxLevel_;
+	}
+
+	/**
+	* ドロップ率を取得.
+	*/
+	int GetProbability()
+	{
+		return Probability_;
+	}
+
 protected:
 
 	/**   
 	* アイテムを識別するためのコード. 
-	* 例:00000 
-	* 上一桁:アイテムタイプ
-	* 二桁目:サブタイプ
-	* 下三桁:個別ID
+	* 例:1001 
+	* 上1桁:アイテムタイプ
+	* 下3桁:個別ID
 	*/
 	int ID_ = 0;
 	/** アイテムの名称。ゲーム内で表示するもの. */
@@ -128,5 +141,12 @@ protected:
 	char IconFilePath_[64];
 	/** アイテムタイプ. */
 	ItemTypeE Type_;
+
+	/** 最低レベル. */
+	int MinLevel_ = 0;
+	/** 最高レベル. */
+	int MaxLevel_ = 100;
+	/** ドロップ確率. */
+	int Probability_ = 100;
 
 };

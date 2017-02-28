@@ -466,7 +466,7 @@ void Enemy_01::Damage()
 			ChangeState(StateDeath);
 
 			//プレイヤーに経験値を加算
-			Player_->AddExperience(100);
+			Player_->AddExperience(2);
 
 			//キャラクターコントローラの剛体を削除
 			CharacterController_.RemoveRigidBody();
@@ -475,7 +475,7 @@ void Enemy_01::Damage()
 			EquipmentItem* item = new EquipmentItem(ItemDataResource().GetItem(3001));
 
 			//ドロップアイテムマネージャに登録
-			g_DropItemManager->SetDropItem(item, Transform_.Position_);
+			g_DropItemManager->SetDropItem(Level_, Transform_.Position_);
 
 			isOnceDeath = true;
 

@@ -31,13 +31,24 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/05
 	 *
-	 * @param	_ID			 	The identifier.
-	 * @param	_Name		 	The name.
-	 * @param	_IconFilePath	Full pathname of the icon file.
-	 * @param	type		 	The type.
-	 * @param	_Defense	 	The defense.
+	 * @param	id			 	アイテムID.
+	 * @param	itemname		アイテム名.
+	 * @param	iconfilename	アイコンファイル名.
+	 * @param	type		 	アイテムタイプ.
+	 * @param	defense	 		防御力.
+	 * @param	minlevel	 	最低レベル.
+	 * @param	maxlevel	 	最高レベル.
+	 * @param	probability	 	ドロップ率.
 	 */
-	ArmorItemData(int _ID, char* _Name, char* _IconFilePath, ItemTypeE type,int _Defense);
+	ArmorItemData(
+		int id, 
+		char* itemname, 
+		char* iconfilename, 
+		ItemTypeE type, 
+		int defense,
+		int minlevel,
+		int maxlevel,
+		int probability);
 
 	/**
 	 * Destructor.
@@ -45,7 +56,9 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
 	 */
-	~ArmorItemData();
+	~ArmorItemData()
+	{
+	}
 
 	int GetParameter()override
 	{

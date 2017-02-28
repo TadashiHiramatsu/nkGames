@@ -8,7 +8,7 @@
 
 void CItemDataResource::Load()
 {
-	LoadFile("ArmorItemData");
+	LoadFile("ItemData/ArmorItemData");
 }
 
 void CItemDataResource::LoadFile(char * filePath)
@@ -21,49 +21,68 @@ void CItemDataResource::LoadFile(char * filePath)
 	for (int row = 1; row < table.size() -1; row++)
 	{
 
+		//アイテムデータ
+		IItemData* item = nullptr;
+
 		vector<string> record; //1行分
 		record = table[row]; //1行分読み込み
 
-		ItemTypeE type = (ItemTypeE)(stoi(record[3]));
+		//アイテムタイプ
+		ItemTypeE type = (ItemTypeE)(stoi(record[ItemDataReadCodeE::ItemType]));
 
 		//ID計算
 		int id = 0;
 		//上1桁
-		id += (type + 1) * IItemData::SubTypeID;
+		id += (type + 1) * IItemData::TypeID;
 		//下3桁
-		id += stoi(record[0]);
+		id += stoi(record[ItemDataReadCodeE::ItemID]);
 
-		IItemData* item = nullptr;
-
+		//アイコンファイル名
 		const char* baseDir = "Icon/";
 		char iconfp[64];
 		strcpy(iconfp, baseDir);
-		strcat(iconfp, record[2].c_str());
+		strcat(iconfp, record[ItemDataReadCodeE::FileName].c_str());
 
+		//アイテム名
 		char namefp[64];
-		strcpy(namefp, record[1].c_str());
+		strcpy(namefp, record[ItemDataReadCodeE::ItemName].c_str());
+
+		//最低ドロップレベル
+		int minlevel = stoi(record[ItemDataReadCodeE::MinLevel]);
+		//最高ドロップレベル
+		int maxlevel = stoi(record[ItemDataReadCodeE::MaxLevel]);
+		//ドロップ確率
+		int probability = stoi(record[ItemDataReadCodeE::Probability]);
 
 		//タイプによって違う初期化
 		switch (type)
 		{
 		case Sword:
-			break;
+		{
+
+		}
+		break;
 		case Shield:
-			break;
+		{
+
+		}
+		break;
 		case Helm:
 		case Armor:
 		case Arm:
 		case Greaves:
 		{
-			int defense = stoi(record[4]);
+			int defense = stoi(record[ItemDataReadCodeE::Defense]);
+		
 			//アイテムデータ作成
-			item = new ArmorItemData(id, namefp, iconfp, type, defense);
+			item = new ArmorItemData(id, namefp, iconfp, type, defense, minlevel, maxlevel, probability);
 		}
 		break;
 		case Accessory:
-			break;
-		case TypeNum:
-			break;
+		{
+
+		}
+		break;
 		default:
 			break;
 		}

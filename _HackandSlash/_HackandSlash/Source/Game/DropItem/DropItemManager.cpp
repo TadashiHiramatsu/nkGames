@@ -4,13 +4,14 @@
 #include"../GameCamera.h"
 
 #include"../Item/InventoryManager.h"
+#include"../Item/ItemDataResource.h"
 
 /** 初期化. */
 void DropItemManager::Start()
 {
 	DropItemList_.clear();
 
-	PickUpDistance_ = 1.0f;
+	PickUpDistance_ = 2.0f;
 
 	AButtonSprite_.Load("Image/AButton.png");
 	AButtonSprite_.Start();
@@ -75,16 +76,67 @@ void DropItemManager::Render()
 	}
 }
 
-/** 装備アイテムをドロップアイテムにしてリストに登録する. */
-void DropItemManager::SetDropItem(EquipmentItem * item, D3DXVECTOR3 & pos)
+void DropItemManager::SetDropItem(int level, D3DXVECTOR3 & pos)
 {
-	
-	//ドロップアイテムのポインタを作成
-	DropItem* dropitem = new DropItem();
-	
-	dropitem->Start(item, pos, Player_);
+	struct DataS
+	{
+		/** アイテムデータ. */
+		IItemData* ItemData_;
+		/** ドロップ率. */
+		int Probability_;
+	};
 
-	//リストに設定
-	DropItemList_.push_back(dropitem);
+	//この敵が落とすアイテム
+	vector<DataS*> ItemList;
 
+	//実際のドロップ値?
+	int probability = 0;
+
+	//存在するアイテム.
+	map<int, IItemData*> ItemMap = ItemDataResource().GetItemMap();
+	for (auto it : ItemMap)
+	{
+		if (it.second->GetMinLevel() <= level && level <= it.second->GetMaxLevel())
+		{
+			DataS* data = new DataS();
+
+			//アイテムデータを設定.
+			data->ItemData_ = it.second;
+
+			//ドロップ率を加算
+			probability += it.second->GetProbability();
+
+			//ドロップ率を設定
+			data->Probability_ = probability;
+
+
+			ItemList.push_back(data);
+		}
+	}
+
+	int p = Random().Range(0, max(999999, probability));
+
+	EquipmentItem* item = nullptr;
+
+	for(auto it : ItemList)
+	{
+		if (p < it->Probability_)
+		{
+			item = new EquipmentItem(it->ItemData_);
+			break;
+		}
+	}
+
+	if (item != nullptr)
+	{
+
+		//ドロップアイテムのポインタを作成
+		DropItem* dropitem = new DropItem();
+		dropitem->Start(item, pos, Player_);
+
+		//リストに設定
+		DropItemList_.push_back(dropitem);
+	}
+
+	ItemList.clear();
 }

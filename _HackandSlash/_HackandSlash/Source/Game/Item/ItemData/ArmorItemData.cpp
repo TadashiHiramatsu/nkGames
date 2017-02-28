@@ -19,35 +19,32 @@ ArmorItemData::ArmorItemData()
 }
 
 /**
- * Constructor.
- *
- * @author	HiramatsuTadashi
- * @date	2017/01/05
- *
- * @param	_ID			 	The identifier.
- * @param	_Name		 	The name.
- * @param	_IconFilePath	Full pathname of the icon file.
- * @param	type		 	The type.
- * @param	_Defense	 	The defense.
- */
-ArmorItemData::ArmorItemData(int _ID, char * _Name, char * _IconFilePath, ItemTypeE type, int _Defense)
+* Constructor.
+*
+* @author	HiramatsuTadashi
+* @date	2017/01/05
+*
+* @param	id			 	アイテムID.
+* @param	itemname		アイテム名.
+* @param	iconfilename	アイコンファイル名.
+* @param	type		 	アイテムタイプ.
+* @param	defense	 		防御力.
+* @param	minlevel	 	最低レベル.
+* @param	maxlevel	 	最高レベル.
+* @param	probability	 	ドロップ率.
+*/
+ArmorItemData::ArmorItemData(int id, char * itemname, char * iconfilename, ItemTypeE type, int defense, int minlevel, int maxlevel, int probability)
 {
-	ID_ = _ID;
+	ID_ = id;
 
-	strcpy(Name_, _Name);
-	strcpy(IconFilePath_, _IconFilePath);
+	strcpy(Name_, itemname);
+	strcpy(IconFilePath_, iconfilename);
 
 	Type_ = type;
 
-	Defense_ = _Defense;
-}
+	Defense_ = defense;
 
-/**
- * Destructor.
- *
- * @author	HiramatsuTadashi
- * @date	2016/12/31
- */
-ArmorItemData::~ArmorItemData()
-{
+	MinLevel_ = minlevel;
+	MaxLevel_ = maxlevel;
+	Probability_ = probability;
 }

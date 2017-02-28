@@ -120,6 +120,11 @@ public:
 		Player_ = p;
 	}
 
+	void SetLevel(int l)
+	{
+		Level_ = l;
+	}
+
 protected:
 
 	/**
@@ -258,5 +263,8 @@ protected:
 
 	//死亡パーティクルを出すための一度きりのフラグ
 	bool isOnceDeath = false;
+
+	/** レベル. */
+	int Level_ = 1;
 
 };
