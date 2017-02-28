@@ -47,8 +47,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//エンジンの初期化
 	InitEngine(hInstance);
 
-	//SceneManager().ChangeScene<TitleScene>();
-	SceneManager().ChangeScene<GameScene>();
+	SceneManager().ChangeScene<TitleScene>();
+	//SceneManager().ChangeScene<GameScene>();
 
 	//エンジン起動!!
 	Engine().RunGameLoop();
