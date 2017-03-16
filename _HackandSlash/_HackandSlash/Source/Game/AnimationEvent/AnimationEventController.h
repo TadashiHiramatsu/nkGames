@@ -29,14 +29,10 @@ struct AnimationEventS
 public:
 
 	/**
-	 * コンストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/11
-	 */
-	AnimationEventS()
-	{
-	}
+	* コンストラクタ.
+	*/
+	AnimationEventS() {}
+
 	/**
 	 * コンストラクタ.
 	 *
@@ -68,7 +64,7 @@ public:
 		float fArg0, float fArg1, float fArg2, float fArg3,
 		int iArg0, int iArg1, int iArg2, int iArg3,
 		const char* strArg0, const char* strArg1, const char* strArg2, const char* strArg3,
-		D3DXVECTOR3 vArg0, D3DXVECTOR3 vArg1, D3DXVECTOR3 vArg2, D3DXVECTOR3 vArg3)
+		Vector3 vArg0, Vector3 vArg1, Vector3 vArg2, Vector3 vArg3)
 	{
 		EventType_ = type;
 		Time_ = time;
@@ -106,7 +102,7 @@ public:
 	/** 文字列の引数. */
 	const char* strArg_[4];
 	/** ベクトル型の引数. */
-	D3DXVECTOR3 vArg_[4];
+	Vector3 vArg_[4];
 
 };
 
@@ -131,7 +127,7 @@ public:
  * @author HiramatsuTadashi
  * @date 2017/01/11
  */
-class AnimationEventController
+class AnimationEventController : Noncopyable
 {
 public:
 

@@ -6,6 +6,7 @@
 #pragma once
 
 #include"../HUD/TitleBack.h"
+#include"../../Common/SceneEffect/Fade.h"
 
 /**
  * タイトルシステムクラス.
@@ -17,8 +18,8 @@ class TitleSystem : public IGameObject
 {
 public:
 
-	/** タイトルステート. */
-	enum TitleStateE
+	/** タイトルの状態. */
+	enum class TitleStateE
 	{
 		StartUp,	//!< 起動
 		Run,		//!< 稼働
@@ -91,10 +92,10 @@ private:
 	/** ステート. */
 	TitleStateE State_ = TitleStateE::StartUp;
 
-	/** ブラックアウト用カラーデータ. */
-	float BlackOutColor_ = 1.0f;
+	/** フェードクラスのポインタ*/
+	Fade* Fade_ = nullptr;
 
-	/** タイトルバックのポインタ. */
-	TitleBack* TitleBack_ = nullptr;
+	/** タイトルBGM. */
+	SoundSource* TitleBGM_ = nullptr;
 
 };

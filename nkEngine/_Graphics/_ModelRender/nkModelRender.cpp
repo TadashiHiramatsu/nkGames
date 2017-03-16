@@ -15,28 +15,10 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	ModelRender::ModelRender() :
-		ModelData_(nullptr),
-		Light_(nullptr),
-		NormalMap_(nullptr),
-		SpecMap_(nullptr),
-		isShadowCaster_(false),
-		isShadowReceiver_(false),
-		isRimLight_(false),
-		FogFunc_(FogFuncNone)
+	ModelRender::ModelRender()
 	{
 		FogParam_[0] = 0.0f;
 		FogParam_[1] = 0.0f;
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	ModelRender::~ModelRender()
-	{
 	}
 
 	/**
@@ -198,8 +180,6 @@ namespace nkEngine
 
 		D3DCAPS9 d3dCaps;
 		Device->GetDeviceCaps(&d3dCaps);
-
-
 	
 		//テクニックを設定
 		{
@@ -284,8 +264,8 @@ namespace nkEngine
 			else
 			{
 				//通常の描画
-				D3DXMATRIX viewProj;
-				D3DXMatrixMultiply(&viewProj, &Camera_->GetViewMatrix(),&Camera_->GetProjectionMatrix());
+				Matrix viewProj;
+				viewProj.Mul(Camera_->GetViewMatrix(), Camera_->GetProjectionMatrix());
 				Effect_->SetMatrix("g_mViewProj", &viewProj);
 
 				//アルファブレンディングを行う
@@ -300,7 +280,7 @@ namespace nkEngine
 			Effect_->SetValue("g_light", Light_, sizeof(Light));
 
 			//色の設定
-			Effect_->SetValue("g_Color", &Color_, sizeof(Color_));
+			Effect_->SetValue("g_Color", &Color_, sizeof(Vector4));
 
 			//true or false 最終的にGPUに送る
 			int flag[4] = { 0 };
@@ -334,11 +314,11 @@ namespace nkEngine
 
 			//スペキュラとフォグで使用
 			//カメラのポジションを計算
-			D3DXVECTOR3 cameraPos;
+			Vector4 cameraPos = Vector4::Zero;
 			cameraPos.x = Camera_->GetViewInvMatrix().m[3][0];
 			cameraPos.y = Camera_->GetViewInvMatrix().m[3][1];
 			cameraPos.z = Camera_->GetViewInvMatrix().m[3][2];
-			Effect_->SetVector("g_cameraPos", (D3DXVECTOR4*)&cameraPos);
+			Effect_->SetVector("g_cameraPos", &cameraPos);
 
 			//スペキュラマップ
 			if (SpecMap_ != nullptr)
@@ -351,15 +331,15 @@ namespace nkEngine
 				Effect_->SetBool("g_isSpec", false);
 			}
 
-			D3DXVECTOR4 fogParam;
-			if (FogFunc_ == FogFuncDist) 
+			Vector4 fogParam = Vector4::Zero;
+			if (FogFunc_ ==  FogFuncE::FogFuncDist) 
 			{
 				//距離フォグ
 				fogParam.x = FogParam_[0];
 				fogParam.y = FogParam_[1];
 				fogParam.z = 1.0f;
 			}
-			else if (FogFunc_ == FogFuncHeight) 
+			else if (FogFunc_ == FogFuncE::FogFuncHeight)
 			{
 				//高さフォグ
 				fogParam.x = FogParam_[0];
@@ -393,12 +373,7 @@ namespace nkEngine
 						NK_ASSERT(iPaletteEntry < MAX_MATRIX_PALLET, "ボーン行列パレットの最大数を超えた");
 						NK_ASSERT(pMeshContainer->BoneMatrixPtrs_[iMatrixIndex] != NULL, "NULL");
 
-						D3DXMatrixMultiply(
-							&BoneMatrixPallets_[iPaletteEntry],
-							&pMeshContainer->BoneOffsetMatrix_[iMatrixIndex],
-							pMeshContainer->BoneMatrixPtrs_[iMatrixIndex]
-						);
-
+						BoneMatrixPallets_[iPaletteEntry].Mul(pMeshContainer->BoneOffsetMatrix_[iMatrixIndex], *pMeshContainer->BoneMatrixPtrs_[iMatrixIndex]);
 					}
 
 				}
@@ -433,11 +408,11 @@ namespace nkEngine
 		//アニメーションなし
 		else
 		{
-			D3DXMATRIX mWorld;
+			Matrix mWorld;
 
-			if (pFrame != NULL)
+			if (pFrame != nullptr)
 			{
-				mWorld = pFrame->CombinedTransformationMatrix_;
+				mWorld.Set(pFrame->CombinedTransformationMatrix_);
 			}
 			else
 			{

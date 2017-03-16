@@ -18,7 +18,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/16
 	 */
-	class PostEffect
+	class PostEffect : Noncopyable
 	{
 	public:
 
@@ -67,14 +67,6 @@ namespace nkEngine
 		 * @date 2017/01/16
 		 */
 		void RenderFullScreen();
-
-		/**
-		 * ‰ð•ú.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/16
-		 */
-		void Release();
 
 	private:
 

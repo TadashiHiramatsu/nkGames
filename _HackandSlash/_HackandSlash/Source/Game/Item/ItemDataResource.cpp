@@ -9,6 +9,7 @@
 void CItemDataResource::Load()
 {
 	LoadFile("ItemData/ArmorItemData");
+	LoadFile("ItemData/WeaponItemData");
 }
 
 void CItemDataResource::LoadFile(char * filePath)
@@ -52,19 +53,22 @@ void CItemDataResource::LoadFile(char * filePath)
 		//最高ドロップレベル
 		int maxlevel = stoi(record[ItemDataReadCodeE::MaxLevel]);
 		//ドロップ確率
-		int probability = stoi(record[ItemDataReadCodeE::Probability]);
+		int probability = stof(record[ItemDataReadCodeE::Probability]) * 10000;
 
 		//タイプによって違う初期化
 		switch (type)
 		{
-		case Sword:
+		case Weapon:
 		{
+			int attack = stoi(record[ItemDataReadCodeE::Parameter]);
 
+			//アイテムデータ作成
+			item = new WeaponItemData(id, namefp, iconfp, type, minlevel, maxlevel, probability, attack);
 		}
 		break;
 		case Shield:
 		{
-
+			
 		}
 		break;
 		case Helm:
@@ -72,10 +76,10 @@ void CItemDataResource::LoadFile(char * filePath)
 		case Arm:
 		case Greaves:
 		{
-			int defense = stoi(record[ItemDataReadCodeE::Defense]);
+			int defense = stoi(record[ItemDataReadCodeE::Parameter]);
 		
 			//アイテムデータ作成
-			item = new ArmorItemData(id, namefp, iconfp, type, defense, minlevel, maxlevel, probability);
+			item = new ArmorItemData(id, namefp, iconfp, type, minlevel, maxlevel, probability, defense);
 		}
 		break;
 		case Accessory:

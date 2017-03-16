@@ -40,13 +40,15 @@ namespace
 		{
 
 			//二つのコリジョンデータからポジションを求める
-			const D3DXVECTOR3* vCol0Pos = (D3DXVECTOR3*)(&colObj0Wrap->getWorldTransform().getOrigin());
-			const D3DXVECTOR3* vCol1Pos = (D3DXVECTOR3*)(&colObj1Wrap->getWorldTransform().getOrigin());
-		
+			const Vector3* vCol0Pos = (Vector3*)(&colObj0Wrap->getWorldTransform().getOrigin());
+			const Vector3* vCol1Pos = (Vector3*)(&colObj1Wrap->getWorldTransform().getOrigin());
+
+
 			//長さを求める
-			D3DXVECTOR3 vDist;
-			vDist = *vCol0Pos - *vCol1Pos;
-			float distTmpSq = D3DXVec3Length(&vDist);
+			Vector3 vDist;
+			vDist.Sub(*vCol0Pos , *vCol1Pos);
+
+			float distTmpSq = vDist.Length();
 
 			//コリジョン作成
 			CollisionWorld::Collision* hitObjectTmp;
@@ -83,31 +85,11 @@ namespace
 		/** ?。FLT_MAXは単精度の浮動小数点が取りうる最大の値 */
 		float DistSq_ = FLT_MAX;
 		/** 調べるコリジョン属性. */
-		CollisionWorld::AttributeE QueryAttr_ = CollisionWorld::DamageToEnemy;
+		CollisionWorld::AttributeE QueryAttr_ = CollisionWorld::AttributeE::DamageToEnemy;
 
 	};
 
 }// namespace
-
-/**
- * コンストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/11
- */
-CollisionWorld::CollisionWorld()
-{
-}
-
-/**
- * デストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/11
- */
-CollisionWorld::~CollisionWorld()
-{
-}
 
 /**
  * 初期化.
@@ -177,7 +159,7 @@ void CollisionWorld::Update()
 *
 * @return Null if it fails, else the found overlapped damage collision.
 */
-const CollisionWorld::Collision* CollisionWorld::FindOverlappedDamageCollision(AttributeE attr, const D3DXVECTOR3 & pos, float radius) const
+const CollisionWorld::Collision* CollisionWorld::FindOverlappedDamageCollision(AttributeE attr, const Vector3 & pos, float radius) const
 {
 	for (auto& col : CollisionList_)
 	{
@@ -186,10 +168,10 @@ const CollisionWorld::Collision* CollisionWorld::FindOverlappedDamageCollision(A
 		{
 			float t = col->Radius_ + radius;
 
-			D3DXVECTOR3 diff;
-			diff = col->Position_ - pos;
+			Vector3 diff;
+			diff.Sub(col->Position_, pos);
 			
-			if (D3DXVec3LengthSq(&diff) < t * t)
+			if (diff.LengthSq() < t * t)
 			{
 				//衝突
 				return col.get();

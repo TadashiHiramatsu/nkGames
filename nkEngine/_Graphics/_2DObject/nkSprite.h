@@ -15,7 +15,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/06
 	 */
-	class Sprite
+	class Sprite : Noncopyable
 	{
 	public:
 
@@ -25,7 +25,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/06
 		 */
-		Sprite();
+		Sprite()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -33,7 +35,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/06
 		 */
-		~Sprite();
+		~Sprite()
+		{
+		}
 
 		/**
 		 * 読み込み.
@@ -78,7 +82,7 @@ namespace nkEngine
 		 *
 		 * @param [in,out]	transform	If non-null, the transform.
 		 */
-		void SetTransform(Transform* transform)
+		void SetTransform(const Transform* transform)
 		{
 			Transform_ = transform;
 		}
@@ -91,7 +95,7 @@ namespace nkEngine
 		 *
 		 * @param [in,out] camera If non-null, the camera.
 		 */
-		void SetCamera(Camera* camera)
+		void SetCamera(const Camera* camera)
 		{
 			Camera_ = camera;
 		}
@@ -101,20 +105,20 @@ namespace nkEngine
 		/** プリミティブ. */
 		Primitive Primitive_;
 		/** エフェクト. */
-		Effect* Effect_;
+		Effect* Effect_ = nullptr;
 		/** トランスフォーム. */
-		Transform* Transform_ = nullptr;
+		const Transform* Transform_ = nullptr;
 		/** テクスチャ. */
 		Texture Texture_;
 		/** カメラのポインタ. */
-		Camera* Camera_;
+		const Camera* Camera_ = nullptr;
 
 	public:
 
 		/** UV座標 x:左, y:上, z:右, w:下. */
-		D3DXVECTOR4 RectUV_;
+		Vector4 RectUV_ = Vector4(0, 0, 1, 1);
 		/** 色. */
-		D3DXVECTOR4 Color_;
+		Vector4 Color_ = Vector4(1, 1, 1, 1);
 
 	};
 

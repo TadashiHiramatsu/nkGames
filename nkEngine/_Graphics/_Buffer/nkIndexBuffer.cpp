@@ -54,11 +54,11 @@ namespace nkEngine
 
 		switch (format)
 		{
-		case IndexFormat16:
+		case IndexFormatE::IndexFormat16:
 			d3dFormat = D3DFMT_INDEX16;
 			size = indexNum * 2;
 			break;
-		case IndexFormat32:
+		case IndexFormatE::IndexFormat32:
 			d3dFormat = D3DFMT_INDEX32;
 			size = indexNum * 4;
 			break;

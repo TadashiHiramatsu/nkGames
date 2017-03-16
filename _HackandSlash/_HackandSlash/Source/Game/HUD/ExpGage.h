@@ -23,7 +23,9 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
 	 */
-	ExpGage();
+	ExpGage()
+	{
+	}
 
 	/**
 	 * デストラクタ.
@@ -31,7 +33,9 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
 	 */
-	~ExpGage();
+	~ExpGage()
+	{
+	}
 
 	/**
 	 * 初期化.

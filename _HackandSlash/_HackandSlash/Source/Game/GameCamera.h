@@ -23,7 +23,9 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
 	 */
-	GameCamera();
+	GameCamera()
+	{
+	}
 
 	/**
 	 * デストラクタ.
@@ -31,7 +33,9 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/31
 	 */
-	~GameCamera();
+	~GameCamera()
+	{
+	}
 
 	/**
 	 * 初期化.
@@ -57,7 +61,7 @@ public:
 	 *
 	 * @return	Null if it fails, else the camera.
 	 */
-	Camera* GetCamera()
+	const Camera* GetCamera() const
 	{
 		return &Camera_;
 	}
@@ -70,7 +74,7 @@ public:
 	 *
 	 * @param [in,out]	pla	If non-null, the pla.
 	 */
-	void SetPlayer(Player* pla)
+	void SetPlayer(const Player* pla)
 	{
 		Player_ = pla;
 	}
@@ -83,13 +87,15 @@ public:
 	 *
 	 * @return	The direction forward.
 	 */
-	D3DXVECTOR3& GetDirectionForward()
+	const Vector3& GetDirectionForward() const
 	{
-		D3DXVECTOR3 dirForward;
+		Vector3 dirForward;
 		dirForward.x = ViewInvMatrix_->m[2][0];
 		dirForward.y = 0.0f;		//Y軸いらない。
 		dirForward.z = ViewInvMatrix_->m[2][2];
-		D3DXVec3Normalize(&dirForward, &dirForward);//Y軸を打ち消しているので正規化する。
+
+		//Y軸を打ち消しているので正規化する。
+		dirForward.Normalize();
 		return dirForward;
 	}
 
@@ -101,13 +107,15 @@ public:
 	 *
 	 * @return	The direction right.
 	 */
-	D3DXVECTOR3& GetDirectionRight()
+	const Vector3& GetDirectionRight() const
 	{
-		D3DXVECTOR3 dirRight;
+		Vector3 dirRight;
 		dirRight.x = ViewInvMatrix_->m[0][0];
 		dirRight.y = 0.0f;		//Y軸はいらない。
 		dirRight.z = ViewInvMatrix_->m[0][2];
-		D3DXVec3Normalize(&dirRight, &dirRight);//Y軸を打ち消しているので正規化する。
+
+		//Y軸を打ち消しているので正規化する。
+		dirRight.Normalize();
 		return dirRight;
 	}
 
@@ -116,14 +124,23 @@ private:
 	/** カメラ. */
 	Camera Camera_;
 	/** プレイヤー. */
-	Player* Player_;
+	const Player* Player_ = nullptr;
 	/** 距離. */
 	float Distance_;
-	/** The view inverse matrix. */
-	const D3DXMATRIX* ViewInvMatrix_;
-	/** 回転スピード.一秒間に回転する角度.*/
-	float SpinSpeed = 45;
+	/** 最大距離. */
+	float DistanceMax_;
 
+	/** ビュー行列の逆行列. */
+	const Matrix* ViewInvMatrix_ = nullptr;
+
+	/** 回転スピード.一秒間に回転する角度. */
+	float SpinSpeed = 45.0f;
+
+	/** プレイヤーの少し上を見る調整. */
+	Vector3 PlusPosition_;
+
+	/** カメラコリジョンクラス. */
+	CameraCollision CameraCollision_;
 
 };
 

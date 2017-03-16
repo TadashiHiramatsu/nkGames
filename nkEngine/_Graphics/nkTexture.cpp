@@ -10,28 +10,6 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	Texture::Texture() :
-		D3DTexture_(nullptr)
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	Texture::~Texture()
-	{
-		Release();
-	}
-
-	/**
 	 * 読み込み. "Asset/Texture/"内に保存されているテクスチャを読み込めます.
 	 *
 	 * @author HiramatsuTadashi

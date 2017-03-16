@@ -10,40 +10,6 @@ namespace nkEngine
 {
 
 	/**
-	 * Default constructor.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	MeshCollider::MeshCollider() :
-		MeshShape_(nullptr),
-		StridingMeshInterface_(nullptr)
-	{
-	}
-
-	/**
-	 * Destructor.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	MeshCollider::~MeshCollider()
-	{
-		//頂点バッファ配列の削除
-		for (auto& vb : VertexBufferArray_) 
-		{
-			delete vb;
-		}
-
-		//インデックスバッファの削除
-		for (auto& ib : IndexBufferArray_) 
-		{
-			delete ib;
-		}
-		delete StridingMeshInterface_;
-	}
-
-	/**
 	* CModelRenderからMeshコライダーを生成.
 	*
 	* @author	HiramatsuTadashi
@@ -52,7 +18,7 @@ namespace nkEngine
 	* @param [in,out]	model			スキンモデル.
 	* @param 		  	offsetMatrix	オフセット行列.
 	*/
-	void MeshCollider::Create(ModelRender* model, const D3DXMATRIX* offsetMatrix)
+	void MeshCollider::Create(ModelRender* model, const Matrix* offsetMatrix)
 	{
 		StridingMeshInterface_ = new btTriangleIndexVertexArray;
 
@@ -73,7 +39,7 @@ namespace nkEngine
 				vb->GetDesc(&desc);
 				
 				//頂点バッファをロックする
-				D3DXVECTOR3* pos;
+				Vector3* pos;
 				vb->Lock(0, 0, (void**)&pos, D3DLOCK_READONLY);
 
 				//頂点バッファ作成
@@ -84,11 +50,10 @@ namespace nkEngine
 				for (int v = 0; v < numVertex; v++) 
 				{
 					//ポジション取得
-					D3DXVECTOR3 posTmp = *pos;
-
+					Vector3 posTmp = *pos;
 					if (offsetMatrix)
 					{
-						D3DXVECTOR3 vTmp = posTmp;
+						Vector3 vTmp = posTmp;
 						posTmp.x = vTmp.x * offsetMatrix->m[0][0] + vTmp.y * offsetMatrix->m[1][0] + vTmp.z * offsetMatrix->m[2][0] + offsetMatrix->m[3][0];
 						posTmp.y = vTmp.x * offsetMatrix->m[0][1] + vTmp.y * offsetMatrix->m[1][1] + vTmp.z * offsetMatrix->m[2][1] + offsetMatrix->m[3][1];
 						posTmp.z = vTmp.x * offsetMatrix->m[0][2] + vTmp.y * offsetMatrix->m[1][2] + vTmp.z * offsetMatrix->m[2][2] + offsetMatrix->m[3][2];
@@ -97,7 +62,7 @@ namespace nkEngine
 					vertexBuffer->push_back(posTmp);
 					char* p = (char*)pos;
 					p += stride;
-					pos = (D3DXVECTOR3*)p;
+					pos = (Vector3*)p;
 				}
 
 				//アンロック
@@ -168,7 +133,7 @@ namespace nkEngine
 			indexedMesh.m_triangleIndexStride = 12;
 			indexedMesh.m_numVertices = vb->size();
 			indexedMesh.m_vertexBase = (unsigned char*)(&vb->front());
-			indexedMesh.m_vertexStride = sizeof(D3DXVECTOR3);
+			indexedMesh.m_vertexStride = sizeof(Vector3);
 			
 			StridingMeshInterface_->addIndexedMesh(indexedMesh);
 

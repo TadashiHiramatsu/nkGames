@@ -9,25 +9,21 @@ namespace nkEngine
 {
 
 	/**
-	 * 衝突判定に使用する情報.
-	 * 画面左上を0,0とする位置情報.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	struct BoxCollisionS
+	* アンカープリセット.
+	* アンカーの位置からの位置になる.
+	*/
+	enum class AnchorPresetE
 	{
-	public:
-
-		/** 上. */
-		int Top_;
-		/** 下. */
-		int Bottom_;
-		/** 左. */
-		int Left_;
-		/** 右. */
-		int Right_;
-
+		TopLeft,		//!< 左上
+		TopCenter,		//!< 上中央
+		TopRight,		//!< 右上
+		MiddleLeft,		//!< 左中央
+		MiddleCenter,	//!< 中心
+		MiddleRight,	//!< 右中央
+		BottomLeft,		//!< 左下
+		BottomCenter,	//!< 下中央
+		BottomRight,	//!< 右下
+		AnchorPresetNum,//!< 数
 	};
 
 	/**
@@ -36,28 +32,8 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	class RectTransform
+	class RectTransform : Noncopyable
 	{
-	public:
-
-		/**   
-		 * アンカープリセット.
-		 * アンカーの位置からの位置になる. 
-		 */
-		enum AnchorPresetE
-		{
-			TopLeft,		//!< 左上
-			TopCenter,		//!< 上中央
-			TopRight,		//!< 右上
-			MiddleLeft,		//!< 左中央
-			MiddleCenter,	//!< 中心
-			MiddleRight,	//!< 右中央
-			BottomLeft,		//!< 左下
-			BottomCenter,	//!< 下中央
-			BottomRight,	//!< 右下
-			AnchorPresetNum,//!< 数
-		};
-
 	public:
 
 		/**
@@ -74,7 +50,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		~RectTransform();
+		~RectTransform()
+		{
+		}
 
 		/**
 		 * 更新.
@@ -90,48 +68,44 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 *
-		 * @param value Degree値.
+		 * @param angle 回転量(度).
 		 */
-		void RotationZ(float value)
+		void RotationZ(float angle)
 		{
-			float z = D3DXToRadian(value);
-			D3DXQuaternionRotationAxis(&Rotation_, &D3DXVECTOR3(0, 0, 1), z);
+			Rotation_.RotationAxis(Vector3::AxisZ, angle);
 		}
 
 	public:
 
-		/** アンカー初期値は中心. */
-		AnchorPresetE Anchor_;
+		/** アンカー.初期値は中心. */
+		AnchorPresetE Anchor_ = AnchorPresetE::MiddleCenter;
 		/** ポジション. */
-		D3DXVECTOR3 Position_;
+		Vector3 Position_ = Vector3::Zero;
 		/** 横幅. */
-		float Width_;
+		float Width_ = 100;
 		/** 縦幅. */
-		float Height_;
+		float Height_ = 100;
 		/** 中心. */
-		D3DXVECTOR2 Pivot_;
+		Vector2 Pivot_ = Vector2(0.5f, 0.5f);
 		/** 回転. */
-		D3DXQUATERNION Rotation_;
+		Quaternion Rotation_ = Quaternion::Identity;
 		/** サイズ. */
-		D3DXVECTOR2 Scale_;
-
-		/** 衝突レクト. */
-		BoxCollisionS BoxCol_;
+		Vector2 Scale_ = Vector2::One;
 
 	public:
 
 		/** 親子関係を持つ親のRectTransformのポインタ. */
-		RectTransform* Parent_;
+		RectTransform* Parent_ = nullptr;
 
 		/** ワールド行列. */
-		D3DXMATRIX WorldMatrix_;
+		Matrix WorldMatrix_ = Matrix::Identity;
 		/** ワールド行列(サイズなし) */
-		D3DXMATRIX WorldSizeOffMatrix_;
+		Matrix WorldSizeOffMatrix_ = Matrix::Identity;
 
 		/** プロジェクション行列. */
-		D3DXMATRIX ProjectionMatrix_;
+		Matrix ProjectionMatrix_ = Matrix::Identity;
 		/** ワールドプロジェクション行列. */
-		D3DXMATRIX WorldProjMatrix_;
+		Matrix WorldProjMatrix_ = Matrix::Identity;
 
 	};
 

@@ -6,7 +6,7 @@ class ItemDetailRender
 {
 public:
 
-	void Start(RectTransform* parent, D3DXVECTOR3& pos);
+	void Start(RectTransform* parent,const Vector3& pos);
 
 	void Update();
 

@@ -10,6 +10,7 @@
 
 #include"nkEngine/_Component/nkCharacterController.h"
 #include"..\Player\Player.h"
+#include"../GameCamera.h"
 
 /**
  * 敵の基底クラス.
@@ -23,15 +24,15 @@ class IEnemy : public IGameObject
 protected:
 
 	/** ステートコード. */
-	enum StateCodeE
+	enum class StateCodeE
 	{
-		StateSpawn,		//!< 出現
-		StateWaiting,	//!< 立ち止まり
-		StateLoitering, //!< 徘徊
-		StateChase,		//!< 追いかけ
-		StateAttack,	//!< 攻撃
-		StateDamage,	//!< ダメージ
-		StateDeath,		//!< そして死
+		Spawn,		//!< 出現.
+		Waiting,	//!< 立ち止まり.
+		Loitering,	//!< 徘徊.
+		Chase,		//!< 追いかけ.
+		Attack,		//!< 攻撃.
+		Hit,		//!< ヒット.
+		Death,		//!< 死.
 	};
 
 public:
@@ -85,12 +86,14 @@ public:
 	virtual void Release()override;
 
 	/**
-	 * ダメージを受けた.
+	 * ダメージ関数.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
 	 */
-	virtual void Damage(){}
+	virtual void Damage()
+	{
+	}
 
 	/**
 	 * ポジションを設定.
@@ -101,7 +104,7 @@ public:
 	 *
 	 * @param [in,out] pos The position.
 	 */
-	void SetPosition(D3DXVECTOR3& pos)
+	void SetPosition(Vector3& pos)
 	{
 		Transform_.Position_ = pos;
 		DefaultPosition_ = pos;
@@ -120,6 +123,9 @@ public:
 		Player_ = p;
 	}
 
+	/**
+	* レベルを設定.
+	*/
 	void SetLevel(int l)
 	{
 		Level_ = l;
@@ -159,11 +165,13 @@ protected:
 	 *
 	 * @return to player dir.
 	 */
-	D3DXVECTOR2& GetToPlayerDir()
+	Vector2& GetToPlayerDir()
 	{
-		D3DXVECTOR2 toP = D3DXVECTOR2(Player_->Transform_.Position_.x, Player_->Transform_.Position_.z) - D3DXVECTOR2(Transform_.Position_.x, Transform_.Position_.z);
-		D3DXVec2Normalize(&toP, &toP);
-		return toP;
+		Vector3 toP;
+		toP.Sub(Player_->Transform_.Position_, Transform_.Position_);
+		toP.y = 0;
+		toP.Normalize();
+		return Vector2(toP.x, toP.z);
 	}
 
 	/**
@@ -177,8 +185,10 @@ protected:
 	 */
 	float GetToPlayerDis()
 	{
-		D3DXVECTOR3 toP = Player_->Transform_.Position_ - Transform_.Position_;
-		return D3DXVec2Length(&D3DXVECTOR2(toP.x, toP.z));
+		Vector3 toP;
+		toP.Sub(Player_->Transform_.Position_ ,Transform_.Position_);
+		toP.y = 0;
+		return toP.Length();
 	}
 
 	/**
@@ -189,11 +199,13 @@ protected:
 	 *
 	 * @return to destination.
 	 */
-	D3DXVECTOR2& GetToDestination()
+	Vector2& GetToDestination()
 	{
-		D3DXVECTOR2 toD = Destination_ - D3DXVECTOR2(Transform_.Position_.x, Transform_.Position_.z);
-		D3DXVec2Normalize(&toD, &toD);
-		return toD;
+		Vector3 toD;
+		toD.Sub(Destination_, Transform_.Position_);
+		toD.y = 0;
+		toD.Normalize();
+		return Vector2(toD.x, toD.z);
 	}
 
 	/**
@@ -207,8 +219,36 @@ protected:
 	 */
 	float GetToDestinationDis()
 	{
-		D3DXVECTOR2 toD = Destination_ - D3DXVECTOR2(Transform_.Position_.x, Transform_.Position_.z);
-		return D3DXVec2Length(&toD);
+		Vector3 toD;
+		toD.Sub(Destination_, Transform_.Position_);
+		toD.y = 0;
+		return toD.Length();
+	}
+
+	/**
+	* 消滅パーティクルの発生. 
+	*
+	* @param bonename	ボーン名.
+	* @param param		パーティクル情報.
+	*/
+	void DisappearanceParticleSet(char* bonename, const ParticleParameterS& param)
+	{
+		//行列を取得.
+		Matrix posmatrix = *ModelRender_.FindBoneWorldMatrix(bonename);
+		
+		//座標を取得.
+		Vector3 pos;
+		pos.x = posmatrix.m[3][0];
+		pos.y = posmatrix.m[3][1];
+		pos.z = posmatrix.m[3][2];
+
+		//寿命時間(秒).
+		float LifeTime = 8.0f;
+
+		//パーティクルエミッタを作成.
+		ParticleEmitter* pe = NewGO<ParticleEmitter>();
+		//初期化.
+		pe->Start(g_MainCamera->GetCamera(), param, pos, LifeTime);
 	}
 
 protected:
@@ -220,9 +260,9 @@ protected:
 	/** アニメーション. */
 	Animation Animation_;
 
-	/** The radius. */
+	/** 半径. */
 	float Radius_;
-	/** The height. */
+	/** 高さ. */
 	float Height_;
 	/** キャラクターコントローラ. */
 	CharacterController CharacterController_;
@@ -231,11 +271,11 @@ protected:
 	int Hp_;
 
 	/** スポーン位置 ここからの距離移動できる. */
-	D3DXVECTOR3 DefaultPosition_;
+	Vector3 DefaultPosition_ = Vector3();
 	/** 距離. */
 	float Distance_;
 	/** 目的地. */
-	D3DXVECTOR2 Destination_;
+	Vector3 Destination_ = Vector3();
 
 	/** プレイヤーのポインタ. */
 	Player* Player_;
@@ -258,11 +298,16 @@ protected:
 	/** アニメーションイベント. */
 	AnimationEventController AnimationEvent_;
 
-	/** アルファデータ. */
+	/** アルファ値. */
 	float Alpha_ = 1.0f;
 
-	//死亡パーティクルを出すための一度きりのフラグ
-	bool isOnceDeath = false;
+	/** 死亡した判定の一度きりのフラグ. */
+	bool isOnceDeath_ = false;
+
+	/** 消滅までの時間(秒). */
+	float DisappearanceTime_ = 5.0f;
+	/** 消滅時間のローカルタイム. */
+	float DisappearanceLT_ = 0.0f;
 
 	/** レベル. */
 	int Level_ = 1;

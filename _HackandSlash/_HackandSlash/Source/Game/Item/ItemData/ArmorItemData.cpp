@@ -28,12 +28,12 @@ ArmorItemData::ArmorItemData()
 * @param	itemname		アイテム名.
 * @param	iconfilename	アイコンファイル名.
 * @param	type		 	アイテムタイプ.
-* @param	defense	 		防御力.
 * @param	minlevel	 	最低レベル.
 * @param	maxlevel	 	最高レベル.
 * @param	probability	 	ドロップ率.
+* @param	defense	 		防御力.
 */
-ArmorItemData::ArmorItemData(int id, char * itemname, char * iconfilename, ItemTypeE type, int defense, int minlevel, int maxlevel, int probability)
+ArmorItemData::ArmorItemData(int id, char * itemname, char * iconfilename, ItemTypeE type, int minlevel, int maxlevel, int probability, int defense)
 {
 	ID_ = id;
 

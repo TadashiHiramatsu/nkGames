@@ -27,6 +27,10 @@
 
 #include"Enemy\Spawn\EnemySpawnManager.h"
 
+#include"../Common/SceneEffect/Fade.h"
+
+#include"Boss\Boss_01.h"
+
 
 /** コリジョンワールドのグローバルポインタ. */
 CollisionWorld* g_CollisionWorld = nullptr;
@@ -62,17 +66,25 @@ void GameScene::Start()
 	GraphicsConfig_.BloomConfig_.isEnable_ = true;
 	GraphicsConfig_.AntiAliasingConfig_.isEnable_ = true;
 
-	//コリジョンワールドの作成
-	g_CollisionWorld = NewGO<CollisionWorld>();
-	//メインカメラの作成
-	g_MainCamera = NewGO<GameCamera>(1);
-
 	//アイテムデータのロード
 	ItemDataResource().Load();
+
+	//コリジョンワールドの作成
+	g_CollisionWorld = NewGO<CollisionWorld>();
+	
+	//メインカメラの作成
+	g_MainCamera = NewGO<GameCamera>(1);
 
 	//ゲームライトの初期化
 	g_GameLight = new GameLight();
 	g_GameLight->Start();
+
+	//地面作成
+	NewGO<Ground>();
+	//マップ作成
+	NewGO<Map>();
+	//スカイボックス
+	Skybox* skybox = NewGO<Skybox>();
 
 	//プレイヤーの作成
 	Player* player = NewGO<Player>();
@@ -80,15 +92,10 @@ void GameScene::Start()
 	//ゲームカメラにプレイヤーを設定
 	g_MainCamera->SetPlayer(player);
 	
-	//地面
-	NewGO<Ground>();
-
-	//スカイボックス
-	Skybox* skybox = NewGO<Skybox>();
+	//スカイボックスにプレイヤーのポインタを設定.
 	skybox->SetPlayer(player);
 
-	NewGO<Map>();
-
+	//エネミースポナークラスの初期化
 	EnemySpawnManager* esm = NewGO<EnemySpawnManager>();
 	esm->SetPlayer(player);
 
@@ -104,9 +111,18 @@ void GameScene::Start()
 	g_MenuSystem = NewGO<MenuSystem>();
 	g_MenuSystem->Start(player);
 
+	//インベントリの初期化
 	InventoryManager().Start();
 
+	//ドロップアイテムマネージャの作成
 	g_DropItemManager = NewGO<DropItemManager>(3);
 	g_DropItemManager->SetPlayer(player);
+
+	//フェードクラスの作成
+	Fade* fade = NewGO<Fade>(5);
+	fade->StartFadeIn();
+
+	Boss_01* boss = NewGO<Boss_01>();
+	boss->SetPlayer(player);
 
 }

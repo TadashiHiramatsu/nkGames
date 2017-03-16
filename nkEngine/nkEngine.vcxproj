@@ -162,6 +162,7 @@
     <ClInclude Include="nkEngine.h" />
     <ClInclude Include="nkOriginalDefine.h" />
     <ClInclude Include="nkstdafx.h" />
+    <ClInclude Include="_Component\nkCameraCollision.h" />
     <ClInclude Include="_Component\nkCharacterController.h" />
     <ClInclude Include="_Component\nkTransform.h" />
     <ClInclude Include="_Component\nkRectTransform.h" />
@@ -195,12 +196,12 @@
     <ClInclude Include="_Graphics\_Shape\nkShape.h" />
     <ClInclude Include="_Graphics\_Shape\nkShapeVertex.h" />
     <ClInclude Include="_Graphics\_Shape\nkSphereSharpe.h" />
-    <ClInclude Include="_Graphics\_UI\nkButton.h" />
     <ClInclude Include="_Graphics\_UI\nkImage.h" />
     <ClInclude Include="_Graphics\_UI\nkText.h" />
     <ClInclude Include="_Input\nkInput.h" />
     <ClInclude Include="_Input\nkXinput.h" />
     <ClInclude Include="_Math\nkHash.h" />
+    <ClInclude Include="_Math\nkMatrix.h" />
     <ClInclude Include="_Math\nkRandom.h" />
     <ClInclude Include="_Math\nkVector.h" />
     <ClInclude Include="_Physics\nkBoxCollider.h" />
@@ -211,6 +212,7 @@
     <ClInclude Include="_Physics\nkPhysics.h" />
     <ClInclude Include="_Physics\nkRigidBody.h" />
     <ClInclude Include="_Physics\nkSphereCollider.h" />
+    <ClInclude Include="_Policy\nkNoncopyable.h" />
     <ClInclude Include="_Resources\nkSkinModelDataHandle.h" />
     <ClInclude Include="_Resources\nkSkinModelDataResources.h" />
     <ClInclude Include="_Resources\nkTextureResources.h" />
@@ -230,10 +232,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="_Component\nkCameraCollision.cpp" />
     <ClCompile Include="_Component\nkCharacterController.cpp" />
     <ClCompile Include="_Component\nkTransform.cpp" />
     <ClCompile Include="_Component\nkRectTransform.cpp" />
-    <ClCompile Include="_GameObject\nkGameObject.cpp" />
     <ClCompile Include="_GameObject\nkGameObjectManager.cpp" />
     <ClCompile Include="_Graphics\nkCamera.cpp" />
     <ClCompile Include="_Graphics\nkRenderTarget.cpp" />
@@ -243,7 +245,6 @@
     <ClCompile Include="_Graphics\_2DObject\nkSprite.cpp" />
     <ClCompile Include="_Graphics\_Buffer\nkIndexBuffer.cpp" />
     <ClCompile Include="_Graphics\_Buffer\nkVertexBuffer.cpp" />
-    <ClCompile Include="_Graphics\_Effect\nkEffect.cpp" />
     <ClCompile Include="_Graphics\_Effect\nkEffectManager.cpp" />
     <ClCompile Include="_Graphics\_ModelRender\nkAnimation.cpp" />
     <ClCompile Include="_Graphics\_ModelRender\nkLight.cpp" />
@@ -258,11 +259,11 @@
     <ClCompile Include="_Graphics\_PreRender\nkShadow.cpp" />
     <ClCompile Include="_Graphics\_Shape\nkShape.cpp" />
     <ClCompile Include="_Graphics\_Shape\nkSphereShape.cpp" />
-    <ClCompile Include="_Graphics\_UI\nkButton.cpp" />
     <ClCompile Include="_Graphics\_UI\nkImage.cpp" />
     <ClCompile Include="_Graphics\_UI\nkText.cpp" />
     <ClCompile Include="_Input\nkInput.cpp" />
     <ClCompile Include="_Input\nkXinput.cpp" />
+    <ClCompile Include="_Math\nkMatrix.cpp" />
     <ClCompile Include="_Math\nkVector.cpp" />
     <ClCompile Include="_Physics\nkBoxCollider.cpp" />
     <ClCompile Include="_Physics\nkCapsuleCollider.cpp" />
@@ -273,8 +274,6 @@
     <ClCompile Include="_Resources\nkSkinModelDataHandle.cpp" />
     <ClCompile Include="_Resources\nkSkinModelDataResources.cpp" />
     <ClCompile Include="_Resources\nkTextureResources.cpp" />
-    <ClCompile Include="_Scene\nkScene.cpp" />
-    <ClCompile Include="_Scene\nkSceneManager.cpp" />
     <ClCompile Include="_Sound\nkSoundEngine.cpp" />
     <ClCompile Include="_Sound\nkSoundSource.cpp" />
     <ClCompile Include="_Sound\nkWaveFile.cpp" />

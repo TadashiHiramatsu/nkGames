@@ -52,6 +52,15 @@
     <Filter Include="Game\Enemy\Spawn">
       <UniqueIdentifier>{1f75b18f-cb67-4cc4-a7f4-cc5ea17357f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{73afe6c3-b30a-4a5a-b0b2-a0cdfded21b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\SceneEfferct">
+      <UniqueIdentifier>{ac31339e-8ce0-48da-91f5-6268026c9898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Boss">
+      <UniqueIdentifier>{38865a8a-af2e-4408-9345-2c88a6482a04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -106,9 +115,6 @@
       <Filter>Game\Item\ItemData</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Item\ItemData\ShieldItemData.cpp">
-      <Filter>Game\Item\ItemData</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Item\ItemData\SwordItemData.cpp">
       <Filter>Game\Item\ItemData</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Item\EquipmentItem.cpp">
@@ -170,6 +176,18 @@
     </ClCompile>
     <ClCompile Include="Source\Game\Item\ItemDataResource.cpp">
       <Filter>Game\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Item\ItemData\WeaponItemData.cpp">
+      <Filter>Game\Item\ItemData</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\SceneEffect\Fade.cpp">
+      <Filter>Common\SceneEfferct</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Boss\IBoss.cpp">
+      <Filter>Game\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Boss\Boss_01.cpp">
+      <Filter>Game\Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -233,9 +251,6 @@
     <ClInclude Include="Source\Game\Item\ItemData\ShieldItemData.h">
       <Filter>Game\Item\ItemData</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Item\ItemData\SwordItemData.h">
-      <Filter>Game\Item\ItemData</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Item\EquipmentItem.h">
       <Filter>Game\Item</Filter>
     </ClInclude>
@@ -295,6 +310,18 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Item\ItemDataResource.h">
       <Filter>Game\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Item\ItemData\WeaponItemData.h">
+      <Filter>Game\Item\ItemData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\SceneEffect\Fade.h">
+      <Filter>Common\SceneEfferct</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Boss\Boss_01.h">
+      <Filter>Game\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Boss\IBoss.h">
+      <Filter>Game\Boss</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

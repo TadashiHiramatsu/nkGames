@@ -10,17 +10,17 @@ namespace nkEngine
 {
 
 	/**
-	 * 初期化. オーバーライドじゃないため自分で呼ぶ必要がある.
+	 * 初期化. 
+	 * オーバーライドじゃないため自分で呼ぶ必要がある.
 	 *
 	 * @author HiramatsuTadashi
-	 * @date 2017/01/16
 	 *
-	 * @param [in,out] camera	    If non-null, the camera.
-	 * @param 		   param	    The parameter.
-	 * @param 		   emitPosition The emit position.
-	 * @param 		   lifeTime	    The life time.
+	 * @param [in,out] camera	    カメラ.
+	 * @param 		   param	    パーティクル情報.
+	 * @param 		   emitPosition 発生座標.
+	 * @param 		   lifeTime	    寿命(秒).
 	 */
-	void ParticleEmitter::Start(Camera* camera, const ParticleParameterS& param, D3DXVECTOR3& emitPosition, float lifeTime)
+	void ParticleEmitter::Start(const Camera* camera, const ParticleParameterS& param, const Vector3& emitPosition, float lifeTime)
 	{
 		Camera_ = camera;
 		Param_ = param;
@@ -93,7 +93,7 @@ namespace nkEngine
 	 *
 	 * @param addForce The add force.
 	 */
-	void ParticleEmitter::AddForce(const D3DXVECTOR3& addForce)
+	void ParticleEmitter::AddForce(const Vector3& addForce)
 	{
 		for (auto it : ParticleList_) 
 		{

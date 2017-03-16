@@ -23,7 +23,9 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/30
 	 */
-	LifeGage();
+	LifeGage()
+	{
+	}
 
 	/**
 	 * デストラクタ.
@@ -31,7 +33,9 @@ public:
 	 * @author	HiramatsuTadashi
 	 * @date	2016/12/30
 	 */
-	~LifeGage();
+	~LifeGage()
+	{
+	}
 
 	/**
 	 * 初期化.

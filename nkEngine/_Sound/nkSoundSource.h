@@ -15,8 +15,8 @@ namespace nkEngine
 	{
 	private:
 
-		/** ストリーミング再生のステート. */
-		enum StreamingStateE
+		/** ストリーミング再生の状態. */
+		enum class StreamingStateE
 		{
 			StreamingBuffering,	//!< バッファリング中。
 			StreamingQueueing,	//!< キューイング中。
@@ -117,7 +117,7 @@ namespace nkEngine
 		*
 		* @param pos	座標.
 		*/
-		void SetPosition(const D3DXVECTOR3& pos)
+		void SetPosition(const Vector3& pos)
 		{
 			Position_ = pos;
 			if (isSetPositionFirst_)
@@ -130,7 +130,7 @@ namespace nkEngine
 		/**
 		* 座標を取得.
 		*/
-		D3DXVECTOR3& GetPosition()
+		const Vector3& GetPosition() const
 		{
 			return Position_;
 		}
@@ -138,7 +138,7 @@ namespace nkEngine
 		/**
 		* 移動速度を取得.
 		*/
-		D3DXVECTOR3& GetVelocity()
+		const Vector3& GetVelocity() const
 		{
 			return Velocity_;
 		}
@@ -167,7 +167,7 @@ namespace nkEngine
 		/**
 		* ソースボイスの取得.
 		*/
-		IXAudio2SourceVoice* GetSourceVoice()
+		IXAudio2SourceVoice* GetSourceVoice() const
 		{
 			return SourceVoice_;
 		}
@@ -175,7 +175,7 @@ namespace nkEngine
 		/**
 		* 入力チャンネル数を取得.
 		*/
-		int GetNumInputChannel()const
+		int GetNumInputChannel() const
 		{
 			return WaveFile_->GetFormat()->nChannels;
 		}
@@ -183,7 +183,7 @@ namespace nkEngine
 		/**
 		* エミッターの包囲角を取得.
 		*/
-		FLOAT32* GetEmitterAzimuth()
+		FLOAT32* GetEmitterAzimuth() 
 		{
 			return EmitterAzimuth_;
 		}
@@ -191,7 +191,7 @@ namespace nkEngine
 		/**
 		* 係数行列を取得.
 		*/
-		FLOAT32* GetMatrixCoefficient()
+		FLOAT32* GetMatrixCoefficient() 
 		{
 			return MatrixCoefficient_;
 		}
@@ -263,16 +263,16 @@ namespace nkEngine
 		UINT RingBufferSize_ = 0;
 
 		/** ストリーミングステータス. */
-		StreamingStateE	StreamingState_ = StreamingBuffering;
+		StreamingStateE	StreamingState_ = StreamingStateE::StreamingBuffering;
 		
 		/** 3Dサウンドフラグ. */
 		bool is3DSound_ = false;
 		/** 音源の座標. */
-		D3DXVECTOR3 Position_ = D3DXVECTOR3(0,0,0);	
+		Vector3 Position_ = Vector3::Zero;
 		/** 音源の1フレーム前の座標. */
-		D3DXVECTOR3 LastFramePosition_ = D3DXVECTOR3(0, 0, 0);
+		Vector3 LastFramePosition_ = Vector3::Zero;
 		/** 移動速度. */
-		D3DXVECTOR3 Velocity_ = D3DXVECTOR3(0, 0, 0);
+		Vector3 Velocity_ = Vector3::Zero;
 
 		/** エミッターの包囲角. */
 		FLOAT32 EmitterAzimuth_[INPUTCHANNELS];

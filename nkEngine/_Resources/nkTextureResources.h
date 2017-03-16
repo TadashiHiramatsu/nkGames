@@ -16,7 +16,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/17
 	 */
-	class CTextureResources
+	class CTextureResources : Noncopyable 
 	{
 	private:
 

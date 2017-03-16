@@ -14,7 +14,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class VertexBuffer
+	class VertexBuffer : Noncopyable
 	{
 	public:
 

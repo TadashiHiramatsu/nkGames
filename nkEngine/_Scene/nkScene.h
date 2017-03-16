@@ -27,7 +27,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		IScene();
+		IScene()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -35,7 +37,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		virtual ~IScene();
+		virtual ~IScene()
+		{
+		}
 
 	public:
 

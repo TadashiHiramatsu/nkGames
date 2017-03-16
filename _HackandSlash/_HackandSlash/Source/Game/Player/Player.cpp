@@ -20,9 +20,13 @@ namespace
 {
 
 	/** プレイヤーのアニメーションイベントテーブル. */
-	AnimationEventGroupS AnimationEventTbl[Player::AnimationNum] = 
+	AnimationEventGroupS AnimationEventTbl[(int)Player::AnimationCodeE::AnimationNum] = 
 	{
 		//AnimationWaiting
+		{
+			END_ANIMATION_EVENT(),
+		},
+		//AnimationWalk
 		{
 			END_ANIMATION_EVENT(),
 		},
@@ -32,11 +36,16 @@ namespace
 		},
 		//AnimationAttack_01
 		{
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.5f,	0.1f, 0.8f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.55f, 0.1f, 0.8f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.6f,	0.1f, 0.8f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.65f, 0.1f, 0.8f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
-			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.7f,	0.1f, 0.8f, 11, "CollisionPos", D3DXVECTOR3(0,0,0), 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.5f,	0.1f, 0.8f, 11, "CollisionPos", Vector3::Zero, 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.55f, 0.1f, 0.8f, 11, "CollisionPos", Vector3::Zero, 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.6f,	0.1f, 0.8f, 11, "CollisionPos", Vector3::Zero, 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.65f, 0.1f, 0.8f, 11, "CollisionPos", Vector3::Zero, 0),
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(0.7f,	0.1f, 0.8f, 11, "CollisionPos", Vector3::Zero, 0),
+			END_ANIMATION_EVENT(),
+		},
+		//AnimationAttack_08
+		{
+			EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(1.5f,	0.1f, 1.2f, 11, "CollisionPos", Vector3::Zero, 0),
 			END_ANIMATION_EVENT(),
 		},
 		//AnimationDeath_01
@@ -77,23 +86,26 @@ void Player::Start()
 	ModelRender_.SetSpecMap(&Specular_);
 
 	//ポジションをちょっと上に
-	Transform_.Position_ = D3DXVECTOR3(0, 5, 0);
+	RespawnPosition_ = Vector3(65, 5, -65);
+	Transform_.Position_ = RespawnPosition_;
 
 	//キャラクターコントローラーの初期化
 	//ここら辺直さなきゃな
-	Radius_ = 0.6f;
+	Radius_ = 0.3f;
 	Height_ = 1.8f;
 	CharacterController_.Init(Radius_, Height_, Transform_.Position_);
 
 	//ステートを待機に
-	ChangeState(StateCodeE::StateWaiting);
+	ChangeState(StateCodeE::Waiting);
 
-	Animation_.SetAnimationEndTime(AnimationCodeE::AnimationRun, 0.7);
+	Animation_.SetAnimationEndTime((int)AnimationCodeE::Run, 0.7);
 
 	//アニメーションループをfalseに設定
-	Animation_.SetAnimationLoopFlag(AnimationCodeE::AnimationAttack_01, false);
-	Animation_.SetAnimationLoopFlag(AnimationCodeE::AnimationDeath_01, false);
+	Animation_.SetAnimationLoopFlag((int)AnimationCodeE::Attack_01, false);
+	Animation_.SetAnimationLoopFlag((int)AnimationCodeE::Attack_08, false);
+	Animation_.SetAnimationLoopFlag((int)AnimationCodeE::Death_01, false);
 
+	NextAttackAnimCode_ = ReqAttackAnimCode_ = AnimationCodeE::Invalid;
 
 	//武器と盾を作成
 	EquipmentWeapon* wepon = NewGO<EquipmentWeapon>(1);
@@ -111,7 +123,9 @@ void Player::Start()
 	CollisionObject_->setCollisionShape(SphereShape_->GetBody());
 
 	//シャドウを計算
-	Shadow().SetLightPosition(D3DXVECTOR3(0.0f, 5.0f, 0.0f) + Transform_.Position_);
+	Vector3 ShadowLightPos;
+	ShadowLightPos.Add(Vector3(-10.0f, 10.0f, -10.0f), Transform_.Position_);
+	Shadow().SetLightPosition(ShadowLightPos);
 	Shadow().SetLightTarget(Transform_.Position_);
 }
 
@@ -127,12 +141,13 @@ void Player::Update()
 	ParameterUpdate();
 
 	//キャラクターコントローラからムーブスピードを取得
-	D3DXVECTOR3 moveSpeed = CharacterController_.GetMoveSpeed();
+	Vector3 moveSpeed = CharacterController_.GetMoveSpeed();
 
 	switch (State_)
 	{
-	case Player::StateWaiting:
-	case Player::StateRun:
+	case StateCodeE::Waiting:
+	case StateCodeE::Walk:
+	case StateCodeE::Run:
 	{
 
 		//ジャンプ処理
@@ -143,67 +158,97 @@ void Player::Update()
 		}
 
 		//平行移動
-		D3DXVECTOR3 move = D3DXVECTOR3(0, 0, 0);
+		Vector3 move = Vector3::Zero;
 
 		if (!g_MenuSystem->GetEffectiveness())
 		{
 			//メニューが表示されていなければ移動させる.
-			move += D3DXVECTOR3(XInput().GetLeftStick().x, 0, XInput().GetLeftStick().y);
+			move.Add(Vector3(XInput().GetLeftStick().x, 0, XInput().GetLeftStick().y));
 		}
 
 		//カメラの正面方向に合わせる
-		D3DXVECTOR3 dirForward = g_MainCamera->GetDirectionForward();
-		D3DXVECTOR3 dirRight = g_MainCamera->GetDirectionRight();
-		D3DXVECTOR3 moveDir;
+		Vector3 dirForward = g_MainCamera->GetDirectionForward();
+		Vector3 dirRight = g_MainCamera->GetDirectionRight();
+		Vector3 moveDir;
 		moveDir.x = dirRight.x * move.x + dirForward.x * move.z;
 		moveDir.y = 0.0f;	//Y軸はいらない。
 		moveDir.z = dirRight.z * move.x + dirForward.z * move.z;
 
 		//ムーブスピードを計算
-		static float MOVE_SPEED = 100.0f;
-		moveSpeed = moveDir * MOVE_SPEED * Time().DeltaTime();
+		static float MOVE_SPEED = 70.0f;
+		moveDir.Scale(MOVE_SPEED * Time().DeltaTime());
+		moveSpeed = moveDir;
 
-		//走っている
-		float len = D3DXVec3Length(&moveDir);
-		if (len > 0.0f)
+		float len = moveDir.Length();
+		if (len > 0.2f)
 		{
-			ChangeState(StateCodeE::StateRun);
+			//走っている.
+
+			//走り状態に変化.
+			ChangeState(StateCodeE::Run);
 			//正面方向に回転させている
-			D3DXQuaternionRotationAxis(&Transform_.Rotation_, &D3DXVECTOR3(0, 1, 0), atan2f(moveDir.x, moveDir.z) + D3DXToRadian(180.0f));
+			Transform_.Rotation_.RotationAxis(Vector3::Up, D3DXToDegree(atan2f(moveDir.x, moveDir.z)) + 180.0f);
+	
+		}
+		else if (len > 0.0f)
+		{
+			//歩いている.
+
+			//歩き状態に変化.
+			ChangeState(StateCodeE::Walk);
+			//正面方向に回転させている
+			Transform_.Rotation_.RotationAxis(Vector3::Up, D3DXToDegree(atan2f(moveDir.x, moveDir.z)) + 180.0f);
+
 		}
 		else
 		{
-			ChangeState(StateCodeE::StateWaiting);
+			ChangeState(StateCodeE::Waiting);
 		}
 
 		//攻撃
-		if(XInput().IsTrigger(ButtonE::ButtonA) && !CharacterController_.IsJump() && !g_MenuSystem->GetEffectiveness() && !g_DropItemManager->GetisGetItem())
+		//絶対どうにかしたほうがいい.
+		if(XInput().IsTrigger(ButtonE::A) && 
+			!CharacterController_.IsJump() && 
+			!g_MenuSystem->GetEffectiveness() && 
+			!g_DropItemManager->GetisGetItem())
 		{
-			ChangeState(StateCodeE::StateAttack);
+			NextAttackAnimCode_ = AnimationCodeE::Attack_01;
+			ChangeState(StateCodeE::Attack);
 		}
+
 	}
 	break;
-	case Player::StateAttack:
+	case StateCodeE::Attack:
 	{
 		//移動を緩める
 		moveSpeed.x *= 0.8f;
 		moveSpeed.z *= 0.8f;
-		
-		if (!Animation_.IsPlayAnim())
+
+		int currentAnimCode = Animation_.GetNowAnimationNo();
+
+		if (!Animation_.IsPlayAnim() && NextAttackAnimCode_ == AnimationCodeE::Invalid)
 		{
-			//アニメーションが終了したので待機ステートに変更
-			ChangeState(StateCodeE::StateWaiting);
+			//アニメーションが終了した
+			ChangeState(StateCodeE::Waiting);
 		}
+		else if (XInput().IsTrigger(ButtonE::A) &&
+			currentAnimCode >= (int)AnimationCodeE::Attack_Start &&
+			currentAnimCode < (int)AnimationCodeE::Attack_End &&
+			currentAnimCode == (int)ReqAttackAnimCode_)
+		{
+			NextAttackAnimCode_ = (AnimationCodeE)(currentAnimCode + 1);
+		}
+
 	}
 	break;
-	case Player::StateDamage:
+	case StateCodeE::Damage:
 	{
 		//どうしよう？
 		// 強攻撃を受けたときに使うので放置
 		//if (!Animation_.IsPlayAnim())
 		//{
 			//アニメーションが終了したので待機ステートに変更
-			ChangeState(StateCodeE::StateWaiting);
+			ChangeState(StateCodeE::Waiting);
 		//	break;
 		//}
 
@@ -212,10 +257,15 @@ void Player::Update()
 		moveSpeed.z *= 0.8f;
 	}
 	break;
-	case Player::StateDeath:
+	case StateCodeE::Death:
 	{
 		//死亡。移動を止める.
-		moveSpeed = D3DXVECTOR3(0, 0, 0);
+		moveSpeed = Vector3(0, 0, 0);
+
+		if (XInput().IsTrigger(ButtonE::A))
+		{
+			Respawn();
+		}
 	}
 	break;
 
@@ -231,11 +281,20 @@ void Player::Update()
 	Transform_.Position_ = CharacterController_.GetPosition();
 
 	{
-		AnimationEventTbl[AnimationAttack_01].Event_[0].iArg_[0] = Parameter_.Attack_;
-		AnimationEventTbl[AnimationAttack_01].Event_[1].iArg_[0] = Parameter_.Attack_;
-		AnimationEventTbl[AnimationAttack_01].Event_[2].iArg_[0] = Parameter_.Attack_;
-		AnimationEventTbl[AnimationAttack_01].Event_[3].iArg_[0] = Parameter_.Attack_;
-		AnimationEventTbl[AnimationAttack_01].Event_[4].iArg_[0] = Parameter_.Attack_;
+		int animnum = (int)AnimationCodeE::Attack_01;
+		AnimationEventTbl[animnum].Event_[0].iArg_[0] = Parameter_.Attack_;
+		AnimationEventTbl[animnum].Event_[1].iArg_[0] = Parameter_.Attack_;
+		AnimationEventTbl[animnum].Event_[2].iArg_[0] = Parameter_.Attack_;
+		AnimationEventTbl[animnum].Event_[3].iArg_[0] = Parameter_.Attack_;
+		AnimationEventTbl[animnum].Event_[4].iArg_[0] = Parameter_.Attack_;
+
+		animnum = (int)AnimationCodeE::Attack_08;
+		//強攻撃にしてみた.
+		AnimationEventTbl[animnum].Event_[0].iArg_[0] = Parameter_.Attack_ * 1.2;
+		AnimationEventTbl[animnum].Event_[1].iArg_[0] = Parameter_.Attack_ * 1.2;
+		AnimationEventTbl[animnum].Event_[2].iArg_[0] = Parameter_.Attack_ * 1.2;
+		AnimationEventTbl[animnum].Event_[3].iArg_[0] = Parameter_.Attack_ * 1.2;
+		AnimationEventTbl[animnum].Event_[4].iArg_[0] = Parameter_.Attack_ * 1.2;
 	}
 
 	//アニメーションの更新
@@ -246,25 +305,19 @@ void Player::Update()
 
 	//死んでいる又はダメージを受けている状態でなければ
 	//体力回復時間を更新する
-	if (State_ != StateDeath && State_ != StateDamage)
+	if (State_ != StateCodeE::Death && State_ != StateCodeE::Damage)
 	{
 		RecoveryLT_ += Time().DeltaTime();
 	}
+
 	//攻撃を回避してから3秒経過で回復し始め
-	if (RecoveryLT_ >= 3)
+	if (RecoveryLT_ >= 3.0f)
 	{
 		//体力が減っていれば
 		if (Parameter_.MaxHp_ > Parameter_.NowHp_)
 		{
 			//改造の余地あり
-			//2フレームに一回回復
-			static bool flg = true;
-			if (flg)
-			{
-				Parameter_.NowHp_++;
-			}
-
-			flg = !flg;
+			Parameter_.NowHp_ = min(Parameter_.MaxHp_, Parameter_.NowHp_ + (RecoveryLT_ - 3.0f) * 1.2f);
 		}
 	}
 
@@ -277,7 +330,9 @@ void Player::Update()
 	ModelRender_.Update();
 
 	//シャドウマップの更新
-	Shadow().SetLightPosition(D3DXVECTOR3(-10.0f, 10.0f, -10.0f) + Transform_.Position_);
+	Vector3 ShadowLightPos;
+	ShadowLightPos.Add(Vector3(-10.0f, 10.0f, -10.0f), Transform_.Position_);
+	Shadow().SetLightPosition(ShadowLightPos);
 	Shadow().SetLightTarget(Transform_.Position_);
 
 }
@@ -314,55 +369,57 @@ void Player::Release()
  */
 void Player::Damage()
 {
-	if (State_ == StateDeath)
+	if (State_ == StateCodeE::Death)
 	{
 		//死んでる...
 		return;
 	}
 
-	float offset = Radius_ + Height_ * 0.5f;
-	D3DXVECTOR3 centerPos;
-	centerPos = Transform_.Position_;
-	centerPos.y += offset;
-
-	btTransform trans;
-	trans.setOrigin(btVector3(centerPos.x, centerPos.y, centerPos.z));
-	CollisionObject_->setWorldTransform(trans);
-
-	//当たっているコリジョンを検出
-	const CollisionWorld::Collision* dmgCol = g_CollisionWorld->FindOverlappedDamageCollision(
-		CollisionWorld::DamageToPlayer,
-		CollisionObject_.get()
-	);
-
-	if (!dmgCol) 
+	//無敵状態でなければ
+	if (Parameter_.InvincibleTime_ <= InvincibleLT)
 	{
-		//当たっていないので位置をずらしてもう一度
+
+		float offset = Radius_ + Height_ * 0.5f;
+		Vector3 centerPos;
+		centerPos = Transform_.Position_;
 		centerPos.y += offset;
+
+		btTransform trans;
 		trans.setOrigin(btVector3(centerPos.x, centerPos.y, centerPos.z));
 		CollisionObject_->setWorldTransform(trans);
 
 		//当たっているコリジョンを検出
 		const CollisionWorld::Collision* dmgCol = g_CollisionWorld->FindOverlappedDamageCollision(
-			CollisionWorld::DamageToPlayer,
+			CollisionWorld::AttributeE::DamageToPlayer,
 			CollisionObject_.get()
 		);
-	}
 
-	//無敵状態でなければ
-	if (Parameter_.InvincibleTime_ <= InvincibleLT)
-	{
+		if (!dmgCol)
+		{
+			//当たっていないので位置をずらしてもう一度
+			centerPos.y += offset;
+			trans.setOrigin(btVector3(centerPos.x, centerPos.y, centerPos.z));
+			CollisionObject_->setWorldTransform(trans);
+
+			//当たっているコリジョンを検出
+			const CollisionWorld::Collision* dmgCol = g_CollisionWorld->FindOverlappedDamageCollision(
+				CollisionWorld::AttributeE::DamageToPlayer,
+				CollisionObject_.get()
+			);
+		}
+
+
 		//コリジョンが反応していて。攻撃を受けていなければ。
-		if (dmgCol != NULL && State_ != StateDamage)
+		if (dmgCol != NULL && State_ != StateCodeE::Damage)
 		{
 			//ダメージを食らっている。
 			Parameter_.NowHp_ -= dmgCol->Damage_;
 			RecoveryLT_ = 0;
-			
+
 			if (Parameter_.NowHp_ <= 0)
 			{
 				//死亡。
-				ChangeState(StateDeath);
+				ChangeState(StateCodeE::Death);
 			}
 			else
 			{
@@ -396,17 +453,19 @@ void Player::ParameterUpdate()
 		Parameter_.Experience_ -= Parameter_.NextLevelExperience_;
 
 		//必要経験値量を更新
-		int a = Parameter_.NextLevelExperience_ * 1.2;
-		int b = Parameter_.Level_ * 15;
-		Parameter_.NextLevelExperience_ = (a + b) / 2;
+		int aE = Parameter_.NextLevelExperience_ * 1.2;
+		int bE = Parameter_.Level_ * 10;
+		Parameter_.NextLevelExperience_ = (aE + bE) / 2;
 
 		//意味ない
 		Parameter_.Attack_ *= 1.2;
 
 		//Hp上昇
-		float idx = Parameter_.MaxHp_ * 1.2 - Parameter_.MaxHp_;
-		Parameter_.MaxHp_ += idx;
-		Parameter_.NowHp_ += idx;
+		int aH = Parameter_.MaxHp_ * 1.1;
+		int bH = Parameter_.Level_ * 100;
+		int idx = (aH + bH) / 2;
+		Parameter_.MaxHp_ = idx;
+		Parameter_.NowHp_ = idx;
 		
 		//レベルアップ
 		Parameter_.Level_++;
@@ -426,18 +485,34 @@ void Player::AnimationControl()
 
 	switch (State_)
 	{
-	case StateWaiting:
-		PlayAnimation(AnimationCodeE::AnimationIdol, 0.3f);
+	case StateCodeE::Waiting:
+		PlayAnimation(AnimationCodeE::Idol, 0.3f);
 		break;
-	case StateRun:
-		PlayAnimation(AnimationCodeE::AnimationRun, 0.3f);
+	case StateCodeE::Walk:
+		PlayAnimation(AnimationCodeE::Walk, 0.3f);
+		break;
+	case StateCodeE::Run:
+		PlayAnimation(AnimationCodeE::Run, 0.4f);
 		time = 1.0f / 15.0f;
 		break;
-	case StateAttack:
-		PlayAnimation(AnimationCodeE::AnimationAttack_01, 0.3f);
-		break;
-	case StateDeath:
-		PlayAnimation(AnimationCodeE::AnimationDeath_01, 0.3f);
+	case StateCodeE::Attack:
+	{
+		if (NextAttackAnimCode_ == AnimationCodeE::Attack_Start) {
+			//攻撃開始。
+			PlayAnimation(NextAttackAnimCode_, 0.3f);
+			ReqAttackAnimCode_ = NextAttackAnimCode_;
+			NextAttackAnimCode_ = AnimationCodeE::Invalid;
+		}
+		else if (NextAttackAnimCode_ != AnimationCodeE::Invalid) {
+			//連撃のアニメーションをリクエストキューに積む。
+			Animation_.PlayAnimationQueue((int)NextAttackAnimCode_, 0.5f);
+			ReqAttackAnimCode_ = NextAttackAnimCode_;
+			NextAttackAnimCode_ = AnimationCodeE::Invalid;
+		}
+	}
+	break;
+	case StateCodeE::Death:
+		PlayAnimation(AnimationCodeE::Death_01, 0.3f);
 		break;
 	default:
 		break;
@@ -459,8 +534,8 @@ void Player::AnimationControl()
  */
 void Player::PlayAnimation(AnimationCodeE animCode, float interpolateTime)
 {
-	if (Animation_.GetNowAnimationNo() != animCode)
+	if (Animation_.GetNowAnimationNo() != (int)animCode)
 	{
-		Animation_.PlayAnimation(animCode, interpolateTime);
+		Animation_.PlayAnimation((int)animCode, interpolateTime);
 	}
 }

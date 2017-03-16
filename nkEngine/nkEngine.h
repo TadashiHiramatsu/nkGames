@@ -59,7 +59,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class CEngine
+	class CEngine : Noncopyable
 	{
 	private:
 
@@ -136,7 +136,7 @@ namespace nkEngine
 		 *
 		 * @return	Null if it fails, else the device.
 		 */
-		IDirect3DDevice9* GetDevice()
+		IDirect3DDevice9* GetDevice() const
 		{
 			return D3DDevice_;
 		}
@@ -150,23 +150,12 @@ namespace nkEngine
 		 *
 		 * @return	The hwnd.
 		 */
-		HWND GetHWND()
+		HWND GetHWND() const
 		{
 			return Hwnd_;
 		}
 
-		/**
-		 * 物理ワールドの取得.
-		 *
-		 * @author	HiramatsuTadashi
-		 * @date	2017/01/07
-		 *
-		 * @return	The physics.
-		 */
-		CPhysics& GetPhysics()
-		{
-			return Physics_;
-		}
+	
 
 		/**
 		 * フレームの横幅を取得.
@@ -176,7 +165,7 @@ namespace nkEngine
 		 *
 		 * @return	The frame w.
 		 */
-		int GetFrameW() 
+		int GetFrameW() const
 		{
 			return FrameBufferW_;
 		}
@@ -189,7 +178,7 @@ namespace nkEngine
 		 *
 		 * @return	The frame h.
 		 */
-		int GetFrameH() 
+		int GetFrameH() const
 		{
 			return FrameBufferH_; 
 		}
@@ -202,7 +191,7 @@ namespace nkEngine
 		 *
 		 * @return	The screen w.
 		 */
-		int GetScreenW()
+		int GetScreenW() const
 		{
 			return ScreenBufferW_; 
 		}
@@ -215,9 +204,24 @@ namespace nkEngine
 		 *
 		 * @return	The screen h.
 		 */
-		int GetScreenH()
+		int GetScreenH() const
 		{
 			return ScreenBufferH_; 
+		}
+
+	public:
+
+		/**
+		* 物理ワールドの取得.
+		*
+		* @author	HiramatsuTadashi
+		* @date	2017/01/07
+		*
+		* @return	The physics.
+		*/
+		CPhysics& GetPhysics()
+		{
+			return Physics_;
 		}
 
 		/**

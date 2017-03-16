@@ -17,7 +17,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class CEffectManager
+	class CEffectManager : Noncopyable
 	{
 	private:
 
@@ -80,8 +80,10 @@ namespace nkEngine
 		}
 
 	private:
+		
 		/** エフェクトのディクショナリ、ファイルパスのハッシュ値をキーにもつ. */
 		map<int, Effect*> EffectDictinary_;
+
 	};
 
 	/**

@@ -3,7 +3,7 @@
 //ID“o˜^Žž‚Í+1‚³‚ê‚Ä‚¢‚é
 enum ItemTypeE
 {
-	Sword,		//!< Œ•
+	Weapon,		//!< •Ší
 	Shield,		//!< ‚
 	Helm,		//!< “ª
 	Armor,		//!< ‹¹

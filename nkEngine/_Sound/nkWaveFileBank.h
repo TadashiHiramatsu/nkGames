@@ -1,7 +1,11 @@
+/**
+* ウェーブファイルバンククラスの定義.
+*/
 #pragma once
 
 namespace nkEngine
 {
+	
 	class WaveFile;
 
 	/** WaveFileクラスのシェアードポインタのシノニム. */
@@ -16,7 +20,7 @@ namespace nkEngine
 	* 一度ロードされた波形データをバンクに登録することが出来ます。
 	* 登録された波形データは再読み込みを行う必要がなく、バンクから再利用することが出来ます。
 	*/
-	class WaveFileBank
+	class WaveFileBank : Noncopyable
 	{
 	public:
 

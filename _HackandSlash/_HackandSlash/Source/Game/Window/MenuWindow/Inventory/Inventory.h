@@ -13,7 +13,7 @@ class Inventory : public IMenuWindow
 {
 public:
 
-	enum StateE
+	enum class StateE
 	{
 		Select,	//選択
 		Detail, //詳細
@@ -71,7 +71,7 @@ private:
 		ItemTypeE::Armor,
 		ItemTypeE::Helm,
 		ItemTypeE::Shield,
-		ItemTypeE::Sword,
+		ItemTypeE::Weapon,
 		ItemTypeE::Accessory,
 		ItemTypeE::Accessory,
 		ItemTypeE::Greaves,
@@ -93,6 +93,7 @@ private:
 	Image DetailImage_;
 	RectTransform DetailTransform_;
 
+	/** アイテム表示数. */
 	const static int MAX_DISPLAY = 4;
 
 	int BefSelect_[MAX_EQUIPMENT];

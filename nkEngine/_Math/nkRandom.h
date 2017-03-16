@@ -14,14 +14,20 @@ namespace nkEngine
 	* ランダムクラス.
 	* シングルトンクラス.
 	*/
-	class CRandom
+	class CRandom : Noncopyable
 	{
 	private:
 
+		/**
+		* コンストラクタ.
+		*/
 		CRandom()
 		{
 		}
 
+		/**
+		* デストラクタ.
+		*/
 		~CRandom()
 		{
 		}
@@ -133,6 +139,9 @@ namespace nkEngine
 
 	};
 
+	/**
+	* ランダムクラス.
+	*/
 	static CRandom& Random()
 	{
 		return CRandom::GetInstance();

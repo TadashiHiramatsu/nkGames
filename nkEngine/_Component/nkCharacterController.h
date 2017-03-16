@@ -16,7 +16,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	class CharacterController
+	class CharacterController : Noncopyable
 	{
 	public:
 
@@ -26,7 +26,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		CharacterController();
+		CharacterController()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -48,7 +50,7 @@ namespace nkEngine
 		 * @param height The height.
 		 * @param pos    The position.
 		 */
-		void Init(float radius, float height, const D3DXVECTOR3& pos);
+		void Init(float radius, float height, const Vector3& pos);
 
 		/**
 		 * 更新.
@@ -66,7 +68,7 @@ namespace nkEngine
 		 *
 		 * @return The position.
 		 */
-		const D3DXVECTOR3& GetPosition() const 
+		const Vector3& GetPosition() const
 		{
 			return Position_;
 		}
@@ -79,7 +81,7 @@ namespace nkEngine
 		 *
 		 * @param pos The position.
 		 */
-		void SetPosition(const D3DXVECTOR3& pos)
+		void SetPosition(const Vector3& pos)
 		{
 			Position_ = pos;
 		}
@@ -92,7 +94,7 @@ namespace nkEngine
 		 *
 		 * @return The move speed.
 		 */
-		const D3DXVECTOR3& GetMoveSpeed() const
+		const Vector3& GetMoveSpeed() const
 		{
 			return MoveSpeed_;
 		}
@@ -105,7 +107,7 @@ namespace nkEngine
 		 *
 		 * @param ms The milliseconds.
 		 */
-		void SetMoveSpeed(const D3DXVECTOR3& ms)
+		void SetMoveSpeed(const Vector3& ms)
 		{
 			MoveSpeed_ = ms;
 		}
@@ -167,11 +169,11 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 *
-		 * @param _gravity The gravity.
+		 * @param gravity 重力値.
 		 */
-		void SetGravity(float _gravity)
+		void SetGravity(float gravity)
 		{
-			Gravity_ = _gravity;
+			Gravity_ = gravity;
 		}
 
 		/**
@@ -198,23 +200,23 @@ namespace nkEngine
 	private:
 
 		/** 座標. */
-		D3DXVECTOR3 Position_; 
+		Vector3 Position_ = Vector3::Zero; 
 		/** 移動速度. */
-		D3DXVECTOR3 MoveSpeed_;
+		Vector3 MoveSpeed_ = Vector3::Zero;
 		/** ジャンプフラグ. */
-		bool isJump_;
+		bool isJump_ = false;
 		/** 地面の上にいる。true:地面上,false:空中. */
-		bool isOnGround_;
+		bool isOnGround_ = true;
 		/** カプセル形状のコライダー. */
 		CapsuleCollider Collider_;
 		/** 半径. */
-		float Radius_;
+		float Radius_ = 0.0f;
 		/** 高さ. */
-		float Height_;
+		float Height_ = 0.0f;
 		/** 剛体. */
 		RigidBody RigidBody_;
 		/** 重力. */
-		float Gravity_;
+		float Gravity_ = -9.8f;
 
 	};
 

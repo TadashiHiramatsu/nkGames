@@ -10,28 +10,7 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	CGameObjectManager::CGameObjectManager()
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	CGameObjectManager::~CGameObjectManager()
-	{
-
-	}
-
-	/**
-	 * Starts a gom.
+	 * ゲームオブジェクトマネージャの初期化.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
@@ -49,7 +28,7 @@ namespace nkEngine
 	}
 
 	/**
-	 * Starts this object.
+	 * 初期化.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
@@ -66,7 +45,7 @@ namespace nkEngine
 	}
 
 	/**
-	 * Pre update.
+	 * Updateの前に呼ばれる更新.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
@@ -83,7 +62,7 @@ namespace nkEngine
 	}
 
 	/**
-	 * Updates this object.
+	 * 更新.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
@@ -100,7 +79,7 @@ namespace nkEngine
 	}
 
 	/**
-	 * Posts the update.
+	 * Updateの後に呼ばれる更新.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
@@ -117,7 +96,7 @@ namespace nkEngine
 	}
 
 	/**
-	 * Pre render.
+	 * Renderの前に呼ばれる描画.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
@@ -134,7 +113,7 @@ namespace nkEngine
 	}
 
 	/**
-	 * Renders this object.
+	 * 描画.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
@@ -151,7 +130,7 @@ namespace nkEngine
 	}
 
 	/**
-	 * Posts the render.
+	 * ポストエフェクトの後に呼ばれる描画.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
@@ -168,7 +147,7 @@ namespace nkEngine
 	}
 
 	/**
-	 * Deletes this object.
+	 * deleteObjectArrayに登録されているGameObjectを削除する.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
@@ -204,7 +183,7 @@ namespace nkEngine
 	}
 
 	/**
-	 * All delete.
+	 * 全削除SceneManagerに呼ばれる.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10

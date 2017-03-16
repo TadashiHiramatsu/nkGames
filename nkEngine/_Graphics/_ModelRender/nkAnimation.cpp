@@ -10,34 +10,6 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	Animation::Animation():
-		D3DAnimController_(nullptr),
-		AnimNum_(0),
-		LocalAnimationTime_(0.0),
-		NumMaxTracks_(0),
-		isBlending_(false),
-		isInterpolate_(false),
-		InterpolateEndTime_(0.0f),
-		InterpolateTime_(0.0f)
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	Animation::~Animation()
-	{
-	}
-
-	/**
 	 * 初期化.
 	 *
 	 * @author HiramatsuTadashi
@@ -49,6 +21,7 @@ namespace nkEngine
 	{
 		//アニメーションコントローラ受け取り
 		D3DAnimController_ = animcon;
+
 
 		//アニメーションセットの作成
 		ID3DXAnimationSet* animSet;
@@ -67,6 +40,8 @@ namespace nkEngine
 			AnimationEndTime_[i] = -1.0;
 			isAnimationLoops_[i] = true;
 		}
+
+		D3DAnimController_->AddRef();
 
 		//アニメーショントラック設定
 		NumMaxTracks_ = D3DAnimController_->GetMaxNumTracks();
@@ -197,6 +172,8 @@ namespace nkEngine
 	*/
 	void Animation::UpdateTrackWeights()
 	{
+
+		//重み.
 		float weight = 0.0f;
 
 		//補間時間内なら
@@ -247,15 +224,17 @@ namespace nkEngine
 	*/
 	void Animation::PopRequestPlayAnimation()
 	{
-		//あれば
 		if (!PlayAnimRequest_.empty())
 		{
-			//一番初めのものを取得
-			RequestPlayAnimationS& req = PlayAnimRequest_.front();
-			//設定
-			PlayAnimation(req.AnimationSetIndex_, req.InterpolateTime_);
-			//排出
-			PlayAnimRequest_.pop_front();
+			if (AnimationSets_[CurrentAnimationSetNo_]->GetPeriod() - PlayAnimRequest_.front().InterpolateTime_ < LocalAnimationTime_)
+			{
+				//先頭のものを取得.
+				RequestPlayAnimationS& req = PlayAnimRequest_.front();
+				//設定.
+				PlayAnimation(req.AnimationSetIndex_, req.InterpolateTime_);
+				//排出.
+				PlayAnimRequest_.pop_front();
+			}
 		}
 	}
 
@@ -286,7 +265,7 @@ namespace nkEngine
 					isInterpolate_ = false;
 
 					weight = 1.0f;
-					
+
 					//現在のトラック以外を無効にする
 					for (int i = 0; i < NumMaxTracks_; i++)
 					{
@@ -304,8 +283,8 @@ namespace nkEngine
 				}
 			}
 
-			if (AnimationEndTime_[CurrentAnimationSetNo_] > 0.0 //アニメーションの終了時間が設定されている.
-				&& LocalAnimationTime_ > AnimationEndTime_[CurrentAnimationSetNo_]) //アニメーションの終了時間を超えた.
+			if (AnimationEndTime_[CurrentAnimationSetNo_] > 0.0 && //アニメーションの終了時間が設定されている. 
+				LocalAnimationTime_ > AnimationEndTime_[CurrentAnimationSetNo_]) //アニメーションの終了時間を超えた.
 			{
 				//ループする
 				if (isAnimationLoops_[CurrentAnimationSetNo_])
@@ -322,7 +301,7 @@ namespace nkEngine
 					isAnimEnd_ = true;
 				}
 			}
-			else 
+			else
 			{
 				//普通に再生。
 				if (AnimationSets_[CurrentAnimationSetNo_]->GetPeriod() < LocalAnimationTime_
@@ -345,14 +324,10 @@ namespace nkEngine
 				LocalAnimationTime_ = fmod(trackDesk.Position, AnimationSets_[CurrentAnimationSetNo_]->GetPeriod());
 
 			}
-			
-			if (isAnimEnd_)
-			{
-				//アニメーション終了
-				//アニメーションの連続再生のリクエストをポップ
-				PopRequestPlayAnimation();
 
-			}
+			//アニメーション終了
+			//アニメーションの連続再生のリクエストをポップ
+			PopRequestPlayAnimation();
 
 		}
 

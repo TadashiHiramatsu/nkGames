@@ -14,6 +14,7 @@
 namespace nkEngine
 {
 
+	/** CSVデータを保存するデータテーブル. */
 	typedef vector<vector<string>> CSVDataTableT;
 
 	/**
@@ -22,7 +23,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/04
 	 */
-	class CSVData
+	class CSVData : Noncopyable
 	{
 	public:
 

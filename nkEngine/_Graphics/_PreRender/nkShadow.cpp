@@ -33,13 +33,11 @@ namespace nkEngine
 		Near_(1.0f),
 		Far_(100.0f),
 		Aspect_(1.0f),
-		CalcLightViewFunc_(CalcLightViewFunc_PositionTarget),
-		LightTarget_(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
-		LightPosition_(D3DXVECTOR3(0.0f, 3.0f, 0.0f)),
-		LightDirection_(D3DXVECTOR3(0.0f, -1.0f, 0.0f))
+		CalcLightViewFunc_(CalcLightViewFuncE::PositionTarget),
+		LightTarget_(Vector3::Zero),
+		LightPosition_(Vector3(0.0f, 3.0f, 0.0f)),
+		LightDirection_(Vector3::Down)
 	{
-		
-		D3DXMatrixIdentity(&LightViewMatrix_);
 		
 		for (int i = 0; i < MAX_SHADOW_MAP; i++) 
 		{
@@ -118,40 +116,40 @@ namespace nkEngine
 	{
 		if (isEnable_)
 		{
-			if (CalcLightViewFunc_ == CalcLightViewFunc_PositionTarget)
+			if (CalcLightViewFunc_ == CalcLightViewFuncE::PositionTarget)
 			{
 				//ライトの視点と注視点で計算
-				LightDirection_ = LightTarget_ - LightPosition_;
-				D3DXVec3Normalize(&LightDirection_, &LightDirection_);
+				LightDirection_.Sub(LightTarget_, LightPosition_);
+				LightDirection_.Normalize();
 			}
 
-			D3DXVECTOR3 vLightUp;
-			float t = fabsf(D3DXVec3Dot(&LightDirection_, &D3DXVECTOR3(0.0f, 1.0f, 0.0f)));
+			Vector3 vLightUp;
+			float t = fabsf(LightDirection_.Dot(Vector3::Up));
 
 			if (fabsf((t - 1.0f)) < 0.00001f)
 			{
-				vLightUp = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+				vLightUp = Vector3::Right;
 			}
 			else
 			{
-				vLightUp = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+				vLightUp = Vector3::Up;
 			}
 			
 			//ターゲット
-			D3DXVECTOR3 vLightTarget;
+			Vector3 vLightTarget;
 			//ターゲットの作成
-			vLightTarget = LightPosition_ + LightDirection_;
+			vLightTarget.Add(LightPosition_, LightDirection_);
 
 			//ライトから見たビュー行列を作成
-			D3DXMatrixLookAtLH(&LightViewMatrix_, &LightPosition_, &vLightTarget, &vLightUp);
+			LightViewMatrix_.MakeLookAt(LightPosition_, vLightTarget, vLightUp);
 		
 			for (int i = 0; i < MAX_SHADOW_MAP; i++) 
 			{
 				//プロジェクション行列を作成。平行投影.
-				D3DXMatrixOrthoLH(&ProjMatrix_, ShadowAreaW_[i] * Aspect_, ShadowAreaH_[i], Near_, Far_);
+				ProjMatrix_.MakeOrthoProjection(ShadowAreaW_[i] * Aspect_, ShadowAreaH_[i], Near_, Far_);
 
 				//ビュープロジェクション行列の作成
-				D3DXMatrixMultiply(&ShadowReceiverParam_.LightViewProjMatrix_[i], &LightViewMatrix_, &ProjMatrix_);
+				ShadowReceiverParam_.LightViewProjMatrix_[i].Mul(LightViewMatrix_, ProjMatrix_);
 
 			}
 
@@ -195,6 +193,7 @@ namespace nkEngine
 				
 				for (auto model : ShadowModelList_)
 				{
+					//モデルを描画.
 					model->RenderToShadowMap();
 				}
 				

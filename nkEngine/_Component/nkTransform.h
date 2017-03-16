@@ -14,7 +14,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	class Transform
+	class Transform : Noncopyable
 	{
 	public:
 
@@ -24,7 +24,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		Transform();
+		Transform()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -32,7 +34,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		~Transform();
+		~Transform()
+		{
+		}
 
 		/**
 		 * ワールド行列などの更新.
@@ -48,30 +52,30 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/16
 		 */
-		void BillboardUpdate(const D3DXMATRIX& rot);
+		void BillboardUpdate(const Matrix& rot);
 	
 	public:
 
 		/** 親子関係を持つ親のTransformクラスのポインタ. */
-		Transform* Parent_;
+		Transform* Parent_ = nullptr;
 		/** 親にする行列. */
-		D3DXMATRIX* ParentMatrix_;
+		Matrix* ParentMatrix_ = nullptr;
 
 		/** 位置ベクトル. */
-		D3DXVECTOR3 Position_;
+		Vector3 Position_ = Vector3::Zero;
 		/** 拡大ベクトル. */
-		D3DXVECTOR3 Scale_;
+		Vector3 Scale_ = Vector3::One;
 		/** 回転ベクトル. */
-		D3DXQUATERNION Rotation_;
+		Quaternion Rotation_ = Quaternion::Identity;
 
 		/** ローカルのワールド行列. */
-		D3DXMATRIX LocalMatrix_;
+		Matrix LocalMatrix_ = Matrix::Identity;
 		/** ワールド行列. */
-		D3DXMATRIX WorldMatrix_;
+		Matrix WorldMatrix_ = Matrix::Identity;
 		/** ワールド行列の逆行列. */
-		D3DXMATRIX WorldInvMatrix_;
+		Matrix WorldInvMatrix_ = Matrix::Identity;
 		/** 回転行列. */
-		D3DXMATRIX RotationMatrix_;
+		Matrix RotationMatrix_ = Matrix::Identity;
 
 	};
 

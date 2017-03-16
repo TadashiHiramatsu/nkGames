@@ -35,20 +35,20 @@ public:
 	 * @param	itemname		アイテム名.
 	 * @param	iconfilename	アイコンファイル名.
 	 * @param	type		 	アイテムタイプ.
-	 * @param	defense	 		防御力.
 	 * @param	minlevel	 	最低レベル.
 	 * @param	maxlevel	 	最高レベル.
 	 * @param	probability	 	ドロップ率.
+	 * @param	defense	 		防御力.
 	 */
 	ArmorItemData(
 		int id, 
 		char* itemname, 
 		char* iconfilename, 
 		ItemTypeE type, 
-		int defense,
 		int minlevel,
 		int maxlevel,
-		int probability);
+		int probability,
+		int defense);
 
 	/**
 	 * Destructor.
@@ -60,6 +60,9 @@ public:
 	{
 	}
 
+	/**
+	* 表示するパラメーターを取得.
+	*/
 	int GetParameter()override
 	{
 		return Defense_;

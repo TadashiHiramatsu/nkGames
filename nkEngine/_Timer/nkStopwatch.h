@@ -14,7 +14,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class Stopwatch
+	class Stopwatch : Noncopyable
 	{
 	public:
 
@@ -25,12 +25,12 @@ namespace nkEngine
 		 * @date	2017/01/07
 		 */
 		Stopwatch() :
-			freq_(0),
-			end_(0),
-			begin_(0),
-			elapsed_(0.0),
-			elapsedMill_(0.0),
-			elapsedMicro_(0.0)
+			Freq_(0),
+			End_(0),
+			Begin_(0),
+			Elapsed_(0.0),
+			ElapsedMill_(0.0),
+			ElapsedMicro_(0.0)
 		{
 		}
 
@@ -52,7 +52,7 @@ namespace nkEngine
 		 */
 		void Start()
 		{
-			::QueryPerformanceCounter((LARGE_INTEGER*)&begin_);
+			::QueryPerformanceCounter((LARGE_INTEGER*)&Begin_);
 		}
 
 		/**
@@ -63,12 +63,12 @@ namespace nkEngine
 		 */
 		void Stop()
 		{
-			::QueryPerformanceFrequency((LARGE_INTEGER*)&freq_);
-			::QueryPerformanceCounter((LARGE_INTEGER*)&end_);
+			::QueryPerformanceFrequency((LARGE_INTEGER*)&Freq_);
+			::QueryPerformanceCounter((LARGE_INTEGER*)&End_);
 
-			elapsed_ = double(end_ - begin_) / freq_;
-			elapsedMill_ = elapsedMicro_ * 1000.0;
-			elapsedMicro_ = elapsedMill_ * 1000.0;
+			Elapsed_ = double(End_ - Begin_) / Freq_;
+			ElapsedMill_ = ElapsedMicro_ * 1000.0;
+			ElapsedMicro_ = ElapsedMill_ * 1000.0;
 		}
 
 		/**
@@ -77,11 +77,11 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 *
-		 * @return	The elapsed.
+		 * @return	経過時間(単位:秒).
 		 */
 		double GetElapsed() const
 		{
-			return elapsed_;
+			return Elapsed_;
 		}
 
 		/**
@@ -90,11 +90,11 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 *
-		 * @return	The elapsed millisecond.
+		 * @return	経過時間(単位:ミリ秒).
 		 */
 		double GetElapsedMillisecond() const
 		{
-			return elapsedMill_;
+			return ElapsedMill_;
 		}
 
 		/**
@@ -103,27 +103,27 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 *
-		 * @return	The elapsed microsecond.
+		 * @return	経過時間(単位:マイクロ秒).
 		 */
 		double GetElapsedMicrosecond() const
 		{
-			return elapsedMicro_;
+			return ElapsedMicro_;
 		}
 
 	private:
 
 		/** The frequency. */
-		LONGLONG freq_;
+		LONGLONG Freq_;
 		/** The end. */
-		LONGLONG end_;
+		LONGLONG End_;
 		/** The begin. */
-		LONGLONG begin_;
+		LONGLONG Begin_;
 		/** 経過時間(単位：秒). */
-		double elapsed_;
+		double Elapsed_;
 		/** 経過時間(単位：ミリ秒). */
-		double elapsedMill_;
+		double ElapsedMill_;
 		/** 経過時間(単位：マイクロ秒). */
-		double elapsedMicro_;
+		double ElapsedMicro_;
 
 	};
 

@@ -38,7 +38,7 @@ void Ground::Start()
 	Specular_.Load("ground4_Specular.tga");
 	ModelRender_.SetSpecMap(&Specular_);
 
-	ModelRender_.SetFogParam(ModelRender::FogFuncE::FogFuncDist, 350.0f, 600.0f, D3DXVECTOR4(1, 1, 1, 1));
+	ModelRender_.SetFogParam(ModelRender::FogFuncE::FogFuncDist, 350.0f, 600.0f, Vector4(1, 1, 1, 1));
 
 	//çXêV
 	Update();

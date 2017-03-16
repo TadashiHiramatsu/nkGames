@@ -16,7 +16,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class SkinModelDataHandle
+	class SkinModelDataHandle : Noncopyable
 	{
 	public:
 
@@ -26,7 +26,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		SkinModelDataHandle();
+		SkinModelDataHandle()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -34,7 +36,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~SkinModelDataHandle();
+		~SkinModelDataHandle()
+		{
+		}
 
 		/**
 		 * スキンモデルデータの生ポインタを取得.

@@ -19,7 +19,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/16
 	 */
-	class WaveFile
+	class WaveFile : Noncopyable
 	{
 	public:
 
@@ -101,7 +101,7 @@ namespace nkEngine
 		/**
 		* ファイルフォーマットを取得.
 		*/
-		WAVEFORMATEX* GetFormat()const
+		WAVEFORMATEX* GetFormat() const
 		{
 			return WaveFormat_;
 		}
@@ -125,7 +125,7 @@ namespace nkEngine
 		/**
 		* 読み込み先のバッファを取得.
 		*/
-		char* GetReadBuffer()
+		char* GetReadBuffer() const
 		{
 			return ReadBuffer_.get();
 		}

@@ -17,7 +17,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class CScreenRender
+	class CScreenRender : Noncopyable
 	{
 	private:
 
@@ -122,7 +122,7 @@ namespace nkEngine
 	private:
 
 		/** デバイス. */
-		IDirect3DDevice9* Device_;
+		IDirect3DDevice9* Device_ = nullptr;
 
 		/** バックバッファのレンダーターゲット. */
 		RenderTarget BackBufferRT_;
@@ -138,7 +138,7 @@ namespace nkEngine
 		/** プリミティブ. */
 		Primitive Primitive_;
 		/** エフェクト. */
-		Effect* Effect_;
+		Effect* Effect_ = nullptr;
 
 	};
 

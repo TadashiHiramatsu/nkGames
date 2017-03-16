@@ -12,13 +12,13 @@
  * @date 2017/01/10
  */
 #define END_ANIMATION_EVENT()													\
-	AnimationEventS(																\
+	AnimationEventS(															\
 		Invalid,																\
 		0.0f,																	\
 		0.0f, 0.0f, 0.0f, 0.0f, 												\
 		0, 0, 0, 0, 															\
 		NULL, NULL, NULL, NULL, 												\
-		D3DXVECTOR3(0,0,0),D3DXVECTOR3(0,0,0), D3DXVECTOR3(0,0,0),D3DXVECTOR3(0,0,0))
+		Vector3::Zero,Vector3::Zero, Vector3::Zero,Vector3::Zero)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -37,13 +37,13 @@
  * @param groupID		    ÉOÉãÅ[ÉvÇhÇc.
  */
 #define EMIT_DAMAGE_TO_ENEMY_COLLISION_EVENT(invokeTime, life, radius, damage, boneName, offsetLocalVector, groupID)		\
-	AnimationEventS(																				\
+	AnimationEventS(																			\
 		EmitDamageToEnemyCollision,																\
 		(invokeTime),																			\
 		(life), (radius), 0.0f, 0.0f,															\
 		damage,groupID,0,0,																		\
 		boneName, NULL, NULL, NULL,																\
-		offsetLocalVector,D3DXVECTOR3(0,0,0),D3DXVECTOR3(0,0,0),D3DXVECTOR3(0,0,0)						\
+		offsetLocalVector,Vector3::Zero,Vector3::Zero,Vector3::Zero									\
 	)
 
  /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -69,7 +69,7 @@
 		(life), (radius), 0.0f, 0.0f,															\
 		damage,groupID,0,0,																		\
 		boneName, NULL, NULL, NULL,																\
-		offsetLocalVector,D3DXVECTOR3(0,0,0),D3DXVECTOR3(0,0,0),D3DXVECTOR3(0,0,0)						\
+		offsetLocalVector,Vector3::Zero,Vector3::Zero,Vector3::Zero									\
 	)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

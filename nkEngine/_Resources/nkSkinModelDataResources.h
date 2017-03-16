@@ -15,7 +15,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class CSkinModelDataResources
+	class CSkinModelDataResources : Noncopyable
 	{
 	private:
 
@@ -25,7 +25,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		CSkinModelDataResources();
+		CSkinModelDataResources()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -33,7 +35,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~CSkinModelDataResources();
+		~CSkinModelDataResources()
+		{
+		}
 	
 	public:
 

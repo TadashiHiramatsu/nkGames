@@ -17,7 +17,7 @@ void DropItemManager::Start()
 	AButtonSprite_.Start();
 	AButtonSprite_.SetTransform(&AButtonTransform_);
 	AButtonSprite_.SetCamera(g_MainCamera->GetCamera());
-	AButtonTransform_.Scale_ = D3DXVECTOR3(0.1f, 0.1f, 1.0f);
+	AButtonTransform_.Scale_ = Vector3(0.1f, 0.1f, 1.0f);
 
 }
 
@@ -44,8 +44,8 @@ void DropItemManager::Update()
 		if ((*it)->GettoPlayerLength() <= PickUpDistance_)
 		{
 			isGetItem_ = true;
-			D3DXVECTOR3 pos = (*it)->Transform_.Position_;
-			AButtonTransform_.Position_ = pos + D3DXVECTOR3(0, 0.5f, 0);
+			Vector3 pos = (*it)->Transform_.Position_;
+			AButtonTransform_.Position_.Add(pos, Vector3(0, 0.5f, 0));
 			AButtonTransform_.BillboardUpdate(g_MainCamera->GetCamera()->GetRotationMatrix());
 		}
 		else
@@ -53,7 +53,7 @@ void DropItemManager::Update()
 			isGetItem_ = false;
 		}
 
-		if (isGetItem_ && XInput().IsTrigger(ButtonE::ButtonA))
+		if (isGetItem_ && XInput().IsTrigger(ButtonE::A))
 		{
 			InventoryManager().SetItem((*it)->GetEquipmentItem());
 			DropItemList_.erase(it);
@@ -76,16 +76,8 @@ void DropItemManager::Render()
 	}
 }
 
-void DropItemManager::SetDropItem(int level, D3DXVECTOR3 & pos)
+void DropItemManager::SetDropItem(int level,const Vector3 & pos)
 {
-	struct DataS
-	{
-		/** アイテムデータ. */
-		IItemData* ItemData_;
-		/** ドロップ率. */
-		int Probability_;
-	};
-
 	//この敵が落とすアイテム
 	vector<DataS*> ItemList;
 
@@ -93,7 +85,7 @@ void DropItemManager::SetDropItem(int level, D3DXVECTOR3 & pos)
 	int probability = 0;
 
 	//存在するアイテム.
-	map<int, IItemData*> ItemMap = ItemDataResource().GetItemMap();
+	auto& ItemMap = ItemDataResource().GetItemMap();
 	for (auto it : ItemMap)
 	{
 		if (it.second->GetMinLevel() <= level && level <= it.second->GetMaxLevel())

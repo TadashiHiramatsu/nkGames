@@ -16,7 +16,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class CTime
+	class CTime : Noncopyable
 	{
 	private:
 
@@ -79,7 +79,8 @@ namespace nkEngine
 		 */
 		void Update()
 		{
-			if (isReady_) {
+			if (isReady_) 
+			{
 				sw_.Stop();
 				FrameDeltaTime_ = s_cast<float>(sw_.GetElapsed());
 			}
@@ -88,12 +89,14 @@ namespace nkEngine
 		}
 
 	private:
+		
 		/** 1フレームの経過時間. */
 		float FrameDeltaTime_;
 		/** ストップウォッチ. */
 		Stopwatch sw_;
 		/** 計測が始まっているかフラグ. */
 		bool isReady_;
+
 	};
 
 	/**

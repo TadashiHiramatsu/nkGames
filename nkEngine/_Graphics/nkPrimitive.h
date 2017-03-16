@@ -17,12 +17,13 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class Primitive
+	class Primitive : Noncopyable
 	{
 	public:
 
 		/** プリミティブタイプ. */
-		enum TypeE {
+		enum class TypeE
+		{
 			TriangleList,	//!< トライアングルリスト。
 			TriangleStrip,  //!< トライアングルストリップ。
 			TypeNum,		//!< タイプの数

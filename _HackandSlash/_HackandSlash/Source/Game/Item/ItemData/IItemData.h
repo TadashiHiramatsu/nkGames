@@ -96,7 +96,9 @@ public:
 		return Type_;
 	}
 
-	//各種パラメータを取得する.
+	/**
+	* 各種パラメータを取得する.
+	*/
 	virtual int GetParameter()
 	{
 		return -1;

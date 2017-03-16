@@ -8,32 +8,6 @@
 
 namespace nkEngine
 {
-	
-	/**
-	 * コンストラクタ.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/08
-	 */
-	CPhysics::CPhysics() :
-		CollisionConfiguration_(nullptr),
-		CollisionDispatcher_(nullptr),
-		OverlappingPairCache_(nullptr),
-		ConstraintSolver_(nullptr),
-		DynamicWorld_(nullptr)
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	CPhysics::~CPhysics()
-	{
-		Release();
-	}
 
 	/**
 	 * 初期化.

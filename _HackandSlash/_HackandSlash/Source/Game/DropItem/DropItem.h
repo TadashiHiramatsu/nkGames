@@ -50,7 +50,7 @@ public:
 	* @param [in,out] pos    The position.
 	* @param [in] player     プレイヤーのポインタ
 	*/
-	void Start(EquipmentItem* item, D3DXVECTOR3& pos, Player* player);
+	void Start(EquipmentItem* item,const Vector3& pos, Player* player);
 
 	/**
 	 * 更新.
@@ -106,7 +106,7 @@ private:
 	EquipmentItem* Item_;
 
 	/** プレイヤーの位置ベクトルのポインタ. */
-	D3DXVECTOR3* PlayerPos_;
+	Vector3* PlayerPos_;
 
 	/** プレイヤーとの距離. */
 	float toPlayerLength_ = 0;

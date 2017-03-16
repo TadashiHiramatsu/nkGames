@@ -78,7 +78,7 @@ private:
 	MeshCollider MeshCollider_;
 
 	/** ワールド行列のポインタ. */
-	D3DXMATRIX* WorldMatrix_;
+	Matrix* WorldMatrix_;
 
 	/** 法線マップ. */
 	Texture Normal_;

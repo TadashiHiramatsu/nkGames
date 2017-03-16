@@ -10,28 +10,6 @@ namespace nkEngine
 {
 
 	/**
-	 * Default constructor.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	SphereCollider::SphereCollider() :
-		Shape_(nullptr)
-	{
-	}
-
-	/**
-	 * Destructor.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	SphereCollider::~SphereCollider()
-	{
-		SAFE_DELETE(Shape_);
-	}
-
-	/**
 	 * 球体コライダーの作成.
 	 *
 	 * @author	HiramatsuTadashi

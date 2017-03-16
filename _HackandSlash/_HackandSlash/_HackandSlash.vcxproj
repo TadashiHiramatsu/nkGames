@@ -149,8 +149,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Source\Common\SceneEffect\Fade.cpp" />
     <ClCompile Include="Source\Game\AnimationEvent\AnimationEventController.cpp" />
     <ClCompile Include="Source\Game\AnimationEvent\CollisionWorld.cpp" />
+    <ClCompile Include="Source\Game\Boss\Boss_01.cpp" />
+    <ClCompile Include="Source\Game\Boss\IBoss.cpp" />
     <ClCompile Include="Source\Game\DropItem\DropItem.cpp" />
     <ClCompile Include="Source\Game\DropItem\DropItemManager.cpp" />
     <ClCompile Include="Source\Game\Enemy\Enemy_01.cpp" />
@@ -168,7 +171,7 @@
     <ClCompile Include="Source\Game\Item\ItemData\AccessoryItemData.cpp" />
     <ClCompile Include="Source\Game\Item\ItemData\ArmorItemData.cpp" />
     <ClCompile Include="Source\Game\Item\ItemData\ShieldItemData.cpp" />
-    <ClCompile Include="Source\Game\Item\ItemData\SwordItemData.cpp" />
+    <ClCompile Include="Source\Game\Item\ItemData\WeaponItemData.cpp" />
     <ClCompile Include="Source\Game\Map\Ground.cpp" />
     <ClCompile Include="Source\Game\Map\Map.cpp" />
     <ClCompile Include="Source\Game\Map\MapChip.cpp" />
@@ -192,9 +195,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Common\SceneEffect\Fade.h" />
     <ClInclude Include="Source\Game\AnimationEvent\AnimationEventController.h" />
     <ClInclude Include="Source\Game\AnimationEvent\AnimationEventMacro.h" />
     <ClInclude Include="Source\Game\AnimationEvent\CollisionWorld.h" />
+    <ClInclude Include="Source\Game\Boss\Boss_01.h" />
+    <ClInclude Include="Source\Game\Boss\IBoss.h" />
     <ClInclude Include="Source\Game\DropItem\DropItem.h" />
     <ClInclude Include="Source\Game\DropItem\DropItemManager.h" />
     <ClInclude Include="Source\Game\Enemy\Enemy_01.h" />
@@ -214,7 +220,7 @@
     <ClInclude Include="Source\Game\Item\ItemData\IItemData.h" />
     <ClInclude Include="Source\Game\Item\ItemData\ItemType.h" />
     <ClInclude Include="Source\Game\Item\ItemData\ShieldItemData.h" />
-    <ClInclude Include="Source\Game\Item\ItemData\SwordItemData.h" />
+    <ClInclude Include="Source\Game\Item\ItemData\WeaponItemData.h" />
     <ClInclude Include="Source\Game\Map\Ground.h" />
     <ClInclude Include="Source\Game\Map\Map.h" />
     <ClInclude Include="Source\Game\Map\MapChip.h" />

@@ -10,28 +10,6 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	Sprite::Sprite() :
-		RectUV_(D3DXVECTOR4(0, 0, 1, 1)),
-		Color_(D3DXVECTOR4(1, 1, 1, 1))
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/06
-	 */
-	Sprite::~Sprite()
-	{
-	}
-
-	/**
 	 * 読み込み.
 	 *
 	 * @author	HiramatsuTadashi
@@ -85,13 +63,13 @@ namespace nkEngine
 		};
 		//プリミティブの作成
 		Primitive_.Create(
-			Primitive::TriangleStrip,
+			Primitive::TypeE::TriangleStrip,
 			4,
 			sizeof(SShapeVertex_PT),
 			scShapeVertex_PT_Element,
 			vb,
 			4,
-			IndexFormat16,
+			IndexFormatE::IndexFormat16,
 			ib
 		);
 
@@ -107,10 +85,9 @@ namespace nkEngine
 	{
 
 		//ワールドビュープロジェクション行列の計算
-		D3DXMATRIX m;
-		D3DXMatrixIdentity(&m);
-		D3DXMatrixMultiply(&m, &Transform_->WorldMatrix_, &Camera_->GetViewMatrix());
-		D3DXMatrixMultiply(&m, &m, &Camera_->GetProjectionMatrix());
+		Matrix mWVP = Matrix::Identity;
+		mWVP.Mul(Transform_->WorldMatrix_, Camera_->GetViewMatrix());
+		mWVP.Mul(mWVP, Camera_->GetProjectionMatrix());
 
 		//デバイスの取得
 		IDirect3DDevice9* Device = Engine().GetDevice();
@@ -122,16 +99,22 @@ namespace nkEngine
 		// 半透明処理を行う
 		Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 
+		//テクニックを設定.
 		Effect_->SetTechnique("Sprite");
 
 		Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 		Effect_->BeginPass(0);
 
-		Effect_->SetValue("g_mWVP", &m, sizeof(D3DXMATRIX));
+		//ワールドビュープロジェクション行列を設定.
+		Effect_->SetMatrix("g_mWVP", &mWVP);
 
+		//テクスチャを設定.
 		Effect_->SetTexture("g_Texture", &Texture_);
 
+		//UVを設定.
 		Effect_->SetValue("g_RectUV", &RectUV_, sizeof(RectUV_));
+
+		//色を設定.
 		Effect_->SetValue("g_Color", &Color_, sizeof(Color_));
 		
 		Effect_->CommitChanges();
@@ -148,8 +131,6 @@ namespace nkEngine
 		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 		Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
 		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
-
-
 
 	}
 

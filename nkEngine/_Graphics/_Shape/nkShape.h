@@ -15,7 +15,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/18
 	 */
-	class IShape
+	class IShape : Noncopyable
 	{
 	public:
 
@@ -43,7 +43,7 @@ namespace nkEngine
 		 *
 		 * @return The world matrix.
 		 */
-		const D3DXMATRIX& GetWorldMatrix()const
+		const Matrix& GetWorldMatrix() const
 		{
 			return WorldMatrix_;
 		}
@@ -56,7 +56,7 @@ namespace nkEngine
 		 *
 		 * @return The rotation matrix.
 		 */
-		const D3DMATRIX& GetRotationMatrix()const
+		const Matrix& GetRotationMatrix() const
 		{
 			return RotationMatrix_;
 		}
@@ -69,7 +69,7 @@ namespace nkEngine
 		 *
 		 * @param pos The position.
 		 */
-		void SetPosition(const D3DXVECTOR3& pos)
+		void SetPosition(const Vector3& pos)
 		{
 			Position_ = pos;
 		}
@@ -82,7 +82,7 @@ namespace nkEngine
 		 *
 		 * @param rot The rot.
 		 */
-		void SetRotation(const D3DXQUATERNION& rot)
+		void SetRotation(const Quaternion& rot)
 		{
 			Rotation_ = rot;
 		}
@@ -132,14 +132,14 @@ namespace nkEngine
 		Primitive* Primitive_ = nullptr;
 
 		/** 座標. */
-		D3DXVECTOR3 Position_ = D3DXVECTOR3(0, 0, 0);
+		Vector3 Position_ = Vector3::Up;
 		/** 回転. */
-		D3DXQUATERNION Rotation_ = D3DXQUATERNION(0, 0, 0, 1);
+		Quaternion Rotation_ = Quaternion::Identity;
 
 		/** ワールド行列. */
-		D3DXMATRIX WorldMatrix_;
+		Matrix WorldMatrix_ = Matrix::Identity;
 		/** 回転行列. */
-		D3DXMATRIX RotationMatrix_;
+		Matrix RotationMatrix_ = Matrix::Identity;
 
 		/** エフェクト. */
 		Effect* Effect_ = nullptr;
@@ -162,7 +162,7 @@ namespace nkEngine
 	public:
 
 		/** 面法線. */
-		D3DXVECTOR3 Normal_;
+		Vector3 Normal_;
 		/** 面を構成する頂点. */
 		int VertexNo_[3];
 
@@ -197,7 +197,7 @@ namespace nkEngine
 		for (int i = 0; i < numFace; i++)
 		{
 			//座標
-			D3DXVECTOR3 pos[3];
+			Vector3 pos[3];
 			int t = i * 3;
 
 			//ポリゴン情報
@@ -218,27 +218,27 @@ namespace nkEngine
 			}
 
 			//法線
-			D3DXVECTOR3 normal = D3DXVECTOR3(0, 0, 0);
+			Vector3 normal = Vector3::Up;
 			//頂点座標
-			D3DXVECTOR3 vertexPos[3];
+			Vector3 vertexPos[3];
 			
 			for (int i = 0; i < 3; i++)
 			{
 				//頂点バッファをコピー
 				const TVertex& vertex = vertexBuffer.at(polygonInfo.VertexNo_[i]);
 				//頂点座標をコピー
-				vertexPos[i] = D3DXVECTOR3(vertex.pos[0], vertex.pos[1], vertex.pos[2])
+				vertexPos[i] = Vector3(vertex.pos[0], vertex.pos[1], vertex.pos[2])
 			}
 
-			D3DXVECTOR3 t0, t1;
-			t0 = vertexPos[1] - vertexPos[0];
-			t1 = vertexPos[2] - vertexPos[0];
+			Vector3 t0, t1;
+			t0.Sub(vertexPos[1] , vertexPos[0]);
+			t1.Sub(vertexPos[2] , vertexPos[0]);
 			//正規化
-			D3DXVec3Normalize(&t0, &t0);
-			D3DXVec3Normalize(&t1, &t1);
+			t0.Normalize();
+			t1.Normalize();
 
 			//法線を計算
-			D3DXVec3Cross(&polygonInfo.Normal_, &t0, &t1);
+			polygonInfo.Normal_.Cross(t0, t1);
 			
 			//リストに登録
 			polygonInfoList.at(polygonInfo.VertexNo_[0]).push_back(polygonInfo);
@@ -254,16 +254,16 @@ namespace nkEngine
 			list<PolygonInfoS>& polygonInfo = polygonInfoList.at(vertexNo);
 
 			//法線
-			D3DXVECTOR3 normal = D3DXVECTOR3(0, 0, 0);
+			Vector3 normal = Vector3::Up;
 
 			//合計
 			for (const auto& it : polygonInfo)
 			{
-				normal += it.Normal_;
+				normal.Add(it.Normal_);
 			}
 			
 			//平均値を計算
-			normal /= s_cast<float>(polygonInfo.size());
+			normal.Div(s_cast<float>(polygonInfo.size()));
 		
 			float* pNormal = vertexBuffer.at(vertexNo).Normal_;
 			pNormal[0] = normal.x;
@@ -307,7 +307,7 @@ namespace nkEngine
 		for (int i = 0; i < numFace; i++)
 		{
 			//座標
-			D3DXVECTOR3 pos[3];
+			Vector3 pos[3];
 			int t = i * 3;
 
 			//ポリゴン情報
@@ -328,27 +328,27 @@ namespace nkEngine
 			}
 
 			//法線
-			D3DXVECTOR3 normal = D3DXVECTOR3(0, 0, 0);
+			Vector3 normal = Vector3::Up;
 			//頂点座標
-			D3DXVECTOR3 vertexPos[3];
+			Vector3 vertexPos[3];
 
 			for (int i = 0; i < 3; i++)
 			{
 				//頂点バッファをコピー
 				const TVertex& vertex = vertexBuffer[polygonInfo.VertexNo_[i]];
 				//頂点座標をコピー
-				vertexPos[i] = D3DXVECTOR3(vertex.pos[0], vertex.pos[1], vertex.pos[2])
+				vertexPos[i] = Vector3(vertex.pos[0], vertex.pos[1], vertex.pos[2])
 			}
 
-			D3DXVECTOR3 t0, t1;
-			t0 = vertexPos[1] - vertexPos[0];
-			t1 = vertexPos[2] - vertexPos[0];
+			Vector3 t0, t1;
+			t0.Sub(vertexPos[1], vertexPos[0]);
+			t1.Sub(vertexPos[2],vertexPos[0]);
 			//正規化
-			D3DXVec3Normalize(&t0, &t0);
-			D3DXVec3Normalize(&t1, &t1);
+			t0.Normalize();
+			t1.Normalize();
 
 			//法線を計算
-			D3DXVec3Cross(&polygonInfo.Normal_, &t0, &t1);
+			polygonInfo.Normal_.Cross(t0, t1);
 
 			//リストに登録
 			polygonInfoList.at(polygonInfo.VertexNo_[0]).push_back(polygonInfo);
@@ -364,7 +364,7 @@ namespace nkEngine
 			list<PolygonInfoS>& polygonInfo = polygonInfoList.at(vertexNo);
 
 			//法線
-			D3DXVECTOR3 normal = D3DXVECTOR3(0, 0, 0);
+			Vector3 normal = Vector3::Up;
 
 			//合計
 			for (const auto& it : polygonInfo)
@@ -373,7 +373,7 @@ namespace nkEngine
 			}
 
 			//平均値を計算
-			normal /= s_cast<float>(polygonInfo.size());
+			normal.Div(s_cast<float>(polygonInfo.size()));
 
 			float* pNormal = vertexBuffer[vertexNo].Normal_;
 			pNormal[0] = normal.x;
@@ -435,12 +435,12 @@ namespace nkEngine
 			const TVertex& v0 = vertexBuffer[vertexNo];
 
 			//座標
-			D3DXVECTOR3 pos;
+			Vector3 pos;
 			//距離
-			D3DXVECTOR3 len;
+			Vector3 len;
 
 			//座標を設定
-			pos = D3DXVECTOR3(v0.pos[0], v0.pos[1], v0.pos[2]);
+			pos = Vector3(v0.pos[0], v0.pos[1], v0.pos[2]);
 
 			for (int delvertexNo = 0; delvertexNo < (int)vertexBuffer.size(); delvertexNo++)
 			{
@@ -451,12 +451,12 @@ namespace nkEngine
 					const TVertex& v1 = vertexBuffer[delvertexNo];
 
 					//距離を設定
-					len = D3DXVECTOR3(v1.pos[0], v1.pos[1], v1.pos[2]);
+					len = Vector3(v1.pos[0], v1.pos[1], v1.pos[2]);
 
-					len = pos - len;
+					len.Sub(pos,len);
 
 					//距離の二乗を取得
-					float lenSq = D3DXVec3LengthSq(&len);
+					float lenSq = len.Length();
 
 					if (lenSq < margeLenThresholdSq) 
 					{

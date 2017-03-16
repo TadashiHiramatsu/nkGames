@@ -14,7 +14,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	class Animation
+	class Animation : Noncopyable
 	{
 	private:
 
@@ -26,8 +26,10 @@ namespace nkEngine
 		*/
 		struct RequestPlayAnimationS
 		{
-			int AnimationSetIndex_;
-			float InterpolateTime_;
+			/** アニメーション番号. */
+			int AnimationSetIndex_ = -1;
+			/** 補間時間. */
+			float InterpolateTime_ = 0;
 		};
 
 	public:
@@ -38,7 +40,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		Animation();
+		Animation()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -46,7 +50,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		~Animation();
+		~Animation()
+		{
+		}
 
 		/**
 		 * 初期化.
@@ -116,6 +122,20 @@ namespace nkEngine
 		void PlayAnimation(int aniSetIndex, float interpolateTime);
 
 		/**
+		* アニメーション再生リクエストをキューに積む.
+		*
+		* @param animationSetIndex	アニメーションナンバー.
+		* @param interpolateTime	補間時間.
+		*/
+		void PlayAnimationQueue(int animationSetIndex, float interpolateTime)
+		{
+			RequestPlayAnimationS req;
+			req.AnimationSetIndex_ = animationSetIndex;
+			req.InterpolateTime_ = interpolateTime;
+			PlayAnimRequest_.push_back(req);
+		}
+
+		/**
 		 * アニメーションセットの取得.
 		 *
 		 * @author HiramatsuTadashi
@@ -146,7 +166,7 @@ namespace nkEngine
 		 *
 		 * @return The now animation no.
 		 */
-		int GetNowAnimationNo()
+		int GetNowAnimationNo() const
 		{
 			return CurrentAnimationSetNo_;
 		}
@@ -159,7 +179,7 @@ namespace nkEngine
 		 *
 		 * @return True if play animation, false if not.
 		 */
-		bool IsPlayAnim()
+		bool IsPlayAnim() const
 		{
 			return !isAnimEnd_;
 		}
@@ -172,7 +192,7 @@ namespace nkEngine
 		 *
 		 * @return The local animation time.
 		 */
-		float GetLocalAnimationTime()const
+		float GetLocalAnimationTime() const
 		{
 			return (float)LocalAnimationTime_;
 		}
@@ -211,9 +231,9 @@ namespace nkEngine
 	private:
 
 		/** アニメーションコントローラ. */
-		ID3DXAnimationController* D3DAnimController_;
+		ID3DXAnimationController* D3DAnimController_ = nullptr;
 		/** アニメーションの数. */
-		int AnimNum_;
+		int AnimNum_ = 0;
 		/** アニメーションセットの配列. */
 		unique_ptr<ID3DXAnimationSet*[]> AnimationSets_;
 		/** ブレンディングレートのテーブル. */
@@ -223,24 +243,25 @@ namespace nkEngine
 		/** アニメーションループフラグ. */
 		unique_ptr<bool[]> isAnimationLoops_;
 		/** ローカルアニメーションタイム. */
-		double LocalAnimationTime_; 
+		double LocalAnimationTime_ = 0.0; 
 		/** 現在再生中のアニメーショントラックの番号. */
-		int CurrentAnimationSetNo_;
+		int CurrentAnimationSetNo_ = 0;
 		/** 現在のトラックの番号. */
-		int CurrentTrackNo_;
+		int CurrentTrackNo_ = 0;
 		/** アニメーショントラックの最大数. */
-		int NumMaxTracks_; 
+		int NumMaxTracks_ = 0; 
 		/** アニメーションブレンディング. */
-		bool isBlending_;
+		bool isBlending_ = false;
 		/** アニメーションの終了フラグ. */
-		bool isAnimEnd_;
+		bool isAnimEnd_ = true;
 		/** 補間中か？｛補間中：true、未補間：false｝. */
-		bool isInterpolate_;
+		bool isInterpolate_ = false;
 		/** 補間終了時間. */
-		float InterpolateEndTime_; 
+		float InterpolateEndTime_ = 0.0f; 
 		/** 補間時間. */
-		float InterpolateTime_;
+		float InterpolateTime_ = 0.0f;
 		/** アニメーション再生のリクエスト. */
 		deque<RequestPlayAnimationS> PlayAnimRequest_;
+
 	};
 }

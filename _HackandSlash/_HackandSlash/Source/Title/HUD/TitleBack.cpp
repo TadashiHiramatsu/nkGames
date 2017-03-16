@@ -24,7 +24,7 @@ void TitleBack::Start()
 	BackRT_.Height_ = Engine().GetScreenH();
 
 	//アンカーを中心に設定
-	BackRT_.Anchor_ = RectTransform::MiddleCenter;
+	BackRT_.Anchor_ = AnchorPresetE::MiddleCenter;
 
 }
 

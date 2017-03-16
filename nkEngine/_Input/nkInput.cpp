@@ -10,35 +10,6 @@ namespace nkEngine
 {
 		
 	/**
-	 * 初期化.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 *
-	 * @param hWnd Handle of the window.
-	 *
-	 * @return A hResult.
-	 */
-	HRESULT CInput::Init(HWND hWnd)
-	{
-		HRESULT hr;
-
-		if (FAILED(hr = DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION,
-			IID_IDirectInput8, (VOID**)&DInput_, NULL)))
-		{
-			return hr;
-		}
-
-		//マウスの初期化
-		InitMouse(hWnd);
-
-		//キーボードの初期化
-		InitKeyboard(hWnd);
-
-		return S_OK;
-	}
-
-	/**
 	 * マウスの初期化.
 	 *
 	 * @author HiramatsuTadashi
@@ -80,6 +51,8 @@ namespace nkEngine
 	
 		DInputMouse_->Acquire();
 
+		isMouse_ = true;
+
 	}
 
 	/**
@@ -97,6 +70,45 @@ namespace nkEngine
 		DInputKeyboard_->SetDataFormat(&c_dfDIKeyboard);
 
 		DInputKeyboard_->SetCooperativeLevel(hWnd,DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
+
+		isKeyboard_ = true;
+	}
+
+	/**
+	* 初期化.
+	*
+	* @author	HiramatsuTadashi
+	* @date	2017/01/09
+	*
+	* @param	hWnd		ウィンドウズハンドル.
+	* @param	isKeyboard	キーボードを使用するか.
+	* @param	isMouse		マウスを使用するか.
+	*
+	* @return	A hResult.
+	*/
+	HRESULT CInput::Init(HWND hWnd, bool isKeyboard, bool isMouse)
+	{
+		HRESULT hr;
+
+		if (FAILED(hr = DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION,
+			IID_IDirectInput8, (VOID**)&DInput_, NULL)))
+		{
+			return hr;
+		}
+
+		if (isMouse)
+		{
+			//マウスの初期化
+			InitMouse(hWnd);
+		}
+
+		if (isKeyboard)
+		{
+			//キーボードの初期化
+			InitKeyboard(hWnd);
+		}
+
+		return S_OK;
 	}
 
 	/**

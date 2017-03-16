@@ -10,54 +10,30 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	Transform::Transform() :
-		Parent_(nullptr),
-		ParentMatrix_(nullptr),
-		Position_(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
-		Scale_(D3DXVECTOR3(1.0f, 1.0f, 1.0f)),
-		Rotation_(D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f))
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	Transform::~Transform()
-	{
-	}
-
-	/**
-	 * Updates this object.
+	 * 更新.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
 	void Transform::Update()
 	{
-		D3DXMATRIX mTrans, mScale;
+		Matrix mTrans, mScale;
 
 		//移動行列の計算
-		D3DXMatrixTranslation(&mTrans, Position_.x, Position_.y, Position_.z);
+		mTrans.MakeTranslation(Position_);
 		//回転行列の計算
-		D3DXMatrixRotationQuaternion(&RotationMatrix_, &Rotation_);
+		RotationMatrix_.MakeRotationQuaternion(Rotation_);
 		//拡大行列の計算
-		D3DXMatrixScaling(&mScale, Scale_.x, Scale_.y, Scale_.z);
+		mScale.MakeScaling(Scale_);
 
 		//ローカル行列を計算
-		LocalMatrix_ = mScale * RotationMatrix_ * mTrans;
+		LocalMatrix_.Mul(mScale, RotationMatrix_);
+		LocalMatrix_.Mul(LocalMatrix_, mTrans);
 
 		//親子関係を計算
 		if (ParentMatrix_)
 		{
-			D3DXMatrixMultiply(&WorldMatrix_, &LocalMatrix_, ParentMatrix_);
+			WorldMatrix_.Mul(LocalMatrix_, *ParentMatrix_);
 		}
 		else
 		{
@@ -65,19 +41,25 @@ namespace nkEngine
 		}
 
 		//ワールド行列の逆行列を計算
-		D3DXMatrixInverse(&WorldInvMatrix_, NULL, &WorldMatrix_);
+		WorldInvMatrix_.Inverse(WorldMatrix_);
 	
 	}
 
-	void Transform::BillboardUpdate(const D3DXMATRIX& rot)
+	/**
+	* ビルボードする更新.
+	*
+	* @author HiramatsuTadashi
+	* @date 2017/01/16
+	*/
+	void Transform::BillboardUpdate(const Matrix& rot)
 	{
-		D3DXMATRIX mTrans, mScale;
+		Matrix mTrans, mScale;
 
 		//移動行列の計算
-		D3DXMatrixTranslation(&mTrans, Position_.x, Position_.y, Position_.z);
+		mTrans.MakeTranslation(Position_);
 
-		//回転行列の計算
-		D3DXQUATERNION qRot;
+		//クォータニオン.
+		Quaternion qRot;
 
 		float s;
 		s = sin(0);
@@ -86,21 +68,23 @@ namespace nkEngine
 		qRot.z = rot.m[2][2] * s;
 		qRot.w = cos(0);
 
-		D3DXMATRIX rota;
-		D3DXMatrixRotationQuaternion(&rota, &qRot);
+		//回転行列.
+		Matrix mRot;
+		mRot.MakeRotationQuaternion(qRot);
 
-		D3DXMatrixMultiply(&RotationMatrix_, &rot, &rota);
+		RotationMatrix_.Mul(rot, mRot);
 
 		//拡大行列の計算
-		D3DXMatrixScaling(&mScale, Scale_.x, Scale_.y, Scale_.z);
+		mScale.MakeScaling(Scale_);
 
 		//ローカル行列を計算
-		LocalMatrix_ = mScale * RotationMatrix_ * mTrans;
+		LocalMatrix_.Mul(mScale, RotationMatrix_);
+		LocalMatrix_.Mul(LocalMatrix_, mTrans);
 
 		//親子関係を計算
 		if (ParentMatrix_)
 		{
-			D3DXMatrixMultiply(&WorldMatrix_, &LocalMatrix_, ParentMatrix_);
+			WorldMatrix_.Mul(LocalMatrix_, *ParentMatrix_);
 		}
 		else
 		{
@@ -108,7 +92,8 @@ namespace nkEngine
 		}
 
 		//ワールド行列の逆行列を計算
-		D3DXMatrixInverse(&WorldInvMatrix_, NULL, &WorldMatrix_);
+		WorldInvMatrix_.Inverse(WorldMatrix_);
+
 	}
 
 }// namespace nkEngine

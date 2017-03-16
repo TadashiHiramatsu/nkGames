@@ -19,7 +19,7 @@ class CollisionWorld : public IGameObject
 public:
 
 	/** 属性. */
-	enum AttributeE
+	enum class AttributeE
 	{
 		DamageToEnemy,	//!< 敵にダメージを与える
 		DamageToPlayer,	//!< プレイヤーにダメージを与える
@@ -38,7 +38,7 @@ public:
 		/** 半径. */
 		float Radius_;
 		/** 中心. */
-		D3DXVECTOR3 Position_;
+		Vector3 Position_;
 		/** 寿命. */
 		float Life_;
 		/** ダメージ量. */
@@ -64,7 +64,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
 	 */
-	CollisionWorld();
+	CollisionWorld()
+	{
+	}
 
 	/**
 	 * デストラクタ.
@@ -72,7 +74,9 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
 	 */
-	~CollisionWorld();
+	~CollisionWorld()
+	{
+	}
 
 	/**
 	 * 初期化.
@@ -103,7 +107,7 @@ public:
 	 * @param attr    The attribute.
 	 * @param groupID Identifier for the group.
 	 */
-	inline void CollisionWorld::Add(float radius, const D3DXVECTOR3 & pos, float life, int damage, AttributeE attr, int groupID)
+	inline void CollisionWorld::Add(float radius, const Vector3 & pos, float life, int damage, AttributeE attr, int groupID)
 	{
 		CollisionPtrT col = CollisionPtrT(new Collision);
 
@@ -149,7 +153,7 @@ public:
 	 *
 	 * @return Null if it fails, else the found overlapped damage collision.
 	 */
-	const Collision* FindOverlappedDamageCollision(AttributeE attr, const D3DXVECTOR3& pos, float radius)const;
+	const Collision* FindOverlappedDamageCollision(AttributeE attr, const Vector3& pos, float radius)const;
 	/**
 	 * 重なっているダメージコリジョンを取得する.
 	 * 属性とコリジョンオブジェクトから算出.

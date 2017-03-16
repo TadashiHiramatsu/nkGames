@@ -10,28 +10,6 @@ namespace nkEngine
 {
 
 	/**
-	* コンストラクタ.
-	*
-	* @author	HiramatsuTadashi
-	* @date	2017/01/07
-	*/
-	BoxCollider::BoxCollider() :
-		Shape_(nullptr)
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	BoxCollider::~BoxCollider()
-	{
-		SAFE_DELETE(Shape_);
-	}
-
-	/**
 	 * ボックス形状の作成.
 	 *
 	 * @author	HiramatsuTadashi

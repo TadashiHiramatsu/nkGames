@@ -40,7 +40,7 @@ void Inventory::Start(RectTransform * rt, float namepos)
 	}
 
 	float fpos = 110;
-	D3DXVECTOR3 pos[4] =
+	Vector3 pos[4] =
 	{
 		{  fpos,     0, 0 },
 		{     0,  fpos, 0 },
@@ -93,14 +93,14 @@ void Inventory::Start(RectTransform * rt, float namepos)
 	SelectName_.Create(20, 20);
 	SelectName_.SetTransform(&SelectNameTransform_);
 	SelectNameTransform_.Parent_ = &DetailTransform_;
-	SelectNameTransform_.Anchor_ = RectTransform::AnchorPresetE::TopCenter;
+	SelectNameTransform_.Anchor_ = AnchorPresetE::TopCenter;
 	SelectNameTransform_.Position_.y = 30;
 
 	//所持アイテムの詳細表示ウィンドウの初期化
 	for (int i = 0; i < 4; i++)
 	{
 		float posy = i * -126 - 80;
-		ItemDetailRender_[i].Start(&DetailTransform_, D3DXVECTOR3(0, posy, 0));
+		ItemDetailRender_[i].Start(&DetailTransform_, Vector3(0, posy, 0));
 	}
 
 	{//詳細をSelectしている表示用画像の初期化
@@ -117,16 +117,16 @@ void Inventory::Start(RectTransform * rt, float namepos)
 		ShojiText_.Create(15, 15);
 		ShojiText_.SetTransform(&ShojiTransform_);
 		ShojiTransform_.Parent_ = &DetailTransform_;
-		ShojiTransform_.Anchor_ = RectTransform::AnchorPresetE::TopCenter;
-		ShojiTransform_.Position_ = D3DXVECTOR3(-130, 65, 0);
+		ShojiTransform_.Anchor_ = AnchorPresetE::TopCenter;
+		ShojiTransform_.Position_ = Vector3(-130, 65, 0);
 	}
 
 	{//所持品テキストの初期化
 		SoubiText_.Create(15, 15);
 		SoubiText_.SetTransform(&SoubiTransform_);
 		SoubiTransform_.Parent_ = &DetailTransform_;
-		SoubiTransform_.Anchor_ = RectTransform::AnchorPresetE::TopCenter;
-		SoubiTransform_.Position_ = D3DXVECTOR3(130, 65, 0);
+		SoubiTransform_.Anchor_ = AnchorPresetE::TopCenter;
+		SoubiTransform_.Position_ = Vector3(130, 65, 0);
 	}
 
 }
@@ -135,10 +135,10 @@ void Inventory::Update()
 {
 	switch (State_)
 	{
-	case Inventory::Select:
+	case StateE::Select:
 	{
 
-		float Len = D3DXVec2Length(&XInput().GetLeftStick());
+		float Len = XInput().GetLeftStick().Length();
 		if (Len > 0.8f)
 		{
 			int angle = XInput().GetLeftStickAngle() + (360 / MAX_EQUIPMENT / 2);
@@ -146,7 +146,7 @@ void Inventory::Update()
 			SelectEquipment_ = (ItemTypeE)num;
 		}
 
-		if (XInput().IsTrigger(ButtonE::ButtonA))
+		if (XInput().IsTrigger(ButtonE::A))
 		{
 			//Aボタンが押された.
 			if (InventoryManager().GetItemSize(SelectEquipmentCode[SelectEquipment_]) > 0)
@@ -160,7 +160,7 @@ void Inventory::Update()
 
 	}
 	break;
-	case Inventory::Detail:
+	case StateE::Detail:
 	{
 
 		//前フレームの結果を代入.
@@ -234,12 +234,12 @@ void Inventory::Update()
 
 		DetailSelectTransform_.Update();
 
-		if (XInput().IsTrigger(ButtonE::ButtonA))
+		if (XInput().IsTrigger(ButtonE::A))
 		{
 			ChangeItem();
 		}
 
-		if (XInput().IsTrigger(ButtonE::ButtonB))
+		if (XInput().IsTrigger(ButtonE::B))
 		{
 			ChangeState(StateE::Select);
 			break;
@@ -262,6 +262,7 @@ void Inventory::Update()
 	{
 		IconBackTransform_[i].Update();
 
+		//選択されていたら大きく.
 		if (SelectEquipment_ == i)
 		{
 			IconTransform_[i].Width_ = SelectIconSize_;
@@ -273,8 +274,10 @@ void Inventory::Update()
 			IconTransform_[i].Height_ = DefaultIconSize_;
 		}
 
-		if (InventoryManager().GetItemSize(SelectEquipmentCode[i]) <= 0)
+		//アイテムを所持していない.
+		if (InventoryManager().GetItemSize(SelectEquipmentCode[i]) <= 0 && !Player_->GetIsSet(SelectEquipmentCode[i]))
 		{
+			//モノクロに設定.
 			IconImage_[i].SetMonochrome(true);
 		}
 		else
@@ -282,6 +285,7 @@ void Inventory::Update()
 			IconImage_[i].SetMonochrome(false);
 		}
 
+		//トランスフォームの更新.
 		IconTransform_[i].Update();
 
 	}
@@ -343,11 +347,11 @@ void Inventory::Render()
 
 	switch (State_)
 	{
-	case Inventory::Select:
+	case StateE::Select:
 	{
 	}
 	break;
-	case Inventory::Detail:
+	case StateE::Detail:
 	{
 		DetailSelectImage_.Render();
 	}

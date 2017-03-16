@@ -7,26 +7,6 @@
 #include"LifeGage.h"
 
 /**
- * コンストラクタ.
- *
- * @author	HiramatsuTadashi
- * @date	2016/12/30
- */
-LifeGage::LifeGage()
-{
-}
-
-/**
- * デストラクタ.
- *
- * @author	HiramatsuTadashi
- * @date	2016/12/30
- */
-LifeGage::~LifeGage()
-{
-}
-
-/**
  * 初期化.
  *
  * @author	HiramatsuTadashi
@@ -52,12 +32,12 @@ void LifeGage::Start()
 	LifeTransform_.Width_ = LifeTransform_.Height_ = 140;
 
 	//フレームのアンカーを左下
-	LifeFrameTransform_.Anchor_ = RectTransform::AnchorPresetE::BottomLeft;
-	LifeFrameTransform_.Pivot_ = D3DXVECTOR2(0, 0);
+	LifeFrameTransform_.Anchor_ = AnchorPresetE::BottomLeft;
+	LifeFrameTransform_.Pivot_ = Vector2::Zero;
 
 	//本体のアンカーをフレームの下中央
-	LifeTransform_.Anchor_ = RectTransform::AnchorPresetE::BottomCenter;
-	LifeTransform_.Pivot_ = D3DXVECTOR2(0.5, 0);
+	LifeTransform_.Anchor_ = AnchorPresetE::BottomCenter;
+	LifeTransform_.Pivot_ = Vector2(0.5, 0);
 	//位置を調整
 	LifeTransform_.Position_.y = 5;
 
@@ -68,9 +48,9 @@ void LifeGage::Start()
 	//フォントの初期化
 	Life_.Create(15, 15);
 	Life_.SetTransform(&TextTransform_);
-	Life_.SetFormat(Text::Left);
+	Life_.SetFormat(Text::FormatE::Left);
 	TextTransform_.Parent_ = &LifeFrameTransform_;
-	TextTransform_.Anchor_ = RectTransform::AnchorPresetE::TopLeft;
+	TextTransform_.Anchor_ = AnchorPresetE::TopLeft;
 	TextTransform_.Position_.y = -15;
 }
 

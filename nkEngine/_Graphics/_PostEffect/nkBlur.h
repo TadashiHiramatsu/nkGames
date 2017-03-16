@@ -14,7 +14,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class Blur
+	class Blur : Noncopyable
 	{
 	public:
 
@@ -24,7 +24,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		Blur();
+		Blur()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -32,7 +34,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		~Blur();
+		~Blur()
+		{
+		}
 
 		/**
 		 * 初期化.
@@ -98,7 +102,7 @@ namespace nkEngine
 		/** ガウシアンブラーの結果を描きこむレンダリングターゲット. */
 		RenderTarget BlurRT_[2];
 		/** ソースとなるテクスチャ. */
-		const Texture*	SrcTexture_;
+		const Texture*	SrcTexture_ = nullptr;
 		/** エフェクト. */
 		Effect* Effect_;
 		/** テクスチャの幅. */

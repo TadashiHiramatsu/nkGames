@@ -104,8 +104,8 @@ namespace nkEngine
 		if (is3DSound_)
 		{
 			//音源の移動速度を更新。
-			Velocity_ = Position_ -  LastFramePosition_;
-			Velocity_ /= Time().DeltaTime();
+			Velocity_.Sub(Position_, LastFramePosition_);
+			Velocity_.Div(Time().DeltaTime());
 			LastFramePosition_ = Position_;
 		}
 	}
@@ -223,16 +223,16 @@ namespace nkEngine
 			return;
 		}
 
-		if (StreamingState_ == StreamingBuffering) 
+		if (StreamingState_ == StreamingStateE::StreamingBuffering)
 		{
 			//バッファリング中。
 			if (WaveFile_->IsReadEnd()) 
 			{
 				//バッファリングが終わった。
-				StreamingState_ = StreamingQueueing;
+				StreamingState_ = StreamingStateE::StreamingQueueing;
 			}
 		}
-		if (StreamingState_ == StreamingQueueing) 
+		if (StreamingState_ == StreamingStateE::StreamingQueueing)
 		{
 			//キューイング中。
 			XAUDIO2_VOICE_STATE state;
@@ -317,7 +317,7 @@ namespace nkEngine
 		}
 
 		WaveFile_->ReadAsync(&readStartBuff[ReadStartPos_], StreamingBufferSize_, &CurrentBufferingSize_);
-		StreamingState_ = StreamingBuffering;
+		StreamingState_ = StreamingStateE::StreamingBuffering;
 	}
 
 	/**

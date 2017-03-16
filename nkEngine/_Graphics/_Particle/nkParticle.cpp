@@ -21,7 +21,7 @@ namespace nkEngine
 	 * @param 		   param	    The parameter.
 	 * @param [in,out] emitPosition If non-null, the emit position.
 	 */
-	void Particle::Start(Camera* camera, const ParticleParameterS& param, D3DXVECTOR3& emitPosition,char* filepath)
+	void Particle::Start(const Camera* camera, const ParticleParameterS& param, const Vector3& emitPosition,char* filepath)
 	{
 
 		//パーティクルの幅の中心値を計算
@@ -31,7 +31,7 @@ namespace nkEngine
 		NK_ASSERT(param.UVTableSize_ <= ARRAYSIZE(param.UVTable_), "uvTable size over!!!");
 
 		//UV値を計算
-		D3DXVECTOR4 uv;
+		Vector4 uv;
 		if (param.UVTableSize_ > 0) 
 		{
 			uv = param.UVTable_[Random().Range(0, param.UVTableSize_ -1)];
@@ -61,30 +61,30 @@ namespace nkEngine
 			},
 
 		};
-		short index[] = 
+		short ib[] = 
 		{
 			0,1,2,3
 		};
 		
 		//プリミティブ作成
 		Primitive_.Create(
-			Primitive::TriangleStrip,
+			Primitive::TypeE::TriangleStrip,
 			4,
 			sizeof(SShapeVertex_PT),
 			scShapeVertex_PT_Element,
 			vb,
 			4,
-			IndexFormat16,
-			index
+			IndexFormatE::IndexFormat16,
+			ib
 		);
 
 		//エフェクトのロード
 		Effect_ = EffectManager().LoadEffect("Particle.fx");
 
-		Scale_ = D3DXVECTOR3(param.W_, param.H_, 1);
+		Scale_ = Vector3(param.W_, param.H_, 1);
 
 		//スケール行列の計算
-		D3DXMatrixScaling(&ScaleMatrix_, Scale_.x, Scale_.y, Scale_.z);
+		ScaleMatrix_.MakeScaling(Scale_);
 
 		Camera_ = camera;
 		
@@ -112,7 +112,7 @@ namespace nkEngine
 		isFade_ = param.isFade_;
 
 		//ステート設定
-		State_ = StateRun;
+		State_ = StateCodeE::Run;
 
 		//アルファ値設定
 		InitAlpha_ = param.InitAlpha_;
@@ -137,28 +137,28 @@ namespace nkEngine
 	 */
 	void Particle::Update()
 	{
-		D3DXMatrixIdentity(&WorldMatrix_);
+		WorldMatrix_ = Matrix::Identity;
 
 		//デルタタイム取得
 		float deltaTime = Time().DeltaTime();
 
-		D3DXVECTOR3 addGrafity = Gravity_;
-		addGrafity *= deltaTime;
-		Velocity_ += addGrafity;
-		D3DXVECTOR3 force = ApplyForce_;
+		Vector3 addGrafity = Gravity_;
+		addGrafity.Scale(deltaTime);
+		Velocity_.Add(addGrafity);
+
+		Vector3 force = ApplyForce_;
 		force.x += (((float)Random().value() - 0.5f) * 2.0f) * AddVelocityRandomMargih_.x;
 		force.y += (((float)Random().value() - 0.5f) * 2.0f) * AddVelocityRandomMargih_.y;
 		force.z += (((float)Random().value() - 0.5f) * 2.0f) * AddVelocityRandomMargih_.z;
-		force *= deltaTime;
-		Velocity_ += force;
-		D3DXVECTOR3 addPos = Velocity_;
-		addPos *= deltaTime;
-		ApplyForce_ = D3DXVECTOR3(0, 0, 0);
+		force.Scale(deltaTime);
+		Velocity_.Add(force);
+		Vector3 addPos = Velocity_;
+		addPos.Scale(deltaTime);
+		ApplyForce_ = Vector3::Zero;
 
-		Position_ += addPos;
+		Position_.Add(addPos);
 
-		D3DXMATRIX mTrans;
-		D3DXMatrixIdentity(&mTrans);
+		Matrix mTrans = Matrix::Identity;
 		mTrans.m[0][0] = 1.0f;
 		mTrans.m[1][1] = 1.0f;
 		mTrans.m[2][2] = 1.0f;
@@ -173,9 +173,10 @@ namespace nkEngine
 			//ビルボード
 			
 			//カメラの回転行列を取得
-			D3DXMATRIX rot = Camera_->GetRotationMatrix();
+			Matrix rot = Camera_->GetRotationMatrix();
 			
-			D3DXQUATERNION qRot;
+			//クォータニオン
+			Quaternion qRot;
 			
 			float s;
 			s = sin(RotateZ_);
@@ -184,16 +185,20 @@ namespace nkEngine
 			qRot.z = rot.m[2][2] * s;
 			qRot.w = cos(RotateZ_);
 
-			D3DXMATRIX rota;
-			D3DXMatrixRotationQuaternion(&rota, &qRot);
-			D3DXMatrixMultiply(&rot, &rot, &rota);
+			//行列を回転.
+			Matrix rota;
+			rota.MakeRotationQuaternion(qRot);
+			
+			rot.Mul(rot, rota);
 
-			WorldMatrix_ *= ScaleMatrix_ * rot * mTrans;
+			//ワールド行列を計算.
+			WorldMatrix_.Mul(ScaleMatrix_, rot);
+			WorldMatrix_.Mul(WorldMatrix_, mTrans);
 
 		}
 		else
 		{
-			WorldMatrix_ = ScaleMatrix_ * mTrans;
+			WorldMatrix_.Mul(ScaleMatrix_,mTrans);
 		}
 
 		//タイム計算
@@ -201,25 +206,26 @@ namespace nkEngine
 		
 		switch (State_)
 		{
-		case StateRun:
+		case StateCodeE::Run:
+		{
 			if (Timer_ >= Life_)
 			{
 				//生存終了
 				if (isFade_)
 				{
 					//フェードアウト開始
-					State_ = StateFadeOut;
+					State_ = StateCodeE::FadeOut;
 					Timer_ = 0.0f;
 				}
-				else 
+				else
 				{
 					//即死
-					State_ = StateDead;
+					State_ = StateCodeE::Dead;
 				}
 			}
-			break;
-
-		case StateFadeOut:
+		}
+		break;
+		case StateCodeE::FadeOut:
 		{
 			//フェード時間計算
 			float t = Timer_ / FadeTime_;
@@ -231,15 +237,16 @@ namespace nkEngine
 			if (Alpha_ <= 0.0f)
 			{
 				Alpha_ = 0.0f;
-				State_ = StateDead;	//死亡
+				State_ = StateCodeE::Dead;	//死亡
 			}
 		}
 		break;
-
-		case StateDead:
+		case StateCodeE::Dead:
+		{
 			isDead_ = true;
 			DeleteGO(this);
-			break;
+		}
+		break;
 		}
 
 	}
@@ -256,10 +263,11 @@ namespace nkEngine
 	{
 
 		//ワールドビュープロジェクション行列の計算
-		D3DXMATRIX m;
-		D3DXMatrixIdentity(&m);
-		D3DXMatrixMultiply(&m, &WorldMatrix_, &Camera_->GetViewMatrix());
-		D3DXMatrixMultiply(&m, &m, &Camera_->GetProjectionMatrix());
+
+		//ワールドビュープロジェクション行列
+		Matrix mWVP = Matrix::Identity;
+		mWVP.Mul(WorldMatrix_, Camera_->GetViewMatrix());
+		mWVP.Mul(mWVP, Camera_->GetProjectionMatrix());
 
 		//デバイスの取得
 		IDirect3DDevice9* Device = Engine().GetDevice();
@@ -295,10 +303,14 @@ namespace nkEngine
 		Effect_->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 		Effect_->BeginPass(0);
 
-		Effect_->SetValue("g_mWVP", &m, sizeof(D3DXMATRIX));
+		//ワールドビュープロジェクション行列を設定.
+		Effect_->SetValue("g_mWVP", &mWVP, sizeof(D3DXMATRIX));
+		//アルファ値を設定.
 		Effect_->SetValue("g_alpha", &Alpha_, sizeof(Alpha_));
+		//輝度を設定.
 		Effect_->SetValue("g_brightness", &Brightness_, sizeof(Brightness_));
 
+		//テクスチャを設定.
 		Effect_->SetTexture("g_texture", &Texture_);
 
 		Effect_->CommitChanges();
@@ -311,6 +323,7 @@ namespace nkEngine
 		Effect_->EndPass();
 		Effect_->End();
 
+		//レンダリングステートを戻す.
 		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 		Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
 		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);

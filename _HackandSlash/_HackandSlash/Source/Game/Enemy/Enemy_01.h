@@ -18,16 +18,16 @@ class Enemy_01 : public IEnemy
 public:
 
 	/** アニメーションコード. */
-	enum AnimationCode
+	enum class AnimationCodeE
 	{
-		AnimationInvalid = -1,	//!< 無効
-		AnimationWaiting = 0,	//!< 待機
-		AnimationWalk,			//!< 歩き
-		AnimationRun,			//!< 走り
-		AnimationAttack_01,		//!< 攻撃１
-		AnimationHit,			//!< ダメージ
-		AnimationDeath,			//!< 死
-		AnimationNum,			//!< アニメーションの数
+		Invalid = -1,	//!< 無効
+		Waiting = 0,	//!< 待機
+		Walk,			//!< 歩き
+		Run,			//!< 走り
+		Attack_01,		//!< 攻撃１
+		Hit,			//!< ダメージ
+		Death,			//!< 死
+		AnimationNum,	//!< アニメーションの数
 	};
 
 public:
@@ -98,15 +98,15 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
 	 *
-	 * @param animCode		  The animation code.
-	 * @param interpolateTime The interpolate time.
+	 * @param animCode		  再生するアニメーションコード.
+	 * @param time 補間時間.
 	 */
-	void PlayAnimation(AnimationCode animCode, float interpolateTime)
+	void PlayAnimation(AnimationCodeE animCode, float time)
 	{
 		//現在のアニメーションではない
-		if (Animation_.GetNowAnimationNo() != animCode)
+		if (Animation_.GetNowAnimationNo() != (int)animCode)
 		{
-			Animation_.PlayAnimation(animCode, interpolateTime);
+			Animation_.PlayAnimation((int)animCode, time);
 		}
 
 	}
@@ -116,12 +116,12 @@ public:
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/11
 	 *
-	 * @param animCode		  The animation code.
-	 * @param interpolateTime The interpolate time.
+	 * @param animCode	再生するアニメーションコード.
+	 * @param time		補間時間.
 	 */
-	void PlayAnimationAbs(AnimationCode animCode, float interpolateTime)
+	void PlayAnimationAbs(AnimationCodeE animCode, float time)
 	{
-		Animation_.PlayAnimation(animCode, interpolateTime);
+		Animation_.PlayAnimation((int)animCode, time);
 	}
 
 	/**
@@ -139,9 +139,6 @@ private:
 	/** 球体形状. */
 	unique_ptr<SphereCollider> SphereShape_;
 
-	/** 消滅までの時間(秒). */
-	float DisappearanceTime_ = 5.0f;
-	/** 消滅時間のローカルタイム. */
-	float DisappearanceLT_ = 0.0f;
+
 
 };

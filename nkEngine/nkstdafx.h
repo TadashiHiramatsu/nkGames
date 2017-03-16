@@ -49,8 +49,10 @@ using namespace std;
 #include"BulletCollision\CollisionDispatch\btGhostObject.h"
 #include"_Physics\nkCollisionAttr.h"
 
+//ポリシーのインクルード
+#include"_Policy\nkNoncopyable.h"
+
 //自作ヘッダのインクルード
-#include"nkEngine.h"
 #include"nkOriginalDefine.h"
 
 #include"_Debug/nkAssert.h"
@@ -59,6 +61,11 @@ using namespace std;
 #include"_Math\nkHash.h"
 #include"_Math\nkRandom.h"
 #include"_Timer\nkTime.h"
+
+#include"_Math\nkMatrix.h"
+#include"_Math\nkVector.h"
+
+#include"nkEngine.h"
 
 //コンポーネント
 #include"_Component\nkTransform.h"
@@ -79,6 +86,7 @@ using namespace std;
 
 //カメラ
 #include"_Graphics\nkCamera.h"
+#include"_Component\nkCameraCollision.h"
 
 #include"_Graphics\_Effect\nkEffectManager.h"
 
@@ -124,3 +132,6 @@ using namespace std;
 
 //外部ファイル読み込み
 #include"_DataLoad\nkCSVData.h"
+
+//サウンド
+#include"_Sound\nkSoundSource.h"

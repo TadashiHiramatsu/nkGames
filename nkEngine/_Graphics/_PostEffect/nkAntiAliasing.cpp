@@ -73,14 +73,4 @@ namespace nkEngine
 		}
 	}
 
-	/**
-	 * ‰ð•ú.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	void AntiAliasing::Release()
-	{
-	}
-
 }// namespace nkEngine

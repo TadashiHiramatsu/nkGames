@@ -187,12 +187,9 @@ namespace nkEngine
 			//リスナーがXZ平面上で動いている。
 			
 			//リスナーポジション.
-			D3DXVECTOR3 listenerPos = Listener_.Position;
-
-			//動いた分を計算。
-			D3DXVECTOR3 vDelta;
-			vDelta = ListenerPosition_ - listenerPos;
-
+			Vector3 listenerPos;
+			listenerPos.Set(Listener_.Position);
+			
 			//角度を計算
 			ListenerAngle_ = float(atan2(Listener_.OrientFront.x, Listener_.OrientFront.z));
 
@@ -214,12 +211,13 @@ namespace nkEngine
 		{
 			//リスナーの移動速度を計算する。
 		
-			D3DXVECTOR3 vel = Listener_.Position;
-			vel = ListenerPosition_ -  vel;
-			vel /= deltaTime;
+			Vector3 vel;
+			vel.Set(Listener_.Position);
+			vel.Sub(ListenerPosition_, vel);
+			vel.Div(deltaTime);
 			
-			Listener_.Position = ListenerPosition_;
-			Listener_.Velocity = vel;
+			ListenerPosition_.CopyTo(Listener_.Position);
+			vel.CopyTo(Listener_.Velocity);
 		}
 
 		DWORD dwCalcFlags = X3DAUDIO_CALCULATE_MATRIX | X3DAUDIO_CALCULATE_DOPPLER
@@ -263,8 +261,8 @@ namespace nkEngine
 			emitter.CurveDistanceScaler = 14.0f;
 			emitter.DopplerScaler = 1.0f;
 
-			emitter.Position = soundsource->GetPosition();
-			emitter.Velocity = soundsource->GetVelocity();
+			soundsource->GetPosition().CopyTo(emitter.Position);
+			soundsource->GetVelocity().CopyTo(emitter.Velocity);
 
 			if (isInnerRadius_) 
 			{

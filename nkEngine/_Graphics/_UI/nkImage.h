@@ -16,7 +16,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class Image
+	class Image : Noncopyable
 	{
 	public:
 
@@ -26,7 +26,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		Image();
+		Image()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -45,20 +47,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 *
-		 * @param _filepass "Asset/Texture/"を省いたファイルパス.
+		 * @param filepass "Asset/Texture/"を省いたファイルパス.
 		 */
-		void Load(const char* _filepass);
-
-		/**
-		 * ファイルのロードを行う.
-		 * エフェクトのみ.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
-		 *
-		 * @param [in,out] _tex The tex to load.
-		 */
-		void Load(shared_ptr<Texture>& _tex);
+		void Load(const char* filepass);
 
 		/**
 		 * ファイルのロードを行う　 
@@ -111,6 +102,11 @@ namespace nkEngine
 			RectTransform_ = rt;
 		}
 
+		/**
+		* モノクロ設定.
+		*
+		* @param flag	モノクロフラグ.
+		*/
 		void SetMonochrome(bool flag)
 		{
 			isMonochrome_ = flag;
@@ -119,24 +115,27 @@ namespace nkEngine
 	private:
 
 		/** エフェクト. */
-		Effect* Effect_;
+		Effect* Effect_ = nullptr;
 		/** プリミティブ. */
 		Primitive Primitive_;
 		/** テクスチャ. */
 		shared_ptr<Texture> Texture_;
 		/** レクトトランスフォーム. */
-		RectTransform* RectTransform_;
+		RectTransform* RectTransform_ = nullptr;
+
+		/** モノクロフラグ. */
+		bool isMonochrome_ = false;
 
 	public:
 
 		/** UV座標 x:左, y:上, z:右 ,w:下 . */
-		D3DXVECTOR4 RectUV_;
+		Vector4 RectUV_ = Vector4(0, 0, 1, 1);
 		/** 色. */
-		D3DXVECTOR4 Color_;
+		Vector4 Color_ = Vector4(1, 1, 1, 1);
 
+		/** 初期化されているかフラグ. */
 		bool isInit = false;
-
-		bool isMonochrome_ = false;
+	
 
 	};
 

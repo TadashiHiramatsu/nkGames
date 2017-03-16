@@ -26,7 +26,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		BoxCollider();
+		BoxCollider()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -34,7 +36,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~BoxCollider();
+		~BoxCollider()
+		{
+		}
 
 		/**
 		 * ボックスコライダー作成.
@@ -57,6 +61,11 @@ namespace nkEngine
 		btCollisionShape* GetBody()override
 		{
 			return Shape_;
+		}
+
+		void Release()override
+		{
+			SAFE_DELETE(Shape_);
 		}
 
 	private:

@@ -7,26 +7,6 @@
 #include"ExpGage.h"
 
 /**
- * コンストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/10
- */
-ExpGage::ExpGage()
-{
-}
-
-/**
- * デストラクタ.
- *
- * @author HiramatsuTadashi
- * @date 2017/01/10
- */
-ExpGage::~ExpGage()
-{
-}
-
-/**
  * 初期化.
  *
  * @author HiramatsuTadashi
@@ -58,12 +38,12 @@ void ExpGage::Start()
 	ExpTransform_.Height_ = 10;
 
 	//フレームのアンカーを下中央
-	ExpFrameTransform_.Anchor_ = RectTransform::AnchorPresetE::BottomCenter;
-	ExpFrameTransform_.Pivot_ = D3DXVECTOR2(0.5f, 0);
+	ExpFrameTransform_.Anchor_ = AnchorPresetE::BottomCenter;
+	ExpFrameTransform_.Pivot_ = Vector2(0.5f, 0);
 
 	//本体のアンカーをフレームの左中央
-	ExpTransform_.Anchor_ = RectTransform::AnchorPresetE::MiddleLeft;
-	ExpTransform_.Pivot_ = D3DXVECTOR2(0, 0.5f);
+	ExpTransform_.Anchor_ = AnchorPresetE::MiddleLeft;
+	ExpTransform_.Pivot_ = Vector2(0, 0.5f);
 	//少しずらす
 	ExpTransform_.Position_.x = 25;
 
@@ -75,7 +55,7 @@ void ExpGage::Start()
 	Level_.Create(20, 20);
 	Level_.SetTransform(&TextTransform_);
 	TextTransform_.Parent_ = &ExpFrameTransform_;
-	TextTransform_.Anchor_ = RectTransform::TopCenter;
+	TextTransform_.Anchor_ = AnchorPresetE::TopCenter;
 }
 
 /**

@@ -11,26 +11,6 @@ namespace nkEngine
 {
 
 	/**
-	 * Default constructor.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	CSkinModelDataResources::CSkinModelDataResources()
-	{
-	}
-
-	/**
-	 * Destructor.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	CSkinModelDataResources::~CSkinModelDataResources()
-	{
-	}
-
-	/**
 	 * “Ç‚ÝŽæ‚è.
 	 *
 	 * @author	HiramatsuTadashi

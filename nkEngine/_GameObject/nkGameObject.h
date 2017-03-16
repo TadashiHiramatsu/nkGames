@@ -8,7 +8,7 @@
 namespace nkEngine
 {
 
-	/** unsigned char. */
+	/** 優先度. */
 	typedef unsigned char GOPriorityT;
 
 	/**
@@ -18,7 +18,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	class IGameObject
+	class IGameObject : Noncopyable
 	{
 	public:
 
@@ -28,7 +28,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		IGameObject();
+		IGameObject()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -36,7 +38,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		virtual ~IGameObject();
+		virtual ~IGameObject()
+		{
+		}
 
 	public:
 
@@ -301,9 +305,9 @@ namespace nkEngine
 		/** 優先度. */
 		GOPriorityT Priority_;
 		/** アクティブフラグ. */
-		bool isActive_;
+		bool isActive_ = true;
 		/** Startが呼ばれているかフラグ. */
-		bool isStart_;
+		bool isStart_ = false;
 
 	};
 

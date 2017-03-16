@@ -52,13 +52,13 @@ namespace nkEngine
 		};
 		//プリミティブの初期化
 		Primitive_.Create(
-			Primitive::TriangleStrip,
+			Primitive::TypeE::TriangleStrip,
 			4,
 			sizeof(SShapeVertex_PT),
 			scShapeVertex_PT_Element,
 			vb,
 			4,
-			IndexFormat16,
+			IndexFormatE::IndexFormat16,
 			ib
 		);
 
@@ -96,20 +96,6 @@ namespace nkEngine
 		Device->SetVertexDeclaration(Primitive_.GetVertexDecl());
 		Device->DrawIndexedPrimitive(Primitive_.GetD3DPrimitiveType(), 0, 0, Primitive_.GetNumVertex(), 0, Primitive_.GetNumPolygon());
 	
-	}
-
-	/**
-	 * 解放.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/16
-	 */
-	void PostEffect::Release()
-	{
-		//ブルームの解放
-		Bloom_.Release();
-		//アンチエイリアスの解放
-		AntiAliasing_.Release();
 	}
 
 }// namespace nkEngine

@@ -21,12 +21,12 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	class ModelRender
+	class ModelRender : Noncopyable
 	{
 	public:
 
 		/** フォグのパラメータ. */
-		enum FogFuncE
+		enum  class FogFuncE
 		{
 			FogFuncNone,	//!< フォグなし
 			FogFuncDist,	//!< 距離フォグ
@@ -49,7 +49,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		~ModelRender();
+		~ModelRender()
+		{
+		}
 
 		/**
 		 * 読み取り.
@@ -120,7 +122,7 @@ namespace nkEngine
 		 *
 		 * @param [in,out] light ライトのアドレス.
 		 */
-		void SetLight(Light* light)
+		void SetLight(const Light* light)
 		{
 			Light_ = light;
 		}
@@ -199,7 +201,7 @@ namespace nkEngine
 		 *
 		 * @param [in,out] camera カメラ.
 		 */
-		void SetCamera(Camera* camera)
+		void SetCamera(const Camera* camera)
 		{
 			Camera_ = camera;
 		}
@@ -244,7 +246,7 @@ namespace nkEngine
 		 * @param idx1    フォグがかかりきる距離.
 		 * @param color	　フォグの色
 		 */
-		void SetFogParam(FogFuncE fogfunc, float idx0, float idx1, const D3DXVECTOR4& color)
+		void SetFogParam(FogFuncE fogfunc, float idx0, float idx1, const Vector4& color)
 		{
 			FogFunc_ = fogfunc;
 			FogParam_[0] = idx0;
@@ -260,7 +262,7 @@ namespace nkEngine
 		 *
 		 * @return The mesh.
 		 */
-		LPD3DXMESH GetMesh()
+		LPD3DXMESH GetMesh() const
 		{
 			static D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(ModelData_->GetFrameRoot()->pMeshContainer);
 			return pMeshContainer->OrigMesh_;
@@ -316,10 +318,10 @@ namespace nkEngine
 		 *
 		 * @return Null if it fails, else the found bone world matrix.
 		 */
-		D3DXMATRIX* FindBoneWorldMatrix(const char* name)
+		Matrix* FindBoneWorldMatrix(const char* name)
 		{
 			D3DXFRAME_DERIVED* frame = (D3DXFRAME_DERIVED*)GetFrame(name);
-			return &frame->CombinedTransformationMatrix_;
+			return r_cast<Matrix*>(&frame->CombinedTransformationMatrix_);
 		}
 
 		/**
@@ -379,42 +381,42 @@ namespace nkEngine
 	protected:
 
 		/** スキンモデルのデータ. */
-		SkinModelData* ModelData_;
+		SkinModelData* ModelData_ = nullptr;
 		/** ライトクラス. */
-		Light* Light_;
+		const Light* Light_ = nullptr;
 		/** エフェクト. */
-		Effect* Effect_;
+		Effect* Effect_ = nullptr;
 		/** カメラのアドレス. */
-		Camera* Camera_;
+		const Camera* Camera_ = nullptr;
 		/** トランスフォーム 委譲したクラスのトランスフォームのアドレス. */
-		Transform* Transform_;
+		const Transform* Transform_ = nullptr;
 
 		/** マトリクスパレットの最大数. */
 		static const int MAX_MATRIX_PALLET = 128;
 		/** マトリクスパレット. */
-		D3DXMATRIX BoneMatrixPallets_[MAX_MATRIX_PALLET];
+		Matrix BoneMatrixPallets_[MAX_MATRIX_PALLET];
 
 		/** 影を落とすかどうか. */
-		bool isShadowReceiver_;
+		bool isShadowReceiver_ = true;
 		/** 影が出るかどうか. */
-		bool isShadowCaster_;
+		bool isShadowCaster_ = false;
 		/** リムライトをするかどうか. */
-		bool isRimLight_;
+		bool isRimLight_ = false;
 
 		/** 法線マップのTexture. */
-		Texture* NormalMap_;
+		Texture* NormalMap_ = nullptr;
 		/** 鏡面反射マップのTexture. */
-		Texture* SpecMap_;
+		Texture* SpecMap_ = nullptr;
 
 		/** フォグの種類. */
-		FogFuncE FogFunc_;
+		FogFuncE FogFunc_ = FogFuncE::FogFuncNone;
 		/** フォグのパラメータ. */
 		float FogParam_[2];
 		/** フォグの色. */
-		D3DXVECTOR4 FogColor_ = D3DXVECTOR4(0, 0, 0, 1);
+		Vector4 FogColor_ = Vector4(0, 0, 0, 1);
 
 		/** 色. */
-		D3DXVECTOR4 Color_ = D3DXVECTOR4(1, 1, 1, 1);
+		Vector4 Color_ = Vector4(1, 1, 1, 1);
 
 	};
 

@@ -16,7 +16,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class Texture
+	class Texture : Noncopyable
 	{
 	public:
 
@@ -26,7 +26,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		Texture();
+		Texture()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -34,7 +36,10 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		~Texture();
+		~Texture()
+		{
+			Release();
+		}
 
 		/**
 		 * テクスチャを設定.
@@ -91,7 +96,7 @@ namespace nkEngine
 	private:
 
 		/** テクスチャ. */
-		IDirect3DTexture9* D3DTexture_;
+		IDirect3DTexture9* D3DTexture_ = nullptr;
 		/** テクスチャリソースに登録されているかフラグ. */
 		bool isRegistration_ = false;
 

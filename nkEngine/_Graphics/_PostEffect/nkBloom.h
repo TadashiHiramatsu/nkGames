@@ -14,7 +14,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class Bloom
+	class Bloom : Noncopyable
 	{
 	public:
 
@@ -57,14 +57,6 @@ namespace nkEngine
 		 * @param [in,out] postEffect If non-null, the post effect.
 		 */
 		void Render(PostEffect* postEffect);
-
-		/**
-		 * ‰ð•ú.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
-		 */
-		void Release();
 
 	private:
 

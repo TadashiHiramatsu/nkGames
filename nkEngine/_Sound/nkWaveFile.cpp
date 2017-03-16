@@ -17,7 +17,7 @@ namespace nkEngine
 	*
 	* @param fileName ファイル名.
 	*/
-	void WaveFile::Open(const char * fileName)
+	void WaveFile::Open(const char* fileName)
 	{
 		//ファイルパスを計算.
 		char fileP[256];

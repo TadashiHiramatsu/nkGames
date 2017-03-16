@@ -8,7 +8,7 @@
 namespace nkEngine
 {
 	/**
-	 * マウスステート.
+	 * マウスの状態.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/09
@@ -18,7 +18,7 @@ namespace nkEngine
 	public:
 
 		/**
-		* Default constructor.
+		* コンストラクタ.
 		*
 		* @author	HiramatsuTadashi
 		* @date	2017/01/09
@@ -45,14 +45,15 @@ namespace nkEngine
 	};
 
 	/** マウスボタンの列挙値. */
-	enum MouseButtonE
+	enum class MouseButtonE
 	{
-		MouseLeft = 0,	//!< 左.
-		MouseRight,		//!< 右.
-		MouseWheel,		//!< ホイール.
+		Left = 0,	//!< 左.
+		Right,		//!< 右.
+		Wheel,		//!< ホイール.
 	};
 
-	enum KeyCodeE
+	/** キーボードのコード. */
+	enum class KeyCodeE
 	{
 		Escape = DIK_ESCAPE,
 		Alpha1 = DIK_1,			//!< キーボードの1.
@@ -206,24 +207,22 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/09
 	 */
-	class CInput
+	class CInput : Noncopyable
 	{
 	private:
 
 		/**
-		* Default constructor.
+		* コンストラクタ.
 		*
 		* @author	HiramatsuTadashi
 		* @date	2017/01/09
 		*/
-		CInput() :
-			isKeyboard_(true),
-			isMouse_(true)
+		CInput()
 		{
 		}
 
 		/**
-		* Destructor.
+		* デストラクタ.
 		*
 		* @author	HiramatsuTadashi
 		* @date	2017/01/09
@@ -240,11 +239,13 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/09
 		 *
-		 * @param	hWnd	Handle of the window.
+		 * @param	hWnd		ウィンドウズハンドル.
+		 * @param	isKeyboard	キーボードを使用するか.
+		 * @param	isMouse		マウスを使用するか.
 		 *
 		 * @return	A hResult.
 		 */
-		HRESULT Init(HWND hWnd);
+		HRESULT Init(HWND hWnd, bool isKeyboard = false, bool isMouse = false);
 		
 		/**
 		 * 更新.
@@ -270,7 +271,7 @@ namespace nkEngine
 		 *
 		 * @return	The mouse x coordinate.
 		 */
-		LONG GetMouseX()
+		LONG GetMouseX() const
 		{
 			return MouseStateBef_.PosX_ - MouseState_.PosX_;
 		}
@@ -283,7 +284,7 @@ namespace nkEngine
 		 *
 		 * @return	The mouse y coordinate.
 		 */
-		LONG GetMouseY()
+		LONG GetMouseY() const
 		{
 			return MouseStateBef_.PosY_ - MouseState_.PosY_;
 		}
@@ -296,7 +297,7 @@ namespace nkEngine
 		 *
 		 * @return	The mouse position x coordinate.
 		 */
-		LONG GetMousePosX()
+		LONG GetMousePosX() const
 		{
 			return MousePos_.x;
 		}
@@ -309,7 +310,7 @@ namespace nkEngine
 		 *
 		 * @return	The mouse position y coordinate.
 		 */
-		LONG GetMousePosY()
+		LONG GetMousePosY() const
 		{
 			return MousePos_.y;
 		}
@@ -324,7 +325,7 @@ namespace nkEngine
 		 *
 		 * @return	True if it succeeds, false if it fails.
 		 */
-		bool GetMoudeButton(int idx)
+		bool GetMoudeButton(int idx) const
 		{
 			return (MouseState_.Button_[idx] & 0x80);
 		}
@@ -338,9 +339,9 @@ namespace nkEngine
 		 *
 		 * @return	True if it succeeds, false if it fails.
 		 */
-		bool GetMoudeButton(MouseButtonE idx)
+		bool GetMoudeButton(MouseButtonE idx) const
 		{
-			return (MouseState_.Button_[idx] & 0x80);
+			return (MouseState_.Button_[(int)idx] & 0x80);
 		}
 
 		/**
@@ -353,7 +354,7 @@ namespace nkEngine
 		 *
 		 * @return	True if it succeeds, false if it fails.
 		 */
-		bool GetMoudeButtonDown(int idx)
+		bool GetMoudeButtonDown(int idx) const
 		{
 			return(!(MouseStateBef_.Button_[idx] & 0x80) && MouseState_.Button_[idx] & 0x80) ;
 		}
@@ -367,9 +368,9 @@ namespace nkEngine
 		 *
 		 * @return	True if it succeeds, false if it fails.
 		 */
-		bool GetMoudeButtonDown(MouseButtonE idx)
+		bool GetMoudeButtonDown(MouseButtonE idx) const
 		{
-			return(!(MouseStateBef_.Button_[idx] & 0x80) && MouseState_.Button_[idx] & 0x80) ;
+			return(!(MouseStateBef_.Button_[(int)idx] & 0x80) && MouseState_.Button_[(int)idx] & 0x80) ;
 		}
 
 		/**
@@ -382,7 +383,7 @@ namespace nkEngine
 		 *
 		 * @return	True if it succeeds, false if it fails.
 		 */
-		bool GetMoudeButtonUp(int idx)
+		bool GetMoudeButtonUp(int idx) const
 		{
 			return (MouseStateBef_.Button_[idx] & 0x80 && !(MouseState_.Button_[idx] & 0x80)) ;
 		}
@@ -396,13 +397,13 @@ namespace nkEngine
 		 *
 		 * @return	True if it succeeds, false if it fails.
 		 */
-		bool GetMoudeButtonUp(MouseButtonE idx)
+		bool GetMoudeButtonUp(MouseButtonE idx) const
 		{
-			return(MouseStateBef_.Button_[idx] & 0x80 && !(MouseState_.Button_[idx] & 0x80)) ;
+			return(MouseStateBef_.Button_[(int)idx] & 0x80 && !(MouseState_.Button_[(int)idx] & 0x80)) ;
 		}
 
 		/**
-		 * Gets key button.
+		 * キーボードの指定キーが押されている.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/09
@@ -411,13 +412,13 @@ namespace nkEngine
 		 *
 		 * @return	True if it succeeds, false if it fails.
 		 */
-		bool GetKeyButton(KeyCodeE key)
+		bool GetKeyButton(KeyCodeE key) const
 		{
-			return (bool)(Keyboard_[key] & 0x80);
+			return (bool)(Keyboard_[(int)key] & 0x80);
 		}
 
 		/**
-		 * Gets key button down.
+		 * キーボードの指定キーが押された.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/09
@@ -426,13 +427,13 @@ namespace nkEngine
 		 *
 		 * @return	True if it succeeds, false if it fails.
 		 */
-		bool GetKeyButtonDown(KeyCodeE key)
+		bool GetKeyButtonDown(KeyCodeE key) const
 		{
-			return (bool)(!(KeyboardBef_[key] & 0x80) && Keyboard_[key] & 0x80);
+			return (bool)(!(KeyboardBef_[(int)key] & 0x80) && Keyboard_[(int)key] & 0x80);
 		}
 
 		/**
-		 * Gets key button up.
+		 * キーボードの指定キーが離された.
 		 *
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/09
@@ -441,9 +442,9 @@ namespace nkEngine
 		 *
 		 * @return	True if it succeeds, false if it fails.
 		 */
-		bool GetKeyButtonUp(KeyCodeE key)
+		bool GetKeyButtonUp(KeyCodeE key) const
 		{
-			return (bool)(KeyboardBef_[key] & 0x80 && !(Keyboard_[key] & 0x80));
+			return (bool)(KeyboardBef_[(int)key] & 0x80 && !(Keyboard_[(int)key] & 0x80));
 		}
 
 		/**
@@ -483,6 +484,7 @@ namespace nkEngine
 		void InitKeyboard(HWND hWnd);
 
 	private:
+
 		/** 現在のマウスステータス. */
 		MouseStateS MouseState_;
 		/** 1フレーム前のマウスステータス. */
@@ -492,20 +494,24 @@ namespace nkEngine
 		 * クライアントの左下が 0,0 になる.
 		 */
 		POINT MousePos_;
+		
 		/** 現在のキーボードステータス. */
 		BYTE Keyboard_[256];
 		/** 一回前のキーボードステータス. */
 		BYTE KeyboardBef_[256];
+		
 		/** マウスデバイス. */
 		IDirectInputDevice8* DInputMouse_ = nullptr;
 		/** キーボードデバイス. */
 		IDirectInputDevice8* DInputKeyboard_ = nullptr;
 		/** なぁにこれぇ. */
 		IDirectInput8* DInput_ = nullptr;
+		
 		/** キーボードを使用する. */
-		bool isKeyboard_;
+		bool isKeyboard_ = false;
 		/** マウスを使用する. */
-		bool isMouse_;
+		bool isMouse_ = false;
+
 	};
 
 	/**

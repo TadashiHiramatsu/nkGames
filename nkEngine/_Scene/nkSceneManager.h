@@ -28,7 +28,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		CSceneManager();
+		CSceneManager()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -36,7 +38,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~CSceneManager();
+		~CSceneManager()
+		{
+		}
 
 	public:
 
@@ -87,8 +91,8 @@ namespace nkEngine
 
 	private:
 
-		/** The now scene. */
-		IScene* NowScene_;
+		/** シーンクラス. */
+		IScene* NowScene_ = nullptr;
 
 	};
 

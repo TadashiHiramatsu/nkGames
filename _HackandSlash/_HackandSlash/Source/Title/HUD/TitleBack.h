@@ -59,19 +59,6 @@ public:
 	 */
 	void PostRender()override;
 
-	/**
-	 * F‚ğİ’è.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/14
-	 *
-	 * @param [in,out] color The color.
-	 */
-	void SetColor(D3DXVECTOR4& color)
-	{
-		BackImage_.Color_ = color;
-	}
-
 private:
 
 	/** ”wŒi‰æ‘œ. */

@@ -68,26 +68,30 @@ public:
 	};
 
 	/** アニメーションコードの列挙. */
-	enum AnimationCodeE
+	enum class AnimationCodeE
 	{
-		AnimationInvalid = -1,	//!< 無し
-		AnimationIdol = 0,	//!< 待機
-		AnimationRun,			//!< 走り
-		AnimationAttack_01,		//!< 攻撃
-		AnimationDeath_01,		//!< 死亡
-		AnimationNum,			//!< アニメーションの数
+		Invalid = -1,				//!< 無し
+		Idol = 0,					//!< 待機
+		Walk,						//!< 歩き
+		Run,						//!< 走り
+		Attack_Start,				//!< 攻撃アニメーションコード始め.
+		Attack_01 = Attack_Start,	//!< 攻撃01
+		Attack_08,					//!< 攻撃08
+		Attack_End = Attack_08,		//!< 攻撃02
+		Death_01,					//!< 死亡
+		AnimationNum,				//!< アニメーションの数
 	};
 
 
 	/** ステートコードの列挙. */
-	enum StateCodeE
+	enum class StateCodeE
 	{
-		StateWaiting = 0,	//!< 待機
-		StateWalk,			//!< 歩き
-		StateRun,			//!< 走り
-		StateAttack,		//!< 攻撃
-		StateDamage,		//!< やられ
-		StateDeath,			//!< 死亡
+		Waiting = 0,	//!< 待機
+		Walk,			//!< 歩き
+		Run,			//!< 走り
+		Attack,			//!< 攻撃
+		Damage,			//!< やられ
+		Death,			//!< 死亡
 	};
 
 public:
@@ -194,25 +198,51 @@ public:
 	 *
 	 * @return The position.
 	 */
-	D3DXVECTOR3& GetPosition()
+	const Vector3& GetPosition() const
 	{
 		return Transform_.Position_;
 	}
 
-	//死んでいるかを返す
-	bool GetDeathFlag()
+	/**
+	* 死んでいるかを返す.
+	*/
+	bool GetDeathFlag() const
 	{
-		return (State_ == StateCodeE::StateDeath);
+		return (State_ == StateCodeE::Death);
 	}
 
+	/**
+	* アイテムを取得
+	*
+	* @param type	アイテムタイプ.
+	*
+	* @return アイテム.
+	*/
 	EquipmentItem* GetEquipmentItem(ItemTypeE type)
 	{
 		return PlayerEquipment_.GetEquipmentItem(type);
 	}
 
+	/**
+	* アイテムを設定.
+	*
+	* @param item	アイテム.
+	*/
 	void SetEquipmentItem(EquipmentItem* item)
 	{
 		PlayerEquipment_.SetEquipmentItem(item);
+	}
+
+	/**
+	* アイテムが設定されているかのフラグを返します.
+	*
+	* @param type	アイテムタイプ.
+	*
+	* @return true or false.
+	*/
+	bool GetIsSet(ItemTypeE type) const
+	{
+		return PlayerEquipment_.GetIsSet(type);
 	}
 
 private:
@@ -248,6 +278,29 @@ private:
 	 * @param interpolateTime The interpolate time.
 	 */
 	void PlayAnimation(AnimationCodeE animCode, float interpolateTime);
+
+	/**
+	* リスポーン関数.
+	*/
+	void Respawn()
+	{
+		//待機状態に変化.
+		ChangeState(StateCodeE::Waiting);
+		PlayAnimation(AnimationCodeE::Idol, 0.0f);
+
+		//現在の経験値の3分の1をロスト.
+		float param  = Parameter_.Experience_ / 3;
+		Parameter_.Experience_ -= param;
+
+		//位置をリスポーン位置に変更.
+		Transform_.Position_ = RespawnPosition_;
+
+		//体力を1に設定.
+		Parameter_.NowHp_ = 1;
+
+		//インターバルのローカルタイムを初期化.
+		InvincibleLT = 0.0f;
+	}
 
 private:
 
@@ -289,5 +342,13 @@ private:
 
 	/** 装備情報. */
 	PlayerEquipment PlayerEquipment_;
+
+	/** 再生のリクエストを出している攻撃モーション番号. */
+	AnimationCodeE ReqAttackAnimCode_;
+	/** 次の攻撃モーション番号. */
+	AnimationCodeE NextAttackAnimCode_;
+
+	/** リスポーン位置. */
+	Vector3 RespawnPosition_;
 
 };

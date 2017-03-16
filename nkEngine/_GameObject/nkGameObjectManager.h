@@ -18,7 +18,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	class CGameObjectManager
+	class CGameObjectManager : Noncopyable
 	{
 	private:
 
@@ -28,7 +28,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		CGameObjectManager();
+		CGameObjectManager()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -36,7 +38,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
-		~CGameObjectManager();
+		~CGameObjectManager()
+		{
+		}
 
 	public:
 

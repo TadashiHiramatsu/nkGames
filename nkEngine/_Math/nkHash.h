@@ -1,7 +1,7 @@
 /**
  * @file	_Math\nkHash.h
  *
- * ハッシュクラス.
+ * ハッシュ値計算クラスの定義.
  */
 #pragma once
 
@@ -9,12 +9,12 @@ namespace nkEngine
 {
 
 	/**
-	 * A hash.
+	 * ハッシュ値を計算するクラス.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/08
 	 */
-	class Hash
+	class Hash : Noncopyable
 	{
 	public:
 
@@ -24,9 +24,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/08
 		 *
-		 * @param	string	The string.
+		 * @param	string	文字列.
 		 *
-		 * @return	An int.
+		 * @return	ハッシュ値.
 		 */
 		static int MakeHash(const char* string)
 		{

@@ -9,7 +9,7 @@ namespace nkEngine
 {
 
 	/** インデックスフォーマットの列挙型. */
-	enum IndexFormatE
+	enum class IndexFormatE
 	{
 		IndexFormat16 = D3DFMT_INDEX16, //!< 16bitインデックス
 		IndexFormat32 = D3DFMT_INDEX32, //!< 32bitインデックス
@@ -21,7 +21,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class IndexBuffer
+	class IndexBuffer : Noncopyable
 	{
 	public:
 

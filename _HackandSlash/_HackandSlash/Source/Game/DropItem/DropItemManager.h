@@ -9,6 +9,16 @@
 class DropItemManager : public IGameObject
 {
 public:
+
+	struct DataS
+	{
+		/** アイテムデータ. */
+		IItemData* ItemData_;
+		/** ドロップ率. */
+		int Probability_;
+	};
+
+public:
 	
 	//コンストラクタ
 	DropItemManager()
@@ -41,7 +51,7 @@ public:
 	* @param level	敵のレベル.
 	* @param pos	ドロップする座標.
 	**/
-	void SetDropItem(int level, D3DXVECTOR3& pos);
+	void SetDropItem(int level, const Vector3& pos);
 
 	/** プレイヤーのポインタを設定. */
 	void SetPlayer(Player* p)

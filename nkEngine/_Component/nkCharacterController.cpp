@@ -42,10 +42,11 @@ namespace
 			}
 
 			//衝突点の法線を引っ張ってくる。
-			D3DXVECTOR3 hitNormalTmp = *(D3DXVECTOR3*)&convexResult.m_hitNormalLocal;
+			Vector3 hitNormalTmp;
+			hitNormalTmp.Set(convexResult.m_hitNormalLocal);
 
 			//上方向と法線のなす角度を求める。
-			float angle = D3DXVec3Dot(&hitNormalTmp, &D3DXVECTOR3(0, 1, 0));
+			float angle = hitNormalTmp.Dot(Vector3::Up);
 			angle = fabsf(acosf(angle));
 
 			if (angle < 3.14159265 * 0.3f		//地面の傾斜が54度より小さいので地面とみなす。
@@ -53,18 +54,22 @@ namespace
 			{
 				//衝突している。
 				isHit_ = true;
-				D3DXVECTOR3 hitPosTmp = *(D3DXVECTOR3*)&convexResult.m_hitPointLocal;
+				
+				//ヒットした座標.
+				Vector3 hitPosTmp;
+				hitPosTmp.Set(convexResult.m_hitPointLocal);
 
 				//衝突点の距離を求める。
-				D3DXVECTOR3 vDist;
-				vDist = hitPosTmp - StartPos_;
-				float distTmp = D3DXVec3Length(&vDist);
+				Vector3 vDist;
+				vDist.Sub(hitPosTmp,StartPos_);
+
+				float distTmp = vDist.Length();
 
 				if (Dist_ > distTmp)
 				{
 					//この衝突点の方が近いので、最近傍の衝突点を更新する。
 					HitPos_ = hitPosTmp;
-					HitNormal_ = *(D3DXVECTOR3*)&convexResult.m_hitNormalLocal;
+					HitNormal_.Set(convexResult.m_hitNormalLocal);
 					Dist_ = distTmp;
 				}
 
@@ -78,11 +83,11 @@ namespace
 		/** 衝突フラグ. */
 		bool isHit_ = false;
 		/** 衝突点. */
-		D3DXVECTOR3 HitPos_ = D3DXVECTOR3(0.0f, -FLT_MAX, 0.0f);
+		Vector3 HitPos_ = Vector3(0.0f, -FLT_MAX, 0.0f);
 		/** レイの始点. */
-		D3DXVECTOR3 StartPos_ = D3DXVECTOR3(0, 0, 0);
+		Vector3 StartPos_ = Vector3::Zero;
 		/** 衝突点の法線. */
-		D3DXVECTOR3 HitNormal_ = D3DXVECTOR3(0, 0, 0);
+		Vector3 HitNormal_ = Vector3::Zero;
 		/** 自分自身。自分自身との衝突を除外するためのメンバ. */
 		btCollisionObject* MyCol_ = nullptr;
 		/** 衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値. */
@@ -109,10 +114,11 @@ namespace
 			}
 
 			//衝突点の法線を引っ張ってくる。
-			D3DXVECTOR3 hitNormalTmp = convexResult.m_hitNormalLocal;
+			Vector3 hitNormalTmp;
+			hitNormalTmp.Set(convexResult.m_hitNormalLocal);
 
 			//上方向と衝突点の法線のなす角度を求める。
-			float angle = fabsf(acosf(D3DXVec3Dot(&hitNormalTmp, &D3DXVECTOR3(0, 1, 0))));
+			float angle = fabsf(acosf(hitNormalTmp.Dot(Vector3::Up)));
 
 			if (angle >= PI * 0.3f
 				|| convexResult.m_hitCollisionObject->getUserIndex() == CollisionAttr_Character) 
@@ -124,15 +130,18 @@ namespace
 				isHit_ = true;
 
 				//衝突した位置を取得.
-				D3DXVECTOR3 hitPosTmp = convexResult.m_hitPointLocal;
+				Vector3 hitPosTmp;
+				hitPosTmp.Set(convexResult.m_hitPointLocal);
 
 				//交点との距離を調べる。
-				D3DXVECTOR3 vDist = hitPosTmp - StartPosition_;
+				Vector3 vDist;
+				vDist.Sub(hitPosTmp, StartPosition_);
 				vDist.y = 0.0f;
 
-				float distTmp = D3DXVec3Length(&vDist);
+				float distTmp = vDist.Length();
 
-				if (distTmp < Dist_) {
+				if (distTmp < Dist_)
+				{
 					//この衝突点の方が近いので、最近傍の衝突点を更新する。
 					HitPosition_ = hitPosTmp;
 					Dist_ = distTmp;
@@ -147,11 +156,11 @@ namespace
 		/** 衝突フラグ. */
 		bool isHit_ = false;
 		/** 衝突点. */
-		D3DXVECTOR3 HitPosition_ = D3DXVECTOR3(0.0f, -FLT_MAX, 0.0f);
+		Vector3 HitPosition_ = Vector3(0.0f, -FLT_MAX, 0.0f);
 		/** レイの始点. */
-		D3DXVECTOR3 StartPosition_ = D3DXVECTOR3(0, 0, 0);
+		Vector3 StartPosition_ = Vector3::Up;
 		/** 衝突点の法線. */
-		D3DXVECTOR3 HitNormal_ = D3DXVECTOR3(0, 0, 0);
+		Vector3 HitNormal_ = Vector3::Up;
 		/** 自分自身。自分自身との衝突を除外するためのメンバ. */
 		btCollisionObject* MyCol_ = nullptr;
 		/** 衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値. */
@@ -165,32 +174,16 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	CharacterController::CharacterController() :
-		isJump_(false),
-		isOnGround_(true),
-		Radius_(0.0f),
-		Height_(0.0f),
-		Gravity_(-9.8f),
-		MoveSpeed_(D3DXVECTOR3(0,0,0))
-	{
-	}
-
-	/**
 	 * 初期化.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 *
-	 * @param radius The radius.
-	 * @param height The height.
-	 * @param pos    The position.
+	 * @param radius 半径.
+	 * @param height 高さ.
+	 * @param pos    座標.
 	 */
-	void CharacterController::Init(float radius, float height, const D3DXVECTOR3& pos)
+	void CharacterController::Init(float radius, float height, const Vector3& pos)
 	{
 
 		//ポジションコピー
@@ -232,16 +225,16 @@ namespace nkEngine
 		MoveSpeed_.y += Gravity_ * Time().DeltaTime();
 
 		//次の移動先となる座標を計算
-		D3DXVECTOR3 nextPos = Position_;
+		Vector3 nextPos = Position_;
 
 		//速度からこのFrameでの移動量を求める
-		D3DXVECTOR3 addPos = MoveSpeed_;
-		addPos *= Time().DeltaTime();
-		nextPos += addPos;
+		Vector3 addPos = MoveSpeed_;
+		addPos.Scale(Time().DeltaTime());
+		nextPos.Add(addPos);
 
-		D3DXVECTOR3 originalXZDir = addPos;
+		Vector3 originalXZDir = addPos;
 		originalXZDir.y = 0.0f;
-		D3DXVec3Normalize(&originalXZDir, &originalXZDir);
+		originalXZDir.Normalize();
 
 		//XZ平面での衝突検出と衝突解決を行う。
 		{
@@ -250,13 +243,15 @@ namespace nkEngine
 			{
 				//現在の座標から次の移動先へ向かうベクトルを求める。
 				
-				D3DXVECTOR3 addPos = nextPos - Position_;
+				//加算する座標.
+				Vector3 addPos;
+				addPos.Sub(nextPos, Position_);
 
 				//高さを消す.
-				D3DXVECTOR3 addPosXZ = addPos;
+				Vector3 addPosXZ = addPos;
 				addPosXZ.y = 0.0f;
 
-				if (D3DXVec3Length(&addPosXZ) < FLT_EPSILON) 
+				if (addPosXZ.Length() < FLT_EPSILON)
 				{
 					//XZ平面で動きがないので調べる必要なし。
 					//FLT_EPSILONは1より大きい、最小の値との差分を表す定数。
@@ -265,7 +260,7 @@ namespace nkEngine
 				}
 
 				//カプセルコライダーの中心座標 + 0.2の座標をposTmpに求める。
-				D3DXVECTOR3 posTmp = Position_;
+				Vector3 posTmp = Position_;
 				posTmp.y += Height_ * 0.5f + Radius_ + 0.2f;
 
 				//レイを作成。
@@ -294,36 +289,38 @@ namespace nkEngine
 				{
 					//当たった。
 					//壁。
-					D3DXVECTOR3 vT0, vT1;
+					Vector3 vT0, vT1;
 
 					//XZ平面上での移動後の座標をvT0に、交点の座標をvT1に設定する。
-					vT0 = D3DXVECTOR3(nextPos.x, 0.0f, nextPos.z);
-					vT1 = D3DXVECTOR3(callback.HitPosition_.x, 0.0f, callback.HitPosition_.z);
+					vT0 = Vector3(nextPos.x, 0.0f, nextPos.z);
+					vT1 = Vector3(callback.HitPosition_.x, 0.0f, callback.HitPosition_.z);
 
 					//めり込みが発生している移動ベクトルを求める。
-					D3DXVECTOR3 vMerikomi = vT0 - vT1;
+					Vector3 vMerikomi;
+					vMerikomi.Sub(vT0 ,vT1);
 
 					//XZ平面での衝突した壁の法線を求める。。
-					D3DXVECTOR3 hitNormalXZ = callback.HitNormal_;
+					Vector3 hitNormalXZ = callback.HitNormal_;
 					hitNormalXZ.y = 0.0f;
-					D3DXVec3Normalize(&hitNormalXZ, &hitNormalXZ);
+					hitNormalXZ.Normalize();
 
 					//めり込みベクトルを壁の法線に射影する。
-					float fT0 = D3DXVec3Dot(&hitNormalXZ, &vMerikomi);
+					float fT0 = hitNormalXZ.Dot(vMerikomi);
 
 					//押し戻し返すベクトルを求める。
 					//押し返すベクトルは壁の法線に射影されためり込みベクトル+半径。
-					D3DXVECTOR3 vOffset = hitNormalXZ;
-					vOffset *= (-fT0 + Radius_);
+					Vector3 vOffset = hitNormalXZ;
+					vOffset.Scale(-fT0 + Radius_);
 
 					//押し戻す.
-					nextPos += vOffset;
+					nextPos.Add(vOffset);
 
-					D3DXVECTOR3 currentDir = nextPos - Position_;
+					Vector3 currentDir;
+					currentDir.Sub(nextPos, Position_);
 					currentDir.y = 0.0f;
-					D3DXVec3Normalize(&currentDir, &currentDir);
+					currentDir.Normalize();
 
-					if (D3DXVec3Dot(&currentDir,&originalXZDir) < 0.0f)
+					if (currentDir.Dot(originalXZDir) < 0.0f)
 					{
 						//角に入った時のキャラクタの振動を防止するために、
 						//移動先が逆向きになったら移動をキャンセルする。
@@ -351,8 +348,8 @@ namespace nkEngine
 
 		//下方向を調べる。
 		{
-			D3DXVECTOR3 addPos;
-			addPos = nextPos - Position_;
+			Vector3 addPos;
+			addPos.Sub(nextPos , Position_);
 
 			//移動の仮確定。
 			Position_ = nextPos;
@@ -368,8 +365,8 @@ namespace nkEngine
 			//終点は地面上にいない場合は1m下を見る。
 			//地面上にいなくてジャンプで上昇中の場合は上昇量の0.01倍下を見る。
 			//地面上にいなくて降下中の場合はそのまま落下先を調べる。
-			D3DXVECTOR3 endPos;
-			endPos = (D3DXVECTOR3)start.getOrigin();
+			Vector3 endPos;
+			endPos.Set(start.getOrigin());
 
 			if (isOnGround_ == false)
 			{
@@ -396,7 +393,7 @@ namespace nkEngine
 
 			SweepResultGroundS callback;
 			callback.MyCol_ = RigidBody_.GetBody();
-			callback.StartPos_ = (D3DXVECTOR3)start.getOrigin();
+			callback.StartPos_.Set(start.getOrigin());
 
 			//衝突検出。
 			Physics().ConvexSweepTest((const btConvexShape*)Collider_.GetBody(), start, end, callback);
@@ -404,29 +401,12 @@ namespace nkEngine
 			if (callback.isHit_)
 			{
 				//当たった。
-				D3DXVECTOR3 Circle;
-				float x = 0.0f;
-
-				//押し戻す量。
-				float offset = 0.0f;
-				Circle = D3DXVECTOR3(0, 0, 0);
-				Circle = Position_;
-				Circle.y = callback.HitPos_.y;//円の中心
-
-				D3DXVECTOR3 v;
-				v = Circle - callback.HitPos_;
-
-				//物体の角とプレイヤーの間の横幅の距離が求まる。
-				x = D3DXVec3Length(&v);
-
-				//yの平方根を求める。
-				offset = sqrt(max(0.0f, Radius_ * Radius_ - x*x));
+				Vector3 Circle = Position_;
 
 				MoveSpeed_.y = 0.0f;
 				isJump_ = false;
 				isOnGround_ = true;
-
-				nextPos.y = callback.HitPos_.y + offset - Radius_;
+				nextPos.y = callback.HitPos_.y;
 			}
 			else
 			{

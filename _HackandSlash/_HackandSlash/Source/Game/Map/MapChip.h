@@ -1,3 +1,6 @@
+/**
+* マップチッククラスの定義.
+*/
 #pragma once
 
 /** 
@@ -63,14 +66,14 @@ private:
 	/** モデル描画クラス*/
 	ModelRender ModelRender_;
 	/** ワールド行列のバッファ. */
-	unique_ptr<D3DXMATRIX[]> WorldMatrixBuffer_;
+	unique_ptr<Matrix[]> WorldMatrixBuffer_;
 	/** メッシュコライダー. */
 	unique_ptr<MeshCollider[]> MeshCollider_;
 	/** 剛体. */
 	unique_ptr<RigidBody[]> RigidBody_;
 
 	/** 先頭ボーン行列*/
-	D3DXMATRIX* RootBoneMatrix_ = nullptr;
+	Matrix* RootBoneMatrix_ = nullptr;
 
 	/** マップチップの数. */
 	int NumMapChip_ = 0;

@@ -16,25 +16,26 @@ namespace nkEngine
  */
 #define INPUT_DEADZONE  ( 0.24f * FLOAT(0x7FFF) )
 
-	/** Values that represent buttons. */
-	enum ButtonE {
-		ButtonUp,		//!< 上.
-		ButtonDown,		//!< 下.
-		ButtonLeft,		//!< 左.
-		ButtonRight,	//!< 右.
-		ButtonA,		//!< Aボタン.
-		ButtonB,		//!< Bボタン.
-		ButtonX,		//!< Xボタン.
-		ButtonY,		//!< Yボタン.
-		ButtonSelect,	//!< セレクトボタン.
-		ButtonStart,	//!< スタートボタン.
-		ButtonRB1,		//!< RB1ボタン.
-		ButtonRB2,		//!< RB2ボタン.
-		ButtonRB3,		//!< RB3ボタン.
-		ButtonLB1,		//!< LB1ボタン.
-		ButtonLB2,		//!< LB2ボタン.
-		ButtonLB3,		//!< LB3ボタン.
-		ButtonNum,	    //!< ボタンの数.
+	/** コントローラのボタン. */
+	enum class ButtonE
+	{
+		Up,			//!< 上.
+		Down,		//!< 下.
+		Left,		//!< 左.
+		Right,		//!< 右.
+		A,			//!< Aボタン.
+		B,			//!< Bボタン.
+		X,			//!< Xボタン.
+		Y,			//!< Yボタン.
+		Select,		//!< セレクトボタン.
+		Start,		//!< スタートボタン.
+		RB1,		//!< RB1ボタン.
+		RB2,		//!< RB2ボタン.
+		RB3,		//!< RB3ボタン.
+		LB1,		//!< LB1ボタン.
+		LB2,		//!< LB2ボタン.
+		LB3,		//!< LB3ボタン.
+		ButtonNum,	//!< ボタンの数.
 	};
 
 	/**
@@ -51,6 +52,7 @@ namespace nkEngine
 		XINPUT_STATE State_;
 		/** 差し込まれているか. */
 		bool Connected_;
+
 	};
 
 	/**
@@ -59,7 +61,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class CXinput
+	class CXinput : Noncopyable
 	{
 	private:
 
@@ -77,7 +79,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		~CXinput();
+		~CXinput()
+		{
+		}
 
 	public:
 
@@ -111,7 +115,7 @@ namespace nkEngine
 		 *
 		 * @return -1.0～1.0の正規化された値を返す.
 		 */
-		D3DXVECTOR2& GetLeftStick()
+		const Vector2& GetLeftStick() const
 		{
 			return LeftStick_;
 		}
@@ -124,7 +128,7 @@ namespace nkEngine
 		 *
 		 * @return -1.0～1.0の正規化された値を返す.
 		 */
-		D3DXVECTOR2& GetRightStick()
+		const Vector2& GetRightStick() const
 		{
 			return RightStick_;
 		}
@@ -161,9 +165,9 @@ namespace nkEngine
 		 *
 		 * @return true:押された,false:押されてない.
 		 */
-		bool IsPress(ButtonE button)
+		bool IsPress(ButtonE button) const
 		{
-			return Press_[button] != 0;
+			return Press_[(int)button] != 0;
 		}
 
 		/**
@@ -178,7 +182,7 @@ namespace nkEngine
 		 */
 		bool IsTrigger(ButtonE button) const
 		{
-			return Trigger_[button] != 0;
+			return Trigger_[(int)button] != 0;
 		}
 
 		/**
@@ -209,24 +213,24 @@ namespace nkEngine
 
 	private:
 
-		/** The game pad. */
+		/** ゲームパッドの情報. */
 		GamePadStateS GamePad_;
 		
 		/** トリガー入力のフラグ. */
-		int Trigger_[ButtonNum];
+		int Trigger_[(int)ButtonE::ButtonNum];
 		/** press入力のフラグ. */
-		int Press_[ButtonNum];
+		int Press_[(int)ButtonE::ButtonNum];
 		
 		/** 左トリガー. */
-		BYTE LeftTrigger_;
+		BYTE LeftTrigger_ = 0;
 		/** 右トリガー. */
-		BYTE RightTrigger_;
+		BYTE RightTrigger_ = 0;
 
 		/** 左スティックの入力量. */
-		D3DXVECTOR2 LeftStick_;
+		Vector2 LeftStick_ = Vector2::Zero;
 		
 		/** 右スティックの入力量. */
-		D3DXVECTOR2 RightStick_;
+		Vector2 RightStick_ = Vector2::Zero;
 
 	};
 

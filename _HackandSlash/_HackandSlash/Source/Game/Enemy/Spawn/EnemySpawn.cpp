@@ -34,6 +34,9 @@ void EnemySpawn::Start(EnemySpawnInfoS info)
 
 	//出現速度
 	SpawnTime_ = info.SpawnTime_;
+
+	//一番初めに出現する.
+	SpawnLT_ = 999;
 }
 
 /**
@@ -109,8 +112,8 @@ void EnemySpawn::Appearance()
 	Enemy_01* enemy = new Enemy_01();
 
 	//出現位置を計算
-	D3DXVECTOR3 pos = D3DXVECTOR3((Random().value() - 0.5f) * Distance_, 0, (Random().value() - 0.5f) * Distance_);
-	pos += Transform_.Position_;
+	Vector3 pos = Vector3((Random().value() - 0.5f) * Distance_, 0, (Random().value() - 0.5f) * Distance_);
+	pos.Add(Transform_.Position_);
 	
 	//出現位置を設定
 	enemy->SetPosition(pos);

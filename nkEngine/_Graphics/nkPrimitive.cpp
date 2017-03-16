@@ -19,7 +19,7 @@ namespace nkEngine
 		numVertex_(0),
 		numIndex_(0),
 		VertexStride_(0),
-		Type_(TriangleList),
+		Type_(TypeE::TriangleList),
 		D3DPrimitiveType_(D3DPT_TRIANGLELIST)
 	{
 	}
@@ -62,7 +62,7 @@ namespace nkEngine
 	)
 	{
 
-		NK_ASSERT(primitiveType < TypeNum, "primitiveType is invalid");
+		NK_ASSERT(primitiveType < TypeE::TypeNum, "primitiveType is invalid");
 		NK_ASSERT(numVertex != 0, "numVertex is zero");
 		NK_ASSERT(vertexStride != 0, "vertexStrid is zero");
 		NK_ASSERT(numIndex != 0, "numIndex is zero");
@@ -85,12 +85,12 @@ namespace nkEngine
 		//インデックスバッファを作成
 		IndexBuffer_.Create(numIndex_, indexFormat, srcIndexbuffer);
 
-		if (Type_ == TriangleList)
+		if (Type_ == TypeE::TriangleList)
 		{
 			numPolygon_ = numIndex / 3;
 			D3DPrimitiveType_ = D3DPT_TRIANGLELIST;
 		}
-		else if (Type_ == TriangleStrip) 
+		else if (Type_ == TypeE::TriangleStrip)
 		{
 			numPolygon_ = numIndex - 2;
 			D3DPrimitiveType_ = D3DPT_TRIANGLESTRIP;

@@ -295,16 +295,6 @@ namespace nkEngine
 	}
 
 	/**
-	 * ‰ğ•ú.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/16
-	 */
-	void Bloom::Release()
-	{
-	}
-
-	/**
 	* d‚İ‚ğŒvZ.
 	*
 	* @author HiramatsuTadashi

@@ -27,7 +27,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		MeshCollider();
+		MeshCollider()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -35,7 +37,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~MeshCollider();
+		~MeshCollider()
+		{
+		}
 
 		/**
 		 * ModelRenderからMeshコライダーを生成.
@@ -46,7 +50,7 @@ namespace nkEngine
 		 * @param [in,out]	model			スキンモデル.
 		 * @param 		  	offsetMatrix	オフセット行列.
 		 */
-		void Create(ModelRender* model, const D3DXMATRIX* offsetMatrix);
+		void Create(ModelRender* model, const Matrix* offsetMatrix);
 
 		/**
 		 * ボディを取得.
@@ -61,10 +65,29 @@ namespace nkEngine
 			return MeshShape_;
 		}
 
+		/**
+		* 解放.
+		*/
+		void Release()override
+		{
+			//頂点バッファ配列の削除
+			for (auto& vb : VertexBufferArray_)
+			{
+				delete vb;
+			}
+
+			//インデックスバッファの削除
+			for (auto& ib : IndexBufferArray_)
+			{
+				delete ib;
+			}
+			delete StridingMeshInterface_;
+		}
+
 	private:
 
 		/** 頂点バッファ. */
-		typedef std::vector<D3DXVECTOR3> VertexBufferT;
+		typedef std::vector<Vector3> VertexBufferT;
 		/** インデックスバッファ. */
 		typedef std::vector<unsigned int> IndexBufferT;
 		/** 頂点バッファの配列. */
@@ -72,9 +95,9 @@ namespace nkEngine
 		/** インデックスバッファの配列. */
 		std::vector<IndexBufferT*> IndexBufferArray_;
 		/** メッシュ形状. */
-		btBvhTriangleMeshShape* MeshShape_;
+		btBvhTriangleMeshShape* MeshShape_ = nullptr;
 		/** トライアングルインデックスバッファ. */
-		btTriangleIndexVertexArray* StridingMeshInterface_;
+		btTriangleIndexVertexArray* StridingMeshInterface_ = nullptr;
 
 	};
 

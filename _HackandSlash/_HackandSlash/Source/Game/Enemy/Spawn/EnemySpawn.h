@@ -18,7 +18,7 @@ struct EnemySpawnInfoS
 public:
 
 	/** ’†S’n. */
-	D3DXVECTOR3 Position_ = D3DXVECTOR3(0, 0, 0);
+	Vector3 Position_ = Vector3::Up;
 	/** ‹——£. */
 	float Distance_ = 0;
 	/** oŒ»Å‘å”. */
@@ -115,10 +115,9 @@ public:
 	*/
 	float ToPlayerUpdate()
 	{
-		D3DXVECTOR3 ToPlayer = Player_->Transform_.Position_ - Transform_.Position_;
-
-		ToPlayerLength_ = D3DXVec3Length(&ToPlayer);
-
+		Vector3 ToPlayer;
+		ToPlayer.Sub(Player_->Transform_.Position_, Transform_.Position_);
+		ToPlayerLength_ = ToPlayer.Length();
 		return ToPlayerLength_;
 	}
 

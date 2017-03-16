@@ -16,7 +16,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class CPhysics
+	class CPhysics : Noncopyable
 	{
 	public:
 
@@ -26,7 +26,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		CPhysics();
+		CPhysics()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -34,7 +36,10 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~CPhysics();
+		~CPhysics()
+		{
+			Release();
+		}
 
 		/**
 		 * 初期化.
@@ -119,15 +124,15 @@ namespace nkEngine
 	private:
 
 		/** 衝突判定配置. */
-		btDefaultCollisionConfiguration* CollisionConfiguration_;
+		btDefaultCollisionConfiguration* CollisionConfiguration_ = nullptr;
 		/** 衝突解決処理. */
-		btCollisionDispatcher* CollisionDispatcher_;
+		btCollisionDispatcher* CollisionDispatcher_ = nullptr;
 		/** ブロードフェーズ。衝突判定の枝切り. */
-		btBroadphaseInterface* OverlappingPairCache_;
+		btBroadphaseInterface* OverlappingPairCache_ = nullptr;
 		/** コンストレイントソルバー。拘束条件の解決処理. */
-		btSequentialImpulseConstraintSolver* ConstraintSolver_;
+		btSequentialImpulseConstraintSolver* ConstraintSolver_ = nullptr;
 		/** ワールド. */
-		btDiscreteDynamicsWorld* DynamicWorld_;
+		btDiscreteDynamicsWorld* DynamicWorld_ = nullptr;
 
 	};
 

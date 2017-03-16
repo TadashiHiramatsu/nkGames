@@ -16,12 +16,12 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class Text
+	class Text : Noncopyable
 	{
 	public:
 
-		/** Values that represent font weights. */
-		enum FontWeightE
+		/** 文字の太さの形式. */
+		enum class FontWeightE
 		{
 			DONTCARE	= FW_DONTCARE,
 			THIN		= FW_THIN,
@@ -35,7 +35,8 @@ namespace nkEngine
 			HEAVY		= FW_HEAVY
 		};
 
-		enum FormatE
+		/** 表示形式. */
+		enum class FormatE
 		{
 			Left,	//!< 左詰め
 			Center, //!< 中央
@@ -49,7 +50,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		Text();
+		Text()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -57,7 +60,11 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		~Text();
+		~Text()
+		{
+			//解放.
+			Release();
+		}
 
 		/**
 		 * 作成.
@@ -90,16 +97,31 @@ namespace nkEngine
 		 */
 		void Release();
 
+		/**
+		* レクトトランスフォームを設定.
+		*
+		* @param rt	レクトトランスフォームのポインタ.
+		*/
 		void SetTransform(RectTransform* rt)
 		{
 			Transform_ = rt;
 		}
 
-		void SetColor(const D3DXVECTOR4& color)
+		/**
+		* 色の設定.
+		*
+		* @param color	四次元ベクトル( x:r, y:g, z:b, w:a).
+		*/
+		void SetColor(const Vector4& color)
 		{
 			Color_ = color;
 		}
 
+		/**
+		* 表示形式を設定.
+		*
+		* @param format	形式.
+		*/
 		void SetFormat(FormatE format)
 		{
 			Format_ = format;
@@ -108,18 +130,24 @@ namespace nkEngine
 	private:
 
 		/** フォント. */
-		ID3DXFont* D3DFont_;
+		ID3DXFont* D3DFont_ = nullptr;
 		/** スクリーンと内部解像度の倍率. */
 		float Magnification = 1.0f;
 
-		int Height_;
-		int Width_;
+		/** 高さ. */
+		int Height_ = 0;
+		/** 幅. */
+		int Width_ = 0;
 
-		RectTransform* Transform_;
+		/** トランスフォーム. */
+		RectTransform* Transform_ = nullptr;
 
-		D3DXVECTOR4 Color_ = D3DXVECTOR4(0, 0, 0, 255);
+		/** 色. */
+		Vector4 Color_ = Vector4(0, 0, 0, 255);
 
+		/** 表示形式. */
 		FormatE Format_;
-	};
+	
+};
 
 }// namespace nkEngine

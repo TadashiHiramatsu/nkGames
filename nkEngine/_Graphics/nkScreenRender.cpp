@@ -58,13 +58,13 @@ namespace nkEngine
 		};
 		//プリミティブの作成
 		Primitive_.Create(
-			Primitive::TriangleStrip,
+			Primitive::TypeE::TriangleStrip,
 			4,
 			sizeof(SShapeVertex_PT),
 			scShapeVertex_PT_Element,
 			vb,
 			4,
-			IndexFormat16,
+			IndexFormatE::IndexFormat16,
 			ib
 		);
 

@@ -10,27 +10,6 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	Blur::Blur() :
-		SrcTexture_(nullptr)
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	Blur::~Blur()
-	{
-	}
-
-	/**
 	 * 初期化.
 	 *
 	 * @author HiramatsuTadashi
@@ -66,7 +45,7 @@ namespace nkEngine
 			BlurRT_[i].Create(size[i][0], size[i][1], 1, desc.Format, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0);
 		}
 
-		static SShapeVertex_PT vertex[] = 
+		static SShapeVertex_PT vb[] = 
 		{
 			{
 				-1.0f, 1.0f, 0.0f, 1.0f,
@@ -85,21 +64,21 @@ namespace nkEngine
 				1.0f, 1.0f
 			},
 		};
-		static unsigned short index[] =
+		static unsigned short ib[] =
 		{
 			0,1,2,3
 		};
 		
 		//プリミティブ作成
 		Primitive_.Create(
-			Primitive::TriangleStrip,
+			Primitive::TypeE::TriangleStrip,
 			4,
 			sizeof(SShapeVertex_PT),
 			scShapeVertex_PT_Element,
-			vertex,
+			vb,
 			4,
-			IndexFormat16,
-			index
+			IndexFormatE::IndexFormat16,
+			ib
 		);
 
 		//エフェクトのロード

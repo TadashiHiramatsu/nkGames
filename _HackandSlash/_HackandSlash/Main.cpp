@@ -39,16 +39,17 @@ void InitEngine(HINSTANCE hInstance)
  * @param hPrevInstance The previous instance.
  * @param lpCmdLine	    コマンドライン.
  * @param nCmdshow	    コマンドショー.
- *
- * @return A WINAPI.
  */
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdshow)
 {
 	//エンジンの初期化
 	InitEngine(hInstance);
 
+#ifdef _DEBUG
+	SceneManager().ChangeScene<GameScene>();
+#else
 	SceneManager().ChangeScene<TitleScene>();
-	//SceneManager().ChangeScene<GameScene>();
+#endif
 
 	//エンジン起動!!
 	Engine().RunGameLoop();

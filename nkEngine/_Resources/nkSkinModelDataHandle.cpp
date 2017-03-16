@@ -10,27 +10,6 @@ namespace nkEngine
 {
 
 	/**
-	 * Default constructor.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	SkinModelDataHandle::SkinModelDataHandle() :
-		SkinModelData_(nullptr)
-	{
-	}
-
-	/**
-	 * Destructor.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	SkinModelDataHandle::~SkinModelDataHandle()
-	{
-	}
-
-	/**
 	 * ‰Šú‰».
 	 *
 	 * @author	HiramatsuTadashi

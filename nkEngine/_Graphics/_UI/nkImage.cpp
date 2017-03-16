@@ -10,27 +10,13 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	Image::Image() :
-		RectUV_(D3DXVECTOR4(0, 0, 1, 1)),
-		Color_(D3DXVECTOR4(1, 1, 1, 1)),
-		RectTransform_(nullptr),
-		Effect_(nullptr)
-	{
-	}
-
-	/**
 	* ファイルのロードを行う.
 	* エフェクトとテクスチャ.
 	*
 	* @author HiramatsuTadashi
 	* @date 2017/01/09
 	*
-	* @param _filepass "Asset/Texture/"を省いたファイルパス.
+	* @param filepass "Asset/Texture/"を省いたファイルパス.
 	*/
 	void Image::Load(const char * filepass)
 	{
@@ -38,27 +24,6 @@ namespace nkEngine
 
 		Texture_.reset(new Texture);
 		Texture_->Load(filepass, true);
-
-		if (!isInit)
-		{
-			Init();
-		}
-	}
-
-	/**
-	* ファイルのロードを行う.
-	* エフェクトのみ.
-	*
-	* @author HiramatsuTadashi
-	* @date 2017/01/09
-	*
-	* @param [in,out] _tex The tex to load.
-	*/
-	void Image::Load(shared_ptr<Texture>& tex)
-	{
-		Effect_ = EffectManager().LoadEffect("Image.fx");
-
-		Texture_ = tex;
 
 		if (!isInit)
 		{
@@ -93,7 +58,7 @@ namespace nkEngine
 	{
 		isMonochrome_ = false;
 
-		static SShapeVertex_PT vertex[] =
+		static SShapeVertex_PT vb[] =
 		{
 			{
 				-0.5f, 0.5f, 0.0f, 1.0f,
@@ -112,21 +77,21 @@ namespace nkEngine
 				1.0f, 1.0f
 			},
 		};
-		static unsigned short index[] =
+		static unsigned short ib[] =
 		{
 			0,1,2,3
 		};
 
 		//プリミティブの作成
 		Primitive_.Create(
-			Primitive::TriangleStrip,
+			Primitive::TypeE::TriangleStrip,
 			4,
 			sizeof(SShapeVertex_PT),
 			scShapeVertex_PT_Element,
-			vertex,
+			vb,
 			4,
-			IndexFormat16,
-			index
+			IndexFormatE::IndexFormat16,
+			ib
 		);
 
 		isInit = true;

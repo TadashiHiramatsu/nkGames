@@ -14,21 +14,21 @@ namespace nkEngine
  * @author HiramatsuTadashi
  * @date 2017/01/09
  */
-#define		r_cast		reinterpret_cast
+#define r_cast reinterpret_cast
 /**
  * A macro that defines cast.
  *
  * @author HiramatsuTadashi
  * @date 2017/01/09
  */
-#define		s_cast		static_cast
+#define	s_cast static_cast
 /**
  * A macro that defines cast.
  *
  * @author HiramatsuTadashi
  * @date 2017/01/09
  */
-#define		c_cast		const_cast
+#define	c_cast const_cast
 
 /**
  * A macro that defines safe delete.
@@ -38,7 +38,7 @@ namespace nkEngine
  *
  * @param p The void to process.
  */
-#define SAFE_DELETE(p)       { if (p) { delete (p);     (p) = nullptr; } }
+#define SAFE_DELETE(p) { if (p) { delete (p);     (p) = nullptr; } }
 /**
  * A macro that defines safe delete array.
  *
@@ -56,7 +56,7 @@ namespace nkEngine
  *
  * @param p The void to process.
  */
-#define SAFE_RELEASE(p)      { if (p) { (p)->Release(); (p) = nullptr; } }
+#define SAFE_RELEASE(p) { if (p) { (p)->Release(); (p) = nullptr; } }
 
 	
 /**

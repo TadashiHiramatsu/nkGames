@@ -5,7 +5,7 @@
  */
 #pragma once
 
-#include"ItemData/SwordItemData.h"
+#include"ItemData\WeaponItemData.h"
 #include"ItemData/ArmorItemData.h"
 
 /**
@@ -25,10 +25,10 @@ public:
 		ItemName,		//!< アイテム名.
 		FileName,		//!< ファイル名.
 		ItemType,		//!< アイテムタイプ.
-		Defense,		//!< 防御力.
 		MinLevel,		//!< 最低レベル.
 		MaxLevel,		//!< 最高レベル.
 		Probability,	//!< ドロップ率.
+		Parameter,		//!< 各種パラメータ.
 	};
 
 private:
@@ -105,14 +105,16 @@ public:
 		return it->second;
 	}
 
-	map<int, IItemData*>& GetItemMap()
+	const map<int, IItemData*>& GetItemMap() const
 	{
 		return ItemList;
 	}
 
 private:
+
 	/** List of items. */
 	map<int, IItemData*> ItemList;
+
 };
 
 static CItemDataResource& ItemDataResource()

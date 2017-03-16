@@ -10,25 +10,17 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	CapsuleCollider::CapsuleCollider():
-		Shape_(nullptr)
+	* カプセルコライダー作成.
+	*
+	* @author	HiramatsuTadashi
+	* @date	2017/01/07
+	*
+	* @param	radius	The radius.
+	* @param	height	The height.
+	*/
+	void CapsuleCollider::Create(float radius, float height)
 	{
+		Shape_ = new btCapsuleShape(radius, height);
 	}
 
-	/**
-	 * デストラクタ.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	CapsuleCollider::~CapsuleCollider()
-	{
-		delete Shape_;
-	}
-	
 }// namespace nkEngine

@@ -11,6 +11,7 @@
 namespace nkEngine
 {
 
+	/** モデルレンダリングクラス. */
 	class ModelRender;
 
 	/**
@@ -20,7 +21,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class CShadowMap
+	class CShadowMap : Noncopyable
 	{
 	public:
 
@@ -38,7 +39,7 @@ namespace nkEngine
 		public:
 
 			/** ライトビュープロジェクション行列. */
-			D3DXMATRIX LightViewProjMatrix_[MAX_SHADOW_MAP];
+			Matrix LightViewProjMatrix_[MAX_SHADOW_MAP];
 			/** バリアンスシャドウマップを行うかのフラグ. */
 			bool isVSM_;
 			/** シャドウマップの枚数. */
@@ -47,10 +48,10 @@ namespace nkEngine
 		};
 
 		/** ライトビューの計算の仕方. */
-		enum CalcLightViewFuncE 
+		enum class CalcLightViewFuncE
 		{
-			CalcLightViewFunc_PositionDirection,	//!< ライトの位置と方向で計算する。
-			CalcLightViewFunc_PositionTarget,		//!< ライトの位置と注視点で計算する。
+			PositionDirection,	//!< ライトの位置と方向で計算する。
+			PositionTarget,		//!< ライトの位置と注視点で計算する。
 		};
 
 	private:
@@ -155,7 +156,7 @@ namespace nkEngine
 		 *
 		 * @param dir The dir.
 		 */
-		void SetLightDirection(const D3DXVECTOR3& dir)
+		void SetLightDirection(const Vector3& dir)
 		{
 			LightDirection_ = dir;
 		}
@@ -168,7 +169,7 @@ namespace nkEngine
 		 *
 		 * @param pos The position.
 		 */
-		void SetLightPosition(const D3DXVECTOR3& pos)
+		void SetLightPosition(const Vector3& pos)
 		{
 			LightPosition_ = pos;
 		}
@@ -181,7 +182,7 @@ namespace nkEngine
 		 *
 		 * @param target The target.
 		 */
-		void SetLightTarget(const D3DXVECTOR3& target)
+		void SetLightTarget(const Vector3& target)
 		{
 			LightTarget_ = target;
 		}
@@ -246,7 +247,7 @@ namespace nkEngine
 		 *
 		 * @return True if enable, false if not.
 		 */
-		bool isEnable()const
+		bool isEnable() const
 		{
 			return isEnable_;
 		}
@@ -285,7 +286,7 @@ namespace nkEngine
 		 *
 		 * @return The light view projection matrix.
 		 */
-		const D3DXMATRIX& GetLightViewProjectionMatrix() const
+		const Matrix& GetLightViewProjectionMatrix() const
 		{
 			return LightViewProjMatrix_;
 		}
@@ -300,18 +301,18 @@ namespace nkEngine
 		vector<ModelRender*> ShadowModelList_;
 
 		/** ライトの視点. */
-		D3DXVECTOR3 LightPosition_;
+		Vector3 LightPosition_;
 		/** ライトの方向. */
-		D3DXVECTOR3 LightDirection_;
+		Vector3 LightDirection_;
 		/** ライトの注視点. */
-		D3DXVECTOR3 LightTarget_;
+		Vector3 LightTarget_;
 
 		/** ライトビュー行列. */
-		D3DXMATRIX LightViewMatrix_;
+		Matrix LightViewMatrix_ = Matrix::Identity;
 		/** プロジェクション行列. */
-		D3DXMATRIX ProjMatrix_;
+		Matrix ProjMatrix_ = Matrix::Identity;
 		/** ライトビュープロジェクション行列. */
-		D3DXMATRIX LightViewProjMatrix_;
+		Matrix LightViewProjMatrix_ = Matrix::Identity;
 
 		/** ライトビューの計算方法. */
 		CalcLightViewFuncE	CalcLightViewFunc_;

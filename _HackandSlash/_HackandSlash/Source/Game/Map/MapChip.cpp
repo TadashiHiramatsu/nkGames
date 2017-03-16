@@ -1,3 +1,6 @@
+/**
+* マップチッククラスの実装.
+*/
 #include"stdafx.h"
 #include"MapChip.h"
 
@@ -18,6 +21,9 @@ void MapChip::Start(const vector<MapChipInfoS*>& mapchipinfolist)
 
 	//モデルをインスタンシングで読み込み
 	SMDResources().Load(SkinModelData_, filepath, nullptr, true, MapChipInfoList_.size());
+
+	ModelRender_.SetFogParam(ModelRender::FogFuncE::FogFuncDist, 350.0f, 600.0f, Vector4(1, 1, 1, 1));
+
 }
 
 /**
@@ -44,7 +50,7 @@ void MapChip::Start()
 	NumMapChip_ = (int)MapChipInfoList_.size();
 
 	//ワールド行列バッファをリセット
-	WorldMatrixBuffer_.reset(new D3DXMATRIX[NumMapChip_]);
+	WorldMatrixBuffer_.reset(new Matrix[NumMapChip_]);
 
 	//メッシュコライダーをリセット
 	MeshCollider_.reset(new MeshCollider[NumMapChip_]);
@@ -70,8 +76,8 @@ void MapChip::Start()
 	for (auto& mapchipinfo : MapChipInfoList_)
 	{
 		//ワールド行列を作成
-		D3DXMATRIX world;
-		D3DXMatrixMultiply(&world, RootBoneMatrix_, &WorldMatrixBuffer_[i]);
+		Matrix world;
+		world.Mul(*RootBoneMatrix_, WorldMatrixBuffer_[i]);
 
 		//メッシュコライダーを作成
 		MeshCollider_[i].Create(&ModelRender_, &world);

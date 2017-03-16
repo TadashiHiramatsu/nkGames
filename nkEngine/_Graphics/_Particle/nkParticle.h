@@ -7,6 +7,7 @@
 
 namespace nkEngine
 {
+	/** パーティクルのパラメータ. */
 	struct ParticleParameterS;
 
 	/**
@@ -19,12 +20,12 @@ namespace nkEngine
 	{
 	public:
 
-		/** Values that represent states. */
-		enum StateE 
+		/** 状態. */
+		enum class StateCodeE 
 		{
-			StateRun = 0,	//!< 生存.
-			StateFadeOut,	//!< フェードアウト.
-			StateDead,		//!< 死.
+			Run = 0,	//!< 生存.
+			FadeOut,	//!< フェードアウト.
+			Dead,		//!< 死.
 		};
 
 	public:
@@ -60,7 +61,7 @@ namespace nkEngine
 		 * @param [in,out] emitPosition If non-null, the emit position.
 		 * @param [in,out] filepath	    If non-null, the filepath.
 		 */
-		void Start(Camera* camera, const ParticleParameterS& param, D3DXVECTOR3& emitPosition, char* filepath);
+		void Start(const Camera* camera, const ParticleParameterS& param, const Vector3& emitPosition, char* filepath);
 
 		/**
 		 * 更新.
@@ -88,7 +89,7 @@ namespace nkEngine
 		 *
 		 * @param addForce The add force.
 		 */
-		void AddForce(const D3DXVECTOR3 addForce)
+		void AddForce(const Vector3 addForce)
 		{
 			ApplyForce_ = addForce;
 		}
@@ -101,7 +102,7 @@ namespace nkEngine
 		 *
 		 * @return True if it succeeds, false if it fails.
 		 */
-		bool GetDead() 
+		bool GetDead() const
 		{
 			return isDead_;
 		}
@@ -113,32 +114,32 @@ namespace nkEngine
 		/** エフェクト. */
 		Effect* Effect_;
 		/** カメラ. */
-		Camera* Camera_;
+		const Camera* Camera_;
 
 		/** The texture. */
 		Texture Texture_;
 
 		/** ワールド行列. */
-		D3DXMATRIX WorldMatrix_;
+		Matrix WorldMatrix_ = Matrix::Identity;
 		/** スケール行列. */
-		D3DXMATRIX ScaleMatrix_;
+		Matrix ScaleMatrix_ = Matrix::Identity;
 		/** The scale. */
-		D3DXVECTOR3	Scale_;
+		Vector3	Scale_ = Vector3::One;
 	
 		/** ライフ. */
 		float Life_ = 0.0f;
 		/** タイマー. */
 		float Timer_ = 0.0f;
 		/** 速度. */
-		D3DXVECTOR3 Velocity_ = D3DXVECTOR3(0, 0, 0);
+		Vector3 Velocity_ = Vector3::Zero;
 		/** 座標. */
-		D3DXVECTOR3	Position_ = D3DXVECTOR3(0, 0, 0);
+		Vector3	Position_ = Vector3::Zero;
 		/** 重力. */
-		D3DXVECTOR3	Gravity_ = D3DXVECTOR3(0, 0, 0);
+		Vector3	Gravity_ = Vector3::Zero;
 		/** Z軸周りの回転. */
 		float RotateZ_ = 0;
 		/** 速度の積分のときのランダム幅. */
-		D3DXVECTOR3 AddVelocityRandomMargih_ = D3DXVECTOR3(0, 0, 0);
+		Vector3 AddVelocityRandomMargih_ = Vector3::Zero;
 		/** 死亡フラグ. */
 		bool isDead_ = false;
 		/** 死ぬときにフェードアウトする？. */
@@ -146,7 +147,7 @@ namespace nkEngine
 		/** フェードの時間. */
 		float FadeTime_ = 0.0f;
 		/** 状態. */
-		StateE State_;
+		StateCodeE State_;
 		/** 初期アルファ. */
 		float InitAlpha_ = 1.0f;
 		/** アルファ. */
@@ -154,7 +155,7 @@ namespace nkEngine
 		/** ビルボード？. */
 		bool isBillboard_ = false;
 		/** 外部から加わる力. */
-		D3DXVECTOR3 ApplyForce_ = D3DXVECTOR3(0, 0, 0);
+		Vector3 ApplyForce_ = Vector3::Zero;
 		/** 輝度。ブルームが有効になっているとこれを強くすると光が溢れます. */
 		float Brightness_ = 0.0f;
 		/** 0半透明合成、1加算合成. */

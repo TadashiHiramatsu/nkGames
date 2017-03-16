@@ -26,7 +26,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		CapsuleCollider();
+		CapsuleCollider()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -34,7 +36,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~CapsuleCollider();
+		~CapsuleCollider()
+		{
+		}
 
 		/**
 		 * カプセルコライダー作成.
@@ -45,10 +49,7 @@ namespace nkEngine
 		 * @param	radius	The radius.
 		 * @param	height	The height.
 		 */
-		void Create(float radius, float height)
-		{
-			Shape_ = new btCapsuleShape(radius, height);
-		}
+		void Create(float radius, float height);
 
 		/**
 		 * ボディの取得.
@@ -63,10 +64,18 @@ namespace nkEngine
 			return Shape_;
 		}
 
+		/**
+		* 解放.
+		*/
+		void Release()override
+		{
+			SAFE_DELETE(Shape_);
+		}
+
 	private:
 
 		/** カプセル形状. */
-		btCapsuleShape* Shape_;
+		btCapsuleShape* Shape_ = nullptr;
 	
 	};
 

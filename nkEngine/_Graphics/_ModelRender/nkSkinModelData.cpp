@@ -13,7 +13,7 @@ namespace
 	using namespace nkEngine;
 
 	/**
-	 * Inner destroy mesh container.
+	 * êFÅXçÌèúÇ∑ÇÈ.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
@@ -1131,9 +1131,9 @@ namespace nkEngine
 	 *
 	 * @param matWorld The matrix world.
 	 */
-	void SkinModelData::UpdateBoneMatrix(const D3DXMATRIX& matWorld)
+	void SkinModelData::UpdateBoneMatrix(const Matrix& matWorld)
 	{
-		UpdateFrameMatrices(FrameRoot_, reinterpret_cast<const D3DXMATRIX*>(&matWorld));
+		UpdateFrameMatrices(FrameRoot_, r_cast<const D3DXMATRIX*>(&matWorld));
 	}
 
 	/**

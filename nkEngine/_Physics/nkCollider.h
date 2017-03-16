@@ -16,9 +16,24 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class ICollider
+	class ICollider : Noncopyable
 	{
 	public:
+
+		/**
+		* コンストラクタ.
+		*/
+		ICollider()
+		{
+		}
+
+		/**
+		* デストラクタ.
+		*/
+		virtual ~ICollider()
+		{
+			Release();
+		}
 
 		/**
 		 * ボディの取得.
@@ -29,6 +44,13 @@ namespace nkEngine
 		 * @return	Null if it fails, else the body.
 		 */
 		virtual btCollisionShape* GetBody() = 0;
+
+		/**
+		* 解放.
+		*/
+		virtual void Release()
+		{
+		}
 
 	};
 

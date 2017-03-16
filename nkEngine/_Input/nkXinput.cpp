@@ -26,24 +26,24 @@ namespace nkEngine
 	};
 
 	/** The pad to x coordinate pad table[ button num]. */
-	const VirtualPadToXPad vPadToXPadTable[ButtonNum] = 
+	const VirtualPadToXPad vPadToXPadTable[(int)ButtonE::ButtonNum] = 
 	{
-		{ ButtonUp		, XINPUT_GAMEPAD_DPAD_UP		},
-		{ ButtonDown	, XINPUT_GAMEPAD_DPAD_DOWN		},
-		{ ButtonLeft	, XINPUT_GAMEPAD_DPAD_LEFT		},
-		{ ButtonRight	, XINPUT_GAMEPAD_DPAD_RIGHT		},
-		{ ButtonA		, XINPUT_GAMEPAD_A				},
-		{ ButtonB		, XINPUT_GAMEPAD_B				},
-		{ ButtonY		, XINPUT_GAMEPAD_Y				},
-		{ ButtonX		, XINPUT_GAMEPAD_X				},
-		{ ButtonSelect	, XINPUT_GAMEPAD_BACK			},
-		{ ButtonStart	, XINPUT_GAMEPAD_START			},
-		{ ButtonRB1		, XINPUT_GAMEPAD_RIGHT_SHOULDER },
-		{ ButtonRB2		, 0								},
-		{ ButtonRB3		, XINPUT_GAMEPAD_RIGHT_THUMB	},
-		{ ButtonLB1		, XINPUT_GAMEPAD_LEFT_SHOULDER	},
-		{ ButtonLB2		, 0								},
-		{ ButtonLB3		, XINPUT_GAMEPAD_LEFT_THUMB		},
+		{ ButtonE::Up		, XINPUT_GAMEPAD_DPAD_UP		},
+		{ ButtonE::Down		, XINPUT_GAMEPAD_DPAD_DOWN		},
+		{ ButtonE::Left		, XINPUT_GAMEPAD_DPAD_LEFT		},
+		{ ButtonE::Right	, XINPUT_GAMEPAD_DPAD_RIGHT		},
+		{ ButtonE::A		, XINPUT_GAMEPAD_A				},
+		{ ButtonE::B		, XINPUT_GAMEPAD_B				},
+		{ ButtonE::Y		, XINPUT_GAMEPAD_Y				},
+		{ ButtonE::X		, XINPUT_GAMEPAD_X				},
+		{ ButtonE::Select	, XINPUT_GAMEPAD_BACK			},
+		{ ButtonE::Start	, XINPUT_GAMEPAD_START			},
+		{ ButtonE::RB1		, XINPUT_GAMEPAD_RIGHT_SHOULDER },
+		{ ButtonE::RB2		, 0								},
+		{ ButtonE::RB3		, XINPUT_GAMEPAD_RIGHT_THUMB	},
+		{ ButtonE::LB1		, XINPUT_GAMEPAD_LEFT_SHOULDER	},
+		{ ButtonE::LB2		, 0								},
+		{ ButtonE::LB3		, XINPUT_GAMEPAD_LEFT_THUMB		},
 	};
 
 	/**
@@ -60,27 +60,28 @@ namespace nkEngine
 		ButtonE vButton_;
 		/** キーボードのキーコード. */
 		DWORD KeyCoord_;
+
 	};
 
 	/** The pad to keyboard table[ button num]. */
-	const VirtualPadToKeyboard vPadToKeyboardTable[ButtonNum] =
+	const VirtualPadToKeyboard vPadToKeyboardTable[(int)ButtonE::ButtonNum] =
 	{
-		{ ButtonUp		, '8'		},
-		{ ButtonDown	, '2'		},
-		{ ButtonLeft	, '4'		},
-		{ ButtonRight	, '6'		},
-		{ ButtonA		, 'J'		},
-		{ ButtonB		, 'K'		},
-		{ ButtonY		, 'I'		},
-		{ ButtonX		, 'O'		},
-		{ ButtonSelect	, VK_SPACE	},
-		{ ButtonStart	, VK_RETURN },
-		{ ButtonRB1		, '7'		},
-		{ ButtonRB2		, '8'		},
-		{ ButtonRB3		, '9'		},
-		{ ButtonLB1		, 'B'		},
-		{ ButtonLB2		, 'N'		},
-		{ ButtonLB3		, 'M'		},
+		{ ButtonE::Up		, '8'		},
+		{ ButtonE::Down		, '2'		},
+		{ ButtonE::Left		, '4'		},
+		{ ButtonE::Right	, '6'		},
+		{ ButtonE::A		, 'J'		},
+		{ ButtonE::B		, 'K'		},
+		{ ButtonE::Y		, 'I'		},
+		{ ButtonE::X		, 'O'		},
+		{ ButtonE::Select	, VK_SPACE	},
+		{ ButtonE::Start	, VK_RETURN },
+		{ ButtonE::RB1		, '7'		},
+		{ ButtonE::RB2		, '8'		},
+		{ ButtonE::RB3		, '9'		},
+		{ ButtonE::LB1		, 'B'		},
+		{ ButtonE::LB2		, 'N'		},
+		{ ButtonE::LB3		, 'M'		},
 	};
 
 	/**
@@ -89,25 +90,11 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	CXinput::CXinput() :
-		LeftStick_(D3DXVECTOR2(0, 0)),
-		RightStick_(D3DXVECTOR2(0, 0)),
-		LeftTrigger_(0),
-		RightTrigger_(0)
+	CXinput::CXinput()
 	{
 		memset(&GamePad_, 0, sizeof(GamePad_));
 		memset(Trigger_, 0, sizeof(Trigger_));
 		memset(Press_, 0, sizeof(Press_));
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	CXinput::~CXinput()
-	{
 	}
 
 	/**
@@ -130,12 +117,12 @@ namespace nkEngine
 			{
 				if (GamePad_.State_.Gamepad.wButtons & vPadToXPad.xButton_)
 				{
-					Trigger_[vPadToXPad.vButton_] = 1 ^ Press_[vPadToXPad.vButton_];
-					Press_[vPadToXPad.vButton_] = 1;
+					Trigger_[(int)vPadToXPad.vButton_] = 1 ^ Press_[(int)vPadToXPad.vButton_];
+					Press_[(int)vPadToXPad.vButton_] = 1;
 				}
 				else {
-					Trigger_[vPadToXPad.vButton_] = 0;
-					Press_[vPadToXPad.vButton_] = 0;
+					Trigger_[(int)vPadToXPad.vButton_] = 0;
+					Press_[(int)vPadToXPad.vButton_] = 0;
 				}
 			}
 
@@ -146,7 +133,7 @@ namespace nkEngine
 			{
 				GamePad_.State_.Gamepad.sThumbLX = 0;
 				GamePad_.State_.Gamepad.sThumbLY = 0;
-				LeftStick_ = D3DXVECTOR2(0, 0);
+				LeftStick_ = Vector2::Zero;
 			}
 			else
 			{
@@ -177,7 +164,7 @@ namespace nkEngine
 			{
 				GamePad_.State_.Gamepad.sThumbRX = 0;
 				GamePad_.State_.Gamepad.sThumbRY = 0;
-				RightStick_ = D3DXVECTOR2(0, 0);
+				RightStick_ = Vector2::Zero;
 			}
 			else
 			{
@@ -200,8 +187,10 @@ namespace nkEngine
 					RightStick_.y = s_cast<float>(GamePad_.State_.Gamepad.sThumbRY) / -SHRT_MIN;
 				}
 			}
+			
 			LeftTrigger_ = GamePad_.State_.Gamepad.bLeftTrigger;
 			RightTrigger_ = GamePad_.State_.Gamepad.bRightTrigger;
+
 		}
 		else
 		{
@@ -214,8 +203,8 @@ namespace nkEngine
 				memset(Press_, 0, sizeof(Press_));
 			}
 
-			LeftStick_ = D3DXVECTOR2(0, 0);
-			RightStick_ = D3DXVECTOR2(0, 0);
+			LeftStick_ = Vector2::Zero;
+			RightStick_ = Vector2::Zero;
 			LeftTrigger_ = 0;
 			RightTrigger_ = 0;
 
@@ -266,15 +255,16 @@ namespace nkEngine
 			{
 				if (GetAsyncKeyState(vPadToKeyboard.KeyCoord_))
 				{
-					Trigger_[vPadToKeyboard.vButton_] = 1 ^ Press_[vPadToKeyboard.vButton_];
-					Press_[vPadToKeyboard.vButton_] = 1;
+					Trigger_[(int)vPadToKeyboard.vButton_] = 1 ^ Press_[(int)vPadToKeyboard.vButton_];
+					Press_[(int)vPadToKeyboard.vButton_] = 1;
 				}
 				else
 				{
-					Trigger_[vPadToKeyboard.vButton_] = 0;
-					Press_[vPadToKeyboard.vButton_] = 0;
+					Trigger_[(int)vPadToKeyboard.vButton_] = 0;
+					Press_[(int)vPadToKeyboard.vButton_] = 0;
 				}
 			}
+
 		}
 	}
 

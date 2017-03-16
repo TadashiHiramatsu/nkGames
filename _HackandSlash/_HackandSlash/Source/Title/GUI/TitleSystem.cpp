@@ -8,7 +8,7 @@
 
 #include"../../Game/GameScene.h"
 
-/**
+ /**
  * 初期化.
  *
  * @author HiramatsuTadashi
@@ -17,7 +17,10 @@
 void TitleSystem::Start()
 {
 	//背景作成
-	TitleBack_ = NewGO<TitleBack>(0);
+	NewGO<TitleBack>(0);
+
+	//フェード作成
+	Fade_ = NewGO<Fade>(2);
 
 	//タイトルネーム画像の初期化
 	TitleNameImage_.Load("Image/NonTitle.png");
@@ -29,7 +32,7 @@ void TitleSystem::Start()
 	
 	TitleNameRT_.Width_ = 0;
 	TitleNameRT_.Height_ = 150;
-	TitleNameRT_.Position_ = D3DXVECTOR3(250, 200, 0);
+	TitleNameRT_.Position_ = Vector3(250, 200, 0);
 
 	//ニューゲーム画像の初期化
 	NewGameImage_.Load("Image/NewGame.png");
@@ -44,8 +47,13 @@ void TitleSystem::Start()
 	NewGameRT_.Height_ = ContinueRT_.Height_ = 80;
 
 	//位置を設定
-	NewGameRT_.Position_ = D3DXVECTOR3(300, -100,0);
-	ContinueRT_.Position_ = D3DXVECTOR3(300, -200,0);
+	NewGameRT_.Position_ = Vector3(300, -100,0);
+	ContinueRT_.Position_ = Vector3(300, -200,0);
+
+	//BGM読み込み.
+	TitleBGM_ = NewGO<SoundSource>();
+	TitleBGM_->InitStreaming("Title/TitleBGM");
+	TitleBGM_->Play(true);
 
 }
 
@@ -59,10 +67,10 @@ void TitleSystem::Update()
 {
 	switch (State_)
 	{
-	case TitleSystem::StartUp:
+	case TitleStateE::StartUp:
 	{
 		//RectUVを取得
-		D3DXVECTOR4 rectUV = TitleNameImage_.RectUV_;
+		Vector4 rectUV = TitleNameImage_.RectUV_;
 
 		//起動タイム
 		static float StartTime = 2.0f;
@@ -86,34 +94,37 @@ void TitleSystem::Update()
 		if (rectUV.x <= 0.0f)
 		{
 			//完全に表示されたのでRun状態に変化
-			State_ = Run;
+			State_ = TitleStateE::Run;
 			break;
 		}
 	}
 	break;
-	case TitleSystem::Run:
+	case TitleStateE::Run:
 	{
-		if (XInput().IsTrigger(ButtonE::ButtonA))
+		if (XInput().IsTrigger(ButtonE::A))
 		{
-			//エンターキーを押された
-			State_ = BlackOut;
+			//Aボタンを押された.
+
+			//ブラックアウト状態に変化.
+			State_ = TitleStateE::BlackOut;
+			//フェードアウト開始.
+			Fade_->StartFadeOut();
+
+			//BGMストップ.
+			TitleBGM_->Stop();
+
+			//決定音再生.
+			SoundSource* sound = NewGO<SoundSource>();
+			sound->InitStreaming("Title/GameStart");
+			sound->Play();
+
 		}
 	}
 	break;
-	case TitleSystem::BlackOut:
+	case TitleStateE::BlackOut:
 	{
-		//徐々に暗く
-		BlackOutColor_ = fmax(0.0f, BlackOutColor_ - 0.01f);
-
-		//色を作成
-		D3DXVECTOR4 color = D3DXVECTOR4(BlackOutColor_, BlackOutColor_, BlackOutColor_, 1.0f);
-		TitleNameImage_.Color_ = color;
-		NewGameImage_.Color_ = color;
-		ContinueImage_.Color_ = color;
-		TitleBack_->SetColor(color);
-
-		//ブラックアウト終了
-		if (BlackOutColor_ <= 0.0f)
+		//フェードアウト終了
+		if (Fade_->GetState() == Fade::FadeCompletion)
 		{
 			//ゲームシーンに変更
 			SceneManager().ChangeScene<GameScene>();
@@ -124,6 +135,7 @@ void TitleSystem::Update()
 	default:
 		break;
 	}
+
 	//トランスフォームの更新
 	TitleNameRT_.Update();
 	NewGameRT_.Update();

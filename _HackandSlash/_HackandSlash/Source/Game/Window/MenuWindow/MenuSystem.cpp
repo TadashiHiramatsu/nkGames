@@ -18,7 +18,7 @@ void MenuSystem::Start(Player * player)
 void MenuSystem::Update()
 {
 
-	if (XInput().IsTrigger(ButtonE::ButtonStart))
+	if (XInput().IsTrigger(ButtonE::Start))
 	{
 		isEffectiveness_ = !isEffectiveness_;
 		

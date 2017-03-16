@@ -6,7 +6,7 @@ void IMenuWindow::NameStart(RectTransform* parent, const char * filepath, float 
 	NameImage_.Load(filepath);
 	NameImage_.SetTransform(&NameTransform_);
 	NameTransform_.Parent_ = parent;
-	NameTransform_.Anchor_ = RectTransform::MiddleLeft;
+	NameTransform_.Anchor_ = AnchorPresetE::MiddleLeft;
 	NameTransform_.Position_.x = pos;
 
 	NameTransform_.Height_ = 30;

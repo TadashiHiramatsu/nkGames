@@ -16,7 +16,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class RenderTarget
+	class RenderTarget : Noncopyable
 	{
 	public:
 
@@ -42,12 +42,12 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 *
-		 * @param sizeW				 The size w.
-		 * @param sizeH				 The size h.
-		 * @param mipLevel			 The mip level.
-		 * @param colorFormat		 The color format.
-		 * @param depthStencilFormat The depth stencil format.
-		 * @param multiSampleType    Type of the multi sample.
+		 * @param sizeW				 幅.
+		 * @param sizeH				 高さ.
+		 * @param mipLevel			 ミップレベル.
+		 * @param colorFormat		 カラーフォーマット.
+		 * @param depthStencilFormat 深度ステンシルフォーマット.
+		 * @param multiSampleType    マルチサンプルタイプ.
 		 * @param multiSampleQuality The multi sample quality.
 		 */
 		void Create(
@@ -102,7 +102,7 @@ namespace nkEngine
 		 *
 		 * @return The size w.
 		 */
-		int GetSizeW()
+		int GetSizeW() const
 		{
 			return SizeW_;
 		}
@@ -115,7 +115,7 @@ namespace nkEngine
 		 *
 		 * @return The size h.
 		 */
-		int GetSizeH()
+		int GetSizeH() const
 		{
 			return SizeH_;
 		}

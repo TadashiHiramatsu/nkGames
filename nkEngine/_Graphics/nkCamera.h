@@ -14,7 +14,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class Camera
+	class Camera : Noncopyable
 	{
 	public:
 
@@ -24,7 +24,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		Camera();
+		Camera()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -32,7 +34,9 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 */
-		~Camera();
+		~Camera()
+		{
+		}
 
 		/**
 		 * 更新.
@@ -48,7 +52,7 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 *
-		 * @param rot 回転量。ラジアン.
+		 * @param rot 回転量(度).
 		 */
 		void SpinHorizontally(float rot);
 
@@ -58,7 +62,7 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 *
-		 * @param rot 回転量。ラジアン.
+		 * @param rot 回転量(度).
 		 */
 		void SpinVertically(float rot);
 
@@ -70,7 +74,7 @@ namespace nkEngine
 		 *
 		 * @return The view matrix.
 		 */
-		const D3DXMATRIX& GetViewMatrix()
+		const Matrix& GetViewMatrix() const
 		{
 			return ViewMatrix_;
 		}
@@ -83,7 +87,7 @@ namespace nkEngine
 		 *
 		 * @return The view inverse matrix.
 		 */
-		const D3DXMATRIX& GetViewInvMatrix()
+		const Matrix& GetViewInvMatrix() const
 		{
 			return ViewInvMatrix_;
 		}
@@ -96,7 +100,7 @@ namespace nkEngine
 		 *
 		 * @return The projection matrix.
 		 */
-		const D3DXMATRIX& GetProjectionMatrix()
+		const Matrix& GetProjectionMatrix() const
 		{
 			return ProjMatrix_;
 		}
@@ -109,7 +113,7 @@ namespace nkEngine
 		 *
 		 * @return The rotation matrix.
 		 */
-		const D3DXMATRIX& GetRotationMatrix()
+		const Matrix& GetRotationMatrix() const
 		{
 			return RotationMatrix_;
 		}
@@ -122,7 +126,7 @@ namespace nkEngine
 		 *
 		 * @return The rotation inverse matrix.
 		 */
-		const D3DXMATRIX& GetRotationInvMatrix()
+		const Matrix& GetRotationInvMatrix() const
 		{
 			return RotationInvMatrix_;
 		}
@@ -135,7 +139,7 @@ namespace nkEngine
 		 *
 		 * @return The position.
 		 */
-		const D3DXVECTOR3& GetPosition()
+		const Vector3& GetPosition() const
 		{
 			return Position_;
 		}
@@ -148,7 +152,7 @@ namespace nkEngine
 		 *
 		 * @param pos 視点ベクトル.
 		 */
-		void SetPosition(const D3DXVECTOR3& pos)
+		void SetPosition(const Vector3& pos)
 		{
 			Position_ = pos;
 		}
@@ -161,7 +165,7 @@ namespace nkEngine
 		 *
 		 * @return The position direction.
 		 */
-		const D3DXVECTOR3& GetPosDirection()
+		const Vector3& GetPosDirection() const
 		{
 			return PosDirection_;
 		}
@@ -172,11 +176,11 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 *
-		 * @param _dir 視点ベクトル.
+		 * @param dir 視点ベクトル.
 		 */
-		void SetPosDirection(const D3DXVECTOR3& _dir)
+		void SetPosDirection(const Vector3& dir)
 		{
-			PosDirection_ = _dir;
+			PosDirection_ = dir;
 		}
 
 		/**
@@ -187,7 +191,7 @@ namespace nkEngine
 		 *
 		 * @return The target.
 		 */
-		const D3DXVECTOR3& GetTarget()
+		const Vector3& GetTarget() const
 		{
 			return Target_;
 		}
@@ -200,7 +204,7 @@ namespace nkEngine
 		 *
 		 * @param target 注視点ベクトル.
 		 */
-		void SetTarget(const D3DXVECTOR3& target)
+		void SetTarget(const Vector3& target)
 		{
 			Target_ = target;
 		}
@@ -213,7 +217,7 @@ namespace nkEngine
 		 *
 		 * @return The up.
 		 */
-		const D3DXVECTOR3& GetUp()
+		const Vector3& GetUp() const
 		{
 			return Up_;
 		}
@@ -226,7 +230,7 @@ namespace nkEngine
 		 *
 		 * @param up 上方向ベクトル.
 		 */
-		void SetUp(const D3DXVECTOR3& up)
+		void SetUp(const Vector3& up)
 		{
 			Up_ = up;
 		}
@@ -239,7 +243,7 @@ namespace nkEngine
 		 *
 		 * @return The distance.
 		 */
-		const float GetDistance()
+		const float GetDistance() const
 		{
 			return Distance_;
 		}
@@ -252,7 +256,7 @@ namespace nkEngine
 		 *
 		 * @param distance 距離.
 		 */
-		void SetDistance(const float distance)
+		void SetDistance(float distance)
 		{
 			Distance_ = distance;
 		}
@@ -263,11 +267,11 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 *
-		 * @return The fovy.
+		 * @return The Angle_.
 		 */
-		const float GetFovy()
+		float GetAngle() const
 		{
-			return Fovy_;
+			return Angle_;
 		}
 
 		/**
@@ -276,11 +280,11 @@ namespace nkEngine
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
 		 *
-		 * @param fovy 画角.
+		 * @param angle 画角.
 		 */
-		void SetFovy(const float fovy)
+		void SetAngle(float angle)
 		{
-			Fovy_ = fovy;
+			Angle_ = angle;
 		}
 
 		/**
@@ -291,7 +295,7 @@ namespace nkEngine
 		 *
 		 * @return The aspect.
 		 */
-		const float GetAspect()
+		float GetAspect() const
 		{
 			return Aspect_;
 		}
@@ -304,7 +308,7 @@ namespace nkEngine
 		 *
 		 * @param aspect アスペクト比.
 		 */
-		void SetAspect(const float aspect)
+		void SetAspect(float aspect)
 		{
 			Aspect_ = aspect;
 		}
@@ -317,7 +321,7 @@ namespace nkEngine
 		 *
 		 * @return The near.
 		 */
-		const float GetNear()
+		float GetNear() const
 		{
 			return Near_;
 		}
@@ -330,7 +334,7 @@ namespace nkEngine
 		 *
 		 * @param fnear ニア.
 		 */
-		void SetNear(const float fnear)
+		void SetNear(float fnear)
 		{
 			Near_ = fnear;
 		}
@@ -343,7 +347,7 @@ namespace nkEngine
 		 *
 		 * @return The far.
 		 */
-		const float GetFar()
+		float GetFar() const
 		{
 			return Far_;
 		}
@@ -356,7 +360,7 @@ namespace nkEngine
 		 *
 		 * @param ffar ファー.
 		 */
-		void SetFar(const float ffar)
+		void SetFar(float ffar)
 		{
 			Far_ = ffar;
 		}
@@ -364,41 +368,41 @@ namespace nkEngine
 	private:
 
 		/** ビュー行列. */
-		D3DXMATRIX ViewMatrix_;
+		Matrix ViewMatrix_ = Matrix::Identity;
 		/** ビュー行列の逆行列. */
-		D3DXMATRIX ViewInvMatrix_;
+		Matrix ViewInvMatrix_ = Matrix::Identity;
 		/** プロジェクション行列. */
-		D3DXMATRIX ProjMatrix_;
+		Matrix ProjMatrix_ = Matrix::Identity;
 		/** 回転行列. */
-		D3DXMATRIX RotationMatrix_;
+		Matrix RotationMatrix_ = Matrix::Identity;
 		/** 回転行列の逆行列. */
-		D3DXMATRIX RotationInvMatrix_;
+		Matrix RotationInvMatrix_ = Matrix::Identity;
 
 		/** カメラの視点. */
-		D3DXVECTOR3 Position_;
+		Vector3 Position_ = Vector3::Zero;
 		/** カメラの注視点. */
-		D3DXVECTOR3 Target_;
+		Vector3 Target_ = Vector3::Zero;
 		/** カメラの上方向. */
-		D3DXVECTOR3 Up_;
+		Vector3 Up_ = Vector3::Up;
 
 		/** ポジションの方向ベクトル. */
-		D3DXVECTOR3 PosDirection_;
+		Vector3 PosDirection_ = Vector3::Zero;
 		/** 距離. */
-		float Distance_;
+		float Distance_ = 0;
 
 		/** 画角. */
-		float Fovy_;
+		float Angle_ = D3DXToRadian(45);
 		/** アスペクト比. */
-		float Aspect_;
+		float Aspect_ = 0.0f;
 		/** ニア. */
-		float Near_;
+		float Near_ = 0.1f;
 		/** ファー. */
-		float Far_;
+		float Far_ = 1200.0f;
 
 		/** 下限. */
-		float LowerLimit_;
+		float LowerLimit_ = -0.7f;
 		/** 上限. */
-		float UpperLimit_;
+		float UpperLimit_ = 0.7f;
 
 	};
 

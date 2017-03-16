@@ -73,7 +73,7 @@ void AnimationEventController::Update()
 		AnimationEventGroupTableS& eventGroupTable = EventGroupTableList_[currentAnimNo];
 
 		//イベントタイプが無効になるまで
-		for (int i = 0; eventGroupTable.EventGroup_->Event_[i].EventType_ != Invalid;i++)
+		for (int i = 0; eventGroupTable.EventGroup_->Event_[i].EventType_ != AnimationEventTypeE::Invalid;i++)
 		{
 			//発生したことがなければ
 			if (eventGroupTable.isInvokes_[i] == false)
@@ -95,7 +95,7 @@ void AnimationEventController::Update()
 	AnimationEventGroupTableS& eventGroupTable = EventGroupTableList_[currentAnimNo];
 
 	//イベントタイプが無効になるまで更新
-	for (int i = 0;eventGroupTable.EventGroup_->Event_[i].EventType_ != Invalid;i++)
+	for (int i = 0;eventGroupTable.EventGroup_->Event_[i].EventType_ != AnimationEventTypeE::Invalid;i++)
 	{
 		//発生させたことがなければ
 		if (eventGroupTable.isInvokes_[i] == false)
@@ -132,46 +132,47 @@ void AnimationEventController::InvokeAnimationEvent(const AnimationEventS& event
 	//タイプ事に違う処理を
 	switch (event.EventType_)
 	{
-	case EmitDamageToEnemyCollision:
+	case AnimationEventTypeE::EmitDamageToEnemyCollision:
 		//敵にダメージを与えるコリジョン発生
 	{
 		//ボーンを取得 この動作重くね？
-		D3DXMATRIX* bone = ModelRender_->FindBoneWorldMatrix(event.strArg_[0]);
+		Matrix* bone = ModelRender_->FindBoneWorldMatrix(event.strArg_[0]);
 
 		//ボーンが存在していれば
-		if (bone != NULL)
+		if (bone != nullptr)
 		{
 			//ポジションの移動を取得
-			D3DXVECTOR3 pos = event.vArg_[0];
+			Vector3 pos = event.vArg_[0];
 
 			//ポジションの移動分を計算
-			D3DXVec3TransformCoord(&pos, &pos, bone);
+			pos.TransformCoord(*bone);
 
 			//コリジョンワールドに登録
-			g_CollisionWorld->Add(event.fArg_[1], pos, event.fArg_[0], event.iArg_[0], CollisionWorld::DamageToEnemy, event.iArg_[1]);
+			g_CollisionWorld->Add(event.fArg_[1], pos, event.fArg_[0], event.iArg_[0], CollisionWorld::AttributeE::DamageToEnemy, event.iArg_[1]);
 		
+			bone = nullptr;
 		}
 	}
 	break;
 
-	case EmitDamageToPlayerCollision:
+	case AnimationEventTypeE::EmitDamageToPlayerCollision:
 		//プレイヤーにダメージを与えるコリジョン発生.
 	{
 		//ボーンを取得 この動作重くね？
-		D3DXMATRIX* bone = ModelRender_->FindBoneWorldMatrix(event.strArg_[0]);
+		Matrix* bone = ModelRender_->FindBoneWorldMatrix(event.strArg_[0]);
 		
 		//ボーンが存在していれば
 		if (bone != NULL)
 		{
 
 			//ポジションの移動分を取得
-			D3DXVECTOR3 pos = event.vArg_[0];
+			Vector3 pos = event.vArg_[0];
 
 			//ポジションの移動分を計算
-			D3DXVec3TransformCoord(&pos, &pos, bone);
+			pos.TransformCoord(*bone);
 
 			//コリジョンワールドに登録
-			g_CollisionWorld->Add(event.fArg_[1], pos, event.fArg_[0], event.iArg_[0], CollisionWorld::DamageToPlayer, event.iArg_[1]);
+			g_CollisionWorld->Add(event.fArg_[1], pos, event.fArg_[0], event.iArg_[0], CollisionWorld::AttributeE::DamageToPlayer, event.iArg_[1]);
 		}
 	}
 	break;

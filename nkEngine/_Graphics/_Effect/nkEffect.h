@@ -14,19 +14,9 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/18
 	 */
-	class Effect
+	class Effect : Noncopyable
 	{
 	public:
-
-		/**
-		 * コンストラクタ.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/18
-		 */
-		Effect()
-		{
-		}
 
 		/**
 		 * コンストラクタ.
@@ -160,9 +150,9 @@ namespace nkEngine
 		 * @param name   パラメータの名前.
 		 * @param matrix 行列のポインタ.
 		 */
-		void SetMatrix(const char* name, const D3DXMATRIX* matrix)
+		void SetMatrix(const char* name, const Matrix* matrix)
 		{
-			D3DEffect_->SetMatrix(name, matrix);
+			D3DEffect_->SetMatrix(name, r_cast<const D3DXMATRIX*>(matrix));
 		}
 
 		/**
@@ -175,9 +165,9 @@ namespace nkEngine
 		 * @param matrixarrey 配列の先頭アドレス.
 		 * @param size		  サイズ.
 		 */
-		void SetMatrixArray(const char* name, const D3DXMATRIX* matrixarrey,UINT size)
+		void SetMatrixArray(const char* name, const Matrix* matrixarrey,UINT size)
 		{
-			D3DEffect_->SetMatrixArray(name, matrixarrey, size);
+			D3DEffect_->SetMatrixArray(name, r_cast<const D3DXMATRIX*>(matrixarrey), size);
 		}
 
 		/**
@@ -231,9 +221,9 @@ namespace nkEngine
 		 * @param name パラメータの名前.
 		 * @param vec  ベクトルのポインタ.
 		 */
-		void SetVector(const char* name, const D3DXVECTOR4* vec)
+		void SetVector(const char* name, const Vector4* vec)
 		{
-			D3DEffect_->SetVector(name, vec);
+			D3DEffect_->SetVector(name, r_cast<const D3DXVECTOR4*>(vec));
 		}
 
 	private:

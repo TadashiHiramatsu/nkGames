@@ -6,6 +6,7 @@
 #pragma once
 
 #include"nkCollider.h"
+#include"../_Math/nkVector.h"
 
 namespace nkEngine
 {
@@ -16,34 +17,18 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	struct RigidBodyInfoS
+	struct RigidBodyInfoS : Noncopyable
 	{
 	public:
 
-		/**
-		 * コンストラクタ.
-		 *
-		 * @author	HiramatsuTadashi
-		 * @date	2017/01/07
-		 */
-		RigidBodyInfoS() :
-			Collider_(nullptr),
-			Mass_(0.0f),
-			Position_(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
-			Rotation_(D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f))
-		{
-		}
-
-	public:
-
 		/** 座標. */
-		D3DXVECTOR3 Position_;
+		Vector3 Position_ = Vector3::Zero;
 		/** 回転. */
-		D3DXQUATERNION Rotation_;
+		Quaternion Rotation_ = Quaternion::Identity;
 		/** コライダー. */
-		ICollider* Collider_;
+		ICollider* Collider_ = nullptr;
 		/** 質量. */
-		float Mass_;
+		float Mass_ = 0.0f;
 
 	};
 
@@ -53,7 +38,7 @@ namespace nkEngine
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/07
 	 */
-	class RigidBody
+	class RigidBody : Noncopyable
 	{
 	public:
 
@@ -63,7 +48,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		RigidBody();
+		RigidBody()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -71,7 +58,10 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~RigidBody();
+		~RigidBody()
+		{
+			Release();
+		}
 
 		/**
 		 * 作成.
@@ -107,9 +97,9 @@ namespace nkEngine
 	private:
 
 		/** 剛体. */
-		btRigidBody* RigidBody_;
+		btRigidBody* RigidBody_ = nullptr;
 		/** モーションステート. */
-		btDefaultMotionState* MotionState_;
+		btDefaultMotionState* MotionState_ = nullptr;
 	
 	};
 

@@ -3,8 +3,9 @@
 
 void GameLight::Start()
 {
-	D3DXVECTOR3 dld;
-	D3DXVec3Normalize(&dld, &D3DXVECTOR3(5.0f, -5.0f, 5.0f));
+	Vector3 dld = Vector3(5.0f, -5.0f, 5.0f);
+	dld.Normalize();
+
 	Light_.SetDiffuseLightDirection(0, dld);
-	Light_.SetDiffuseLightColor(0, D3DXVECTOR4(1, 1, 1, 0));
+	Light_.SetDiffuseLightColor(0, Vector4(1, 1, 1, 0));
 }

@@ -26,7 +26,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		SphereCollider();
+		SphereCollider()
+		{
+		}
 
 		/**
 		 * デストラクタ.
@@ -34,7 +36,9 @@ namespace nkEngine
 		 * @author	HiramatsuTadashi
 		 * @date	2017/01/07
 		 */
-		~SphereCollider();
+		~SphereCollider()
+		{
+		}
 
 		/**
 		 * 球体コライダー作成.
@@ -59,10 +63,18 @@ namespace nkEngine
 			return Shape_;
 		}
 
+		/**
+		* 解放.
+		*/
+		void Release()override
+		{
+			SAFE_DELETE(Shape_);
+		}
+
 	private:
 
 		/** 球体形状. */
-		btSphereShape* Shape_;
+		btSphereShape* Shape_ = nullptr;
 	
 	};
 

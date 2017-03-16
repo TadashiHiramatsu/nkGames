@@ -22,7 +22,7 @@ void Map::Start()
 		mapchipinfo->ModelName_ = record[MapReadCodeE::ModelName];
 
 		//à íuì«Ç›çûÇ›
-		D3DXVECTOR3 pos;
+		Vector3 pos;
 		pos.x = stof(record[MapReadCodeE::PositionX]);
 		pos.y = stof(record[MapReadCodeE::PositionY]);
 		pos.z = stof(record[MapReadCodeE::PositionZ]);
@@ -30,7 +30,7 @@ void Map::Start()
 		mapchipinfo->Transform_.Position_ = pos;
 
 		//âÒì]ì«Ç›çûÇ›
-		D3DXQUATERNION rot;
+		Quaternion rot;
 		rot.x = stof(record[MapReadCodeE::RotationX]);
 		rot.y = stof(record[MapReadCodeE::RotationY]);
 		rot.z = stof(record[MapReadCodeE::RotationZ]);
@@ -39,7 +39,7 @@ void Map::Start()
 		mapchipinfo->Transform_.Rotation_ = rot;
 
 		//ägëÂì«Ç›çûÇ›
-		D3DXVECTOR3 scale;
+		Vector3 scale;
 		scale.x = stof(record[MapReadCodeE::ScaleX]);
 		scale.y = stof(record[MapReadCodeE::ScaleY]);
 		scale.z = stof(record[MapReadCodeE::ScaleZ]);

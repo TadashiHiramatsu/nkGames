@@ -11,29 +11,6 @@ namespace nkEngine
 {
 
 	/**
-	 * コンストラクタ.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	RigidBody::RigidBody() :
-		RigidBody_(nullptr),
-		MotionState_(nullptr)
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/07
-	 */
-	RigidBody::~RigidBody()
-	{
-		Release();
-	}
-
-	/**
 	 * 作成.
 	 *
 	 * @author	HiramatsuTadashi

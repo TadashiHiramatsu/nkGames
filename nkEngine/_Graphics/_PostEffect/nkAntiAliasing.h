@@ -7,6 +7,8 @@
 
 namespace nkEngine
 {
+
+	/** ポストエフェクトクラス. */
 	class PostEffect;
 
 	/**
@@ -15,7 +17,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/09
 	 */
-	class AntiAliasing
+	class AntiAliasing : Noncopyable
 	{
 	public:
 
@@ -58,14 +60,6 @@ namespace nkEngine
 		 * @param [in,out] postEffect The post effect.
 		 */
 		void Render(PostEffect* postEffect);
-
-		/**
-		 * 解放.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/09
-		 */
-		void Release();
 
 	private:
 

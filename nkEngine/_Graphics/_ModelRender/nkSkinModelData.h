@@ -71,7 +71,7 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	class SkinModelData
+	class SkinModelData : Noncopyable
 	{
 	public:
 
@@ -199,7 +199,7 @@ namespace nkEngine
 		 *
 		 * @param matWorld ワールド行列.
 		 */
-		void UpdateBoneMatrix(const D3DXMATRIX& matWorld);
+		void UpdateBoneMatrix(const Matrix& matWorld);
 
 		/**
 		 * 各フレームの行列を更新.
@@ -272,7 +272,7 @@ namespace nkEngine
 		 *
 		 * @return The number instance.
 		 */
-		int GetNumInstance()
+		int GetNumInstance() const
 		{
 			return numInstance_;
 		}
@@ -295,10 +295,10 @@ namespace nkEngine
 		*
 		* @return 先頭のボーン行列.
 		*/
-		D3DXMATRIX* GetRootBoneWorldMatrix()
+		Matrix* GetRootBoneWorldMatrix()
 		{
 			D3DXFRAME_DERIVED* frameDer = (D3DXFRAME_DERIVED*)FrameRoot_;
-			return (D3DXMATRIX*)&frameDer->CombinedTransformationMatrix_;
+			return (Matrix*)&frameDer->CombinedTransformationMatrix_;
 		}
 
 	private:
@@ -367,5 +367,6 @@ namespace nkEngine
 		int numInstance_;
 		/** 頂点ストライド. */
 		int VertexBufferStride_;
+
 	};
 }

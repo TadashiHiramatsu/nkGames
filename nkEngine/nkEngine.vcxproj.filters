@@ -67,6 +67,9 @@
     <Filter Include="Graphics\Effect">
       <UniqueIdentifier>{c9bc3f75-705a-4ebe-bb1f-e905f82b87f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Policy">
+      <UniqueIdentifier>{f5f1f465-1688-41d3-8a46-b8542335c857}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nkEngine.cpp">
@@ -80,9 +83,6 @@
     </ClCompile>
     <ClCompile Include="_Graphics\nkTexture.cpp">
       <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="_GameObject\nkGameObject.cpp">
-      <Filter>GameObject</Filter>
     </ClCompile>
     <ClCompile Include="_Graphics\nkCamera.cpp">
       <Filter>Graphics</Filter>
@@ -113,12 +113,6 @@
     </ClCompile>
     <ClCompile Include="_Graphics\nkScreenRender.cpp">
       <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="_Scene\nkSceneManager.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="_Scene\nkScene.cpp">
-      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="_Graphics\_PostEffect\nkAntiAliasing.cpp">
       <Filter>Graphics\PostEffect</Filter>
@@ -152,9 +146,6 @@
     </ClCompile>
     <ClCompile Include="_Component\nkRectTransform.cpp">
       <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="_Graphics\_UI\nkButton.cpp">
-      <Filter>Graphics\UI</Filter>
     </ClCompile>
     <ClCompile Include="_Math\nkVector.cpp">
       <Filter>Math</Filter>
@@ -207,9 +198,6 @@
     <ClCompile Include="_Graphics\_Effect\nkEffectManager.cpp">
       <Filter>Graphics\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="_Graphics\_Effect\nkEffect.cpp">
-      <Filter>Graphics\Effect</Filter>
-    </ClCompile>
     <ClCompile Include="_Graphics\_UI\nkText.cpp">
       <Filter>Graphics\UI</Filter>
     </ClCompile>
@@ -221,6 +209,12 @@
     </ClCompile>
     <ClCompile Include="_Sound\nkSoundEngine.cpp">
       <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="_Component\nkCameraCollision.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="_Math\nkMatrix.cpp">
+      <Filter>Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -326,9 +320,6 @@
     <ClInclude Include="_Component\nkRectTransform.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="_Graphics\_UI\nkButton.h">
-      <Filter>Graphics\UI</Filter>
-    </ClInclude>
     <ClInclude Include="_Math\nkVector.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -412,6 +403,15 @@
     </ClInclude>
     <ClInclude Include="_Sound\nkSoundEngine.h">
       <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="_Component\nkCameraCollision.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="_Policy\nkNoncopyable.h">
+      <Filter>Policy</Filter>
+    </ClInclude>
+    <ClInclude Include="_Math\nkMatrix.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

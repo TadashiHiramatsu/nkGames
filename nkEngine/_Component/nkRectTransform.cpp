@@ -6,27 +6,26 @@
 #include"nkEngine/nkstdafx.h"
 #include"nkRectTransform.h"
 
-//無名空間
-namespace
-{
-
-	/** The anchor offset[]. */
-	static const D3DXVECTOR2 AnchorOffset[] =
-	{
-		{ D3DXVECTOR2(-1, 1) },
-		{ D3DXVECTOR2(0	, 1) },
-		{ D3DXVECTOR2(1	, 1) },
-		{ D3DXVECTOR2(-1, 0) },
-		{ D3DXVECTOR2(0	, 0) },
-		{ D3DXVECTOR2(1	, 0) },
-		{ D3DXVECTOR2(-1,-1) },
-		{ D3DXVECTOR2(0	,-1) },
-		{ D3DXVECTOR2(1	,-1) }
-	};
-}
-
 namespace nkEngine
 {
+
+	namespace
+	{
+
+		/** アンカーオフセット. */
+		static const Vector2 AnchorOffset[] =
+		{
+			{ Vector2(-1, 1) },
+			{ Vector2(0	, 1) },
+			{ Vector2(1	, 1) },
+			{ Vector2(-1, 0) },
+			{ Vector2(0	, 0) },
+			{ Vector2(1	, 0) },
+			{ Vector2(-1,-1) },
+			{ Vector2(0	,-1) },
+			{ Vector2(1	,-1) }
+		};
+	}
 
 	/**
 	 * コンストラクタ.
@@ -34,35 +33,16 @@ namespace nkEngine
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
 	 */
-	RectTransform::RectTransform() :
-		Parent_(nullptr),
-		Anchor_(AnchorPresetE::MiddleCenter),
-		Position_(D3DXVECTOR3(0, 0, 0)),
-		Width_(100),
-		Height_(100),
-		Pivot_(D3DXVECTOR2(0.5, 0.5)),
-		Rotation_(D3DXQUATERNION(0, 0, 0, 1)),
-		Scale_(D3DXVECTOR2(1, 1))
+	RectTransform::RectTransform()
 	{
 		//スクリーン幅を取得
 		int screenW = Engine().GetScreenW();
 		int screenH = Engine().GetScreenH();
 		
 		//プロジェクション行列の作成
-		D3DXMatrixIdentity(&ProjectionMatrix_);
 		ProjectionMatrix_._11 = 2.0f / screenW;
 		ProjectionMatrix_._22 = 2.0f / screenH;
 
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/10
-	 */
-	RectTransform::~RectTransform()
-	{
 	}
 
 	/**
@@ -73,18 +53,18 @@ namespace nkEngine
 	 */
 	void RectTransform::Update()
 	{
-		D3DXMATRIX mScale, mScaleSizeOff, mTrans, mRot;
+		Matrix mScale, mScaleSizeOff, mTrans, mRot;
 
 		//スクリーンの中心地を取得
 		int screenWCenter = Engine().GetScreenW() / 2;
 		int screenHCenter = Engine().GetScreenH() / 2;
 
-		D3DXVECTOR2 trans;
+		Vector2 trans;
 		trans.x = Position_.x;
 		trans.y = Position_.y;
 		
 		//アンカーを画面に設定
-		D3DXVECTOR2 AnchorValue;
+		Vector2 AnchorValue;
 		AnchorValue.x = screenWCenter;
 		AnchorValue.y = screenHCenter;
 
@@ -96,65 +76,50 @@ namespace nkEngine
 		}
 
 		//アンカー計算
-		trans.x += AnchorOffset[Anchor_].x * AnchorValue.x;
-		trans.y += AnchorOffset[Anchor_].y * AnchorValue.y;
+		trans.x += AnchorOffset[(int)Anchor_].x * AnchorValue.x;
+		trans.y += AnchorOffset[(int)Anchor_].y * AnchorValue.y;
 
 		//ピボットの分のオフセットを計算。
-		D3DXVECTOR2 pivotOffset;
+		Vector2 pivotOffset;
 		pivotOffset.x = (Width_  * Scale_.x) * (0.5f - Pivot_.x);
 		pivotOffset.y = (Height_ * Scale_.y) * (0.5f - Pivot_.y);
-		trans += pivotOffset;
+		trans.Add(pivotOffset);
 
 		//移動行列作成
-		D3DXMatrixTranslation(&mTrans, trans.x, trans.y, Position_.z);
+		mTrans.MakeTranslation(Vector3(trans.x, trans.y, Position_.z));
 
 		//拡大
-		D3DXVECTOR3 scale;
+		Vector3 scale;
 		scale.x = (Width_  * Scale_.x);
 		scale.y = (Height_ * Scale_.y);
 		scale.z = 1.0f;
 
 		//サイズを含めたスケール行列の計算
-		D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.x);
+		mScale.MakeScaling(scale);
 
 		//拡大ベクトル値だけのスケール行列の計算
-		D3DXMatrixScaling(&mScaleSizeOff, Scale_.x, Scale_.y, 1.0f);
+		mScaleSizeOff.MakeScaling(Vector3(Scale_.x, Scale_.y, 1.0f));
 
 		//回転行列の計算
-		D3DXMatrixRotationQuaternion(&mRot, &Rotation_);
+		mRot.MakeRotationQuaternion(Rotation_);
 
 		//ワールド行列の計算
-		WorldMatrix_ = mScale * mRot * mTrans;
+		WorldMatrix_.Mul(mScale, mRot);
+		WorldMatrix_.Mul(WorldMatrix_, mTrans);
+
 		//サイズを含まないワールド行列の計算
-		WorldSizeOffMatrix_ = mScaleSizeOff * mRot * mTrans;
+		WorldSizeOffMatrix_.Mul(mScaleSizeOff, mRot);
+		WorldSizeOffMatrix_.Mul(WorldSizeOffMatrix_, mTrans);
 
 		//親子関係の計算
 		if (Parent_)
 		{
-			WorldMatrix_ *= Parent_->WorldSizeOffMatrix_;
-			WorldSizeOffMatrix_ *= Parent_->WorldSizeOffMatrix_;
-		}
-
-		//コリジョン計算
-		{
-			//中心座標を設定
-			BoxCol_.Left_ = screenWCenter;
-			BoxCol_.Top_ = screenHCenter;
-
-			//中心の位置を設定
-			BoxCol_.Left_ += WorldMatrix_._41;
-			BoxCol_.Top_ -= WorldMatrix_._42;
-
-			//画像サイズ分ずらす
-			BoxCol_.Left_ -= WorldMatrix_._11 / 2;
-			BoxCol_.Top_ -= WorldMatrix_._22 / 2;
-
-			//右と下も設定
-			BoxCol_.Right_ = BoxCol_.Left_ + WorldMatrix_._11;
-			BoxCol_.Bottom_ = BoxCol_.Top_ + WorldMatrix_._22;
+			WorldMatrix_.Mul(WorldMatrix_, Parent_->WorldSizeOffMatrix_);
+			WorldSizeOffMatrix_.Mul(WorldSizeOffMatrix_, Parent_->WorldSizeOffMatrix_);
 		}
 
 		//プロジェクション行列を計算
-		WorldProjMatrix_ = WorldMatrix_ * ProjectionMatrix_;
+		WorldProjMatrix_.Mul(WorldMatrix_,ProjectionMatrix_);
+
 	}
 }

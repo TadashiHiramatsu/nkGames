@@ -4,9 +4,10 @@
 #pragma once
 
 #include"nkWaveFileBank.h"
+#include"../_Math/nkVector.h"
 
 #define INPUTCHANNELS 2		//!< number of source channels
-#define OUTPUTCHANNELS 8	//!< 最大出力チャンネル数。
+#define OUTPUTCHANNELS 8	//!< 最大出力チャンネル数.
 
 namespace nkEngine
 {
@@ -16,7 +17,7 @@ namespace nkEngine
 	/**
 	* サウンドエンジンクラス.
 	*/
-	class CSoundEngine
+	class CSoundEngine : Noncopyable
 	{
 	public:
 
@@ -78,7 +79,7 @@ namespace nkEngine
 		*
 		* @param pos	位置ベクトル.
 		*/
-		void SetListenerPosition(const D3DXVECTOR3& pos)
+		void SetListenerPosition(const Vector3& pos)
 		{
 			ListenerPosition_ = pos;
 		}
@@ -88,9 +89,9 @@ namespace nkEngine
 		*
 		* @param front	前方向ベクトル.
 		*/
-		void SetListenerFront(D3DXVECTOR3& front)
+		void SetListenerFront(const Vector3& front)
 		{
-			Listener_.OrientFront = front;
+			front.CopyTo(Listener_.OrientFront);
 		}
 
 		/**
@@ -98,9 +99,9 @@ namespace nkEngine
 		*
 		* @param up		上方向ベクトル.
 		*/
-		void SetListenerUp(D3DXVECTOR3& up)
+		void SetListenerUp(const Vector3& up)
 		{
-			Listener_.OrientTop = up;
+			up.CopyTo(Listener_.OrientTop);
 		}
 
 		/**
@@ -130,7 +131,7 @@ namespace nkEngine
 		/**
 		* 出力チャンネル数を取得.
 		*/
-		int GetChannelNum()const
+		int GetChannelNum() const
 		{
 			return ChannelNum_;
 		}
@@ -167,7 +168,7 @@ namespace nkEngine
 		/** サウンドリスナー. */
 		X3DAUDIO_LISTENER Listener_;
 		/** リスナーの位置. */
-		D3DXVECTOR3 ListenerPosition_ = D3DXVECTOR3(0, 0, 0);
+		Vector3 ListenerPosition_ = Vector3::Zero;
 		/** リスナーの角度. */
 		float ListenerAngle_ = 0;
 		/** リスナーコーンフラグ. */

@@ -23,7 +23,7 @@ namespace nkEngine
 		/** テクスチャのファイルパス. */
 		const char* TexturePath_;
 		/** 初速度. */
-		D3DXVECTOR3	InitVelocity_;
+		Vector3	InitVelocity_;
 		/** 寿命。単位は秒. */
 		float		Life_;
 		/** 発生時間。単位は秒. */
@@ -33,17 +33,17 @@ namespace nkEngine
 		/** パーティクルの高さ. */
 		float		H_;
 		/** 初期位置のランダム幅. */
-		D3DXVECTOR3	InitPositionRandomMargin_;
+		Vector3	InitPositionRandomMargin_;
 		/** 初速度のランダム幅. */
-		D3DXVECTOR3	InitVelocityVelocityRandomMargin_;
+		Vector3	InitVelocityVelocityRandomMargin_;
 		/** 速度の積分のときのランダム幅. */
-		D3DXVECTOR3	AddVelocityRandomMargih_;
+		Vector3	AddVelocityRandomMargih_;
 		/** UVテーブル。最大4まで保持できる。xが左上のu、yが左上のv、zが右下のu、wが右下のvになる. */
-		D3DXVECTOR4	UVTable_[4];
+		Vector4	UVTable_[4];
 		/** UVテーブルのサイズ. */
 		int			UVTableSize_;
 		/** 重力. */
-		D3DXVECTOR3	Gravity_;
+		Vector3	Gravity_;
 		/** 死ぬときにフェードアウトする？. */
 		bool		isFade_;
 		/** フェードする時間. */
@@ -90,17 +90,17 @@ namespace nkEngine
 		}
 
 		/**
-		 * 初期化. オーバーライドじゃないため自分で呼ぶ必要がある.
+		 * 初期化. 
+		 * オーバーライドじゃないため自分で呼ぶ必要がある.
 		 *
 		 * @author HiramatsuTadashi
-		 * @date 2017/01/16
 		 *
-		 * @param [in,out] camera	    If non-null, the camera.
-		 * @param 		   param	    The parameter.
-		 * @param 		   emitPosition The emit position.
-		 * @param 		   lifeTime	    The life time.
+		 * @param [in,out] camera	    カメラ.
+		 * @param 		   param	    パーティクル情報.
+		 * @param 		   emitPosition 発生座標.
+		 * @param 		   lifeTime	    寿命(秒).
 		 */
-		void Start(Camera* camera, const ParticleParameterS& param, D3DXVECTOR3& emitPosition, float lifeTime);
+		void Start(const Camera* camera, const ParticleParameterS& param, const Vector3& emitPosition, float lifeTime);
 
 		/**
 		 * 更新.
@@ -118,18 +118,18 @@ namespace nkEngine
 		 *
 		 * @param force 力.
 		 */
-		void AddForce(const D3DXVECTOR3& force);
+		void AddForce(const Vector3& force);
 
 	private:
 
 		/** 発生時間のローカルタイム. */
 		float IntervalLT_ = 0.0f;
 		/** カメラ. */
-		Camera*	Camera_ = nullptr;
+		const Camera* Camera_ = nullptr;
 		/** パラメータ. */
 		ParticleParameterS Param_;
 		/** エミッターの座標. */
-		D3DXVECTOR3 EmitPosition_;
+		Vector3 EmitPosition_;
 		/** パーティクルのリスト. */
 		list<Particle*>	ParticleList_;
 

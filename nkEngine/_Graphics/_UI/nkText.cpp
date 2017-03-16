@@ -8,28 +8,7 @@
 
 namespace nkEngine
 {
-
-	/**
-	 * コンストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	Text::Text() :
-		D3DFont_(nullptr)
-	{
-	}
-
-	/**
-	 * デストラクタ.
-	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/09
-	 */
-	Text::~Text()
-	{
-	}
-
+	
 	/**
 	 * 作成.
 	 *
@@ -38,9 +17,9 @@ namespace nkEngine
 	 *
 	 * @param _Height  The height.
 	 * @param _Width   The width.
-	 * @param _Weights The weights.
+	 * @param _Weights The weight.
 	 */
-	void Text::Create(int height,int width, FontWeightE weights)
+	void Text::Create(int height,int width, FontWeightE weight)
 	{
 
 		//倍率を計算
@@ -56,7 +35,7 @@ namespace nkEngine
 			Engine().GetDevice(),			// デバイス
 			height * Magnification,			// 高さ
 			width * Magnification,			// 幅
-			weights,						// フォントの太さ 普通
+			(int)weight,						// フォントの太さ 普通
 			NULL,							// 下線
 			FALSE,							// 斜体
 			SHIFTJIS_CHARSET,				// 文字セット
@@ -81,7 +60,7 @@ namespace nkEngine
 	void Text::Render(const char* text)
 	{
 
-		D3DXVECTOR2 pos;
+		Vector2 pos;
 		pos.x = Transform_->WorldMatrix_._41;
 		pos.y = Transform_->WorldMatrix_._42;
 
@@ -96,10 +75,10 @@ namespace nkEngine
 
 		switch (Format_)
 		{
-		case nkEngine::Text::Left:
+		case FormatE::Left:
 			idx = 0;
 			break;
-		case nkEngine::Text::Center:
+		case FormatE::Center:
 			idx = num / 2 * Width_;
 			break;
 		default:

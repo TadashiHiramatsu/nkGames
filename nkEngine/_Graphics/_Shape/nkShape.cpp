@@ -23,7 +23,7 @@ namespace nkEngine
 	{
 		if (!isInitDefaultLight_) {
 			//デフォルトライトの初期化。
-			DefaultLight_.SetAmbientLight(D3DXVECTOR3(1.0f, 1.0f, 1.0f));
+			DefaultLight_.SetAmbientLight(Vector3(1.0f, 1.0f, 1.0f));
 			isInitDefaultLight_ = true;
 		}
 	}
