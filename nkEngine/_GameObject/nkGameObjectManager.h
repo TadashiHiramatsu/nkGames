@@ -183,12 +183,13 @@ namespace nkEngine
 
 		/**
 		 * ‘SíœSceneManager‚ÉŒÄ‚Î‚ê‚é.
+		 * isStatic‚ªtrue‚Ìê‡Á‚³‚ê‚È‚¢.
 		 *
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/10
 		 */
 		void AllDelete();
-
+		
 	private:
 
 		/** 1—Dæ“x‚É1List. */

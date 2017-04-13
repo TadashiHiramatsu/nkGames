@@ -111,6 +111,7 @@ namespace nkEngine
 
 		if (0 != mmioAscend(Hmmio_, &ckIn, 0))
 		{
+			NK_LOG("Failed mmioAscend");
 			Release();
 			return;
 		}
@@ -269,7 +270,8 @@ namespace nkEngine
 		}
 		
 		//waveフォーマットを削除.
-		SAFE_DELETE_ARRAY(WaveFormat_);
+		delete[] WaveFormat_;
+		WaveFormat_ = nullptr;
 
 	}
 

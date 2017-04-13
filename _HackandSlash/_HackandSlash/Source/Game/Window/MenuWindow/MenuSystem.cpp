@@ -26,6 +26,10 @@ void MenuSystem::Update()
 		{
 			IMenuWindow_->Close();
 		}
+
+		SoundSource* se = NewGO<SoundSource>();
+		se->InitOnMemory("Game/Menu");
+		se->Play();
 	}
 
 	if (isEffectiveness_)

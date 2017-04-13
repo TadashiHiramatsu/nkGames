@@ -168,8 +168,6 @@ namespace nkEngine
 				auto it = std::find(goExecList.begin(), goExecList.end(), go);
 				if (it != goExecList.end()) 
 				{
-					//解放
-					(*it)->Release();
 					//削除
 					delete (*it);
 				}
@@ -184,6 +182,7 @@ namespace nkEngine
 
 	/**
 	 * 全削除SceneManagerに呼ばれる.
+	 * isStaticがtrueの場合消されない.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
@@ -191,10 +190,23 @@ namespace nkEngine
 	void CGameObjectManager::AllDelete()
 	{
 		//イテレータ取得
-		auto itList = GameObjectArray_.begin();
+		auto& itList = GameObjectArray_.begin();
 		while (itList != GameObjectArray_.end())
 		{
-			itList->clear();
+			auto& it = itList->begin();
+			while (it != itList->end())
+			{
+				if ((*it)->GetStatic())
+				{
+					it++;
+				}
+				else
+				{
+					it = itList->erase(it);
+				}
+			}
+
+			//itList->clear();
 			itList++;
 		}
 	}

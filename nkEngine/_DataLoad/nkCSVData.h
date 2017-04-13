@@ -5,10 +5,11 @@
  */
 #pragma once
 
- //ファイル関連
+//ファイル関連
 #include<fstream>
- //文字ストリーム
+//文字ストリーム
 #include<sstream>
+#include<cassert>
 #include<string>
 
 namespace nkEngine

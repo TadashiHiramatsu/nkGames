@@ -298,16 +298,41 @@ namespace nkEngine
 			return Priority_;
 		}
 
+		/**
+		* スタティックフラグを設定する.
+		*
+		* @param value	値.
+		*/
+		void SetStatic(bool value)
+		{
+			isStatic_ = value;
+		}
+
+		/**
+		* スタティックフラグを取得する.
+		*
+		* @return 値.
+		*/
+		bool GetStatic()
+		{
+			return isStatic_;
+		}
+
 	public:
 
 		/** トランスフォーム. */
 		Transform Transform_;
 		/** 優先度. */
-		GOPriorityT Priority_;
+		GOPriorityT Priority_ = 0;
 		/** アクティブフラグ. */
 		bool isActive_ = true;
 		/** Startが呼ばれているかフラグ. */
 		bool isStart_ = false;
+		/** 
+		* スタティックフラグ. 
+		* trueの場合シーン遷移で削除されない.
+		*/
+		bool isStatic_ = false;
 
 	};
 

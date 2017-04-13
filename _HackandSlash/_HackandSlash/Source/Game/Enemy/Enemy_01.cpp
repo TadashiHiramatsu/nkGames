@@ -17,7 +17,7 @@ namespace
 {
 
 	/** The animation event tbl[ monster 01 animation num]. */
-	AnimationEventGroupS AnimationEventTbl[Enemy_01::AnimationCodeE::AnimationNum] =
+	AnimationEventGroupS AnimationEventTbl[(int)Enemy_01::AnimationCodeE::AnimationNum] =
 	{
 		//AnimationWaiting
 		{
@@ -122,7 +122,6 @@ void Enemy_01::Start()
 	//プレイヤーを攻撃し始める距離を設定.
 	PlayerAttackDis_ = 1.0f;
 
-
 }
 
 /**
@@ -134,7 +133,7 @@ void Enemy_01::Start()
 void Enemy_01::Update()
 {
 	//ムーブスピードを取得
-	Vector3 MoveSpeed = CharacterController_.GetMoveSpeed();
+	MoveDirection_ = CharacterController_.GetMoveSpeed();
 
 	switch (State_)
 	{
@@ -147,8 +146,7 @@ void Enemy_01::Update()
 			break;
 		}
 
-		//スピードを緩める
-		MoveSpeed.Scale(0.8f);
+		MoveDirection_.Scale(0.8f);
 
 		//立ち止まり
 		if (WaitingLT_ >= WaitingTime_)
@@ -189,10 +187,10 @@ void Enemy_01::Update()
 		Vector2 toD = GetToDestination();
 
 		//ムーブスピードを設定
-		MoveSpeed = Vector3(toD.x, 0, toD.y);
+		MoveDirection_ = Vector3(toD.x, 0, toD.y);
 
 		//向いている方向に回転
-		Transform_.Rotation_.RotationAxis(Vector3::Up, D3DXToDegree(atan2f(MoveSpeed.x, MoveSpeed.z)) + 180.0f);
+		Transform_.Rotation_.RotationAxis(Vector3::Up, D3DXToDegree(atan2f(MoveDirection_.x, MoveDirection_.z)) + 180.0f);
 	
 	}
 	break;
@@ -216,10 +214,10 @@ void Enemy_01::Update()
 		Vector2 toP = GetToPlayerDir();
 
 		//ムーブスピードを設定
-		MoveSpeed = Vector3(toP.x, 0, toP.y);
+		MoveDirection_ = Vector3(toP.x, 0, toP.y);
 
 		//向いている方向に回転
-		Transform_.Rotation_.RotationAxis(Vector3::Up, D3DXToDegree(atan2f(MoveSpeed.x, MoveSpeed.z)) + 180.0f);
+		Transform_.Rotation_.RotationAxis(Vector3::Up, D3DXToDegree(atan2f(MoveDirection_.x, MoveDirection_.z)) + 180.0f);
 	
 	}
 	break;
@@ -242,7 +240,7 @@ void Enemy_01::Update()
 		}
 
 		//移動情報を削除
-		MoveSpeed = Vector3::Zero;
+		MoveDirection_ = Vector3::Zero;
 	
 	}
 	break;
@@ -256,7 +254,7 @@ void Enemy_01::Update()
 		}
 		
 		//ダメージを受けているので動いていない
-		MoveSpeed = Vector3::Zero;
+		MoveDirection_ = Vector3::Zero;
 
 	}
 	break;
@@ -294,17 +292,16 @@ void Enemy_01::Update()
 			}
 		}
 		//死んでいるので移動情報を削除
-		MoveSpeed = Vector3::Zero;
+		MoveDirection_ = Vector3::Zero;
 
 	}
 	break;
-	
 	default:
 		break;
 	}
-
+	
 	//キャラクターコントローラに移動情報を設定
-	CharacterController_.SetMoveSpeed(MoveSpeed);
+	CharacterController_.SetMoveSpeed(MoveDirection_);
 	//キャラクターコントローラの更新
 	CharacterController_.Update();
 	

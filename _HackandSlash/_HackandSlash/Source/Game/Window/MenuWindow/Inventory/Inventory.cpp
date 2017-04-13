@@ -143,9 +143,18 @@ void Inventory::Update()
 		{
 			int angle = XInput().GetLeftStickAngle() + (360 / MAX_EQUIPMENT / 2);
 			int num = (angle / (360 / MAX_EQUIPMENT)) % MAX_EQUIPMENT;
-			SelectEquipment_ = (ItemTypeE)num;
-		}
 
+			//現在選択していなければ.
+			if (SelectEquipment_ != (ItemTypeE)num)
+			{
+				SoundSource* se = NewGO<SoundSource>();
+				se->InitOnMemory("Game/Select");
+				se->Play();
+
+				SelectEquipment_ = (ItemTypeE)num;
+			}
+		}
+		
 		if (XInput().IsTrigger(ButtonE::A))
 		{
 			//Aボタンが押された.
@@ -153,7 +162,15 @@ void Inventory::Update()
 			{
 				DetailSelectTransform_.Parent_ = ItemDetailRender_[NowSelect_[SelectEquipment_]].GetTransform();
 				DetailSelectTransform_.Update();
+
+				//状態遷移.
 				ChangeState(StateE::Detail);
+
+				//音声
+				SoundSource* se = NewGO<SoundSource>();
+				se->InitOnMemory("Common/SelectChange");
+				se->Play();
+
 				break;
 			}
 		}
@@ -166,28 +183,43 @@ void Inventory::Update()
 		//前フレームの結果を代入.
 		BefSelect_[SelectEquipment_] = NowSelect_[SelectEquipment_];
 
-		static bool flag[2] =
-		{ false,false };
+		static bool flag[2] ={ false,false };
+
+		bool isSound = false;
 
 		if (XInput().GetLeftStick().y > 0)
 		{
-			//上
+			//上にスライド
 			if (!flag[0])
 			{
-
 				if (NowSelect_[SelectEquipment_] <= 0)
 				{
-					LeadIdx[SelectEquipment_]--;
-
 					//限界まで表示
-					if (LeadIdx[SelectEquipment_] < 0)
+					if (LeadIdx[SelectEquipment_] > 0)
 					{
-						LeadIdx[SelectEquipment_] = 0;
+						LeadIdx[SelectEquipment_]--;
+
+						isSound = true;
 					}
+					
 				}
 
-				NowSelect_[SelectEquipment_] = max(0, NowSelect_[SelectEquipment_] - 1);
+				//次に選択する箇所.
+				int nextselect = NowSelect_[SelectEquipment_] - 1;
 
+				//0を超えないようにする.
+				if (nextselect < 0)
+				{
+					nextselect = 0;
+				}
+				else
+				{
+					isSound = true;
+				}
+
+				NowSelect_[SelectEquipment_] = nextselect;
+
+				//連続で上へあがらない設定.
 				flag[0] = true;
 			}
 		}
@@ -202,23 +234,38 @@ void Inventory::Update()
 			if (!flag[1])
 			{
 
+				//総所持数.
 				int limit = InventoryManager().GetItemSize(SelectEquipmentCode[SelectEquipment_]);
+				
+				//所持数から表示する数を引いた何か.
 				int num = limit - MAX_DISPLAY;
 
 				if (NowSelect_[SelectEquipment_] >= MAX_DISPLAY - 1)
 				{
-					LeadIdx[SelectEquipment_]++;
-
-					if (LeadIdx[SelectEquipment_] > num)
+					if (LeadIdx[SelectEquipment_] < num)
 					{
-						LeadIdx[SelectEquipment_] = num;
+						LeadIdx[SelectEquipment_]++;
+
+						isSound = true;
 					}
+				}
+
+				//次の選択箇所.
+				int nextselect = NowSelect_[SelectEquipment_] + 1;
+				
+				//表示数を超えないようにする.
+				if (MAX_DISPLAY - 1 < nextselect)
+				{
+					nextselect = MAX_DISPLAY - 1;
 				}
 				else
 				{
-					NowSelect_[SelectEquipment_] = min(MAX_DISPLAY - 1 + num, NowSelect_[SelectEquipment_] + 1);
+					isSound = true;
 				}
+				
+				NowSelect_[SelectEquipment_] = nextselect;
 
+				//連続で上へあがらない設定.
 				flag[1] = true;
 			}
 		}
@@ -234,6 +281,13 @@ void Inventory::Update()
 
 		DetailSelectTransform_.Update();
 
+		if (isSound)
+		{
+			SoundSource* se = NewGO<SoundSource>();
+			se->InitOnMemory("Game/Select");
+			se->Play();
+		}
+
 		if (XInput().IsTrigger(ButtonE::A))
 		{
 			ChangeItem();
@@ -241,7 +295,14 @@ void Inventory::Update()
 
 		if (XInput().IsTrigger(ButtonE::B))
 		{
+			//状態遷移.
 			ChangeState(StateE::Select);
+
+			//音声
+			SoundSource* se = NewGO<SoundSource>();
+			se->InitOnMemory("Game/SelectChange");
+			se->Play();
+
 			break;
 		}
 
@@ -274,8 +335,8 @@ void Inventory::Update()
 			IconTransform_[i].Height_ = DefaultIconSize_;
 		}
 
-		//アイテムを所持していない.
-		if (InventoryManager().GetItemSize(SelectEquipmentCode[i]) <= 0 && !Player_->GetIsSet(SelectEquipmentCode[i]))
+		//アイテムを所持していないかつ装備していない.
+		if (InventoryManager().GetItemSize(SelectEquipmentCode[i]) <= 0 && !Player_->GetIsItemSet(SelectEquipmentCode[i]))
 		{
 			//モノクロに設定.
 			IconImage_[i].SetMonochrome(true);
@@ -375,5 +436,9 @@ void Inventory::ChangeItem()
 
 	//設定
 	Player_->SetEquipmentItem(ret);
+
+	SoundSource* se = NewGO<SoundSource>();
+	se->InitOnMemory("Game/Equipment");
+	se->Play();
 
 }

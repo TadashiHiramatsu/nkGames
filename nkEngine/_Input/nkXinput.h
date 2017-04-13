@@ -109,6 +109,7 @@ namespace nkEngine
 		
 		/**
 		 * 左スティックの傾き量.
+		 * x:横.y:縦
 		 *
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09
@@ -122,6 +123,7 @@ namespace nkEngine
 
 		/**
 		 * 右スティックの傾き量.
+		 * x:横.y:縦
 		 *
 		 * @author HiramatsuTadashi
 		 * @date 2017/01/09

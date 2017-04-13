@@ -31,53 +31,34 @@ public:
 	{
 	public:
 
-		/**
-		 * コンストラクタ.
-		 *
-		 * @author HiramatsuTadashi
-		 * @date 2017/01/10
-		 */
-		PlayerParameterS()
-		{
-			Level_ = 1;
-			Experience_ = 0;
-			NextLevelExperience_ = 10;
-			Attack_ = 10;
-			MaxHp_ = NowHp_ = 100;
-			InvincibleTime_ = 1.0f;
-		}
-
-	public:
-
 		/** レベル. */
-		int Level_;
+		int Level_ = 1;
 		/** 現在の経験値. */
-		int Experience_;
+		int Experience_ = 0;
 		/** 次のレベルへの経験値. */
-		int NextLevelExperience_;
+		int NextLevelExperience_ = 10;
 		/** 攻撃力. */
-		int	Attack_;
+		int	Attack_ = 10;
 		/** 体力. */
-		int MaxHp_;
+		int MaxHp_ = 100;
 		/** 体力. */
-		int NowHp_;
+		int NowHp_ = 100;
 		/** 無敵時間. */
-		float InvincibleTime_;
-
+		float InvincibleTime_ = 1.0f;
 
 	};
 
 	/** アニメーションコードの列挙. */
 	enum class AnimationCodeE
 	{
-		Invalid = -1,				//!< 無し
+		Invalid = -1,				//!< 無効
 		Idol = 0,					//!< 待機
 		Walk,						//!< 歩き
 		Run,						//!< 走り
-		Attack_Start,				//!< 攻撃アニメーションコード始め.
+		Attack_Start,				//!< 攻撃アニメーションコード開始.
 		Attack_01 = Attack_Start,	//!< 攻撃01
 		Attack_08,					//!< 攻撃08
-		Attack_End = Attack_08,		//!< 攻撃02
+		Attack_End = Attack_08,		//!< 攻撃アニメーションコード終了.
 		Death_01,					//!< 死亡
 		AnimationNum,				//!< アニメーションの数
 	};
@@ -86,6 +67,7 @@ public:
 	/** ステートコードの列挙. */
 	enum class StateCodeE
 	{
+		Invalid = -1,	//!< 無効
 		Waiting = 0,	//!< 待機
 		Walk,			//!< 歩き
 		Run,			//!< 走り
@@ -149,7 +131,7 @@ public:
 	void Release()override;
 
 	/**
-	 * 攻撃を受けた.
+	 * ダメージ.
 	 *
 	 * @author HiramatsuTadashi
 	 * @date 2017/01/10
@@ -212,7 +194,7 @@ public:
 	}
 
 	/**
-	* アイテムを取得
+	* 装備中のアイテムを取得
 	*
 	* @param type	アイテムタイプ.
 	*
@@ -224,7 +206,7 @@ public:
 	}
 
 	/**
-	* アイテムを設定.
+	* 装備するアイテムを設定.
 	*
 	* @param item	アイテム.
 	*/
@@ -240,9 +222,9 @@ public:
 	*
 	* @return true or false.
 	*/
-	bool GetIsSet(ItemTypeE type) const
+	bool GetIsItemSet(ItemTypeE type) const
 	{
-		return PlayerEquipment_.GetIsSet(type);
+		return PlayerEquipment_.GetIsItemSet(type);
 	}
 
 private:

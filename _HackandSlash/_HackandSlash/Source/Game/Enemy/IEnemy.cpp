@@ -23,7 +23,7 @@ IEnemy::IEnemy():
 	toPlayerMaxDis_(20),
 	PlayerAttackDis_(0.3f),
 	WaitingTime_(4),
-	WaitingLT_(0)
+	WaitingLT_(999)
 {
 }
 

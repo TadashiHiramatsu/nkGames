@@ -270,6 +270,14 @@ namespace nkEngine
 
 				//アルファブレンディングを行う
 				Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+
+				//アルファテストを行う.
+				Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+				//値を決める.
+				Device->SetRenderState(D3DRS_ALPHAREF, 100);
+				//D3DCMP_GREATEREQUAL = 上の値以上をキル.
+				Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);
+				
 				// 透過処理を行う
 				Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 				// 半透明処理を行う
@@ -454,7 +462,7 @@ namespace nkEngine
 		Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 		Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
 		Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
-		
+		Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	}
 
 	/**

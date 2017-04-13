@@ -166,6 +166,8 @@
     <ClInclude Include="_Component\nkCharacterController.h" />
     <ClInclude Include="_Component\nkTransform.h" />
     <ClInclude Include="_Component\nkRectTransform.h" />
+    <ClInclude Include="_DataLoad\Json\nkJsonData.h" />
+    <ClInclude Include="_DataLoad\Json\picojson.h" />
     <ClInclude Include="_DataLoad\nkCSVData.h" />
     <ClInclude Include="_Debug\nkAssert.h" />
     <ClInclude Include="_Debug\nkLog.h" />
@@ -236,6 +238,7 @@
     <ClCompile Include="_Component\nkCharacterController.cpp" />
     <ClCompile Include="_Component\nkTransform.cpp" />
     <ClCompile Include="_Component\nkRectTransform.cpp" />
+    <ClCompile Include="_DataLoad\Json\nkJsonData.cpp" />
     <ClCompile Include="_GameObject\nkGameObjectManager.cpp" />
     <ClCompile Include="_Graphics\nkCamera.cpp" />
     <ClCompile Include="_Graphics\nkRenderTarget.cpp" />

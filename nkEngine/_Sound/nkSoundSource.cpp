@@ -74,7 +74,7 @@ namespace nkEngine
 
 		//サウンドボイスソースを作成。
 		SourceVoice_ = SoundEngine().CreateSourceVoice(WaveFile_.get(), is3Dsound);
-		
+
 		if (is3Dsound) 
 		{
 			SoundEngine().Add3DSoundSource(this);
@@ -207,8 +207,7 @@ namespace nkEngine
 			}
 			else 
 			{
-				DeleteGO(this);
-				Remove3DSound();
+				Release();
 			}
 		}
 	}
@@ -261,8 +260,7 @@ namespace nkEngine
 						{
 							//再生終了。
 							isPlaying_ = false;
-							DeleteGO(this);
-							Remove3DSound();
+							Release();
 						}
 					}
 				}

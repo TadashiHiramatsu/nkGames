@@ -61,6 +61,24 @@
     <Filter Include="Game\Boss">
       <UniqueIdentifier>{38865a8a-af2e-4408-9345-2c88a6482a04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Enemy\HFSM">
+      <UniqueIdentifier>{9b9e9fde-6e42-473c-be27-64e60c02f0f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Boss\Warlock">
+      <UniqueIdentifier>{c2cae511-3345-49aa-9c9b-e5b48c4fd4d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Boss\Warlock\HFSM">
+      <UniqueIdentifier>{7949fdc9-ab60-43db-8954-97b00bab7ce2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\SaveData">
+      <UniqueIdentifier>{a08d6936-c80b-400e-9597-185076473bfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Title\GUI">
+      <UniqueIdentifier>{04650173-e0de-449a-b8f5-f374ac7ad902}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Title\GUI\TitleSelect">
+      <UniqueIdentifier>{2cc437f5-2310-49b8-9673-2147dcac3d03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -76,9 +94,6 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Source\Title\TitleScene.cpp">
-      <Filter>Title</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Title\GUI\TitleSystem.cpp">
       <Filter>Title</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\AnimationEvent\AnimationEventController.cpp">
@@ -186,8 +201,62 @@
     <ClCompile Include="Source\Game\Boss\IBoss.cpp">
       <Filter>Game\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Boss\Boss_01.cpp">
-      <Filter>Game\Boss</Filter>
+    <ClCompile Include="Source\Game\Enemy\HFSM\EnemyState_Waiting.cpp">
+      <Filter>Game\Enemy\HFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Enemy\HFSM\EnemyState_Loitering.cpp">
+      <Filter>Game\Enemy\HFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Enemy\HFSM\EnemyState_Stand.cpp">
+      <Filter>Game\Enemy\HFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Boss\Warlock\Boss_Warlock.cpp">
+      <Filter>Game\Boss\Warlock</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Waiting.cpp">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Death.cpp">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Combat.cpp">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Chase.cpp">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Damage.cpp">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Stand.cpp">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Turn.cpp">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Attack.cpp">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common\SaveData\SaveData.cpp">
+      <Filter>Common\SaveData</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Title\GUI\TitleSelect\TitleSelect_NewGame.cpp">
+      <Filter>Title\GUI\TitleSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Title\GUI\TitleSelect\ITitleSelect.cpp">
+      <Filter>Title\GUI\TitleSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Title\GUI\TitleSelect\TitleSelect_Continue.cpp">
+      <Filter>Title\GUI\TitleSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Title\GUI\TitleSelect\TitleSelect_Exit.cpp">
+      <Filter>Title\GUI\TitleSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Title\HUD\TitleName.cpp">
+      <Filter>Title\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Title\TitleSystem.cpp">
+      <Filter>Title</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -201,9 +270,6 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Source\Title\TitleScene.h">
-      <Filter>Title</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Title\GUI\TitleSystem.h">
       <Filter>Title</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\AnimationEvent\AnimationEventMacro.h">
@@ -317,11 +383,71 @@
     <ClInclude Include="Source\Common\SceneEffect\Fade.h">
       <Filter>Common\SceneEfferct</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Boss\Boss_01.h">
-      <Filter>Game\Boss</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Game\Boss\IBoss.h">
       <Filter>Game\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Enemy\HFSM\IEnemyState.h">
+      <Filter>Game\Enemy\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Enemy\HFSM\EnemyState_Waiting.h">
+      <Filter>Game\Enemy\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Enemy\HFSM\EnemyState_Loitering.h">
+      <Filter>Game\Enemy\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Enemy\HFSM\EnemyState_Stand.h">
+      <Filter>Game\Enemy\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Boss\Warlock\Boss_Warlock.h">
+      <Filter>Game\Boss\Warlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Waiting.h">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\IWarlockState.h">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Death.h">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Combat.h">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Chase.h">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Damage.h">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Stand.h">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Turn.h">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Attack.h">
+      <Filter>Game\Boss\Warlock\HFSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common\SaveData\SaveData.h">
+      <Filter>Common\SaveData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\GUI\TitleSelect\TitleSelect_Continue.h">
+      <Filter>Title\GUI\TitleSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\GUI\TitleSelect\TitleSelect_NewGame.h">
+      <Filter>Title\GUI\TitleSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\GUI\TitleSelect\ITitleSelect.h">
+      <Filter>Title\GUI\TitleSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\GUI\TitleSelect\TitleSelect_Exit.h">
+      <Filter>Title\GUI\TitleSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\HUD\TitleName.h">
+      <Filter>Title\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Title\TitleSystem.h">
+      <Filter>Title</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

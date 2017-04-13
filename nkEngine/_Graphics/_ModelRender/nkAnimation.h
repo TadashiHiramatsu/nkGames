@@ -245,7 +245,7 @@ namespace nkEngine
 		/** ローカルアニメーションタイム. */
 		double LocalAnimationTime_ = 0.0; 
 		/** 現在再生中のアニメーショントラックの番号. */
-		int CurrentAnimationSetNo_ = 0;
+		int CurrentAnimationSetNo_ = -1;
 		/** 現在のトラックの番号. */
 		int CurrentTrackNo_ = 0;
 		/** アニメーショントラックの最大数. */

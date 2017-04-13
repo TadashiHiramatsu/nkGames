@@ -131,6 +131,42 @@ public:
 		Level_ = l;
 	}
 
+	/**
+	* 移動速度を設定.
+	*
+	* @param speed	移動速度.
+	*/
+	void SetMoveSpeed(float speed)
+	{
+		MoveSpeed_ = speed;
+	}
+
+	/**
+	* 移動速度を取得.
+	*/
+	float GetMoveSpeed() const
+	{
+		return MoveSpeed_;
+	}
+
+	/**
+	* 移動方向を設定.
+	*
+	* @param dir	移動方向ベクトル.
+	*/
+	void SetMoveDirection(const Vector3& dir)
+	{
+		MoveDirection_ = dir;
+	}
+
+	/**
+	* 移動方向を取得.
+	*/
+	const Vector3& GetMoveDirection() const
+	{
+		return MoveDirection_;
+	}
+
 protected:
 
 	/**
@@ -271,11 +307,11 @@ protected:
 	int Hp_;
 
 	/** スポーン位置 ここからの距離移動できる. */
-	Vector3 DefaultPosition_ = Vector3();
+	Vector3 DefaultPosition_ = Vector3::Zero;
 	/** 距離. */
 	float Distance_;
 	/** 目的地. */
-	Vector3 Destination_ = Vector3();
+	Vector3 Destination_ = Vector3::Zero;
 
 	/** プレイヤーのポインタ. */
 	Player* Player_;
@@ -311,5 +347,10 @@ protected:
 
 	/** レベル. */
 	int Level_ = 1;
+
+	/** 移動速度. */
+	float MoveSpeed_ = 50.0f;
+	/** 移動方向. */
+	Vector3 MoveDirection_ = Vector3::Zero;
 
 };

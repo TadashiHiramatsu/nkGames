@@ -70,6 +70,9 @@
     <Filter Include="Policy">
       <UniqueIdentifier>{f5f1f465-1688-41d3-8a46-b8542335c857}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DataLoad\Json">
+      <UniqueIdentifier>{901da571-2e26-4ef5-88fc-9ce33abd9107}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nkEngine.cpp">
@@ -215,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="_Math\nkMatrix.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="_DataLoad\Json\nkJsonData.cpp">
+      <Filter>DataLoad\Json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -412,6 +418,12 @@
     </ClInclude>
     <ClInclude Include="_Math\nkMatrix.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="_DataLoad\Json\picojson.h">
+      <Filter>DataLoad\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="_DataLoad\Json\nkJsonData.h">
+      <Filter>DataLoad\Json</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -155,8 +155,6 @@ namespace nkEngine
 			return Hwnd_;
 		}
 
-	
-
 		/**
 		 * フレームの横幅を取得.
 		 *
@@ -207,6 +205,14 @@ namespace nkEngine
 		int GetScreenH() const
 		{
 			return ScreenBufferH_; 
+		}
+
+		/**
+		* ゲームの終了.
+		*/
+		void GameExit()
+		{
+			isExit_ = true;
 		}
 
 	public:
@@ -297,6 +303,9 @@ namespace nkEngine
 
 		/** サウンドエンジン. */
 		CSoundEngine SoundEngine_;
+
+		/** 終了フラグ. */
+		bool isExit_ = false;
 
 	};
 

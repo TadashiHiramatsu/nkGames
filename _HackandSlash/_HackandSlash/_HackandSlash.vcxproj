@@ -149,14 +149,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Source\Common\SaveData\SaveData.cpp" />
     <ClCompile Include="Source\Common\SceneEffect\Fade.cpp" />
     <ClCompile Include="Source\Game\AnimationEvent\AnimationEventController.cpp" />
     <ClCompile Include="Source\Game\AnimationEvent\CollisionWorld.cpp" />
-    <ClCompile Include="Source\Game\Boss\Boss_01.cpp" />
     <ClCompile Include="Source\Game\Boss\IBoss.cpp" />
+    <ClCompile Include="Source\Game\Boss\Warlock\Boss_Warlock.cpp" />
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Attack.cpp" />
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Chase.cpp" />
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Combat.cpp" />
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Damage.cpp" />
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Death.cpp" />
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Stand.cpp" />
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Turn.cpp" />
+    <ClCompile Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Waiting.cpp" />
     <ClCompile Include="Source\Game\DropItem\DropItem.cpp" />
     <ClCompile Include="Source\Game\DropItem\DropItemManager.cpp" />
     <ClCompile Include="Source\Game\Enemy\Enemy_01.cpp" />
+    <ClCompile Include="Source\Game\Enemy\HFSM\EnemyState_Loitering.cpp" />
+    <ClCompile Include="Source\Game\Enemy\HFSM\EnemyState_Stand.cpp" />
+    <ClCompile Include="Source\Game\Enemy\HFSM\EnemyState_Waiting.cpp" />
     <ClCompile Include="Source\Game\Enemy\IEnemy.cpp" />
     <ClCompile Include="Source\Game\Enemy\Spawn\EnemySpawn.cpp" />
     <ClCompile Include="Source\Game\Enemy\Spawn\EnemySpawnManager.cpp" />
@@ -186,24 +198,43 @@
     <ClCompile Include="Source\Game\Window\MenuWindow\Inventory\ItemDetailRender.cpp" />
     <ClCompile Include="Source\Game\Window\MenuWindow\MenuBar.cpp" />
     <ClCompile Include="Source\Game\Window\MenuWindow\MenuSystem.cpp" />
-    <ClCompile Include="Source\Title\GUI\TitleSystem.cpp" />
+    <ClCompile Include="Source\Title\GUI\TitleSelect\ITitleSelect.cpp" />
+    <ClCompile Include="Source\Title\GUI\TitleSelect\TitleSelect_Continue.cpp" />
+    <ClCompile Include="Source\Title\GUI\TitleSelect\TitleSelect_Exit.cpp" />
+    <ClCompile Include="Source\Title\GUI\TitleSelect\TitleSelect_NewGame.cpp" />
     <ClCompile Include="Source\Title\HUD\TitleBack.cpp" />
+    <ClCompile Include="Source\Title\HUD\TitleName.cpp" />
     <ClCompile Include="Source\Title\TitleScene.cpp" />
+    <ClCompile Include="Source\Title\TitleSystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Common\SaveData\SaveData.h" />
     <ClInclude Include="Source\Common\SceneEffect\Fade.h" />
     <ClInclude Include="Source\Game\AnimationEvent\AnimationEventController.h" />
     <ClInclude Include="Source\Game\AnimationEvent\AnimationEventMacro.h" />
     <ClInclude Include="Source\Game\AnimationEvent\CollisionWorld.h" />
-    <ClInclude Include="Source\Game\Boss\Boss_01.h" />
     <ClInclude Include="Source\Game\Boss\IBoss.h" />
+    <ClInclude Include="Source\Game\Boss\Warlock\Boss_Warlock.h" />
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\IWarlockState.h" />
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Attack.h" />
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Chase.h" />
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Combat.h" />
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Damage.h" />
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Death.h" />
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Stand.h" />
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Turn.h" />
+    <ClInclude Include="Source\Game\Boss\Warlock\HFSM\WarlockState_Waiting.h" />
     <ClInclude Include="Source\Game\DropItem\DropItem.h" />
     <ClInclude Include="Source\Game\DropItem\DropItemManager.h" />
     <ClInclude Include="Source\Game\Enemy\Enemy_01.h" />
+    <ClInclude Include="Source\Game\Enemy\HFSM\EnemyState_Loitering.h" />
+    <ClInclude Include="Source\Game\Enemy\HFSM\EnemyState_Stand.h" />
+    <ClInclude Include="Source\Game\Enemy\HFSM\EnemyState_Waiting.h" />
+    <ClInclude Include="Source\Game\Enemy\HFSM\IEnemyState.h" />
     <ClInclude Include="Source\Game\Enemy\IEnemy.h" />
     <ClInclude Include="Source\Game\Enemy\Spawn\EnemySpawn.h" />
     <ClInclude Include="Source\Game\Enemy\Spawn\EnemySpawnManager.h" />
@@ -235,9 +266,14 @@
     <ClInclude Include="Source\Game\Window\MenuWindow\Inventory\ItemDetailRender.h" />
     <ClInclude Include="Source\Game\Window\MenuWindow\MenuBar.h" />
     <ClInclude Include="Source\Game\Window\MenuWindow\MenuSystem.h" />
-    <ClInclude Include="Source\Title\GUI\TitleSystem.h" />
+    <ClInclude Include="Source\Title\GUI\TitleSelect\ITitleSelect.h" />
+    <ClInclude Include="Source\Title\GUI\TitleSelect\TitleSelect_Continue.h" />
+    <ClInclude Include="Source\Title\GUI\TitleSelect\TitleSelect_Exit.h" />
+    <ClInclude Include="Source\Title\GUI\TitleSelect\TitleSelect_NewGame.h" />
     <ClInclude Include="Source\Title\HUD\TitleBack.h" />
+    <ClInclude Include="Source\Title\HUD\TitleName.h" />
     <ClInclude Include="Source\Title\TitleScene.h" />
+    <ClInclude Include="Source\Title\TitleSystem.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

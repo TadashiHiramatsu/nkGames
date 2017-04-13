@@ -29,7 +29,7 @@
 
 #include"../Common/SceneEffect/Fade.h"
 
-#include"Boss\Boss_01.h"
+#include"Boss/Warlock/Boss_Warlock.h"
 
 
 /** コリジョンワールドのグローバルポインタ. */
@@ -118,11 +118,15 @@ void GameScene::Start()
 	g_DropItemManager = NewGO<DropItemManager>(3);
 	g_DropItemManager->SetPlayer(player);
 
+	Boss_Warlock* boss = NewGO<Boss_Warlock>();
+	boss->SetPlayer(player);
+
+	SoundSource* BGM = NewGO<SoundSource>();
+	BGM->InitStreaming("Game/BGM");
+	BGM->Play(true);
+
 	//フェードクラスの作成
 	Fade* fade = NewGO<Fade>(5);
 	fade->StartFadeIn();
-
-	Boss_01* boss = NewGO<Boss_01>();
-	boss->SetPlayer(player);
-
+	
 }

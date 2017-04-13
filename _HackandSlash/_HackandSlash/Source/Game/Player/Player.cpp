@@ -92,8 +92,9 @@ void Player::Start()
 	//キャラクターコントローラーの初期化
 	//ここら辺直さなきゃな
 	Radius_ = 0.3f;
-	Height_ = 1.8f;
+	Height_ = 1.0f;
 	CharacterController_.Init(Radius_, Height_, Transform_.Position_);
+	CharacterController_.SetGravity(-9.8f * 2);
 
 	//ステートを待機に
 	ChangeState(StateCodeE::Waiting);
@@ -445,7 +446,6 @@ void Player::Damage()
  */
 void Player::ParameterUpdate()
 {
-
 	//取得経験値が必要経験値を超えていたら
 	if (Parameter_.Experience_ >= Parameter_.NextLevelExperience_)
 	{
@@ -469,6 +469,10 @@ void Player::ParameterUpdate()
 		
 		//レベルアップ
 		Parameter_.Level_++;
+
+		SoundSource* levelup = NewGO<SoundSource>();
+		levelup->InitOnMemory("Game/LevelUp");
+		levelup->Play();
 	}
 
 }

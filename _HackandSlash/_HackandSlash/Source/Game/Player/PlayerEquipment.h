@@ -50,7 +50,7 @@ public:
 	*
 	* @return true or false.
 	*/
-	bool GetIsSet(ItemTypeE type) const
+	bool GetIsItemSet(ItemTypeE type) const
 	{
 		if (EquipmentItem_[type] != nullptr)
 		{

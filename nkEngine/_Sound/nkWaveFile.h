@@ -145,7 +145,7 @@ namespace nkEngine
 		/** マルチメディアRIFFチャンク. */
 		MMCKINFO Chunk_;
 		/** 読み込み終了フラグ. */
-		volatile bool isReadEnd_;
+		volatile bool isReadEnd_ = true;
 
 		/** 非同期読み込み用スレッド. */
 		thread ReadAsyncThread_;

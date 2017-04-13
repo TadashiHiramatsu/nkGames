@@ -47,7 +47,7 @@ void EnemySpawn::Start(EnemySpawnInfoS info)
  */
 void EnemySpawn::Update()
 {
-	if (EnemyList_.size() <= EnemyMax_)
+	if (EnemyList_.size() < EnemyMax_)
 	{
 		//モンスターの出現数が最大に足しいていないので
 		if (SpawnTime_ <= SpawnLT_)

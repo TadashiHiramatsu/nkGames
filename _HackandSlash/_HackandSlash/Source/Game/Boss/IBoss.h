@@ -11,19 +11,6 @@
 */
 class IBoss : public IGameObject
 {
-protected:
-
-	/** 状態コード. */
-	enum class StateCodeE
-	{
-		Spawn,		//!< 出現.
-		Waiting,	//!< 立ち止まり.
-		Chase,		//!< 追いかけ.
-		Turn,		//!< 曲がる.
-		Attack,	//!< 攻撃.
-		Death,		//!< 死.
-	};
-
 public:
 
 	/**
@@ -76,18 +63,44 @@ public:
 		Player_ = p;
 	}
 
-protected:
+	/**
+	* プレイヤーのポインタを取得.
+	*/
+	const Player* GetPlayer() const
+	{
+		return Player_;
+	}
 
 	/**
-	* 状態遷移.
-	*
-	* @param nextstate	次の状態.
+	* プレイヤーの座標を取得.
 	*/
-	void ChangeState(StateCodeE nextstate)
+	const Vector3& GetPlayerPosition() const
 	{
-		State_ = nextstate;
+		return Player_->Transform_.Position_;
 	}
-	
+
+	/**
+	* 移動速度を設定.
+	*
+	* @param speed	移動速度(秒).
+	*/
+	void SetMoveSpeed(float speed)
+	{
+		MoveSpeed_ = speed;
+	}
+
+	/**
+	* 移動速度を取得.
+	*
+	* @return 移動速度(秒).
+	*/
+	float GetMoveSpeed()
+	{
+		return MoveSpeed_;
+	}
+
+protected:
+
 	/**
 	* アニメーション管理.
 	* 継承先のクラスで実装する.
@@ -112,10 +125,13 @@ protected:
 	/** キャラクターコントローラ. */
 	CharacterController CharacterController_;
 
-	/** 状態. */
-	StateCodeE State_;
-
 	/** プレイヤーのポインタ. */
 	const Player* Player_ = nullptr;
+
+	/** 移動速度. */
+	float MoveSpeed_ = 80.0f;
+	/** 移動方向. */
+	Vector3 MoveDir_ = Vector3::Zero;
+
 
 };

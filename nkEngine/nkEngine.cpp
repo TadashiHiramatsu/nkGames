@@ -92,8 +92,17 @@ namespace nkEngine
 
 				//スクリーンレンダーの更新
 				ScreenRender().Loop();
+
+				if (isExit_)
+				{
+					//終了.
+					msg.message = WM_QUIT;
+					GetInstance().Final();
+					PostQuitMessage(0);
+				}
 			}
 		}
+
 	}
 
 	/**
