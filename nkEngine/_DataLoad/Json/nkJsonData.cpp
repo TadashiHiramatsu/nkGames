@@ -9,11 +9,15 @@ namespace nkEngine
 
 	/**
 	* 読み込み.
+	*
+	* @param filename	ファイル名.
+	*
+	* @return true or false.
 	*/
-	bool CJsonData::Load()
+	bool JsonData::Load(string filename)
 	{
 		ifstream file_in;
-		file_in.open(FilePath_);
+		file_in.open("Asset/Data/SaveData/" + filename + ".json");
 
 		if (file_in.fail())
 		{
@@ -31,16 +35,17 @@ namespace nkEngine
 
 	/**
 	* 書き込み.
+	*
+	* @param filename	ファイル名.
 	*/
-	void CJsonData::Save()
+	void JsonData::Save(string filename)
 	{
 		picojson::value DataValue(DataObject_);
 
 		ofstream file_out;
-		file_out.open(FilePath_);
+		file_out.open("Asset/Data/SaveData/" + filename + ".json");
 
 		file_out << DataValue.serialize(true);
-
 	}
 
 }

@@ -17,18 +17,8 @@ WeaponItemData::WeaponItemData()
 	Type_ = ItemTypeE::Weapon;
 }
 
-WeaponItemData::WeaponItemData(int id, char * itemname, char * iconfilename, ItemTypeE type, int minlevel, int maxlevel, int probability, int attack)
+WeaponItemData::WeaponItemData(int id, const string& itemname, const string& iconfilename, ItemTypeE type, int minlevel, int maxlevel, int probability, int attack) :
+	IItemData(id, itemname, iconfilename, type, minlevel, maxlevel, probability)
 {
-	ID_ = id;
-
-	strcpy(Name_, itemname);
-	strcpy(IconFilePath_, iconfilename);
-
-	Type_ = type;
-
 	Attack_ = attack;
-
-	MinLevel_ = minlevel;
-	MaxLevel_ = maxlevel;
-	Probability_ = probability;
 }

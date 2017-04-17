@@ -182,6 +182,7 @@
     <ClCompile Include="Source\Game\Item\ItemDataResource.cpp" />
     <ClCompile Include="Source\Game\Item\ItemData\AccessoryItemData.cpp" />
     <ClCompile Include="Source\Game\Item\ItemData\ArmorItemData.cpp" />
+    <ClCompile Include="Source\Game\Item\ItemData\IItemData.cpp" />
     <ClCompile Include="Source\Game\Item\ItemData\ShieldItemData.cpp" />
     <ClCompile Include="Source\Game\Item\ItemData\WeaponItemData.cpp" />
     <ClCompile Include="Source\Game\Map\Ground.cpp" />
@@ -194,10 +195,11 @@
     <ClCompile Include="Source\Game\Player\EquipmentWeapon.cpp" />
     <ClCompile Include="Source\Game\Window\MenuWindow\IMenuWindow.cpp" />
     <ClCompile Include="Source\Game\Window\MenuWindow\Inventory\EquipmentDetailRender.cpp" />
-    <ClCompile Include="Source\Game\Window\MenuWindow\Inventory\Inventory.cpp" />
+    <ClCompile Include="Source\Game\Window\MenuWindow\Inventory\InventoryWindow.cpp" />
     <ClCompile Include="Source\Game\Window\MenuWindow\Inventory\ItemDetailRender.cpp" />
     <ClCompile Include="Source\Game\Window\MenuWindow\MenuBar.cpp" />
     <ClCompile Include="Source\Game\Window\MenuWindow\MenuSystem.cpp" />
+    <ClCompile Include="Source\Game\Window\MenuWindow\Option\OptionWindow.cpp" />
     <ClCompile Include="Source\Title\GUI\TitleSelect\ITitleSelect.cpp" />
     <ClCompile Include="Source\Title\GUI\TitleSelect\TitleSelect_Continue.cpp" />
     <ClCompile Include="Source\Title\GUI\TitleSelect\TitleSelect_Exit.cpp" />
@@ -262,10 +264,11 @@
     <ClInclude Include="Source\Game\Player\EquipmentWeapon.h" />
     <ClInclude Include="Source\Game\Window\MenuWindow\IMenuWindow.h" />
     <ClInclude Include="Source\Game\Window\MenuWindow\Inventory\EquipmentDetailRender.h" />
-    <ClInclude Include="Source\Game\Window\MenuWindow\Inventory\Inventory.h" />
+    <ClInclude Include="Source\Game\Window\MenuWindow\Inventory\InventoryWindow.h" />
     <ClInclude Include="Source\Game\Window\MenuWindow\Inventory\ItemDetailRender.h" />
     <ClInclude Include="Source\Game\Window\MenuWindow\MenuBar.h" />
     <ClInclude Include="Source\Game\Window\MenuWindow\MenuSystem.h" />
+    <ClInclude Include="Source\Game\Window\MenuWindow\Option\OptionWindow.h" />
     <ClInclude Include="Source\Title\GUI\TitleSelect\ITitleSelect.h" />
     <ClInclude Include="Source\Title\GUI\TitleSelect\TitleSelect_Continue.h" />
     <ClInclude Include="Source\Title\GUI\TitleSelect\TitleSelect_Exit.h" />

@@ -1,0 +1,13 @@
+{
+  "ItemData": {
+    "ItemList": []
+  },
+  "Player": {
+    "Attack": 10,
+    "Experience": 0,
+    "Level": 1,
+    "MaxHp": 100,
+    "NextLevelExperience": 10,
+    "NowHp": 100
+  }
+}

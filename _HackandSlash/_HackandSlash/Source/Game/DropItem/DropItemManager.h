@@ -59,7 +59,7 @@ public:
 		Player_ = p;
 	}
 
-	bool GetisGetItem()
+	bool GetisGetItem() const
 	{
 		return isGetItem_;
 	}

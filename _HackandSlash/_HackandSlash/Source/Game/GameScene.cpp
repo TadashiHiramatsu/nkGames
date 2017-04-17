@@ -31,6 +31,8 @@
 
 #include"Boss/Warlock/Boss_Warlock.h"
 
+#include"../Common/SaveData/SaveData.h"
+
 
 /** コリジョンワールドのグローバルポインタ. */
 CollisionWorld* g_CollisionWorld = nullptr;
@@ -88,6 +90,8 @@ void GameScene::Start()
 
 	//プレイヤーの作成
 	Player* player = NewGO<Player>();
+
+	SaveData().SetSaveObject(player);
 
 	//ゲームカメラにプレイヤーを設定
 	g_MainCamera->SetPlayer(player);

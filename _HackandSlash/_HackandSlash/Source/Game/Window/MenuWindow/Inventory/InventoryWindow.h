@@ -1,3 +1,6 @@
+/**
+* メニューウィンドウのインベントリウィンドウクラスの定義.
+*/
 #pragma once
 
 #include"../IMenuWindow.h"
@@ -9,23 +12,54 @@
 
 #include"../Inventory/EquipmentDetailRender.h"
 
-class Inventory : public IMenuWindow
+/**
+* メニューウィンドウのインベントリウィンドウクラス.
+*/
+class InventoryWindow : public IMenuWindow
 {
 public:
 
+	/** 状態コード. */
 	enum class StateE
 	{
-		Select,	//選択
-		Detail, //詳細
+		Select,	//!< 選択.
+		Detail, //!< 詳細.
 	};
 
 public:
 
+	/**
+	* コンストラクタ.
+	*/
+	InventoryWindow()
+	{
+	}
+
+	/**
+	* デストラクタ.
+	*/
+	~InventoryWindow()
+	{
+	}
+
+	/**
+	* 初期化.
+	*/
 	void Start(RectTransform* rt, float namepos)override;
+	
+	/**
+	* 更新.
+	*/
 	void Update()override;
+	
+	/**
+	* 描画.
+	*/
 	void Render()override;
 
-	//ウィンドウを閉じるときの動作
+	/**
+	* ウィンドウを閉じるときの動作.
+	*/
 	void Close()override
 	{
 		ChangeState(StateE::Select);
@@ -33,12 +67,17 @@ public:
 
 private:
 
-	//ステートを変化
+	/**
+	* ステートを変化.
+	*/
 	void ChangeState(StateE state)
 	{
 		State_ = state;
 	}
 
+	/**
+	* アイテムを交換.
+	*/
 	void ChangeItem();
 
 private:
@@ -46,12 +85,14 @@ private:
 	/** 最高装備数. */
 	const static int MAX_EQUIPMENT = 8;
 
-	//選択
+	/** 選択画像. */
 	Image ChoiceImage_;
+	/** 選択トランスフォーム. */
 	RectTransform ChoiceTransform_;
 
-	//位置調整のためのトランスフォーム
+	/** 中心画像. */
 	Image MiddleImage_;
+	/** 位置調整のためのトランスフォーム. */
 	RectTransform MiddleTransform_[2];
 
 	//アイコンバック画像

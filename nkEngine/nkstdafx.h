@@ -133,6 +133,7 @@ using namespace std;
 //外部ファイル読み込み
 #include"_DataLoad\nkCSVData.h"
 #include"_DataLoad\Json\picojson.h"
+#include"_DataLoad/Json/nkJsonData.h"
 
 //サウンド
 #include"_Sound\nkSoundSource.h"

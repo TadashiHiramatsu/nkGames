@@ -6,13 +6,20 @@
 #include"stdafx.h"
 #include"ItemDataResource.h"
 
+
+/**
+* 読み込み.
+*/
 void CItemDataResource::Load()
 {
 	LoadFile("ItemData/ArmorItemData");
 	LoadFile("ItemData/WeaponItemData");
 }
 
-void CItemDataResource::LoadFile(char * filePath)
+/**
+* ファイルの読み込み.
+*/
+void CItemDataResource::LoadFile(char* filePath)
 {
 	CSVDataTableT table;
 
@@ -21,8 +28,6 @@ void CItemDataResource::LoadFile(char * filePath)
 
 	for (int row = 1; row < table.size() -1; row++)
 	{
-
-		//アイテムデータ
 		IItemData* item = nullptr;
 
 		vector<string> record; //1行分
@@ -39,14 +44,10 @@ void CItemDataResource::LoadFile(char * filePath)
 		id += stoi(record[ItemDataReadCodeE::ItemID]);
 
 		//アイコンファイル名
-		const char* baseDir = "Icon/";
-		char iconfp[64];
-		strcpy(iconfp, baseDir);
-		strcat(iconfp, record[ItemDataReadCodeE::FileName].c_str());
+		string iconfp = "Icon/" + record[ItemDataReadCodeE::FileName];
 
 		//アイテム名
-		char namefp[64];
-		strcpy(namefp, record[ItemDataReadCodeE::ItemName].c_str());
+		string namefp = record[ItemDataReadCodeE::ItemName];
 
 		//最低ドロップレベル
 		int minlevel = stoi(record[ItemDataReadCodeE::MinLevel]);
@@ -64,6 +65,7 @@ void CItemDataResource::LoadFile(char * filePath)
 
 			//アイテムデータ作成
 			item = new WeaponItemData(id, namefp, iconfp, type, minlevel, maxlevel, probability, attack);
+			
 		}
 		break;
 		case Shield:

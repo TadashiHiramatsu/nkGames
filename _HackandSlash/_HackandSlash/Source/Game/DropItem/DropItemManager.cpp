@@ -6,7 +6,9 @@
 #include"../Item/InventoryManager.h"
 #include"../Item/ItemDataResource.h"
 
-/** 初期化. */
+/** 
+* 初期化. 
+*/
 void DropItemManager::Start()
 {
 	DropItemList_.clear();
@@ -21,11 +23,13 @@ void DropItemManager::Start()
 
 }
 
-/** 更新. */
+/** 
+* 更新. 
+*/
 void DropItemManager::Update()
 {
 	//ドロップアイテムリストのイテレータを取得
-	auto it = DropItemList_.begin();
+	auto& it = DropItemList_.begin();
 
 	while (it != DropItemList_.end())
 	{
@@ -62,10 +66,12 @@ void DropItemManager::Update()
 	}
 }
 
-/** 描画. */
+/** 
+* 描画. 
+*/
 void DropItemManager::Render()
 {
-	for (auto it : DropItemList_)
+	for (auto& it : DropItemList_)
 	{
 		it->Render();
 	}
@@ -76,6 +82,9 @@ void DropItemManager::Render()
 	}
 }
 
+/**
+* ドロップアイテムを設定.
+*/
 void DropItemManager::SetDropItem(int level,const Vector3 & pos)
 {
 	//この敵が落とすアイテム
@@ -100,7 +109,6 @@ void DropItemManager::SetDropItem(int level,const Vector3 & pos)
 
 			//ドロップ率を設定
 			data->Probability_ = probability;
-
 
 			ItemList.push_back(data);
 		}

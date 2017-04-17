@@ -10,49 +10,50 @@ namespace nkEngine
 	* JsonDataを管理するクラス.
 	* シングルトンクラス.
 	*/
-	class CJsonData : Noncopyable
+	class JsonData : Noncopyable
 	{
-	private:
+	public:
 
 		/**
 		* コンストラクタ
 		*/
-		CJsonData()
+		JsonData()
 		{
-			FilePath_ = "Asset/Data/SaveData.json";
 		}
 
 		/**
 		* デストラクタ.
 		*/
-		~CJsonData()
+		~JsonData()
 		{
 		}
-
-	public:
-
-		/**
-		* インスタンスの取得.
-		*/
-		static CJsonData& GetInstance()
-		{
-			static CJsonData instance;
-			return instance;
-		}
-
-	public:
 
 		/**
 		* 読み込み.
+		* Asset\Data\SaveDataフォルダ内のjsonファイル.
+		*
+		* @param filename	ファイル名.
 		*
 		* @return true or false.
 		*/
-		bool Load();
+		bool Load(string filename);
 
 		/**
 		* 書き込み.
+		*
+		* @param filename	ファイル名.
 		*/
-		void Save();
+		void Save(string filename);
+
+		/**
+		* データオブジェクトの取得.
+		*
+		* @return オブジェクト.
+		*/
+		picojson::object& GetDataObject()
+		{
+			return DataObject_;
+		}
 
 		/**
 		* データオブジェクトの取得.
@@ -61,7 +62,7 @@ namespace nkEngine
 		*
 		* @return オブジェクト.
 		*/
-		picojson::object& GetObject(string key)
+		picojson::object& GetDataObject(string key)
 		{
 			if (DataObject_[key].is<picojson::object>())
 			{
@@ -76,7 +77,7 @@ namespace nkEngine
 		* @param key	キー.
 		* @param obj	オブジェクト.
 		*/
-		void SetObject(string key, picojson::object& obj)
+		void SetDataObject(string key, picojson::object& obj)
 		{
 			DataObject_[key] = picojson::value(obj);
 		}
@@ -87,28 +88,16 @@ namespace nkEngine
 		* @param key	キー.
 		* @param arr	配列.
 		*/
-		void SetObject(string key, picojson::array& arr)
+		void SetDataObject(string key, picojson::array& arr)
 		{
 			DataObject_[key] = picojson::value(arr);
 		}
-		
 
 	private:
 
 		/** データオブジェクト. */
 		picojson::object DataObject_;
 
-		/** セーブファイルパス. */
-		string FilePath_;
-
 	};
-
-	/**
-	* JsonData管理クラス.
-	*/
-	static CJsonData& JsonData()
-	{
-		return CJsonData::GetInstance();
-	}
 
 }

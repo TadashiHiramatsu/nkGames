@@ -123,6 +123,9 @@ void Player::Start()
 	CollisionObject_.reset(new btCollisionObject());
 	CollisionObject_->setCollisionShape(SphereShape_->GetBody());
 
+	//パラメータの初期化.
+	Parameter_.Continue();
+
 	//シャドウを計算
 	Vector3 ShadowLightPos;
 	ShadowLightPos.Add(Vector3(-10.0f, 10.0f, -10.0f), Transform_.Position_);
@@ -360,6 +363,16 @@ void Player::Render()
 void Player::Release()
 {
 	ModelRender_.Release();
+}
+
+/**
+* セーブ.
+*/
+void Player::Save()
+{
+	Parameter_.Save();
+	//ひとまず.
+	InventoryManager().Save();
 }
 
 /**

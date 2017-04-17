@@ -3,31 +3,37 @@
 
 #include"../../Game/Item/ItemDataResource.h"
 
+#include"../../Common/SaveData/SaveData.h"
+
+/**
+* 初期化.
+*/
 void CInventoryManager::Start()
 {
 	for (int i = 0; i < ItemTypeE::TypeNum; i++)
 	{
-		ItemList[i].clear();
+		ItemList_[i].clear();
 	}
 
-	for (int i = 1; i <= 6; i++)
-	{
-		EquipmentItem* Item = new EquipmentItem(ItemDataResource().GetItem(1000 + i));
-		SetItem(Item);
-	}
-
+	Continue();
 }
 
+/**
+* アイテムを設定.
+*/
 void CInventoryManager::SetItem(EquipmentItem* item)
 {
-	ItemList[item->GetItemType()].push_back(item);
+	ItemList_[item->GetItemType()].push_back(item);
 }
 
+/**
+* アイテムを取得.
+*/
 EquipmentItem* CInventoryManager::GetItem(ItemTypeE type, int num)
 {
 	try
 	{
-		return ItemList[type].at(num);;
+		return ItemList_[type].at(num);
 	}
 	catch(out_of_range& ex)
 	{
@@ -35,20 +41,78 @@ EquipmentItem* CInventoryManager::GetItem(ItemTypeE type, int num)
 	}
 }
 
-EquipmentItem * CInventoryManager::ChangeItem(ItemTypeE type,EquipmentItem* item, int num)
+/**
+* アイテムを変更.
+*/
+EquipmentItem* CInventoryManager::ChangeItem(ItemTypeE type, EquipmentItem* item, int num)
 {
-	EquipmentItem* retitem = nullptr;
+	EquipmentItem* retitem;
 
-	retitem = GetItem(type, num);
+	retitem = GetItem(type,num);
 	
 	if (item != nullptr)
 	{
-		ItemList[type][num] = item;
+		ItemList_[type][num] = item;
 	}
 	else
 	{
-		ItemList[type].erase(ItemList[type].begin() + num);
+		ItemList_[type].erase(ItemList_[type].begin() + num);
 	}
 
 	return retitem;
+}
+
+/**
+* 読み込み.
+*/
+void CInventoryManager::Continue()
+{
+	if (SaveData().IsContinue())
+	{
+		picojson::object itemdata = SaveData().GetDataObject("ItemData");
+
+		picojson::array itemlist = itemdata["ItemList"].get<picojson::array>();
+
+		for (int i = 0; i < itemlist.size(); i++)
+		{
+			picojson::object item = itemlist[i].get<picojson::object>();
+			int id = item["ID"].get<double>();
+
+			EquipmentItem* eitem = new EquipmentItem(ItemDataResource().GetItemData(id));
+			SetItem(eitem);
+		}
+	}
+}
+
+/**
+* 書き込み.
+*/
+void CInventoryManager::Save()
+{
+	//アイテムリスト.
+	picojson::array itemlist;
+
+	for (int type = 0; type < ItemTypeE::TypeNum; type++)
+	{
+		for (int num = 0; num < ItemList_[type].size(); num++)
+		{
+			//個別ID.
+			int id = ItemList_[type][num]->GetID();
+
+			//アイテム.
+			picojson::object item;
+
+			item["ID"] = (picojson::value)(double)id;
+
+			itemlist.push_back((picojson::value)item);
+		}
+	}
+
+	//アイテムデータ.
+	picojson::object itemdata;
+	itemdata["ItemList"] = (picojson::value)itemlist;
+
+	//データ書き込み.
+	SaveData().SetDataObject("ItemData", itemdata);
+
 }

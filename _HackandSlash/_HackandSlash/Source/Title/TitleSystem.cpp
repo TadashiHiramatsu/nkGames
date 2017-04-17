@@ -106,7 +106,8 @@ void TitleSystem::Update()
 			}
 		}
 	}
-
+	
+	//トランスフォームの更新.
 	CursorRT_.Update();
 }
 
@@ -115,6 +116,7 @@ void TitleSystem::Update()
 */
 void TitleSystem::PostRender()
 {
+	//カーソルの描画.
 	CursorImage_.Render();
 }
 

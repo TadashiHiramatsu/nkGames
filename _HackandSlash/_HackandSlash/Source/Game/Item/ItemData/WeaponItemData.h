@@ -41,8 +41,8 @@ public:
 	 */
 	WeaponItemData(
 		int id,
-		char* itemname,
-		char* iconfilename,
+		const string& itemname,
+		const string& iconfilename,
 		ItemTypeE type,
 		int minlevel,
 		int maxlevel,
@@ -63,7 +63,7 @@ public:
 	/**
 	* 表示するパラメーターを取得.
 	*/
-	int GetParameter()override
+	int GetParameter() const override
 	{
 		return Attack_;
 	}
@@ -71,6 +71,6 @@ public:
 private:
 
 	/** 攻撃力. */
-	int Attack_;
+	int Attack_ = 10;
 
 };

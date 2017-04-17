@@ -11,6 +11,8 @@
 
 #include"PlayerEquipment.h"
 
+#include"../../Common/SaveData/SaveData.h"
+
 /**
  * プレイヤークラス.
  *
@@ -29,6 +31,42 @@ public:
 	 */
 	struct PlayerParameterS
 	{
+	public:
+
+		/**
+		* 読み込み.
+		*/
+		void Continue()
+		{
+			if (SaveData().IsContinue())
+			{
+				picojson::object player = SaveData().GetDataObject("Player");
+				Level_ = player["Level"].get<double>();
+				Experience_ = player["Experience"].get<double>();
+				NextLevelExperience_ = player["NextLevelExperience"].get<double>();
+				Attack_ = player["Attack"].get<double>();
+				MaxHp_ = player["MaxHp"].get<double>();
+				NowHp_ = player["NowHp"].get<double>();
+			}
+		}
+
+		/**
+		* 書き込み.
+		*/
+		void Save()
+		{
+			picojson::object player;
+
+			player["Level"] = (picojson::value)(double)Level_;
+			player["Experience"] = (picojson::value)(double)Experience_;
+			player["NextLevelExperience"] = (picojson::value)(double)NextLevelExperience_;
+			player["Attack"] = (picojson::value)(double)Attack_;
+			player["MaxHp"] = (picojson::value)(double)MaxHp_;
+			player["NowHp"] = (picojson::value)(double)NowHp_;
+
+			SaveData().SetDataObject("Player", player);
+		}
+
 	public:
 
 		/** レベル. */
@@ -96,6 +134,7 @@ public:
 	 */
 	~Player()
 	{
+		Release();
 	}
 
 	/**
@@ -129,6 +168,11 @@ public:
 	 * @date 2017/01/10
 	 */
 	void Release()override;
+
+	/**
+	* セーブ.
+	*/
+	void Save()override;
 
 	/**
 	 * ダメージ.

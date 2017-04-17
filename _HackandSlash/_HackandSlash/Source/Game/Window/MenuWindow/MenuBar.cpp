@@ -1,10 +1,14 @@
+/**
+* メニューバークラスの実装.
+*/
 #include"stdafx.h"
 #include"MenuBar.h"
 
-
+/**
+* 初期化.
+*/
 void MenuBar::Start()
 {
-
 	BarImage_.Load("Image/Test.png");
 	BarImage_.SetTransform(&BarTransform_);
 
@@ -16,11 +20,17 @@ void MenuBar::Start()
 
 }
 
+/**
+* 更新.
+*/
 void MenuBar::Update()
 {
 	BarTransform_.Update();
 }
 
+/**
+* 描画.
+*/
 void MenuBar::Render()
 {
 	BarImage_.Render();

@@ -4,3 +4,28 @@
 #include"stdafx.h"
 #include"SaveData.h"
 
+/**
+* “Ç‚Ýž‚Ý.
+*
+* @return true or false.
+*/
+bool CSaveData::Load()
+{
+	isContinue_ = Data_.Load(FileName_);
+
+	return isContinue_;
+}
+
+/**
+* ‘‚«ž‚Ý.
+*/
+void CSaveData::Save()
+{
+
+	for (auto& obj : SaveObject_)
+	{
+		obj->Save();
+	}
+
+	Data_.Save(FileName_);
+}

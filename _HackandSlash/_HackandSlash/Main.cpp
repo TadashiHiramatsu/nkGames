@@ -46,7 +46,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	InitEngine(hInstance);
 
 #ifdef _DEBUG
-	SceneManager().ChangeScene<TitleScene>();
+	SceneManager().ChangeScene<GameScene>();
 #else
 	SceneManager().ChangeScene<TitleScene>();
 #endif

@@ -9,7 +9,7 @@
 #include"ItemData/ArmorItemData.h"
 
 /**
- * An item resource.
+ * アイテムデータのリソース群.
  *
  * @author	HiramatsuTadashi
  * @date	2017/01/03
@@ -70,7 +70,7 @@ public:
 	}
 
 	/**
-	 * Loads this object.
+	 * 読み込み.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/03
@@ -78,15 +78,7 @@ public:
 	void Load();
 
 	/**
-	 * Loads the file.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2017/01/03
-	 */
-	void LoadFile(char* _FilePath);
-
-	/**
-	 * Gets an item.
+	 * アイテムデータの取得.
 	 *
 	 * @author	HiramatsuTadashi
 	 * @date	2017/01/05
@@ -95,7 +87,7 @@ public:
 	 *
 	 * @return	Null if it fails, else the item.
 	 */
-	IItemData* GetItem(int id)
+	IItemData* GetItemData(int id)
 	{
 		auto& it = ItemList.find(id);
 		if (it == ItemList.end())
@@ -105,6 +97,9 @@ public:
 		return it->second;
 	}
 
+	/**
+	* アイテムリストの取得.
+	*/
 	const map<int, IItemData*>& GetItemMap() const
 	{
 		return ItemList;
@@ -112,7 +107,17 @@ public:
 
 private:
 
-	/** List of items. */
+	/**
+	* ファイルの読み込み.
+	*
+	* @author	HiramatsuTadashi
+	* @date	2017/01/03
+	*/
+	void LoadFile(char* filePath);
+
+private:
+
+	/** アイテムリスト. */
 	map<int, IItemData*> ItemList;
 
 };

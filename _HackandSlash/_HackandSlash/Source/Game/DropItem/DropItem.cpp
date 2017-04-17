@@ -24,7 +24,7 @@ void DropItem::Start(EquipmentItem* item,const Vector3 & pos, Player* player)
 	Item_ = item;
 
 	//アイコンの読み込み
-	ItemSprite_.Load(Item_->GetIconFilePath());
+	ItemSprite_.Load(Item_->GetIconFilePath().c_str());
 	ItemSprite_.Start();
 
 	//カメラを設定

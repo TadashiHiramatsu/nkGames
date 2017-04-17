@@ -1,7 +1,13 @@
+/**
+* メニューウィンドウの基底クラスの定義.
+*/
 #pragma once
 
 #include"../../Player/Player.h"
 
+/**
+* メニューウィンドウの基底クラス.
+*/
 class IMenuWindow
 {
 public:
@@ -38,7 +44,7 @@ public:
 	/**
 	* 表示名の初期化.
 	*/
-	void NameStart(RectTransform* parent, const char* filepath, float pos);
+	void NameStart(RectTransform* parent, const char* filepath, float pos,float width);
 
 	/**
 	* 表示名の更新
@@ -66,6 +72,11 @@ public:
 		return NameTransform_;
 	}
 
+	RectTransform* GetNameTransformPointer()
+	{
+		return &NameTransform_;
+	}
+
 	/** 
 	* ウィンドウを閉じるときの処理.
 	*/
@@ -83,9 +94,12 @@ public:
 
 protected:
 
+	/** 名前画像. */
 	Image NameImage_;
+	/** 名前トランスフォーム. */
 	RectTransform NameTransform_;
 
+	/** プレイヤーのポインタ. */
 	Player* Player_ = nullptr;
 
 };

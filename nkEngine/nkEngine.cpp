@@ -61,6 +61,11 @@ namespace nkEngine
 	void CEngine::Final()
 	{
 		Input().Release();
+
+		GameObjectManager().Release();
+
+		Physics_.Release();
+		SoundEngine_.Release();
 		SAFE_RELEASE(D3DDevice_);
 		SAFE_RELEASE(D3DObject_);
 	}

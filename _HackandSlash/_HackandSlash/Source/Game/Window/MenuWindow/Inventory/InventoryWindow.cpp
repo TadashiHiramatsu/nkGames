@@ -1,11 +1,17 @@
+/**
+* メニューウィンドウのインベントリウィンドウクラスの実装.
+*/
 #include"stdafx.h"
-#include"Inventory.h"
+#include"InventoryWindow.h"
 
-void Inventory::Start(RectTransform * rt, float namepos)
+/**
+* 初期化.
+*/
+void InventoryWindow::Start(RectTransform * rt, float namepos)
 {
 	State_ = StateE::Select;
 
-	NameStart(rt, "Image/Inventory.png", namepos);
+	NameStart(rt, "Image/Inventory.png", namepos,283);
 
 	{//選択ウィンドウ画像の初期化
 		ChoiceImage_.Load("Image/Test.png");
@@ -131,7 +137,10 @@ void Inventory::Start(RectTransform * rt, float namepos)
 
 }
 
-void Inventory::Update()
+/**
+* 更新.
+*/
+void InventoryWindow::Update()
 {
 	switch (State_)
 	{
@@ -276,6 +285,7 @@ void Inventory::Update()
 
 		if (BefSelect_[SelectEquipment_] != NowSelect_[SelectEquipment_])
 		{
+			//選択が変わっているので親を変更.
 			DetailSelectTransform_.Parent_ = ItemDetailRender_[NowSelect_[SelectEquipment_]].GetTransform();
 		}
 
@@ -283,6 +293,8 @@ void Inventory::Update()
 
 		if (isSound)
 		{
+			//音声発生フラグがtrue.
+
 			SoundSource* se = NewGO<SoundSource>();
 			se->InitOnMemory("Game/Select");
 			se->Play();
@@ -290,17 +302,21 @@ void Inventory::Update()
 
 		if (XInput().IsTrigger(ButtonE::A))
 		{
+			//Aボタンが押された.
+
 			ChangeItem();
 		}
 
 		if (XInput().IsTrigger(ButtonE::B))
 		{
+			//Bボタンが押された.
+
 			//状態遷移.
 			ChangeState(StateE::Select);
 
 			//音声
 			SoundSource* se = NewGO<SoundSource>();
-			se->InitOnMemory("Game/SelectChange");
+			se->InitOnMemory("Common/SelectChange");
 			se->Play();
 
 			break;
@@ -366,7 +382,10 @@ void Inventory::Update()
 	}
 }
 
-void Inventory::Render()
+/**
+* 描画.
+*/
+void InventoryWindow::Render()
 {
 	ChoiceImage_.Render();
 	DetailImage_.Render();
@@ -423,11 +442,14 @@ void Inventory::Render()
 
 }
 
-void Inventory::ChangeItem()
+/**
+* アイテムを交換.
+*/
+void InventoryWindow::ChangeItem()
 {
 
 	int select = NowSelect_[SelectEquipment_] + LeadIdx[SelectEquipment_];
-	
+
 	//現在装備しているアイテムを取得
 	EquipmentItem* item = Player_->GetEquipmentItem(SelectEquipmentCode[SelectEquipment_]);
 
@@ -440,5 +462,4 @@ void Inventory::ChangeItem()
 	SoundSource* se = NewGO<SoundSource>();
 	se->InitOnMemory("Game/Equipment");
 	se->Play();
-
 }

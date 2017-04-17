@@ -79,6 +79,9 @@
     <Filter Include="Title\GUI\TitleSelect">
       <UniqueIdentifier>{2cc437f5-2310-49b8-9673-2147dcac3d03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Window\MenuWindow\Option">
+      <UniqueIdentifier>{f06b2799-1bd1-4fe5-ac8b-0b1568d928f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -163,9 +166,6 @@
       <Filter>Game\Window\MenuWindow\Inventory</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Window\MenuWindow\Inventory\EquipmentDetailRender.cpp">
-      <Filter>Game\Window\MenuWindow\Inventory</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Game\Window\MenuWindow\Inventory\Inventory.cpp">
       <Filter>Game\Window\MenuWindow\Inventory</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\DropItem\DropItemManager.cpp">
@@ -258,6 +258,15 @@
     <ClCompile Include="Source\Title\TitleSystem.cpp">
       <Filter>Title</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Item\ItemData\IItemData.cpp">
+      <Filter>Game\Item\ItemData</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Window\MenuWindow\Inventory\InventoryWindow.cpp">
+      <Filter>Game\Window\MenuWindow\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Window\MenuWindow\Option\OptionWindow.cpp">
+      <Filter>Game\Window\MenuWindow\Option</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -343,9 +352,6 @@
     </ClInclude>
     <ClInclude Include="Source\Game\Window\MenuWindow\MenuSystem.h">
       <Filter>Game\Window\MenuWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Window\MenuWindow\Inventory\Inventory.h">
-      <Filter>Game\Window\MenuWindow\Inventory</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Window\MenuWindow\Inventory\ItemDetailRender.h">
       <Filter>Game\Window\MenuWindow\Inventory</Filter>
@@ -448,6 +454,12 @@
     </ClInclude>
     <ClInclude Include="Source\Title\TitleSystem.h">
       <Filter>Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Window\MenuWindow\Inventory\InventoryWindow.h">
+      <Filter>Game\Window\MenuWindow\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Window\MenuWindow\Option\OptionWindow.h">
+      <Filter>Game\Window\MenuWindow\Option</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

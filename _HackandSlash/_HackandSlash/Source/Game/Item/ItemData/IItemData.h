@@ -1,19 +1,14 @@
 /**
- * @file	Source\Game\Item\IItem.h
- *
- * Declares the IItem interface.
+ * アイテムの基底クラスの定義.
  */
 #pragma once
 
 #include"ItemType.h"
 
 /**
- * アイテムの基底クラス 
- * アイテムをリソースクラスで扱うため 
+ * アイテムの基底クラス.
+ * アイテムをリソースクラスで扱うため.
  * IDで識別する.
- *
- * @author	HiramatsuTadashi
- * @date	2016/12/31
  */
 class IItemData
 {
@@ -24,21 +19,34 @@ public:
 public:
 
 	/**
-	 * Default constructor.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2016/12/31
-	 */
+	* コンストラクタ.
+	*/
 	IItemData()
 	{
 	}
 
+	/**
+	 * コンストラクタ.
+	 *
+	 * @param	id			 	アイテムID.
+	 * @param	itemname		アイテム名.
+	 * @param	iconfilename	アイコンファイル名.
+	 * @param	type		 	アイテムタイプ.
+	 * @param	minlevel	 	最低レベル.
+	 * @param	maxlevel	 	最高レベル.
+	 * @param	probability	 	ドロップ率.
+	 */
+	IItemData(
+		int id,
+		const string& itemname,
+		const string& iconfilename,
+		ItemTypeE type,
+		int minlevel,
+		int maxlevel,
+		int probability);
 
 	/**
-	 * Destructor.
-	 *
-	 * @author	HiramatsuTadashi
-	 * @date	2016/12/31
+	 * デストラクタ.
 	 */
 	virtual ~IItemData() 
 	{
@@ -47,25 +55,19 @@ public:
 	/**
 	 * IDを取得.
 	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/16
-	 *
 	 * @return The identifier.
 	 */
-	int GetID()
+	int GetID() const
 	{
-		return ID_;
+		return ItemID_;
 	}
 
 	/**
 	* アイテム名の取得.
 	*
-	* @author HiramatsuTadashi
-	* @date 2017/01/16
-	*
 	* @return Null if it fails, else the name.
 	*/
-	const char* GetName()
+	const string& GetName() const
 	{
 		return Name_;
 	}
@@ -73,12 +75,9 @@ public:
 	/**
 	 * アイコンファイルパスの取得.
 	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/16
-	 *
 	 * @return Null if it fails, else the icon file path.
 	 */
-	const char* GetIconFilePath()
+	const string& GetIconFilePath() const
 	{
 		return IconFilePath_;
 	}
@@ -86,12 +85,9 @@ public:
 	/**
 	 * アイテムタイプの取得.
 	 *
-	 * @author HiramatsuTadashi
-	 * @date 2017/01/16
-	 *
 	 * @return The item type.
 	 */
-	ItemTypeE GetItemType()
+	ItemTypeE GetItemType() const
 	{
 		return Type_;
 	}
@@ -99,7 +95,7 @@ public:
 	/**
 	* 各種パラメータを取得する.
 	*/
-	virtual int GetParameter()
+	virtual int GetParameter() const
 	{
 		return -1;
 	}
@@ -107,7 +103,7 @@ public:
 	/**
 	* 最低レベルを取得.
 	*/
-	int GetMinLevel()
+	int GetMinLevel() const
 	{
 		return MinLevel_;
 	}
@@ -115,7 +111,7 @@ public:
 	/**
 	* 最高レベルを取得.
 	*/
-	int GetMaxLevel()
+	int GetMaxLevel() const
 	{
 		return MaxLevel_;
 	}
@@ -123,7 +119,7 @@ public:
 	/**
 	* ドロップ率を取得.
 	*/
-	int GetProbability()
+	int GetProbability() const
 	{
 		return Probability_;
 	}
@@ -136,13 +132,13 @@ protected:
 	* 上1桁:アイテムタイプ
 	* 下3桁:個別ID
 	*/
-	int ID_ = 0;
+	int ItemID_ = 0;
 	/** アイテムの名称。ゲーム内で表示するもの. */
-	char Name_[64];
+	string Name_ = "";
 	/** アイコンのファイルパス . */
-	char IconFilePath_[64];
+	string IconFilePath_ = "";
 	/** アイテムタイプ. */
-	ItemTypeE Type_;
+	ItemTypeE Type_ = ItemTypeE::Weapon;
 
 	/** 最低レベル. */
 	int MinLevel_ = 0;
@@ -150,5 +146,4 @@ protected:
 	int MaxLevel_ = 100;
 	/** ドロップ確率. */
 	int Probability_ = 100;
-
 };

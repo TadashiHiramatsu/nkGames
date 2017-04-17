@@ -189,6 +189,21 @@ namespace nkEngine
 		 * @date 2017/01/10
 		 */
 		void AllDelete();
+
+		/**
+		* 全削除.
+		* isStaticがtrueの場合でも消す.
+		*/
+		void Release()
+		{
+			//イテレータ取得
+			auto& itList = GameObjectArray_.begin();
+			while (itList != GameObjectArray_.end())
+			{
+				itList->clear();
+				itList++;
+			}
+		}
 		
 	private:
 

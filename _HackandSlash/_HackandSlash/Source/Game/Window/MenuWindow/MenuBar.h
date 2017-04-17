@@ -1,14 +1,47 @@
+/**
+* メニューバークラスの定義.
+*/
 #pragma once
 
-class MenuBar
+/**
+* メニューバークラス.
+*/
+class MenuBar : public IGameObject
 {
 public:
 
-	void Start();
-	void Update();
-	void Render();
+	/**
+	* コンストラクタ.
+	*/
+	MenuBar()
+	{
+	}
 
-	/** トランスフォームの取得. */
+	/**
+	* デストラクタ.
+	*/
+	~MenuBar()
+	{
+	}
+
+	/**
+	* 初期化.
+	*/
+	void Start()override;
+
+	/**
+	* 更新.
+	*/
+	void Update()override;
+
+	/**
+	* 描画.
+	*/
+	void Render()override;
+
+	/** 
+	*トランスフォームの取得. 
+	*/
 	RectTransform* GetTransform()
 	{
 		return &BarTransform_;

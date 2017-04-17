@@ -72,9 +72,9 @@ void ItemDetailRender::Render(EquipmentItem * item)
 
 	if (item != nullptr)
 	{
-		IconImage_.Load(item->GetIconFilePath());
+		IconImage_.Load(item->GetIconFilePath().c_str());
 		IconImage_.Render();
-		NameText_.Render(item->GetName());
+		NameText_.Render(item->GetName().c_str());
 
 		int par = item->GetParameter();
 

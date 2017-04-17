@@ -6,6 +6,8 @@
 
 #include"..\..\..\Game\GameScene.h"
 
+#include"../../../Common/SaveData/SaveData.h"
+
 /**
 * 初期化.
 */
@@ -43,10 +45,16 @@ void TitleSelect_Continue::PostRender()
 */
 bool TitleSelect_Continue::OnTrigger()
 {
+	//データを読み込み.
+	bool is = SaveData().Load();
+
+	if (is)
+	{
+		//ゲームシーンに移行.
+		SceneManager().ChangeScene<GameScene>();
+
+		return true;
+	}
+
 	return false;
-
-	//ゲームシーンに移行.
-	SceneManager().ChangeScene<GameScene>();
-
-	return true;
 }

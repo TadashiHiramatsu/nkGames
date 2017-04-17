@@ -33,18 +33,8 @@ ArmorItemData::ArmorItemData()
 * @param	probability	 	ÉhÉçÉbÉvó¶.
 * @param	defense	 		ñhå‰óÕ.
 */
-ArmorItemData::ArmorItemData(int id, char * itemname, char * iconfilename, ItemTypeE type, int minlevel, int maxlevel, int probability, int defense)
+ArmorItemData::ArmorItemData(int id, const string& itemname, const string& iconfilename, ItemTypeE type, int minlevel, int maxlevel, int probability, int defense) :
+	IItemData(id,itemname,iconfilename,type,minlevel,maxlevel,probability)
 {
-	ID_ = id;
-
-	strcpy(Name_, itemname);
-	strcpy(IconFilePath_, iconfilename);
-
-	Type_ = type;
-
 	Defense_ = defense;
-
-	MinLevel_ = minlevel;
-	MaxLevel_ = maxlevel;
-	Probability_ = probability;
 }

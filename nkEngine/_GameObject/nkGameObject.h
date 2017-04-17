@@ -134,6 +134,13 @@ namespace nkEngine
 		{
 		}
 
+		/**
+		* データのセーブを行う.
+		*/
+		virtual void Save()
+		{
+		}
+
 	public:
 
 		/**
